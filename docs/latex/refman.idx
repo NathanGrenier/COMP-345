@@ -1,0 +1,15 @@
+\indexentry{src/main.cpp@{src/main.cpp}|hyperpage}{3}
+\indexentry{main.cpp@{main.cpp}!SDL\_MAIN\_USE\_CALLBACKS@{SDL\_MAIN\_USE\_CALLBACKS}|hyperpage}{4}
+\indexentry{SDL\_MAIN\_USE\_CALLBACKS@{SDL\_MAIN\_USE\_CALLBACKS}!main.cpp@{main.cpp}|hyperpage}{4}
+\indexentry{main.cpp@{main.cpp}!SDL\_AppEvent@{SDL\_AppEvent}|hyperpage}{4}
+\indexentry{SDL\_AppEvent@{SDL\_AppEvent}!main.cpp@{main.cpp}|hyperpage}{4}
+\indexentry{main.cpp@{main.cpp}!SDL\_AppInit@{SDL\_AppInit}|hyperpage}{4}
+\indexentry{SDL\_AppInit@{SDL\_AppInit}!main.cpp@{main.cpp}|hyperpage}{4}
+\indexentry{main.cpp@{main.cpp}!SDL\_AppIterate@{SDL\_AppIterate}|hyperpage}{4}
+\indexentry{SDL\_AppIterate@{SDL\_AppIterate}!main.cpp@{main.cpp}|hyperpage}{4}
+\indexentry{main.cpp@{main.cpp}!SDL\_AppQuit@{SDL\_AppQuit}|hyperpage}{4}
+\indexentry{SDL\_AppQuit@{SDL\_AppQuit}!main.cpp@{main.cpp}|hyperpage}{4}
+\indexentry{main.cpp@{main.cpp}!renderer@{renderer}|hyperpage}{4}
+\indexentry{renderer@{renderer}!main.cpp@{main.cpp}|hyperpage}{4}
+\indexentry{main.cpp@{main.cpp}!window@{window}|hyperpage}{4}
+\indexentry{window@{window}!main.cpp@{main.cpp}|hyperpage}{4}

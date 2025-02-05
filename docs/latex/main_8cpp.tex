@@ -1,0 +1,86 @@
+\doxysection{src/main.cpp File Reference}
+\hypertarget{main_8cpp}{}\label{main_8cpp}\index{src/main.cpp@{src/main.cpp}}
+{\ttfamily \#include $<$SDL3/\+SDL.\+h$>$}\newline
+{\ttfamily \#include $<$SDL3/\+SDL\+\_\+main.\+h$>$}\newline
+Include dependency graph for main.\+cpp\+:
+\nopagebreak
+\begin{figure}[H]
+\begin{center}
+\leavevmode
+\includegraphics[width=268pt]{main_8cpp__incl}
+\end{center}
+\end{figure}
+\doxysubsubsection*{Macros}
+\begin{DoxyCompactItemize}
+\item 
+\#define \mbox{\hyperlink{main_8cpp_a8aa5d9cdf38353a6c4919e0d1fab61cb}{SDL\+\_\+\+MAIN\+\_\+\+USE\+\_\+\+CALLBACKS}}~1  /\texorpdfstring{$\ast$}{*} use the callbacks instead of main() \texorpdfstring{$\ast$}{*}/
+\end{DoxyCompactItemize}
+\doxysubsubsection*{Functions}
+\begin{DoxyCompactItemize}
+\item 
+SDL\+\_\+\+App\+Result \mbox{\hyperlink{main_8cpp_a4985adfb048a4ae4e1c5296a4fc7affe}{SDL\+\_\+\+App\+Init}} (void \texorpdfstring{$\ast$}{*}\texorpdfstring{$\ast$}{*}appstate, int argc, char \texorpdfstring{$\ast$}{*}argv\mbox{[}$\,$\mbox{]})
+\item 
+SDL\+\_\+\+App\+Result \mbox{\hyperlink{main_8cpp_aa1a484aa7972b8018e724425066066b4}{SDL\+\_\+\+App\+Event}} (void \texorpdfstring{$\ast$}{*}appstate, SDL\+\_\+\+Event \texorpdfstring{$\ast$}{*}event)
+\item 
+SDL\+\_\+\+App\+Result \mbox{\hyperlink{main_8cpp_a7038050dca8c80a0133d600fb008b6db}{SDL\+\_\+\+App\+Iterate}} (void \texorpdfstring{$\ast$}{*}appstate)
+\item 
+void \mbox{\hyperlink{main_8cpp_a31f80ce4f4926b0c6fe01a9644f3c837}{SDL\+\_\+\+App\+Quit}} (void \texorpdfstring{$\ast$}{*}appstate, SDL\+\_\+\+App\+Result result)
+\end{DoxyCompactItemize}
+\doxysubsubsection*{Variables}
+\begin{DoxyCompactItemize}
+\item 
+static SDL\+\_\+\+Window \texorpdfstring{$\ast$}{*} \mbox{\hyperlink{main_8cpp_aaa8e409e04dcf575ef63fd5fb3db06f9}{window}} = NULL
+\item 
+static SDL\+\_\+\+Renderer \texorpdfstring{$\ast$}{*} \mbox{\hyperlink{main_8cpp_a966da7a60c4ea3ba301e26ccc5efe452}{renderer}} = NULL
+\end{DoxyCompactItemize}
+
+
+\doxysubsection{Macro Definition Documentation}
+\Hypertarget{main_8cpp_a8aa5d9cdf38353a6c4919e0d1fab61cb}\index{main.cpp@{main.cpp}!SDL\_MAIN\_USE\_CALLBACKS@{SDL\_MAIN\_USE\_CALLBACKS}}
+\index{SDL\_MAIN\_USE\_CALLBACKS@{SDL\_MAIN\_USE\_CALLBACKS}!main.cpp@{main.cpp}}
+\doxysubsubsection{\texorpdfstring{SDL\_MAIN\_USE\_CALLBACKS}{SDL\_MAIN\_USE\_CALLBACKS}}
+{\footnotesize\ttfamily \label{main_8cpp_a8aa5d9cdf38353a6c4919e0d1fab61cb} 
+\#define SDL\+\_\+\+MAIN\+\_\+\+USE\+\_\+\+CALLBACKS~1  /\texorpdfstring{$\ast$}{*} use the callbacks instead of main() \texorpdfstring{$\ast$}{*}/}
+
+
+
+\doxysubsection{Function Documentation}
+\Hypertarget{main_8cpp_aa1a484aa7972b8018e724425066066b4}\index{main.cpp@{main.cpp}!SDL\_AppEvent@{SDL\_AppEvent}}
+\index{SDL\_AppEvent@{SDL\_AppEvent}!main.cpp@{main.cpp}}
+\doxysubsubsection{\texorpdfstring{SDL\_AppEvent()}{SDL\_AppEvent()}}
+{\footnotesize\ttfamily \label{main_8cpp_aa1a484aa7972b8018e724425066066b4} 
+SDL\+\_\+\+App\+Result SDL\+\_\+\+App\+Event (\begin{DoxyParamCaption}\item[{void \texorpdfstring{$\ast$}{*}}]{appstate}{, }\item[{SDL\+\_\+\+Event \texorpdfstring{$\ast$}{*}}]{event}{}\end{DoxyParamCaption})}
+
+\Hypertarget{main_8cpp_a4985adfb048a4ae4e1c5296a4fc7affe}\index{main.cpp@{main.cpp}!SDL\_AppInit@{SDL\_AppInit}}
+\index{SDL\_AppInit@{SDL\_AppInit}!main.cpp@{main.cpp}}
+\doxysubsubsection{\texorpdfstring{SDL\_AppInit()}{SDL\_AppInit()}}
+{\footnotesize\ttfamily \label{main_8cpp_a4985adfb048a4ae4e1c5296a4fc7affe} 
+SDL\+\_\+\+App\+Result SDL\+\_\+\+App\+Init (\begin{DoxyParamCaption}\item[{void \texorpdfstring{$\ast$}{*}\texorpdfstring{$\ast$}{*}}]{appstate}{, }\item[{int}]{argc}{, }\item[{char \texorpdfstring{$\ast$}{*}}]{argv}{\mbox{[}$\,$\mbox{]}}\end{DoxyParamCaption})}
+
+\Hypertarget{main_8cpp_a7038050dca8c80a0133d600fb008b6db}\index{main.cpp@{main.cpp}!SDL\_AppIterate@{SDL\_AppIterate}}
+\index{SDL\_AppIterate@{SDL\_AppIterate}!main.cpp@{main.cpp}}
+\doxysubsubsection{\texorpdfstring{SDL\_AppIterate()}{SDL\_AppIterate()}}
+{\footnotesize\ttfamily \label{main_8cpp_a7038050dca8c80a0133d600fb008b6db} 
+SDL\+\_\+\+App\+Result SDL\+\_\+\+App\+Iterate (\begin{DoxyParamCaption}\item[{void \texorpdfstring{$\ast$}{*}}]{appstate}{}\end{DoxyParamCaption})}
+
+\Hypertarget{main_8cpp_a31f80ce4f4926b0c6fe01a9644f3c837}\index{main.cpp@{main.cpp}!SDL\_AppQuit@{SDL\_AppQuit}}
+\index{SDL\_AppQuit@{SDL\_AppQuit}!main.cpp@{main.cpp}}
+\doxysubsubsection{\texorpdfstring{SDL\_AppQuit()}{SDL\_AppQuit()}}
+{\footnotesize\ttfamily \label{main_8cpp_a31f80ce4f4926b0c6fe01a9644f3c837} 
+void SDL\+\_\+\+App\+Quit (\begin{DoxyParamCaption}\item[{void \texorpdfstring{$\ast$}{*}}]{appstate}{, }\item[{SDL\+\_\+\+App\+Result}]{result}{}\end{DoxyParamCaption})}
+
+
+
+\doxysubsection{Variable Documentation}
+\Hypertarget{main_8cpp_a966da7a60c4ea3ba301e26ccc5efe452}\index{main.cpp@{main.cpp}!renderer@{renderer}}
+\index{renderer@{renderer}!main.cpp@{main.cpp}}
+\doxysubsubsection{\texorpdfstring{renderer}{renderer}}
+{\footnotesize\ttfamily \label{main_8cpp_a966da7a60c4ea3ba301e26ccc5efe452} 
+SDL\+\_\+\+Renderer\texorpdfstring{$\ast$}{*} renderer = NULL\hspace{0.3cm}{\ttfamily [static]}}
+
+\Hypertarget{main_8cpp_aaa8e409e04dcf575ef63fd5fb3db06f9}\index{main.cpp@{main.cpp}!window@{window}}
+\index{window@{window}!main.cpp@{main.cpp}}
+\doxysubsubsection{\texorpdfstring{window}{window}}
+{\footnotesize\ttfamily \label{main_8cpp_aaa8e409e04dcf575ef63fd5fb3db06f9} 
+SDL\+\_\+\+Window\texorpdfstring{$\ast$}{*} window = NULL\hspace{0.3cm}{\ttfamily [static]}}
+

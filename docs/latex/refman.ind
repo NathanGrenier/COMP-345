@@ -1,0 +1,36 @@
+\begin{theindex}
+
+  \item {main.cpp}
+    \subitem {renderer}, \hyperpage{4}
+    \subitem {SDL\_AppEvent}, \hyperpage{4}
+    \subitem {SDL\_AppInit}, \hyperpage{4}
+    \subitem {SDL\_AppIterate}, \hyperpage{4}
+    \subitem {SDL\_AppQuit}, \hyperpage{4}
+    \subitem {SDL\_MAIN\_USE\_CALLBACKS}, \hyperpage{4}
+    \subitem {window}, \hyperpage{4}
+
+  \indexspace
+
+  \item {renderer}
+    \subitem {main.cpp}, \hyperpage{4}
+
+  \indexspace
+
+  \item {SDL\_AppEvent}
+    \subitem {main.cpp}, \hyperpage{4}
+  \item {SDL\_AppInit}
+    \subitem {main.cpp}, \hyperpage{4}
+  \item {SDL\_AppIterate}
+    \subitem {main.cpp}, \hyperpage{4}
+  \item {SDL\_AppQuit}
+    \subitem {main.cpp}, \hyperpage{4}
+  \item {SDL\_MAIN\_USE\_CALLBACKS}
+    \subitem {main.cpp}, \hyperpage{4}
+  \item {src/main.cpp}, \hyperpage{3}
+
+  \indexspace
+
+  \item {window}
+    \subitem {main.cpp}, \hyperpage{4}
+
+\end{theindex}
