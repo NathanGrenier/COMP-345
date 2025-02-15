@@ -13,7 +13,7 @@ bool ExitState::enter() {
 }
 
 bool ExitState::exit() {
-
+	return true;
 }
 
 void ExitState::handleEvent(SDL_Event& e) {
