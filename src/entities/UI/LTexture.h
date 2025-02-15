@@ -1,3 +1,5 @@
+#include <SDL3/SDL_render.h>
+
 #ifndef LTEXTURE_H
 #define LTEXTURE_H
 class LTexture

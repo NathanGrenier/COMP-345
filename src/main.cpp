@@ -5,9 +5,9 @@
 #include <string>
 #include <sstream>
 
-#include "entities/Titlestate.cpp"
-#include "entities/IntroState.cpp"
-#include "entities/ExitState.cpp"
+#include "entities/States/TitleState.cpp"
+#include "entities/States/IntroState.cpp"
+#include "entities/States/ExitState.cpp"
 #include "entities/UI/LTexture.cpp"
 #include "entities/LTimer.cpp"
 

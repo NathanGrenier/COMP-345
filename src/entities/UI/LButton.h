@@ -1,3 +1,7 @@
+#include <SDL3/SDL_events.h>
+#include <string>
+#include "LTexture.h"
+
 #ifndef LBUTTON_H
 #define LBUTTON_H
 class LButton
@@ -5,7 +9,7 @@ class LButton
 public:
     //Button dimensions
     static constexpr int kButtonWidth = 300;
-    static constexpr int kButtonHeight = 200;
+    static constexpr int kButtonHeight = 50;
 
     //Initializes internal variables
     LButton();
@@ -16,8 +20,12 @@ public:
     //Handles mouse event
     void handleEvent(SDL_Event* e);
 
+    bool setText(const std::string& text, SDL_Color textColor);
+
     //Shows button sprite
     void render();
+
+    bool isClicked() const;
 
 private:
     enum eButtonSprite

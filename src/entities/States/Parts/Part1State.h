@@ -1,12 +1,13 @@
 #include "GameState.h"
+#include "../../UI/LTexture.h"
 
-#ifndef INTROSTATE_H
-#define INTROSTATE_H
-class IntroState : public GameState
+#ifndef PART1STATE_H
+#define PART1STATE_H
+class Part1State : public GameState
 {
 public:
     //Static accessor
-    static IntroState* get();
+    static Part1State* get();
 
     //Transitions
     bool enter() override;
@@ -19,10 +20,10 @@ public:
 
 private:
     //Static instance
-    static IntroState sIntroState;
+    static Part1State sPart1State;
 
     //Private constructor
-    IntroState();
+    Part1State();
 
     //Intro background
     LTexture mBackgroundTexture;

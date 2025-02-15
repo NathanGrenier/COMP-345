@@ -74,6 +74,11 @@ void LButton::handleEvent(SDL_Event* e)
     }
 }
 
+bool LButton::setText(const std::string& text, SDL_Color textColor)
+{
+    return gButtonSpriteTexture.loadFromRenderedText(text, textColor);
+}
+
 void LButton::render()
 {
     //Define sprites
@@ -88,3 +93,17 @@ void LButton::render()
     gButtonSpriteTexture.render(mPosition.x, mPosition.y, &spriteClips[mCurrentSprite]);
 }
 
+bool LButton::isClicked() const
+{
+    // Get the current mouse position
+    float x, y;
+    SDL_GetMouseState(&x, &y);
+
+    // Check if the mouse position is inside the button's area
+    if (x >= mPosition.x && x <= mPosition.x + kButtonWidth &&
+        y >= mPosition.y && y <= mPosition.y + kButtonHeight)
+    {
+        return true;
+    }
+    return false;
+}

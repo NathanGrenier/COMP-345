@@ -1,5 +1,6 @@
 #include "LTexture.h"
 #include "../Global.h"
+#include <string>
 
 //LTexture Implementation
 LTexture::LTexture() :
@@ -57,7 +58,6 @@ bool LTexture::loadFromFile(std::string path)
     return mTexture != nullptr;
 }
 
-#if defined(SDL_TTF_MAJOR_VERSION)
 bool LTexture::loadFromRenderedText(std::string textureText, SDL_Color textColor)
 {
     //Clean up existing texture
@@ -88,7 +88,6 @@ bool LTexture::loadFromRenderedText(std::string textureText, SDL_Color textColor
     //Return success if texture loaded
     return mTexture != nullptr;
 }
-#endif
 
 void LTexture::destroy()
 {

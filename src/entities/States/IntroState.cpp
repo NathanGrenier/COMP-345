@@ -1,5 +1,5 @@
 #include "IntroState.h"
-#include "Global.h"
+#include "../Global.h"
 #include "main.h"
 
 IntroState IntroState::sIntroState;

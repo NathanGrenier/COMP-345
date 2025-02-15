@@ -1,3 +1,4 @@
+#include <SDL3_ttf/SDL_ttf.h>
 #ifndef GLOBAL_H
 #define GLOBAL_H
 
