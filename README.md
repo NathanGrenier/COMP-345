@@ -17,6 +17,7 @@ The [project's documentation](docs/html/index.html), generated using Doxygen, ca
 # Getting Started
 
 1. Install the project's dependencies by running `git submodule init` followed by `git submodule update`.
+	> If you don't have git installed. You can use the installation .exe in `vendor/`.
 2. Select the CMake project name as the startup to execute.
 <div align="center">
 	<img src="static/select_startup.png" alt="Select Startup" width="500">
