@@ -97,7 +97,7 @@ bool loadMedia() {
 	bool success{ true };
 
 	//Load scene font
-	std::string fontPath = "assets/fonts/lazy.ttf";
+	std::string fontPath = "./assets/fonts/lazy.ttf";
 	if (gFont = TTF_OpenFont(fontPath.c_str(), 28); gFont == nullptr)
 	{
 		SDL_Log("Could not load %s! SDL_ttf Error: %s\n", fontPath.c_str(), SDL_GetError());

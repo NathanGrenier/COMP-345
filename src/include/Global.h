@@ -1,8 +1,8 @@
 #ifndef GLOBAL_H
 #define GLOBAL_H
 
-#include <SDL3_ttf/SDL_ttf.h>
 #include <states/GameState.h>
+#include <SDL3_ttf/SDL_ttf.h>
 
 extern SDL_Renderer* gRenderer;
 extern TTF_Font* gFont;
