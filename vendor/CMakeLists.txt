@@ -1,5 +1,18 @@
+# Disable tests in vendor libraries (if any)
 set(SDL_TEST OFF)
-add_subdirectory(SDL)
+
+# SDL
+add_subdirectory(SDL EXCLUDE_FROM_ALL)
+# SDL_image
+set(SDLIMAGE_AVIF OFF)
+set(SDLIMAGE_BMP OFF)
+set(SDLIMAGE_JPEG OFF)
+set(SDLIMAGE_WEBP OFF)
+set(SDLIMAGE_VENDORED ON)
+add_subdirectory(SDL_image EXCLUDE_FROM_ALL)
+# SDL_ttf
+set(SDLTTF_VENDORED ON)
+add_subdirectory(SDL_ttf EXCLUDE_FROM_ALL)
 
 add_library(vendor INTERFACE)
-target_link_libraries(vendor INTERFACE SDL3::SDL3)
+target_link_libraries(vendor INTERFACE SDL3::SDL3 SDL3_image::SDL3_image SDL3_ttf::SDL3_ttf)
