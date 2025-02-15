@@ -1,7 +1,7 @@
-#include "LTexture.h"
-#include "../Global.h"
 #include <string>
 #include <SDL3_image/SDL_image.h>
+#include <ui/LTexture.h>
+#include <Global.h>
 
 //LTexture Implementation
 LTexture::LTexture() :

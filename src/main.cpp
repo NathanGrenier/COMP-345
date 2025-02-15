@@ -1,4 +1,4 @@
-﻿#include <SDL3/SDL.h>
+#include <SDL3/SDL.h>
 #include <SDL3/SDL_main.h>
 #include <SDL3_image/SDL_image.h>
 #include <SDL3_ttf/SDL_ttf.h>
@@ -9,9 +9,7 @@
 #include "States/IntroState.cpp"
 #include "States/ExitState.cpp"
 #include "ui/LTexture.cpp"
-#include "LTimer.cpp"
-
-#include "Global.h"
+#include <LTimer.h>
 
 /* Constants */
 constexpr int kScreenFps{ 60 };
@@ -99,7 +97,7 @@ bool loadMedia() {
 	bool success{ true };
 
 	//Load scene font
-	std::string fontPath = "../../../Resources/fonts/lazy.ttf";
+	std::string fontPath = "assets/fonts/lazy.ttf";
 	if (gFont = TTF_OpenFont(fontPath.c_str(), 28); gFont == nullptr)
 	{
 		SDL_Log("Could not load %s! SDL_ttf Error: %s\n", fontPath.c_str(), SDL_GetError());

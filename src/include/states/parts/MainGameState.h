@@ -1,8 +1,9 @@
-#include "GameState.h"
-#include "ui/LTexture.h"
-
 #ifndef MAINGAMESTATE_H
 #define MAINGAMESTATE_H
+
+#include "../GameState.h"
+#include <ui/LTexture.h>
+
 class MainGameState : public GameState {
 public:
 	//Static accessor

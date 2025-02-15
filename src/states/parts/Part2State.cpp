@@ -1,4 +1,4 @@
-#include "parts/Part2State.h"
+#include <states/parts/Part2State.h>
 
 Part2State Part2State::sPart2State;
 

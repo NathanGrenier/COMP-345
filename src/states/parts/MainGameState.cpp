@@ -1,4 +1,4 @@
-#include "parts/MainGameState.h"
+#include <states/parts/MainGameState.h>
 
 MainGameState MainGameState::sMainGameState;
 

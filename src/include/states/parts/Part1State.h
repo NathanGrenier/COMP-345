@@ -1,7 +1,8 @@
 #ifndef PART1STATE_H
 #define PART1STATE_H
 
-#include "GameState.h"
+#include "../GameState.h"
+#include <ui/LTexture.h>
 
 class Part1State : public GameState {
 public:

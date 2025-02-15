@@ -3,8 +3,7 @@ add_library(ui STATIC
     LTexture.cpp
 )
 
-# Expose the public headers for ui (located in src/include/ui)
-target_include_directories(ui PUBLIC ${CMAKE_SOURCE_DIR}/src/include/ui)
+target_include_directories(ui PUBLIC ${CMAKE_SOURCE_DIR}/src/include)
 
-# Link ui with vendor if needed
+# If the states module depends on the core library:
 target_link_libraries(ui PUBLIC vendor)

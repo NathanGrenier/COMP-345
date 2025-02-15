@@ -1,11 +1,10 @@
-#include "Titlestate.h"
-#include "../Global.h"
-#include "../../main.h"
-#include "../UI/LButton.cpp"
-#include "Parts/Part1State.cpp"
-#include "Parts/Part2State.cpp"
-#include "Parts/Part3State.cpp"
-#include "Parts/MainGameState.cpp"
+#include <states/TitleState.h>
+#include <ui/LButton.h>
+#include <states/parts/MainGameState.h>
+#include <states/parts/Part1State.h>
+#include <states/parts/Part2State.h>
+#include <states/parts/Part3State.h>
+#include <Global.h>
 
 TitleState TitleState::sTitleState;
 

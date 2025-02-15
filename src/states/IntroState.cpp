@@ -1,6 +1,7 @@
-#include "IntroState.h"
-#include "../Global.h"
-#include "main.h"
+#include <states/IntroState.h>
+#include <SDL3/SDL_log.h>
+#include <states/TitleState.h>
+#include <Global.h>
 
 IntroState IntroState::sIntroState;
 

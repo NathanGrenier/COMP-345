@@ -1,5 +1,5 @@
-#include "ExitState.h"
 #include <SDL3/SDL_events.h>
+#include <states/ExitState.h>
 
 ExitState ExitState::sExitState;
 
