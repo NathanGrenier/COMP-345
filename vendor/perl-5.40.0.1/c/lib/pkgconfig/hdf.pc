@@ -1,0 +1,14 @@
+prefix=${pcfiledir}/../..
+exec_prefix=${prefix}
+libdir=${exec_prefix}/lib
+includedir=${prefix}/include
+
+Name: hdf
+Description: HDF (Hierarchical Data Format 4) Software Library
+Version: 4.3.0
+
+Cflags: -I${includedir}
+Libs: -L${libdir}  -lhdf -lmfhdf
+Requires: 
+Libs.private:  -lhdf -lmfhdf  -lm -lws2_32 -lwsock32 -l${pcfiledir}/../../lib/libjpeg.dll.a -l${pcfiledir}/../../lib/libz.dll.a -l${pcfiledir}/../../lib/libsz.dll.a
+Requires.private: 

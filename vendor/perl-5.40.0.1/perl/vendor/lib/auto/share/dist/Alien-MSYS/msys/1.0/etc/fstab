@@ -1,0 +1,9 @@
+# /etc/fstab -- mount table configuration for MSYS.
+# Please refer to /etc/fstab.sample for explanatory annotation.
+
+# MSYS-Portable needs this "magic" comment:
+# MSYSROOT=C:/strawberry_build/env/AppDataRoaming/.cpanm/work/1723266465.648/Alien-MSYS-0.17/_alien/build_5D0P/msys/1.0
+
+# Win32_Path				Mount_Point
+#-------------------------------------	-----------
+C:/strawberry_build/env/AppDataRoaming/.cpanm/work/1723266465.648/Alien-MSYS-0.17/_alien/build_5D0P	/mingw

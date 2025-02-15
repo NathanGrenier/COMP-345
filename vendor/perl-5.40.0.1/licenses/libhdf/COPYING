@@ -1,0 +1,140 @@
+
+Copyright Notice and License Terms for 
+Hierarchical Data Format (HDF) Software Library and Utilities
+---------------------------------------------------------------------------
+
+Hierarchical Data Format (HDF) Software Library and Utilities
+Copyright 2006 by The HDF Group.
+
+NCSA Hierarchical Data Format (HDF) Software Library and Utilities
+Copyright 1988-2006 by the Board of Trustees of the University of Illinois.
+
+All rights reserved.
+
+Redistribution and use in source and binary forms, with or without 
+modification, are permitted for any purpose (including commercial purposes) 
+provided that the following conditions are met:
+
+1. Redistributions of source code must retain the above copyright notice, 
+   this list of conditions, and the following disclaimer.
+
+2. Redistributions in binary form must reproduce the above copyright notice, 
+   this list of conditions, and the following disclaimer in the documentation 
+   and/or materials provided with the distribution.
+
+3. Neither the name of The HDF Group, the name of the University, nor the 
+   name of any Contributor may be used to endorse or promote products derived 
+   from this software without specific prior written permission from The HDF
+   Group, the University, or the Contributor, respectively.
+
+DISCLAIMER:
+THIS SOFTWARE IS PROVIDED BY THE HDF GROUP AND THE CONTRIBUTORS "AS IS" 
+WITH NO WARRANTY OF ANY KIND, EITHER EXPRESSED OR IMPLIED.  IN NO EVENT 
+SHALL THE HDF GROUP OR THE CONTRIBUTORS BE LIABLE FOR ANY DAMAGES SUFFERED 
+BY THE USERS ARISING OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF 
+THE POSSIBILITY OF SUCH DAMAGE. 
+
+You are under no obligation whatsoever to provide any bug fixes, patches, or 
+upgrades to the features, functionality or performance of the source code 
+("Enhancements") to anyone; however, if you choose to make your Enhancements 
+available either publicly, or directly to The HDF Group, without imposing a 
+separate written license agreement for such Enhancements, then you hereby grant 
+the following license: a non-exclusive, royalty-free perpetual license to 
+install, use, modify, prepare derivative works, incorporate into other computer 
+software, distribute, and sublicense such enhancements or derivative works 
+thereof, in binary and source code form.
+
+---------------------------------------------------------------------------
+---------------------------------------------------------------------------
+
+Contributors:
+    - National Center for Supercomputing Applications (NCSA)
+        at the University of Illinois
+    - Fortner Software
+    - Unidata Program Center (netCDF)
+    - The Independent JPEG Group (JPEG)
+    - Jean-loup Gailly and Mark Adler (gzip)
+    - Digital Equipment Corporation (DEC)
+
+---------------------------------------------------------------------------
+
+
+---------------------------------------------------------------------------
+---------------------------------------------------------------------------
+
+3rd-party software included in HDF4: netCDF
+
+The multi-file HDF interface (mfhdf library) and several netCDF tools and
+tests are built using netCDF 2.3.2 code under the following license (from
+the mfhdf/COPYRIGHT file):
+
+Copyright 1993 University Corporation for Atmospheric Research/Unidata
+
+Portions of this software were developed by the Unidata Program at the
+University Corporation for Atmospheric Research.
+
+Access and use of this software shall impose the following obligations
+and understandings on the user. The user is granted the right, without
+any fee or cost, to use, copy, modify, alter, enhance and distribute
+this software, and any derivative works thereof, and its supporting
+documentation for any purpose whatsoever, provided that this entire
+notice appears in all copies of the software, derivative works and
+supporting documentation.  Further, UCAR requests that the user credit
+UCAR/Unidata in any publications that result from the use of this
+software or in any product that includes this software, although this
+is not an obligation. The names UCAR and/or Unidata, however, may not
+be used in any advertising or publicity to endorse or promote any
+products or commercial entity unless specific written permission is
+obtained from UCAR/Unidata. The user also understands that
+UCAR/Unidata is not obligated to provide the user with any support,
+consulting, training or assistance of any kind with regard to the use,
+operation and performance of this software nor to provide the user
+with any updates, revisions, new versions or "bug fixes."
+
+THIS SOFTWARE IS PROVIDED BY UCAR/UNIDATA "AS IS" AND ANY EXPRESS OR
+IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE IMPLIED
+WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE ARE
+DISCLAIMED. IN NO EVENT SHALL UCAR/UNIDATA BE LIABLE FOR ANY SPECIAL,
+INDIRECT OR CONSEQUENTIAL DAMAGES OR ANY DAMAGES WHATSOEVER RESULTING
+FROM LOSS OF USE, DATA OR PROFITS, WHETHER IN AN ACTION OF CONTRACT,
+NEGLIGENCE OR OTHER TORTIOUS ACTION, ARISING OUT OF OR IN CONNECTION
+WITH THE ACCESS, USE OR PERFORMANCE OF THIS SOFTWARE.
+
+---------------------------------------------------------------------------
+---------------------------------------------------------------------------
+---------------------------------------------------------------------------
+
+3rd-party software included in HDF4: XDR
+
+HDF4 builds the Sun RPC version of XDR as an internal 3rd-party I/O
+library under this license:
+
+    Sun RPC is a product of Sun Microsystems, Inc. and is provided for
+    unrestricted use provided that this legend is included on all tape
+    media and as a part of the software program in whole or part.  Users
+    may copy or modify Sun RPC without charge, but are not authorized
+    to license or distribute it to anyone else except as part of a product or
+    program developed by the user.
+
+    SUN RPC IS PROVIDED AS IS WITH NO WARRANTIES OF ANY KIND INCLUDING THE
+    WARRANTIES OF DESIGN, MERCHANTABILITY AND FITNESS FOR A PARTICULAR
+    PURPOSE, OR ARISING FROM A COURSE OF DEALING, USAGE OR TRADE PRACTICE.
+
+    Sun RPC is provided with no support and without any obligation on the
+    part of Sun Microsystems, Inc. to assist in its use, correction,
+    modification or enhancement.
+
+    SUN MICROSYSTEMS, INC. SHALL HAVE NO LIABILITY WITH RESPECT TO THE
+    INFRINGEMENT OF COPYRIGHTS, TRADE SECRETS OR ANY PATENTS BY SUN RPC
+    OR ANY PART THEREOF.
+
+    In no event will Sun Microsystems, Inc. be liable for any lost revenue
+    or profits or other special, indirect and consequential damages, even if
+    Sun has been advised of the possibility of such damages.
+
+    Sun Microsystems, Inc.
+    2550 Garcia Avenue
+    Mountain View, California  94043
+
+---------------------------------------------------------------------------
+

@@ -1,0 +1,4 @@
+Package: szip-2.1.1
+Sources: https://support.hdfgroup.org/ftp/lib-external/szip/2.1.1/src/szip-2.1.1.tar.gz
+Patch: szip-2.1.1.diff
+Homepage: http://www.hdfgroup.org/doc_resource/SZIP/

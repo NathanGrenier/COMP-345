@@ -1,0 +1,4 @@
+Package: gnuplot-6.0.0
+Sources: https://downloads.sourceforge.net/gnuplot/gnuplot-6.0.0.tar.gz
+Patch: gnuplot-6.0.0.diff
+Homepage: http://gnuplot.sourceforge.net/

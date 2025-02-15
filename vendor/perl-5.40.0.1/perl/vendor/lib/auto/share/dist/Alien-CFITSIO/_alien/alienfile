@@ -1,0 +1,84 @@
+#! perl
+
+use strict;
+use warnings;
+use Path::Tiny;
+use Sort::Versions;
+
+use alienfile;
+
+# tie versions of this module and CFITSIO.  CFITSIO's code is very
+# backwards compatible, but their build configuration may break, which
+# will cause the unnecessary failure to build this module.
+
+use constant CFITSIO_VERSION => '4.4.0';
+
+# allow tweaks for testing.
+# DON'T USE THIS UNLESS YOU LIKE TO PUT YOUR HAND ON A HOT STOVE.
+
+use constant ( { map { uc($_) => $_ } 'exact_version', 'atleast_version' } );
+
+my %VersionMatchEnvs = (
+    ALIEN_CFITSIO_EXACT_VERSION => EXACT_VERSION,
+    ALIEN_CFITSIO_ATLEAST_VERSION => ATLEAST_VERSION,
+);
+
+my ( $version_match, @extra ) =  grep { defined $ENV{$_} } keys %VersionMatchEnvs;
+
+die( 'specify only one of the environment variables: ' . join( ', ', keys %VersionMatchEnvs ) ) if @extra;
+
+my $requested_version;
+if ( defined $version_match ) {
+    $requested_version = $ENV{$version_match};
+    $version_match = $VersionMatchEnvs{$version_match};
+}
+else {
+    $version_match = EXACT_VERSION;
+    $requested_version = CFITSIO_VERSION;
+}
+
+die( "This distribution only supports CFITSIO versions @{[ CFITSIO_VERSION]} or (usually) greater\n" )
+  if versioncmp( CFITSIO_VERSION, $requested_version) == 1;
+
+plugin 'Gather::IsolateDynamic';
+
+
+plugin PkgConfig => (
+    pkg_name => 'cfitsio',
+    $version_match => $requested_version,
+);
+
+share {
+    start_url 'https://heasarc.gsfc.nasa.gov/FTP/software/fitsio/c';
+    plugin Download => (
+        filter  => qr/cfitsio-4.*[.]tar[.]gz/,
+        version => qr/(\d+\.\d+\.\d+)[.]tar[.]gz$/,
+    );
+
+    meta->around_hook( prefer => sub {
+            my ( $orig, $build, @args ) = @_;
+            my $ret  = $build->$orig( @args );
+            my $list = $ret->{list};
+            if ( $version_match eq EXACT_VERSION )  {
+                $ret->{list} = [ grep { $_->{version} eq $requested_version } @$list ];
+            }
+            else {
+                $ret->{list} = [grep { versioncmp( $requested_version, $_->{version} ) < 1 } @$list ];
+            }
+            return $ret;
+        } );
+
+    plugin Extract => 'tar.gz';
+    patch sub {
+        my $build = shift;
+
+        # just in case the distribution doesn't have a patch directory.
+        return unless defined $build->install_prop->{patch};
+        my $patch
+          = path( $build->install_prop->{patch},
+                  "cfitsio-@{[ $build->runtime_prop->{version} ]}.patch", );
+        return unless $patch->exists;
+        Alien::Build::CommandSequence->new( ["%{patch} -p1 <  $patch"] )->execute( $build );
+    };
+    plugin 'Build::Autoconf';
+};

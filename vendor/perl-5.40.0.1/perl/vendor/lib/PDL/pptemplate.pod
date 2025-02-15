@@ -1,0 +1,56 @@
+=head1 NAME
+
+pptemplate - script to generate Makefile.PL and PP file skeleton
+
+=head1 SYNOPSIS
+
+        # generate Makefile.PL and mymodule.pd in CWD
+	pptemplate PDL::MyModule;
+
+
+=head1 DESCRIPTION
+
+The B<pptemplate> script is the easiest way to start a new module
+for PDL that contains PP code (see also L<PDL::PP>). The usage is simply
+
+  pptemplate modulename;
+
+As a result pptemplate will generate a perl Makefile for the new
+module (F<Makefile.PL>) that contains the minimal structure to
+generate a module from PP code and also a skeleton file
+for your new module.
+
+The file will be called F<mymod.pd> if you called C<pptemplate> as
+
+  pptemplate PDL::CleverAlgs::Mymod;
+
+I suppose you can work out the naming rule C<;)>. If not resort to
+experimentation or the source code.
+
+C<pptemplate> will refuse to overwrite existing files of the same name
+to avoid accidents. Move them out of the way if you really want to scrap
+them.
+
+=head2 Options
+
+Currently there is only the C<-i> option which switches C<pptemplate>
+into the so called I<internal mode>.  It should only be used when you
+are starting a new module within the main PDL tree that is supposed to
+be part of the PDL distribution and the normal PDL build process, e.g.
+
+   cd PDL/IO;
+   mkdir Mpthree; cd Mpthree;
+   pptemplate -i PDL::IO::Mpthree;
+
+=head1 BUGS
+
+Maybe C<;)>.
+Feedback and bug reports are welcome.
+
+=head1 COPYRIGHT
+
+Copyright (c) 2001, Christian Soeller. All Rights Reserved.
+This module is free software. It may be used, redistributed
+and/or modified under the same terms as PDL itself
+(see L<http://pdl.perl.org>).
+

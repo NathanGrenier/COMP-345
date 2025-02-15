@@ -1,0 +1,3 @@
+Package: lapack-3.12.0
+Sources: https://github.com/Reference-LAPACK/lapack/archive/refs/tags/v3.12.0.tar.gz
+Homepage: http://www.netlib.org/lapack/

@@ -1,0 +1,4 @@
+Package: gsl-2.7.1
+Sources: https://ftp.gnu.org/gnu/gsl/gsl-2.7.1.tar.gz
+Patch: gsl-2.7.1.diff
+Homepage: http://www.gnu.org/software/gsl/

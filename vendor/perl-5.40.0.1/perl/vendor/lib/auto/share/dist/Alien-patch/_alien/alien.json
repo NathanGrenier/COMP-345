@@ -1,0 +1,15 @@
+{
+   "alien_build_version" : "2.83",
+   "command" : "patch",
+   "install_type" : "system",
+   "legacy" : {
+      "finished_installing" : 1,
+      "install_type" : "system",
+      "original_prefix" : "C:/strawberry/perl/vendor/lib/auto/share/dist/Alien-patch",
+      "version" : "2.5.9"
+   },
+   "my_vendor" : "unknown",
+   "perl_module_version" : "0.15",
+   "prefix" : "C:/strawberry/perl/vendor/lib/auto/share/dist/Alien-patch",
+   "version" : "2.5.9"
+}

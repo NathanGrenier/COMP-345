@@ -1,0 +1,18 @@
+{
+   "alien_build_version" : "2.83",
+   "cflags" : "-IC:/strawberry/perl/vendor/lib/auto/share/dist/Alien-CFITSIO/include ",
+   "cflags_static" : "-IC:/strawberry/perl/vendor/lib/auto/share/dist/Alien-CFITSIO/include ",
+   "install_type" : "share",
+   "legacy" : {
+      "finished_installing" : 1,
+      "install_type" : "share",
+      "name" : "cfitsio",
+      "original_prefix" : "C:/strawberry/perl/vendor/lib/auto/share/dist/Alien-CFITSIO",
+      "version" : "4.4.0"
+   },
+   "libs" : "-LC:/strawberry/perl/vendor/lib/auto/share/dist/Alien-CFITSIO/lib -lcfitsio ",
+   "libs_static" : "-LC:/strawberry/perl/vendor/lib/auto/share/dist/Alien-CFITSIO/lib -lcfitsio -lz -lm ",
+   "perl_module_version" : "v4.4.0.2",
+   "prefix" : "C:/strawberry/perl/vendor/lib/auto/share/dist/Alien-CFITSIO",
+   "version" : "4.4.0"
+}

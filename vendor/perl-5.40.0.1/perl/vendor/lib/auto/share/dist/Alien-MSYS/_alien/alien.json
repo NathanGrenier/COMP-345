@@ -1,0 +1,13 @@
+{
+   "alien_build_version" : "2.83",
+   "install_type" : "share",
+   "legacy" : {
+      "finished_installing" : 1,
+      "install_type" : "share",
+      "original_prefix" : "C:/strawberry/perl/vendor/lib/auto/share/dist/Alien-MSYS",
+      "version" : null
+   },
+   "my_type" : "share",
+   "perl_module_version" : "0.17",
+   "prefix" : "C:/strawberry/perl/vendor/lib/auto/share/dist/Alien-MSYS"
+}

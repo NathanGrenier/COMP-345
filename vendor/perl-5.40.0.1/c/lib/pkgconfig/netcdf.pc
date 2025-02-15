@@ -1,0 +1,13 @@
+prefix=${pcfiledir}/../..
+exec_prefix=${prefix}
+libdir=${exec_prefix}/lib
+includedir=${prefix}/include
+ccompiler=x86_64-w64-mingw32-gcc
+
+Name: netcdf-c
+Description: NetCDF Client Library for C
+URL: https://www.unidata.ucar.edu/netcdf
+Version: 4.9.2
+Libs: -L${libdir} -lnetcdf
+Libs.private: -ljpeg -lmfhdf -lhdf -ljpeg -lhdf5_hl -lhdf5 -lm -lzlib -ldl -lsz -lbz2 -lxml2 
+Cflags: -I${includedir}

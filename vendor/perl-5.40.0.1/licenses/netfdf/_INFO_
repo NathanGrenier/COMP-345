@@ -1,0 +1,4 @@
+Package: netcdf-c-4.9.2
+Sources: https://github.com/Unidata/netcdf-c/archive/refs/tags/v4.9.2.tar.gz
+Patch: netcdf-c-4.9.2.diff
+Homepage: http://www.unidata.ucar.edu/software/netcdf/

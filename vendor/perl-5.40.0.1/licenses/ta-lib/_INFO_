@@ -1,0 +1,4 @@
+Package: ta-lib-0.4.0
+Sources: http://strawberryperl.com/package/kmx/libs_src/ta-lib-0.4.0.tar.gz
+Patch: ta-lib-0.4.0.diff
+Homepage: http://ta-lib.org/

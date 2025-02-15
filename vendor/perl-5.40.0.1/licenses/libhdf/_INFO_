@@ -1,0 +1,4 @@
+Package: hdf-4.3.0
+Sources: https://github.com/HDFGroup/hdf4/releases/download/hdf4.3.0/hdf4.3.0.tar.gz
+Patch: hdf-4.3.0.diff
+Homepage: http://www.hdfgroup.org/products/hdf4/

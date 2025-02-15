@@ -1,0 +1,12 @@
+prefix="${pcfiledir}/../.."
+libdir=${prefix}/lib
+includedir=${prefix}/include/plplot
+drvdir=${prefix}/lib/plplot5.15.0/drivers
+
+Name: PLplot Fortran
+Description: Scientific plotting library (Double precision Fortran binding)
+Requires: plplot
+Version: 5.15.0
+Libs: -L"${libdir}" -lplplotfortran -lplplot 
+Libs.private: -L"${libdir}" 
+Cflags: -I"${includedir}" -I"${pcfiledir}/../../lib/fortran/modules/plplot"

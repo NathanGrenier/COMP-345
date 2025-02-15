@@ -1,0 +1,12 @@
+prefix=C:/strawberry/perl/vendor/lib/auto/share/dist/Alien-CFITSIO
+exec_prefix=${prefix}
+libdir=${prefix}/lib
+includedir=${prefix}/include
+
+Name: cfitsio
+Description: FITS File Subroutine Library
+URL: https://heasarc.gsfc.nasa.gov/fitsio/
+Version: 4.4.0
+Libs: -L${libdir} -lcfitsio
+Libs.private:  -lz  -lm
+Cflags: -I${includedir}

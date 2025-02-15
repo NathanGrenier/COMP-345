@@ -1,0 +1,12 @@
+prefix="${pcfiledir}/../.."
+libdir=${prefix}/lib
+includedir=${prefix}/include/plplot
+drvdir=${prefix}/lib/plplot5.15.0/drivers
+
+Name: PLplot 
+Description: Scientific plotting library (Double precision Core C library)
+Requires: 
+Version: 5.15.0
+Libs: -L"${libdir}" -lplplot -L"${pcfiledir}/../../lib" -lgd.dll -L"${pcfiledir}/../../lib" -lpng.dll -L"${pcfiledir}/../../lib" -lz.dll -L"${pcfiledir}/../../lib" -ljpeg.dll -lcsirocsa -lqsastime -L"C:/spbuild/mingw64/lib" -lstdc++.dll -L"C:/spbuild/mingw64/x86_64-w64-mingw32/lib" -lmingw32 -L"C:/spbuild/mingw64/lib" -lgcc_s -L"C:/spbuild/mingw64/lib/gcc/x86_64-w64-mingw32/13.2.0" -lgcc -L"C:/spbuild/mingw64/x86_64-w64-mingw32/lib" -lmoldname -L"C:/spbuild/mingw64/x86_64-w64-mingw32/lib" -lmingwex -L"C:/spbuild/mingw64/x86_64-w64-mingw32/lib" -lkernel32 -L"C:/spbuild/mingw64/x86_64-w64-mingw32/lib" -lpthread.dll -L"C:/spbuild/mingw64/x86_64-w64-mingw32/lib" -ladvapi32 -L"C:/spbuild/mingw64/x86_64-w64-mingw32/lib" -lshell32 -L"C:/spbuild/mingw64/x86_64-w64-mingw32/lib" -luser32 -L"C:/spbuild/mingw64/x86_64-w64-mingw32/lib" -lkernel32 -L"C:/spbuild/mingw64/x86_64-w64-mingw32/lib" -lmingw32 -L"C:/spbuild/mingw64/lib" -lgcc_s -L"C:/spbuild/mingw64/lib/gcc/x86_64-w64-mingw32/13.2.0" -lgcc -L"C:/spbuild/mingw64/x86_64-w64-mingw32/lib" -lmoldname -L"C:/spbuild/mingw64/x86_64-w64-mingw32/lib" -lmingwex -L"C:/spbuild/mingw64/x86_64-w64-mingw32/lib" -lkernel32
+Libs.private: -L"${libdir}" 
+Cflags: -I"${includedir}"  -I${pcfiledir}/../../include
