@@ -102,29 +102,39 @@ void LTexture::setBlending(SDL_BlendMode blendMode) {
 }
 
 void LTexture::render(float x, float y, SDL_FRect* clip, float width, float height, double degrees, SDL_FPoint* center, SDL_FlipMode flipMode) {
-	//Set texture position
+	// Set texture position
 	SDL_FRect dstRect = { x, y, static_cast<float>(mWidth), static_cast<float>(mHeight) };
 
-	//Default to clip dimensions if clip is given
-	if (clip != nullptr)
-	{
+	// Default to clip dimensions if clip is given
+	if (clip != nullptr) {
 		dstRect.w = clip->w;
 		dstRect.h = clip->h;
 	}
 
-	//Resize if new dimensions are given
-	if (width > 0)
-	{
+	// Calculate the aspect ratio of the texture
+	float aspectRatio = static_cast<float>(mWidth) / static_cast<float>(mHeight);
+
+	// Resize while maintaining aspect ratio if necessary
+	if (width > 0 && height <= 0) {
+		// Only width is provided, calculate height based on aspect ratio
 		dstRect.w = width;
+		dstRect.h = dstRect.w / aspectRatio;
 	}
-	if (height > 0)
-	{
+	else if (height > 0 && width <= 0) {
+		// Only height is provided, calculate width based on aspect ratio
 		dstRect.h = height;
+		dstRect.w = dstRect.h * aspectRatio;
+	}
+	else {
+		// If both width and height are provided, use them directly
+		if (width > 0) dstRect.w = width;
+		if (height > 0) dstRect.h = height;
 	}
 
-	//Render texture
+	// Render texture with the updated dimensions
 	SDL_RenderTextureRotated(gRenderer, mTexture, clip, &dstRect, degrees, center, flipMode);
 }
+
 
 int LTexture::getWidth() {
 	return mWidth;
