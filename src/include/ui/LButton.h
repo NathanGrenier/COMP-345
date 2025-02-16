@@ -5,14 +5,16 @@
 class LButton {
 public:
 	//Button dimensions
-	static constexpr int kButtonWidth = 300;
-	static constexpr int kButtonHeight = 50;
+	int kButtonWidth;
+	int kButtonHeight;
 
 	//Initializes internal variables
 	LButton();
 
 	//Sets top left position
 	void setPosition(float x, float y);
+
+	SDL_FPoint getPosition();
 
 	//Handles mouse event
 	void handleEvent(SDL_Event* e);
@@ -22,9 +24,9 @@ public:
 	//Shows button sprite
 	void render();
 
-	bool isClicked() const;
+	bool isClicked();
 
-private:
+protected:
 	enum eButtonSprite {
 		eButtonSpriteMouseOut = 0,
 		eButtonSpriteMouseOverMotion = 1,

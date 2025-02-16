@@ -138,7 +138,7 @@ void close() {
 int main(int argc, char* args[]) {
 	//Final exit code
 	int exitCode{ 0 };
-
+	
 	//Initialize
 	if (!init())
 	{
@@ -208,6 +208,7 @@ int main(int argc, char* args[]) {
 					if (e.type == SDL_EVENT_QUIT)
 					{
 						setNextState(ExitState::get());
+						quit = true;
 					}
 				}
 

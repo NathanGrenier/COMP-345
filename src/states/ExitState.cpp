@@ -1,5 +1,6 @@
 #include <SDL3/SDL_events.h>
 #include <states/ExitState.h>
+#include <SDL3/SDL_init.h>
 
 ExitState ExitState::sExitState;
 
@@ -9,6 +10,7 @@ ExitState* ExitState::get() {
 }
 
 bool ExitState::enter() {
+	SDL_Quit();
 	return true;
 }
 
@@ -17,7 +19,6 @@ bool ExitState::exit() {
 }
 
 void ExitState::handleEvent(SDL_Event& e) {
-
 }
 
 void ExitState::update() {
