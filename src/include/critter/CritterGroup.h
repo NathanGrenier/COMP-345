@@ -6,17 +6,18 @@
 class CritterGroup {
 public:
     // Constructor with parameters
-    CritterGroup(int& waveLevel, SDL_FRect startPosition, SDL_FRect endPosition);
+    CritterGroup(int& waveLevel, int& playerGold, SDL_FRect startPosition, SDL_FRect endPosition);
 
     void generateCritters(SDL_FRect startPosition, SDL_FRect endPosition, float deltaTime);
     void update(float deltaTime, SDL_FRect newEndPosition);  // Update all critters in the group
     void render(SDL_Renderer* renderer);  // Render all critters in the group
     void attackTowers(int damage);  // Apply damage to critters from towers
-    void handleExit(int& playerCoins);  // Handle critters that reach the exit
+    void handleExit();  // Handle critters that reach the exit
 
-     std::vector<Critter>& getCritters() { return critters; }
-    int& waveLevel;
+    std::vector<Critter>& getCritters() { return critters; }
 private:
+    int& waveLevel;
+    int& playerGold;
     std::vector<Critter> critters;
     SDL_FRect startPosition;
     SDL_FRect endPosition;

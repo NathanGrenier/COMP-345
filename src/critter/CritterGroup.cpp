@@ -5,8 +5,8 @@
 #include <ui/LTexture.h>
 #include <iostream>
 
-CritterGroup::CritterGroup(int& waveLevel, SDL_FRect startPosition, SDL_FRect endPosition)
-    : waveLevel(waveLevel) {
+CritterGroup::CritterGroup(int& waveLevel, int& playerGold, SDL_FRect startPosition, SDL_FRect endPosition)
+    : waveLevel(waveLevel), playerGold(playerGold), startPosition(startPosition), endPosition(endPosition) {
 }
 
 void CritterGroup::generateCritters(SDL_FRect startPosition, SDL_FRect endPosition, float deltaTime) {
@@ -48,21 +48,14 @@ void CritterGroup::generateCritters(SDL_FRect startPosition, SDL_FRect endPositi
     }
 }
 
-
 void CritterGroup::update(float deltaTime, SDL_FRect newEndPosition) {
-
     if (!waveInProgress) {
         waveCountdown -= deltaTime;
 
         // Debug statement to track countdown progress
-        std::cout << "Wave countdown: " << waveCountdown << " seconds remaining." << std::endl;
-
         if (waveCountdown <= 0.0f) {
             waveInProgress = true;
             waveLevel++;  // Increase wave level
-
-            // Debug statement to confirm wave level increment
-            std::cout << "Wave " << waveLevel << " started!" << std::endl;
         }
         return; // Skip updating critters during countdown
     }
@@ -72,6 +65,12 @@ void CritterGroup::update(float deltaTime, SDL_FRect newEndPosition) {
     // Iterate through critters and update their status
     for (auto it = critters.begin(); it != critters.end(); ) {
         if (!it->isAlive()) {
+            if (!it->atExit()) {
+                playerGold += it->getReward();
+            }
+            else {
+                it->stealGold(playerGold);
+            }
             it = critters.erase(it);  // Remove the critter if it's dead
             ++crittersSpawned;
         }
@@ -79,6 +78,12 @@ void CritterGroup::update(float deltaTime, SDL_FRect newEndPosition) {
             ++aliveCritters;
             it->setEndPosition(newEndPosition);
             it->move(deltaTime, critters, 5.0f);
+
+            // Check if the critter has reached the exit
+            if (!it->atExit() && std::abs(it->getPosition().x - it->getEndPosition().x) <= 1.0f &&
+                std::abs(it->getPosition().y - it->getEndPosition().y) <= 1.0f) {
+                it->setAtExit(true);
+            }
             ++it;
         }
     }
@@ -103,7 +108,7 @@ void CritterGroup::render(SDL_Renderer* renderer) {
     // Render the alive critters count at the top-left or another position on the screen
     SDL_Color textColor = { 0, 0, 0, 255 };
     LTexture aliveText;
-    std::string aliveMessage = "Alive Critters: " + std::to_string(aliveCrittersCount);
+    std::string aliveMessage = "Living Critters: " + std::to_string(aliveCrittersCount);
     aliveText.loadFromRenderedText(aliveMessage, textColor);
     aliveText.render(10, 50);  // Display text at the top-left (you can adjust position)
 
@@ -112,7 +117,7 @@ void CritterGroup::render(SDL_Renderer* renderer) {
         LTexture countdownText;
         std::string countdownMessage = "Next wave in: " + std::to_string((int)std::ceil(waveCountdown));
         countdownText.loadFromRenderedText(countdownMessage, textColor);
-        countdownText.render(10, 80);  // Display text at the top-center
+        countdownText.render(10, 90);  // Display text at the top-center
     }
 
     // Render critters
@@ -124,16 +129,5 @@ void CritterGroup::render(SDL_Renderer* renderer) {
 void CritterGroup::attackTowers(int damage) {
     for (auto& critter : critters) {
         critter.takeDamage(damage);
-    }
-}
-
-void CritterGroup::handleExit(int& playerCoins) {
-    for (auto& critter : critters) {
-        if (!critter.isAlive()) {
-            playerCoins += critter.getReward();  // Reward player for killing critter
-        }
-        else if (critter.isAlive() && critter.getHitPoints() == 0) {
-            critter.stealCoins(playerCoins);  // Critter stole coins
-        }
     }
 }

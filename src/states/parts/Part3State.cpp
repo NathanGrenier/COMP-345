@@ -152,6 +152,6 @@ void Part3State::sellTower(int x, int y) {
 }
 
 
-Part3State::Part3State() : critterGroup{ waveLevel, startSquare, endSquare } {
+Part3State::Part3State() : critterGroup{ waveLevel, playerGold, startSquare, endSquare } {
 
 }

@@ -41,6 +41,11 @@ void CritterTower::update(float deltaTime, std::vector<Critter>& critters) {
         }
     }
 
+    if (critters.empty())
+    {
+        projectiles.clear();
+    }
+
     // Update projectiles (pass the current target position dynamically)
     for (auto& proj : projectiles) {
         // Find the closest critter to the projectile

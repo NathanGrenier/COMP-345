@@ -4,7 +4,7 @@
 
 Critter::Critter(int level, float speed, int hitPoints, int strength, int reward, SDL_FRect start, SDL_FRect end)
     : level(level), speed(speed ), hitPoints(hitPoints), strength(strength), reward(reward),
-    startPosition(start), exitPosition(end), isAtExit(false) {
+    startPosition(start), exitPosition(end), isAtExit(false), healthBarWidth(0.0f), healthBarVisible(false), maxHitPoints(hitPoints) {
     position = start;
 }
 
@@ -59,40 +59,74 @@ void Critter::move(float deltaTime, const std::vector<Critter>& critters, float 
     // Apply the movement if it's valid (no collision detected)
     position.x = nextX;
     position.y = nextY;
-
-    // Check if the critter reached the exit
-    if (!isAtExit &&
-        std::abs(position.x - exitPosition.x) <= 1.0f &&
-        std::abs(position.y - exitPosition.y) <= 1.0f) {
-        isAtExit = true;
-    }
-
-    if (isAtExit) {
-        hitPoints = 0;
-    }
 }
-
 
 void Critter::takeDamage(int damage) {
     hitPoints -= damage;
+
+    // Make the health bar visible for a short time after taking damage
+    healthBarVisible = true;
+    healthBarWidth = 50.0f;
+    healthBarTime = 0.5f;
 }
 
 bool Critter::isAlive() const {
     return hitPoints > 0;
 }
 
-void Critter::stealCoins(int& playerCoins) {
-    playerCoins -= strength;  // Steal coins from the player based on the critter's strength
+bool Critter::atExit() {
+    return isAtExit;
+}
+
+void Critter::setHitPoints(int hitPoints) {
+    hitPoints = hitPoints;
+}
+
+void Critter::setAtExit(bool con) {
+    hitPoints = 0;
+    isAtExit = con;
 }
 
 void Critter::render(SDL_Renderer* renderer) {
     // Render critter as a red rectangle
-    SDL_FRect rect = { position.x, position.y, 20.0f, 20.0f };  // 20x20 size
+    SDL_FRect critterRect = { position.x, position.y, 20.0f, 20.0f };  // 20x20 size
     SDL_SetRenderDrawColor(renderer, 255, 0, 0, 255);  // Red color
-    SDL_RenderFillRect(renderer, &rect);
+    SDL_RenderFillRect(renderer, &critterRect);
+
+    // Health bar positioning and size (above the critter)
+    SDL_FRect healthBarRect = { position.x, position.y - 10.0f, 20.0f, 5.0f };  // Just above the critter
+    SDL_FRect greenBar = healthBarRect;  // For the green part (current health)
+    SDL_FRect redBar = healthBarRect;  // For the red part (remaining health)
+
+    // Calculate the width based on health percentage
+    float healthPercentage = static_cast<float>(hitPoints) / maxHitPoints;
+
+    // Green bar width (representing current health)
+    greenBar.w = healthBarRect.w * healthPercentage;
+
+    // Red bar width (representing the remaining health)
+    redBar.x = greenBar.x + greenBar.w;  // Start where the green bar ends
+    redBar.w = healthBarRect.w - greenBar.w;
+
+    // Set color for the green part (current health)
+    SDL_SetRenderDrawColor(renderer, 0, 255, 0, 255);  // Green
+    SDL_RenderFillRect(renderer, &greenBar);
+
+    // Set color for the red part (remaining health)
+    SDL_SetRenderDrawColor(renderer, 255, 0, 0, 255);  // Red
+    SDL_RenderFillRect(renderer, &redBar);
 }
+
 
 // Dynamically update the critter's end position
 void Critter::setEndPosition(SDL_FRect newEndPosition) {
     exitPosition = newEndPosition;  // Update the exit (end) position
+}
+
+SDL_FRect Critter::getEndPosition() {
+    return exitPosition;
+}
+
+void Critter::stealGold(int& playerGold) {
+    playerGold -= strength;
 }

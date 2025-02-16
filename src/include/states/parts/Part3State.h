@@ -23,11 +23,11 @@ public:
 	void renderText(const std::string& text, float x, float y);
 	void placeTower(int x, int y);
 	void sellTower(int x, int y);
-
-	CritterGroup critterGroup;
+	void updateGoldTween(float deltaTime);
 private:
 	//Static instance
 	static Part3State sPart3State;
+	CritterGroup critterGroup;
 
 	//Private constructor
 	Part3State();
