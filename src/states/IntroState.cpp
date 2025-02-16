@@ -19,7 +19,7 @@ bool IntroState::enter() {
 
 	//Load text
 	SDL_Color textColor{ 0x00, 0x00, 0x00, 0xFF };
-	if (success &= mMessageTexture.loadFromRenderedText("The NullTerminators Present...", textColor); !success)
+	if (success &= mMessageTexture.loadFromRenderedText("The NullTerminators Presents...", textColor); !success)
 	{
 		SDL_Log("Failed to render intro text!\n");
 		success = false;

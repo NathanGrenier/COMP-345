@@ -10,6 +10,7 @@
 #include "States/ExitState.cpp"
 #include "ui/LTexture.cpp"
 #include <LTimer.h>
+#include <iostream>
 
 /* Constants */
 constexpr int kScreenFps{ 60 };
@@ -173,9 +174,6 @@ int main(int argc, char* args[]) {
 
 			//Reset FPS calculation flag
 			bool resetFps = true;
-
-			//In memory text stream
-			std::stringstream timeText;
 
 			//Set the current game state object and start state machine
 			gCurrentState = IntroState::get();

@@ -3,6 +3,7 @@
 
 #include "../GameState.h"
 #include <ui/LTexture.h>
+#include <critter/CritterGroup.h>
 
 class Part3State : public GameState {
 public:
@@ -18,6 +19,9 @@ public:
 	void update() override;
 	void render() override;
 
+	void renderText(const std::string& text, float x, float y);
+
+	CritterGroup critterGroup;
 private:
 	//Static instance
 	static Part3State sPart3State;
@@ -30,5 +34,6 @@ private:
 
 	//Intro message
 	LTexture mMessageTexture;
+	int playerCoins = 100;
 };
 #endif
