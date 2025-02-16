@@ -8,41 +8,70 @@ Critter::Critter(int level, float speed, int hitPoints, int strength, int reward
     position = start;
 }
 
+SDL_FRect Critter::getPosition() {
+    return position;
+}
+
 void Critter::move(float deltaTime, const std::vector<Critter>& critters, float spacing) {
-    // Move logic towards the current end position (exit)
     float directionX = 0.0f;
     float directionY = 0.0f;
 
-    // Default movement towards the exit position
-    if (exitPosition.x > position.x) {
-        directionX = 1.0f;  // Move right
+    // Determine movement direction (strictly horizontal or vertical)
+    bool moveX = std::abs(position.x - exitPosition.x) > 1.0f;
+    bool moveY = std::abs(position.y - exitPosition.y) > 1.0f;
+
+    if (moveX && !moveY) {
+        directionX = (exitPosition.x > position.x) ? 1.0f : -1.0f;
     }
-    else if (exitPosition.x < position.x) {
-        directionX = -1.0f;  // Move left
+    else if (moveY) {
+        directionY = (exitPosition.y > position.y) ? 1.0f : -1.0f;
     }
 
-    if (exitPosition.y > position.y) {
-        directionY = 1.0f;  // Move down
-    }
-    else if (exitPosition.y < position.y) {
-        directionY = -1.0f;  // Move up
+    // Predict next position
+    float nextX = position.x + directionX * speed * deltaTime;
+    float nextY = position.y + directionY * speed * deltaTime;
+
+    // Check if the next position would cause an overlap
+    bool collisionDetected = false;
+    for (const Critter& other : critters) {
+        if (&other == this) continue; // Skip self
+
+        float distanceX = std::abs(nextX - other.position.x);
+        float distanceY = std::abs(nextY - other.position.y);
+
+        // If another critter is within the spacing range, mark as collision
+        if (distanceX < spacing && distanceY < spacing) {
+            collisionDetected = true;
+            break;
+        }
     }
 
-    // Move the critter based on the direction (exit position)
-    position.x += directionX * speed * deltaTime;
-    position.y += directionY * speed * deltaTime;
+    // If there is a collision, try an alternate movement (first priority Y, then X)
+    if (collisionDetected) {
+        if (directionY != 0.0f) {
+            nextY = position.y; // Cancel Y movement
+        }
+        else if (directionX != 0.0f) {
+            nextX = position.x; // Cancel X movement
+        }
+    }
 
-    // Check if the critter is at the exit position (within a small range)
+    // Apply the movement if it's valid (no collision detected)
+    position.x = nextX;
+    position.y = nextY;
+
+    // Check if the critter reached the exit
     if (!isAtExit &&
-        std::abs(position.x - exitPosition.x) <= 1.0f &&  // More precise check for X position
-        std::abs(position.y - exitPosition.y) <= 1.0f) {  // More precise check for Y position
-        isAtExit = true;  // Mark as at the exit
+        std::abs(position.x - exitPosition.x) <= 1.0f &&
+        std::abs(position.y - exitPosition.y) <= 1.0f) {
+        isAtExit = true;
     }
 
     if (isAtExit) {
         hitPoints = 0;
     }
 }
+
 
 void Critter::takeDamage(int damage) {
     hitPoints -= damage;

@@ -18,6 +18,7 @@ public:
     int getStrength() const { return strength; }
     int getHitPoints() const { return hitPoints; }
     void setEndPosition(SDL_FRect newEndPosition);
+    SDL_FRect getPosition();
 private:
     int level;
     float speed;

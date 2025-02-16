@@ -5,67 +5,73 @@
 #include <ui/LTexture.h>
 #include <iostream>
 
-CritterGroup::CritterGroup(int waveLevel, SDL_FRect startPosition, SDL_FRect endPosition)
+CritterGroup::CritterGroup(int& waveLevel, SDL_FRect startPosition, SDL_FRect endPosition)
     : waveLevel(waveLevel) {
 }
 
 void CritterGroup::generateCritters(SDL_FRect startPosition, SDL_FRect endPosition, float deltaTime) {
-    static int critterIndex = 0;  // Keeps track of which critter we're generating
-    static float timeElapsed = 0.0f;  // Keeps track of the elapsed time for sequential generation
+    static int critterIndex = 0;  // Tracks which critter we're generating
+    static float timeElapsed = 0.0f;  // Tracks elapsed time for sequential generation
 
-    // Define the spacing between critters
-    const float spacing = 100.0f;  // Distance between critters in the line
-    const float generationDelay = 5.0f;  // Delay between each critter's generation (1 second)
+    const float spacing = 100.0f;  // Minimum distance between critters
+    const float generationDelay = 5.0f;  // Delay before generating the next critter
 
-    // Check if enough time has passed to generate the next critter
+    // Update time elapsed
     timeElapsed += deltaTime;
+
     if (timeElapsed >= generationDelay && critterIndex < waveLevel * 10) {
         int level = waveLevel;
-
         float speed = 50.0f;
-
         int hitPoints = 100 + level * 20;
         int strength = level * 5;
         int reward = level * 10;
 
-        // Create critter with the current level's parameters and path info (start/end positions)
-        critters.emplace_back(level, speed, hitPoints, strength, reward, startPosition, endPosition);
+        // Check if the start position is clear (no existing critters overlap)
+        bool canSpawn = true;
+        for (Critter& critter : critters) {
+            SDL_FRect critterPos = critter.getPosition();
+            float distanceX = std::abs(startPosition.x - critterPos.x);
+            float distanceY = std::abs(startPosition.y - critterPos.y);
 
-        // Increment the critter index and reset timeElapsed for the next critter
-        critterIndex++;
-        timeElapsed = 0.0f;
+            if (distanceX < spacing && distanceY < spacing) {
+                canSpawn = false;
+                break;  // Stop checking further since overlap is found
+            }
+        }
+
+        // Only spawn if there's no overlap
+        if (canSpawn) {
+            critters.emplace_back(level, speed, hitPoints, strength, reward, startPosition, endPosition);
+            critterIndex++;
+            timeElapsed = 0.0f;
+        }
     }
 }
 
+
 void CritterGroup::update(float deltaTime, SDL_FRect newEndPosition) {
-    // Debug: Print the status of the wave countdown
-    std::cout << "Wave Countdown: " << waveCountdown << " seconds remaining." << std::endl;
 
     if (!waveInProgress) {
         waveCountdown -= deltaTime;
-        // Debug: Print countdown state
-        std::cout << "Wave countdown in progress, remaining time: " << waveCountdown << " seconds." << std::endl;
+
+        // Debug statement to track countdown progress
+        std::cout << "Wave countdown: " << waveCountdown << " seconds remaining." << std::endl;
 
         if (waveCountdown <= 0.0f) {
             waveInProgress = true;
             waveLevel++;  // Increase wave level
-            // Debug: Print wave level increase
-            std::cout << "Wave started! New wave level: " << waveLevel << std::endl;
-            generateCritters(newEndPosition, newEndPosition, 0.1f);
+
+            // Debug statement to confirm wave level increment
+            std::cout << "Wave " << waveLevel << " started!" << std::endl;
         }
         return; // Skip updating critters during countdown
     }
 
     int aliveCritters = 0;
 
-    // Debug: Print the number of critters to update
-    std::cout << "Updating critters. Total critters: " << critters.size() << std::endl;
-
     // Iterate through critters and update their status
     for (auto it = critters.begin(); it != critters.end(); ) {
         if (!it->isAlive()) {
-            // Debug: Print if a critter is being erased
-            std::cout << "Critter dead. Removing critter." << std::endl;
             it = critters.erase(it);  // Remove the critter if it's dead
             ++crittersSpawned;
         }
@@ -73,28 +79,16 @@ void CritterGroup::update(float deltaTime, SDL_FRect newEndPosition) {
             ++aliveCritters;
             it->setEndPosition(newEndPosition);
             it->move(deltaTime, critters, 5.0f);
-
-            // Debug: Print if the critter is alive and moving
-            std::cout << "Critter alive. Moving critter. Alive critters: " << aliveCritters << std::endl;
-
             ++it;
         }
     }
-
-    // Debug: Print the number of alive critters after loop
-    std::cout << "Alive critters after update: " << aliveCritters << std::endl;
 
     // If no critters are alive and all have been spawned, start the countdown for the next wave
     if (aliveCritters == 0 && crittersSpawned >= waveLevel * 10) {
         waveInProgress = false;  // End current wave
         waveCountdown = 3.0f;  // Start countdown for new wave
-
-        // Debug: Print when the wave ends and countdown starts
-        std::cout << "All critters dead. Wave ended. Starting countdown for next wave." << std::endl;
     }
 }
-
-
 
 void CritterGroup::render(SDL_Renderer* renderer) {
     int aliveCrittersCount = 0;
