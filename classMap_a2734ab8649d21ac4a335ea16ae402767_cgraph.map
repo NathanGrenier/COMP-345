@@ -1,0 +1,9 @@
+<map id="Map::getFlowNormal" name="Map::getFlowNormal">
+<area shape="rect" id="Node000001" title="Gets the normalized flow direction vector for a cell." alt="" coords="5,31,164,56"/>
+<area shape="rect" id="Node000002" href="$classMap.html#adb274fa58456ff47c52e90c019cf4e64" title="Checks if a coordinate is within map boundaries." alt="" coords="225,5,353,31"/>
+<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="164,31,211,25,212,30,164,36"/>
+<area shape="rect" id="Node000003" href="$classVector2D.html#a0bb684df2d724e4378dc5fbf0d4faa99" title=" " alt="" coords="212,55,367,80"/>
+<area shape="poly" id="edge2_Node000001_Node000003" title=" " alt="" coords="164,50,198,54,198,59,164,55"/>
+<area shape="rect" id="Node000004" href="$classVector2D.html#a2840db6c516580a39fd5a309d991dae2" title=" " alt="" coords="415,55,573,80"/>
+<area shape="poly" id="edge3_Node000003_Node000004" title=" " alt="" coords="367,65,401,65,401,70,367,70"/>
+</map>

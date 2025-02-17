@@ -1,0 +1,5 @@
+<map id="Map::setCellWall" name="Map::setCellWall">
+<area shape="rect" id="Node000001" title="Sets a cell&#39;s wall status." alt="" coords="232,5,363,31"/>
+<area shape="rect" id="Node000002" href="$classPart1State.html#ac97db0f566dbb0b646c4ab8d6e66b699" title="Handle input events." alt="" coords="5,5,184,31"/>
+<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="218,21,184,21,184,15,218,15"/>
+</map>

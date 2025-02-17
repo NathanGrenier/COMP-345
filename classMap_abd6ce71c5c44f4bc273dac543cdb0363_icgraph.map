@@ -1,0 +1,9 @@
+<map id="Map::setTarget" name="Map::setTarget">
+<area shape="rect" id="Node000001" title="Sets a cell as the new target." alt="" coords="232,55,351,80"/>
+<area shape="rect" id="Node000002" href="$classMap.html#ab525c6579219b594a82ef879b756b880" title="Gets the position of the first target cell found." alt="" coords="23,5,166,31"/>
+<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="226,54,145,33,147,28,228,49"/>
+<area shape="rect" id="Node000003" href="$classPart1State.html#ac97db0f566dbb0b646c4ab8d6e66b699" title="Handle input events." alt="" coords="5,55,184,80"/>
+<area shape="poly" id="edge2_Node000001_Node000003" title=" " alt="" coords="218,70,184,70,184,65,218,65"/>
+<area shape="rect" id="Node000004" href="$classMap.html#a9b4f799a8a3338acdeeb66c17a9337ff" title="Constructs a new Map object." alt="" coords="51,104,138,129"/>
+<area shape="poly" id="edge3_Node000001_Node000004" title=" " alt="" coords="228,86,139,108,138,103,226,81"/>
+</map>

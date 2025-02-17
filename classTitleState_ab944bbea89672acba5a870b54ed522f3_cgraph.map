@@ -1,0 +1,17 @@
+<map id="TitleState::handleEvent" name="TitleState::handleEvent">
+<area shape="rect" id="Node000001" title=" " alt="" coords="5,129,180,155"/>
+<area shape="rect" id="Node000002" href="$classMainGameState.html#ae74dbfb6ef7ba2fb458911e42582c94d" title=" " alt="" coords="261,5,417,31"/>
+<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="105,127,156,84,190,60,227,40,247,32,249,37,229,44,193,64,159,88,109,131"/>
+<area shape="rect" id="Node000003" href="$classPart1State.html#a8b98e2eaeb3624b0d41666c07086b382" title="Get the singleton instance of Part1State." alt="" coords="280,55,399,80"/>
+<area shape="poly" id="edge2_Node000001_Node000003" title=" " alt="" coords="123,127,227,89,266,79,267,84,229,94,125,132"/>
+<area shape="rect" id="Node000004" href="$classPart2State.html#afd03f10f3282fbe8dd3718b19331d824" title=" " alt="" coords="280,104,399,129"/>
+<area shape="poly" id="edge3_Node000001_Node000004" title=" " alt="" coords="180,130,266,121,267,127,180,136"/>
+<area shape="rect" id="Node000005" href="$classPart3State.html#a09fbfb138bd85f00e107d7b91d1cf47c" title=" " alt="" coords="280,153,399,179"/>
+<area shape="poly" id="edge4_Node000001_Node000005" title=" " alt="" coords="180,148,267,156,266,162,180,153"/>
+<area shape="rect" id="Node000006" href="$classMainMenuButton.html#aed528d205a98d29572cdbd0a85197eb3" title=" " alt="" coords="228,203,451,228"/>
+<area shape="poly" id="edge5_Node000001_Node000006" title=" " alt="" coords="127,152,229,187,265,197,263,202,227,193,125,157"/>
+<area shape="rect" id="Node000007" href="$main_8cpp.html#af0dc0ad824f97f7d085e7dd718a089ac" title=" " alt="" coords="286,252,393,277"/>
+<area shape="poly" id="edge6_Node000001_Node000007" title=" " alt="" coords="109,153,160,195,193,217,229,237,273,252,271,257,227,242,191,222,157,199,106,157"/>
+<area shape="rect" id="Node000008" href="$classExitState.html#a607bf68675b52a3a16227106072fb218" title=" " alt="" coords="499,252,609,277"/>
+<area shape="poly" id="edge7_Node000007_Node000008" title=" " alt="" coords="393,262,485,262,485,267,393,267"/>
+</map>

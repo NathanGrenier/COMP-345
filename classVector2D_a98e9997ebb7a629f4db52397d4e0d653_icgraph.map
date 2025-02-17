@@ -1,0 +1,21 @@
+<map id="Vector2D::Vector2D" name="Vector2D::Vector2D">
+<area shape="rect" id="Node000001" title=" " alt="" coords="291,203,439,228"/>
+<area shape="rect" id="Node000002" href="$classVector2D.html#a6daf29104afc3708aa81b287636668c8" title=" " alt="" coords="5,5,243,31"/>
+<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="351,191,334,157,310,117,279,77,241,44,220,33,222,29,244,40,283,73,315,114,339,154,355,189"/>
+<area shape="rect" id="Node000003" href="$classVector2D.html#aaf1f86fe26df56e9e21b8ed949da2749" title=" " alt="" coords="49,55,199,80"/>
+<area shape="poly" id="edge2_Node000001_Node000003" title=" " alt="" coords="345,193,302,142,273,115,241,94,199,78,201,73,244,89,277,111,306,138,349,190"/>
+<area shape="rect" id="Node000004" href="$classVector2D.html#a93aad0fe6040d4bde0c7dd3906f6cf90" title=" " alt="" coords="49,104,199,129"/>
+<area shape="poly" id="edge3_Node000001_Node000004" title=" " alt="" coords="334,196,292,168,242,143,199,130,200,125,244,138,294,164,337,192"/>
+<area shape="rect" id="Node000005" href="$classVector2D.html#aed82523d2df0ebf4d34d8ab6ebb591a9" title=" " alt="" coords="47,153,201,179"/>
+<area shape="poly" id="edge4_Node000001_Node000005" title=" " alt="" coords="289,202,242,193,188,181,189,176,243,187,290,197"/>
+<area shape="rect" id="Node000006" href="$classVector2D.html#a2bed654f65df8c3bedbf8cd7d07071df" title=" " alt="" coords="47,203,201,228"/>
+<area shape="poly" id="edge5_Node000001_Node000006" title=" " alt="" coords="277,218,202,218,202,213,277,213"/>
+<area shape="rect" id="Node000007" href="$classVector2D.html#a285dcc4df54ff44d4177bc77caa55bc8" title=" " alt="" coords="49,252,199,277"/>
+<area shape="poly" id="edge6_Node000001_Node000007" title=" " alt="" coords="289,233,187,255,186,249,288,228"/>
+<area shape="rect" id="Node000008" href="$classVector2D.html#a07a043fc63572c1cf3104ec0a9a4e796" title=" " alt="" coords="49,301,199,327"/>
+<area shape="poly" id="edge7_Node000001_Node000008" title=" " alt="" coords="337,238,294,266,244,291,200,305,198,299,242,286,291,261,334,234"/>
+<area shape="rect" id="Node000009" href="$classVector2D.html#ad52096fe43861cb413026180364aa4f1" title=" " alt="" coords="50,351,198,376"/>
+<area shape="poly" id="edge8_Node000001_Node000009" title=" " alt="" coords="349,241,306,292,277,318,244,340,199,357,198,352,241,336,273,314,302,288,345,237"/>
+<area shape="rect" id="Node000010" href="$classVector2D.html#a1506656576b9625f8a741e2dff6ba304" title=" " alt="" coords="50,400,198,425"/>
+<area shape="poly" id="edge9_Node000001_Node000010" title=" " alt="" coords="355,242,339,276,314,316,283,356,244,390,222,401,199,408,197,403,220,396,241,385,279,352,310,313,334,273,351,239"/>
+</map>

@@ -1,0 +1,20 @@
+<map id="Map::setCellWall" name="Map::setCellWall">
+<area shape="rect" id="Node000001" title="Sets a cell&#39;s wall status." alt="" coords="5,131,136,156"/>
+<area shape="rect" id="Node000002" href="$classMap.html#acee9f3455cd53c742b49f9e2e412823d" title="Recalculates the flow field for pathfinding." alt="" coords="184,55,363,80"/>
+<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="103,128,183,97,223,82,225,87,185,102,105,133"/>
+<area shape="rect" id="Node000004" href="$classMap.html#adb274fa58456ff47c52e90c019cf4e64" title="Checks if a coordinate is within map boundaries." alt="" coords="847,105,975,131"/>
+<area shape="poly" id="edge8_Node000001_Node000004" title=" " alt="" coords="137,146,259,152,424,157,610,154,798,141,851,131,852,136,799,146,611,160,424,162,259,158,136,151"/>
+<area shape="rect" id="Node000005" href="$classMap.html#a5e4b6f317da8de53e4788986bfa2c5ba" title="Checks if a cell is a target." alt="" coords="681,105,791,131"/>
+<area shape="poly" id="edge11_Node000001_Node000005" title=" " alt="" coords="136,138,668,118,668,123,136,144"/>
+<area shape="rect" id="Node000007" href="$classMap.html#a4bd58745f6075f5e9a3409a69792a97d" title="Checks if a cell is a spawner." alt="" coords="673,207,799,232"/>
+<area shape="poly" id="edge9_Node000001_Node000007" title=" " alt="" coords="99,154,138,171,185,185,314,206,444,217,563,221,659,220,659,225,563,226,444,222,313,211,183,190,137,176,96,159"/>
+<area shape="rect" id="Node000003" href="$classMap.html#a49b43a8bec3a832a0afc09b228eedfae" title="Calculates distance values from target cells using BFS." alt="" coords="427,55,609,80"/>
+<area shape="poly" id="edge2_Node000002_Node000003" title=" " alt="" coords="363,65,414,65,414,70,363,70"/>
+<area shape="rect" id="Node000006" href="$classMap.html#a0bcdcc85f3a9521d3b87e90c9133f4f2" title="Determines flow directions based on calculated distances." alt="" coords="411,5,625,31"/>
+<area shape="poly" id="edge6_Node000002_Node000006" title=" " alt="" coords="336,52,440,31,441,36,338,57"/>
+<area shape="poly" id="edge3_Node000003_Node000004" title=" " alt="" coords="609,71,701,79,799,91,844,100,843,105,798,97,700,84,609,76"/>
+<area shape="poly" id="edge4_Node000003_Node000005" title=" " alt="" coords="574,78,669,100,667,105,573,83"/>
+<area shape="poly" id="edge5_Node000005_Node000004" title=" " alt="" coords="791,115,833,115,833,121,791,121"/>
+<area shape="poly" id="edge7_Node000006_Node000004" title=" " alt="" coords="626,28,712,43,800,65,875,96,873,101,798,70,710,48,625,33"/>
+<area shape="poly" id="edge10_Node000007_Node000004" title=" " alt="" coords="762,204,797,185,877,136,880,140,800,190,765,209"/>
+</map>

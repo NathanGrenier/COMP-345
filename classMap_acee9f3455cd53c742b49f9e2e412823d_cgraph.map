@@ -1,0 +1,13 @@
+<map id="Map::calculateFlowField" name="Map::calculateFlowField">
+<area shape="rect" id="Node000001" title="Recalculates the flow field for pathfinding." alt="" coords="5,49,184,75"/>
+<area shape="rect" id="Node000002" href="$classMap.html#a49b43a8bec3a832a0afc09b228eedfae" title="Calculates distance values from target cells using BFS." alt="" coords="232,24,413,49"/>
+<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="184,49,218,46,219,51,185,55"/>
+<area shape="rect" id="Node000005" href="$classMap.html#a0bcdcc85f3a9521d3b87e90c9133f4f2" title="Determines flow directions based on calculated distances." alt="" coords="461,75,676,100"/>
+<area shape="poly" id="edge5_Node000001_Node000005" title=" " alt="" coords="184,64,448,78,447,84,184,69"/>
+<area shape="rect" id="Node000003" href="$classMap.html#adb274fa58456ff47c52e90c019cf4e64" title="Checks if a coordinate is within map boundaries." alt="" coords="724,25,852,51"/>
+<area shape="poly" id="edge2_Node000002_Node000003" title=" " alt="" coords="383,21,461,10,569,3,676,10,729,20,728,25,676,15,569,8,462,15,384,27"/>
+<area shape="rect" id="Node000004" href="$classMap.html#a5e4b6f317da8de53e4788986bfa2c5ba" title="Checks if a cell is a target." alt="" coords="514,25,623,51"/>
+<area shape="poly" id="edge3_Node000002_Node000004" title=" " alt="" coords="414,35,500,35,500,40,414,40"/>
+<area shape="poly" id="edge4_Node000004_Node000003" title=" " alt="" coords="624,35,710,35,710,41,624,41"/>
+<area shape="poly" id="edge6_Node000005_Node000003" title=" " alt="" coords="626,72,675,61,717,51,718,56,677,66,627,77"/>
+</map>

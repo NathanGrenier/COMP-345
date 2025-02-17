@@ -1,0 +1,16 @@
+<map id="Map::setTarget" name="Map::setTarget">
+<area shape="rect" id="Node000001" title="Sets a cell as the new target." alt="" coords="5,104,124,129"/>
+<area shape="rect" id="Node000002" href="$classMap.html#acee9f3455cd53c742b49f9e2e412823d" title="Recalculates the flow field for pathfinding." alt="" coords="172,78,351,104"/>
+<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="124,106,158,102,159,107,125,111"/>
+<area shape="rect" id="Node000004" href="$classMap.html#adb274fa58456ff47c52e90c019cf4e64" title="Checks if a coordinate is within map boundaries." alt="" coords="891,54,1019,80"/>
+<area shape="poly" id="edge8_Node000001_Node000004" title=" " alt="" coords="125,122,255,135,434,144,534,144,637,139,741,129,842,112,882,100,918,84,920,89,884,105,843,118,742,134,638,145,534,149,434,149,254,140,124,127"/>
+<area shape="rect" id="Node000003" href="$classMap.html#a49b43a8bec3a832a0afc09b228eedfae" title="Calculates distance values from target cells using BFS." alt="" coords="399,28,580,53"/>
+<area shape="poly" id="edge2_Node000002_Node000003" title=" " alt="" coords="319,76,418,53,419,59,320,81"/>
+<area shape="rect" id="Node000006" href="$classMap.html#a0bcdcc85f3a9521d3b87e90c9133f4f2" title="Determines flow directions based on calculated distances." alt="" coords="628,78,843,104"/>
+<area shape="poly" id="edge6_Node000002_Node000006" title=" " alt="" coords="351,88,614,88,614,94,351,94"/>
+<area shape="poly" id="edge3_Node000003_Node000004" title=" " alt="" coords="543,25,604,14,680,5,762,4,843,14,885,28,922,45,920,50,883,32,842,19,761,9,680,11,605,19,544,30"/>
+<area shape="rect" id="Node000005" href="$classMap.html#a5e4b6f317da8de53e4788986bfa2c5ba" title="Checks if a cell is a target." alt="" coords="681,29,790,54"/>
+<area shape="poly" id="edge4_Node000003_Node000005" title=" " alt="" coords="580,38,667,39,667,44,580,44"/>
+<area shape="poly" id="edge5_Node000005_Node000004" title=" " alt="" coords="791,45,877,55,877,61,790,51"/>
+<area shape="poly" id="edge7_Node000006_Node000004" title=" " alt="" coords="843,77,877,73,877,78,843,82"/>
+</map>

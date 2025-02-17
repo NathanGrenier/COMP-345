@@ -1,0 +1,5 @@
+<map id="Map::isTarget" name="Map::isTarget">
+<area shape="rect" id="Node000001" title="Checks if a cell is a target." alt="" coords="5,5,115,31"/>
+<area shape="rect" id="Node000002" href="$classMap.html#adb274fa58456ff47c52e90c019cf4e64" title="Checks if a coordinate is within map boundaries." alt="" coords="163,5,291,31"/>
+<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="115,15,149,15,149,21,115,21"/>
+</map>

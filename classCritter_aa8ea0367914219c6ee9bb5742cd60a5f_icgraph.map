@@ -1,0 +1,11 @@
+<map id="Critter::getPosition" name="Critter::getPosition">
+<area shape="rect" id="Node000001" title=" " alt="" coords="463,56,607,81"/>
+<area shape="rect" id="Node000002" href="$classCritterTower.html#afaea576079e62ba47768a50b0ee92cd0" title=" " alt="" coords="225,5,398,31"/>
+<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="464,55,367,33,369,28,465,50"/>
+<area shape="rect" id="Node000003" href="$classCritterTower.html#ab38866a811a90fb67fdf1f690bbe9202" title=" " alt="" coords="5,56,160,81"/>
+<area shape="poly" id="edge5_Node000001_Node000003" title=" " alt="" coords="449,71,160,71,160,66,449,66"/>
+<area shape="rect" id="Node000004" href="$classCritterTower.html#aa3223aa2594f5224328574c7a04e8104" title=" " alt="" coords="208,107,415,132"/>
+<area shape="poly" id="edge3_Node000001_Node000004" title=" " alt="" coords="465,87,369,109,367,104,464,82"/>
+<area shape="poly" id="edge2_Node000002_Node000003" title=" " alt="" coords="240,36,141,59,140,53,239,31"/>
+<area shape="poly" id="edge4_Node000004_Node000003" title=" " alt="" coords="239,106,140,84,141,79,240,101"/>
+</map>

@@ -1,0 +1,8 @@
+<map id="Map::calculateDistances" name="Map::calculateDistances">
+<area shape="rect" id="Node000001" title="Calculates distance values from target cells using BFS." alt="" coords="5,5,187,31"/>
+<area shape="rect" id="Node000002" href="$classMap.html#adb274fa58456ff47c52e90c019cf4e64" title="Checks if a coordinate is within map boundaries." alt="" coords="392,5,520,31"/>
+<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="187,15,379,15,379,21,187,21"/>
+<area shape="rect" id="Node000003" href="$classMap.html#a5e4b6f317da8de53e4788986bfa2c5ba" title="Checks if a cell is a target." alt="" coords="235,31,344,56"/>
+<area shape="poly" id="edge2_Node000001_Node000003" title=" " alt="" coords="187,27,221,32,221,37,187,33"/>
+<area shape="poly" id="edge3_Node000003_Node000002" title=" " alt="" coords="344,32,378,27,379,32,345,38"/>
+</map>

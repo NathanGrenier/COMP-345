@@ -1,0 +1,36 @@
+<map id="src/include/states/parts/Part3State.h" name="src/include/states/parts/Part3State.h">
+<area shape="rect" id="Node000001" title=" " alt="" coords="239,5,382,45"/>
+<area shape="rect" id="Node000002" href="$GameState_8h.html" title=" " alt="" coords="47,93,198,119"/>
+<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="267,48,164,90,162,85,265,43"/>
+<area shape="rect" id="Node000004" href="$LTexture_8h.html" title=" " alt="" coords="176,167,280,192"/>
+<area shape="poly" id="edge3_Node000001_Node000004" title=" " alt="" coords="303,47,243,156,238,153,298,45"/>
+<area shape="rect" id="Node000007" href="$CritterGroup_8h.html" title=" " alt="" coords="688,167,845,192"/>
+<area shape="poly" id="edge6_Node000001_Node000007" title=" " alt="" coords="376,43,532,91,724,159,722,164,530,96,375,48"/>
+<area shape="rect" id="Node000011" href="$CritterTower_8h.html" title=" " alt="" coords="342,93,495,119"/>
+<area shape="poly" id="edge11_Node000001_Node000011" title=" " alt="" coords="338,43,393,83,390,87,335,48"/>
+<area shape="rect" id="Node000003" title=" " alt="" coords="5,167,152,192"/>
+<area shape="poly" id="edge2_Node000002_Node000003" title=" " alt="" coords="118,120,95,156,91,154,113,118"/>
+<area shape="rect" id="Node000005" title=" " alt="" coords="53,240,112,265"/>
+<area shape="poly" id="edge4_Node000004_Node000005" title=" " alt="" coords="206,194,120,236,117,232,203,190"/>
+<area shape="rect" id="Node000006" title=" " alt="" coords="136,240,280,265"/>
+<area shape="poly" id="edge5_Node000004_Node000006" title=" " alt="" coords="227,193,217,228,212,226,222,192"/>
+<area shape="rect" id="Node000008" title=" " alt="" coords="601,313,663,339"/>
+<area shape="poly" id="edge7_Node000007_Node000008" title=" " alt="" coords="758,194,690,267,654,305,650,302,686,264,754,190"/>
+<area shape="rect" id="Node000009" href="$Critter_8h.html" title=" " alt="" coords="557,240,632,265"/>
+<area shape="poly" id="edge8_Node000007_Node000009" title=" " alt="" coords="740,194,636,237,634,232,738,190"/>
+<area shape="poly" id="edge10_Node000009_Node000008" title=" " alt="" coords="603,264,622,300,617,303,598,267"/>
+<area shape="rect" id="Node000010" title=" " alt="" coords="393,313,489,339"/>
+<area shape="poly" id="edge9_Node000009_Node000010" title=" " alt="" coords="571,268,480,310,478,305,569,263"/>
+<area shape="poly" id="edge21_Node000011_Node000004" title=" " alt="" coords="389,121,273,164,271,159,387,116"/>
+<area shape="poly" id="edge13_Node000011_Node000008" title=" " alt="" coords="464,116,519,135,575,164,618,195,633,213,647,239,651,271,644,301,639,300,645,271,641,241,629,216,615,199,572,169,517,140,462,121"/>
+<area shape="poly" id="edge20_Node000011_Node000009" title=" " alt="" coords="458,116,502,135,546,165,570,195,587,226,582,228,566,198,542,169,500,140,456,121"/>
+<area shape="poly" id="edge14_Node000011_Node000010" title=" " alt="" coords="396,121,367,140,355,153,345,168,334,194,330,217,333,239,345,264,366,288,394,305,391,310,363,292,340,267,328,240,325,216,329,193,340,165,351,150,364,136,393,117"/>
+<area shape="poly" id="edge12_Node000011_Node000011" title=" " alt="" coords="466,91,503,92,517,97,522,106,518,114,508,119,479,122,479,117,507,114,514,110,517,106,513,101,502,97,466,96"/>
+<area shape="rect" id="Node000012" href="$CritterProjectile_8h.html" title=" " alt="" coords="355,167,533,192"/>
+<area shape="poly" id="edge15_Node000011_Node000012" title=" " alt="" coords="425,118,438,153,433,155,420,120"/>
+<area shape="poly" id="edge17_Node000012_Node000006" title=" " alt="" coords="407,195,260,239,259,233,405,189"/>
+<area shape="poly" id="edge19_Node000012_Node000008" title=" " alt="" coords="458,190,547,263,604,304,601,308,544,267,455,194"/>
+<area shape="poly" id="edge18_Node000012_Node000009" title=" " alt="" coords="469,190,559,232,556,236,467,194"/>
+<area shape="rect" id="Node000013" title=" " alt="" coords="355,240,483,265"/>
+<area shape="poly" id="edge16_Node000012_Node000013" title=" " alt="" coords="442,193,430,228,425,226,437,191"/>
+</map>

@@ -1,0 +1,7 @@
+<map id="Vector2D::magnitude" name="Vector2D::magnitude">
+<area shape="rect" id="Node000001" title=" " alt="" coords="415,5,573,31"/>
+<area shape="rect" id="Node000002" href="$classVector2D.html#a0bb684df2d724e4378dc5fbf0d4faa99" title=" " alt="" coords="212,5,367,31"/>
+<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="401,21,367,21,367,15,401,15"/>
+<area shape="rect" id="Node000003" href="$classMap.html#a2734ab8649d21ac4a335ea16ae402767" title="Gets the normalized flow direction vector for a cell." alt="" coords="5,5,164,31"/>
+<area shape="poly" id="edge2_Node000002_Node000003" title=" " alt="" coords="198,21,164,21,164,15,198,15"/>
+</map>
