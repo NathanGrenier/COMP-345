@@ -1,6 +1,8 @@
 out/
 build/
 .vs/
+.vscode/
 
 # Docs
-docs/html/**
+docs/**
+!docs/doxygen-awesome-css/**
