@@ -22,7 +22,7 @@ jobs:
         run: git submodule update --init --recursive
             
       - name: Configure CMake
-        run: cmake -S . -B build -DCMAKE_BUILD_TYPE=Release -DCMAKE_CXX_FLAGS="/D_CRT_SECURE_NO_WARNINGS"
+        run: cmake -S . -B build -DCMAKE_BUILD_TYPE=Release -DCMAKE_CXX_FLAGS="/D_CRT_SECURE_NO_WARNINGS" -DBUILD_SHARED_LIBS=OFF
 
       - name: Build project
         run: cmake --build build --config Release
