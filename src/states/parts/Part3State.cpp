@@ -3,21 +3,28 @@
 #include "../../tower/CritterTower.cpp"
 #include <Global.h>
 
-SDL_FRect startSquare = { 0.0f, 300.0f, 50.0f, 50.0f };  // Start square at left edge (adjust position as needed)
-SDL_FRect endSquare = { Global::kScreenWidth - 50.0f, 300.0f, 50.0f, 50.0f };  // End square at right edge
-int playerGold = 100;
-int waveLevel = 1;
+SDL_FRect startSquare;  // Start square at left edge (adjust position as needed)
+SDL_FRect endSquare;  // End square at right edge
+
+int playerGold;
+int waveLevel;
+
 std::string warningMessage = "";
 float warningTime = 0.0f;
 
 Part3State Part3State::sPart3State;
+CritterGroup* critterGroup;
 
 Part3State* Part3State::get() {
     return &sPart3State;
 }
 
 bool Part3State::enter() {
-
+    startSquare = { 0.0f, 300.0f, 50.0f, 50.0f };
+    endSquare = { Global::kScreenWidth - 50.0f, 300.0f, 50.0f, 50.0f };
+    playerGold = 100;
+    waveLevel = 1;
+    critterGroup = new CritterGroup(waveLevel, playerGold, startSquare, endSquare);
     return true;
 }
 
@@ -57,11 +64,11 @@ void Part3State::handleEvent(SDL_Event& e) {
 }
 
 void Part3State::update() {
-    critterGroup.generateCritters(startSquare, endSquare, 0.16f);
-    critterGroup.update(0.016f, endSquare);
+    critterGroup->generateCritters(startSquare, endSquare, 0.16f);
+    critterGroup->update(0.016f, endSquare);
 
     for (auto& tower : towers) {
-        tower.update(0.016f, critterGroup.getCritters());
+        tower.update(0.016f, critterGroup->getCritters());
     }
 }
 
@@ -78,7 +85,7 @@ void Part3State::render() {
     SDL_RenderFillRect(gRenderer, &endSquare);  // Draw the end square
     renderText("E", endSquare.x + endSquare.w / 4, endSquare.y + endSquare.h / 4);  // Label for 'E'
 
-    critterGroup.render(gRenderer);
+    critterGroup->render(gRenderer);
 
     for (auto& tower : towers) {
         tower.render(gRenderer);
@@ -152,6 +159,6 @@ void Part3State::sellTower(int x, int y) {
 }
 
 
-Part3State::Part3State() : critterGroup{ waveLevel, playerGold, startSquare, endSquare } {
+Part3State::Part3State() {
 
 }

@@ -27,7 +27,6 @@ public:
 private:
 	//Static instance
 	static Part3State sPart3State;
-	CritterGroup critterGroup;
 
 	//Private constructor
 	Part3State();

@@ -208,6 +208,10 @@ int main(int argc, char* args[]) {
 						setNextState(ExitState::get());
 						quit = true;
 					}
+					else if (e.type == SDL_EVENT_KEY_DOWN && e.key.key == SDLK_ESCAPE)
+					{
+						setNextState(TitleState::get());
+					}
 				}
 
 				//Do state logic
