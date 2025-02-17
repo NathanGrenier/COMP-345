@@ -1,9 +1,0 @@
-<map id="Part3State::update" name="Part3State::update">
-<area shape="rect" id="Node000001" title=" " alt="" coords="5,56,136,83"/>
-<area shape="rect" id="Node000002" href="$class_critter_group.html#a8ef744c7ef9c224be3a8ec680aeae18f" title=" " alt="" coords="184,5,377,32"/>
-<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="128,53,207,34,208,39,130,58"/>
-<area shape="rect" id="Node000003" href="$class_critter_group.html#a3a6b8033dddddff6cab1ea9a2f0942df" title=" " alt="" coords="200,56,361,83"/>
-<area shape="poly" id="edge2_Node000001_Node000003" title=" " alt="" coords="136,67,184,67,184,72,136,72"/>
-<area shape="rect" id="Node000004" href="$class_critter_group.html#a4f3ec3f3aad7c83dfe8f6c504421e682" title=" " alt="" coords="211,107,350,133"/>
-<area shape="poly" id="edge3_Node000001_Node000004" title=" " alt="" coords="130,81,208,100,207,105,128,86"/>
-</map>

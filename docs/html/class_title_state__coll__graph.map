@@ -1,8 +1,0 @@
-<map id="TitleState" name="TitleState">
-<area shape="rect" id="Node000001" title=" " alt="" coords="61,112,138,139"/>
-<area shape="poly" id="edge2_Node000001_Node000001" title=" " alt="" coords="155,115,162,119,165,126,157,135,139,138,138,133,154,130,160,125,158,122,153,120"/>
-<area shape="rect" id="Node000002" href="$class_game_state.html" title=" " alt="" coords="5,5,93,32"/>
-<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="64,45,96,111,91,113,59,47"/>
-<area shape="rect" id="Node000003" href="$class_l_texture.html" title=" " alt="" coords="116,5,187,32"/>
-<area shape="poly" id="edge3_Node000001_Node000003" title=" " alt="" coords="141,47,108,113,103,110,136,45"/>
-</map>

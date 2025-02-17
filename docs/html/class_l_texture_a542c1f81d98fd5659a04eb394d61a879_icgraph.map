@@ -1,9 +1,0 @@
-<map id="LTexture::getWidth" name="LTexture::getWidth">
-<area shape="rect" id="Node000001" title=" " alt="" coords="190,56,320,83"/>
-<area shape="rect" id="Node000002" href="$class_critter_tower.html#ab1b44bcc53dc28249616c41b6e3d06c0" title=" " alt="" coords="5,5,142,32"/>
-<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="189,54,123,35,125,30,190,49"/>
-<area shape="rect" id="Node000003" href="$class_intro_state.html#ab31761af5b55473ff72ca1580a1fefbe" title=" " alt="" coords="12,56,135,83"/>
-<area shape="poly" id="edge2_Node000001_Node000003" title=" " alt="" coords="174,72,135,72,135,67,174,67"/>
-<area shape="rect" id="Node000004" href="$class_title_state.html#a733ec3f3b758b1b4cc9baef6a79e1fdf" title=" " alt="" coords="13,107,134,133"/>
-<area shape="poly" id="edge3_Node000001_Node000004" title=" " alt="" coords="190,90,125,109,123,104,189,85"/>
-</map>
