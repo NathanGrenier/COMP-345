@@ -1,0 +1,151 @@
+\doxysection{LTexture.\+cpp}
+\hypertarget{_l_texture_8cpp_source}{}\label{_l_texture_8cpp_source}\index{src/ui/LTexture.cpp@{src/ui/LTexture.cpp}}
+\mbox{\hyperlink{_l_texture_8cpp}{Go to the documentation of this file.}}
+\begin{DoxyCode}{0}
+\DoxyCodeLine{00001\ \textcolor{preprocessor}{\#include\ <string>}}
+\DoxyCodeLine{00002\ \textcolor{preprocessor}{\#include\ <SDL3\_image/SDL\_image.h>}}
+\DoxyCodeLine{00003\ \textcolor{preprocessor}{\#include\ <\mbox{\hyperlink{_l_texture_8h}{ui/LTexture.h}}>}}
+\DoxyCodeLine{00004\ \textcolor{preprocessor}{\#include\ <\mbox{\hyperlink{_global_8h}{Global.h}}>}}
+\DoxyCodeLine{00005\ }
+\DoxyCodeLine{00006\ \textcolor{comment}{//LTexture\ Implementation}}
+\DoxyCodeLine{00007\ \mbox{\hyperlink{class_l_texture_a12fbc9278f97388cce5ce18863b462ff}{LTexture::LTexture}}()\ :}
+\DoxyCodeLine{00008\ \ \ \ \ \textcolor{comment}{//Initialize\ texture\ variables}}
+\DoxyCodeLine{00009\ \ \ \ \ mTexture\{\ nullptr\ \},}
+\DoxyCodeLine{00010\ \ \ \ \ mWidth\{\ 0\ \},}
+\DoxyCodeLine{00011\ \ \ \ \ mHeight\{\ 0\ \}\ \{}
+\DoxyCodeLine{00012\ }
+\DoxyCodeLine{00013\ \}}
+\DoxyCodeLine{00014\ }
+\DoxyCodeLine{00015\ \mbox{\hyperlink{class_l_texture_a49cfe57c36e58ad99c1ea73fc274b77b}{LTexture::\string~LTexture}}()\ \{}
+\DoxyCodeLine{00016\ \ \ \ \ \textcolor{comment}{//Clean\ up\ texture}}
+\DoxyCodeLine{00017\ \ \ \ \ \mbox{\hyperlink{class_l_texture_a410a68299fd4baf92220cc390882ac73}{destroy}}();}
+\DoxyCodeLine{00018\ \}}
+\DoxyCodeLine{00019\ }
+\DoxyCodeLine{00020\ \textcolor{keywordtype}{bool}\ \mbox{\hyperlink{class_l_texture_ae5b2b930a619203755988c16d6403665}{LTexture::loadFromFile}}(std::string\ path)\ \{}
+\DoxyCodeLine{00021\ \ \ \ \ \textcolor{comment}{//Clean\ up\ texture\ if\ it\ already\ exists}}
+\DoxyCodeLine{00022\ \ \ \ \ \mbox{\hyperlink{class_l_texture_a410a68299fd4baf92220cc390882ac73}{destroy}}();}
+\DoxyCodeLine{00023\ }
+\DoxyCodeLine{00024\ \ \ \ \ \textcolor{comment}{//Load\ surface}}
+\DoxyCodeLine{00025\ \ \ \ \ \textcolor{keywordflow}{if}\ (SDL\_Surface*\ loadedSurface\ =\ IMG\_Load(path.c\_str());\ loadedSurface\ ==\ \textcolor{keyword}{nullptr})}
+\DoxyCodeLine{00026\ \ \ \ \ \{}
+\DoxyCodeLine{00027\ \ \ \ \ \ \ \ \ SDL\_Log(\textcolor{stringliteral}{"{}Unable\ to\ load\ image\ \%s!\ SDL\_image\ error:\ \%s\(\backslash\)n"{}},\ path.c\_str(),\ SDL\_GetError());}
+\DoxyCodeLine{00028\ \ \ \ \ \}\ \textcolor{keywordflow}{else}}
+\DoxyCodeLine{00029\ \ \ \ \ \{}
+\DoxyCodeLine{00030\ \ \ \ \ \ \ \ \ \textcolor{comment}{//Color\ key\ image}}
+\DoxyCodeLine{00031\ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{if}\ (!SDL\_SetSurfaceColorKey(loadedSurface,\ \textcolor{keyword}{true},\ SDL\_MapSurfaceRGB(loadedSurface,\ 0x00,\ 0xFF,\ 0xFF)))}
+\DoxyCodeLine{00032\ \ \ \ \ \ \ \ \ \{}
+\DoxyCodeLine{00033\ \ \ \ \ \ \ \ \ \ \ \ \ SDL\_Log(\textcolor{stringliteral}{"{}Unable\ to\ color\ key!\ SDL\ error:\ \%s"{}},\ SDL\_GetError());}
+\DoxyCodeLine{00034\ \ \ \ \ \ \ \ \ \}\ \textcolor{keywordflow}{else}}
+\DoxyCodeLine{00035\ \ \ \ \ \ \ \ \ \{}
+\DoxyCodeLine{00036\ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{comment}{//Create\ texture\ from\ surface}}
+\DoxyCodeLine{00037\ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{if}\ (\mbox{\hyperlink{class_l_texture_a98d76cf42f620b9c2eacd7b71c3c0c2f}{mTexture}}\ =\ SDL\_CreateTextureFromSurface(\mbox{\hyperlink{_global_8h_a4735638969a524c4ac90a88f23c59a1f}{gRenderer}},\ loadedSurface);\ \mbox{\hyperlink{class_l_texture_a98d76cf42f620b9c2eacd7b71c3c0c2f}{mTexture}}\ ==\ \textcolor{keyword}{nullptr})}
+\DoxyCodeLine{00038\ \ \ \ \ \ \ \ \ \ \ \ \ \{}
+\DoxyCodeLine{00039\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ SDL\_Log(\textcolor{stringliteral}{"{}Unable\ to\ create\ texture\ from\ loaded\ pixels!\ SDL\ error:\ \%s\(\backslash\)n"{}},\ SDL\_GetError());}
+\DoxyCodeLine{00040\ \ \ \ \ \ \ \ \ \ \ \ \ \}\ \textcolor{keywordflow}{else}}
+\DoxyCodeLine{00041\ \ \ \ \ \ \ \ \ \ \ \ \ \{}
+\DoxyCodeLine{00042\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{comment}{//Get\ image\ dimensions}}
+\DoxyCodeLine{00043\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \mbox{\hyperlink{class_l_texture_ac6b5edfd40c81b2b40b71b12e7da2b6f}{mWidth}}\ =\ loadedSurface-\/>w;}
+\DoxyCodeLine{00044\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \mbox{\hyperlink{class_l_texture_aea944f7b207bb9e8b57870d6bd3b5e05}{mHeight}}\ =\ loadedSurface-\/>h;}
+\DoxyCodeLine{00045\ \ \ \ \ \ \ \ \ \ \ \ \ \}}
+\DoxyCodeLine{00046\ \ \ \ \ \ \ \ \ \}}
+\DoxyCodeLine{00047\ }
+\DoxyCodeLine{00048\ \ \ \ \ \ \ \ \ \textcolor{comment}{//Clean\ up\ loaded\ surface}}
+\DoxyCodeLine{00049\ \ \ \ \ \ \ \ \ SDL\_DestroySurface(loadedSurface);}
+\DoxyCodeLine{00050\ \ \ \ \ \}}
+\DoxyCodeLine{00051\ }
+\DoxyCodeLine{00052\ \ \ \ \ \textcolor{comment}{//Return\ success\ if\ texture\ loaded}}
+\DoxyCodeLine{00053\ \ \ \ \ \textcolor{keywordflow}{return}\ \mbox{\hyperlink{class_l_texture_a98d76cf42f620b9c2eacd7b71c3c0c2f}{mTexture}}\ !=\ \textcolor{keyword}{nullptr};}
+\DoxyCodeLine{00054\ \}}
+\DoxyCodeLine{00055\ }
+\DoxyCodeLine{00056\ \textcolor{keywordtype}{bool}\ \mbox{\hyperlink{class_l_texture_af0ea348d6f108c45372fc5ec5b9296bc}{LTexture::loadFromRenderedText}}(std::string\ textureText,\ SDL\_Color\ textColor)\ \{}
+\DoxyCodeLine{00057\ \ \ \ \ \textcolor{comment}{//Clean\ up\ existing\ texture}}
+\DoxyCodeLine{00058\ \ \ \ \ \mbox{\hyperlink{class_l_texture_a410a68299fd4baf92220cc390882ac73}{destroy}}();}
+\DoxyCodeLine{00059\ }
+\DoxyCodeLine{00060\ \ \ \ \ \textcolor{comment}{//Load\ text\ surface}}
+\DoxyCodeLine{00061\ \ \ \ \ \textcolor{keywordflow}{if}\ (SDL\_Surface*\ textSurface\ =\ TTF\_RenderText\_Blended(\mbox{\hyperlink{_global_8h_a88e76957ec56f067af762125afcac25f}{gFont}},\ textureText.c\_str(),\ 0,\ textColor);\ textSurface\ ==\ \textcolor{keyword}{nullptr})}
+\DoxyCodeLine{00062\ \ \ \ \ \{}
+\DoxyCodeLine{00063\ \ \ \ \ \ \ \ \ SDL\_Log(\textcolor{stringliteral}{"{}Unable\ to\ render\ text\ surface!\ SDL\_ttf\ Error:\ \%s\(\backslash\)n"{}},\ SDL\_GetError());}
+\DoxyCodeLine{00064\ \ \ \ \ \}\ \textcolor{keywordflow}{else}}
+\DoxyCodeLine{00065\ \ \ \ \ \{}
+\DoxyCodeLine{00066\ \ \ \ \ \ \ \ \ \textcolor{comment}{//Create\ texture\ from\ surface}}
+\DoxyCodeLine{00067\ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{if}\ (\mbox{\hyperlink{class_l_texture_a98d76cf42f620b9c2eacd7b71c3c0c2f}{mTexture}}\ =\ SDL\_CreateTextureFromSurface(\mbox{\hyperlink{_global_8h_a4735638969a524c4ac90a88f23c59a1f}{gRenderer}},\ textSurface);\ \mbox{\hyperlink{class_l_texture_a98d76cf42f620b9c2eacd7b71c3c0c2f}{mTexture}}\ ==\ \textcolor{keyword}{nullptr})}
+\DoxyCodeLine{00068\ \ \ \ \ \ \ \ \ \{}
+\DoxyCodeLine{00069\ \ \ \ \ \ \ \ \ \ \ \ \ SDL\_Log(\textcolor{stringliteral}{"{}Unable\ to\ create\ texture\ from\ rendered\ text!\ SDL\ Error:\ \%s\(\backslash\)n"{}},\ SDL\_GetError());}
+\DoxyCodeLine{00070\ \ \ \ \ \ \ \ \ \}\ \textcolor{keywordflow}{else}}
+\DoxyCodeLine{00071\ \ \ \ \ \ \ \ \ \{}
+\DoxyCodeLine{00072\ \ \ \ \ \ \ \ \ \ \ \ \ \mbox{\hyperlink{class_l_texture_ac6b5edfd40c81b2b40b71b12e7da2b6f}{mWidth}}\ =\ textSurface-\/>w;}
+\DoxyCodeLine{00073\ \ \ \ \ \ \ \ \ \ \ \ \ \mbox{\hyperlink{class_l_texture_aea944f7b207bb9e8b57870d6bd3b5e05}{mHeight}}\ =\ textSurface-\/>h;}
+\DoxyCodeLine{00074\ \ \ \ \ \ \ \ \ \}}
+\DoxyCodeLine{00075\ }
+\DoxyCodeLine{00076\ \ \ \ \ \ \ \ \ \textcolor{comment}{//Free\ temp\ surface}}
+\DoxyCodeLine{00077\ \ \ \ \ \ \ \ \ SDL\_DestroySurface(textSurface);}
+\DoxyCodeLine{00078\ \ \ \ \ \}}
+\DoxyCodeLine{00079\ }
+\DoxyCodeLine{00080\ \ \ \ \ \textcolor{comment}{//Return\ success\ if\ texture\ loaded}}
+\DoxyCodeLine{00081\ \ \ \ \ \textcolor{keywordflow}{return}\ \mbox{\hyperlink{class_l_texture_a98d76cf42f620b9c2eacd7b71c3c0c2f}{mTexture}}\ !=\ \textcolor{keyword}{nullptr};}
+\DoxyCodeLine{00082\ \}}
+\DoxyCodeLine{00083\ }
+\DoxyCodeLine{00084\ \textcolor{keywordtype}{void}\ \mbox{\hyperlink{class_l_texture_a410a68299fd4baf92220cc390882ac73}{LTexture::destroy}}()\ \{}
+\DoxyCodeLine{00085\ \ \ \ \ \textcolor{comment}{//Clean\ up\ texture}}
+\DoxyCodeLine{00086\ \ \ \ \ SDL\_DestroyTexture(\mbox{\hyperlink{class_l_texture_a98d76cf42f620b9c2eacd7b71c3c0c2f}{mTexture}});}
+\DoxyCodeLine{00087\ \ \ \ \ \mbox{\hyperlink{class_l_texture_a98d76cf42f620b9c2eacd7b71c3c0c2f}{mTexture}}\ =\ \textcolor{keyword}{nullptr};}
+\DoxyCodeLine{00088\ \ \ \ \ \mbox{\hyperlink{class_l_texture_ac6b5edfd40c81b2b40b71b12e7da2b6f}{mWidth}}\ =\ 0;}
+\DoxyCodeLine{00089\ \ \ \ \ \mbox{\hyperlink{class_l_texture_aea944f7b207bb9e8b57870d6bd3b5e05}{mHeight}}\ =\ 0;}
+\DoxyCodeLine{00090\ \}}
+\DoxyCodeLine{00091\ }
+\DoxyCodeLine{00092\ \textcolor{keywordtype}{void}\ \mbox{\hyperlink{class_l_texture_aead3e0fd603db038782f15e9845e50d4}{LTexture::setColor}}(Uint8\ r,\ Uint8\ g,\ Uint8\ b)\ \{}
+\DoxyCodeLine{00093\ \ \ \ \ SDL\_SetTextureColorMod(\mbox{\hyperlink{class_l_texture_a98d76cf42f620b9c2eacd7b71c3c0c2f}{mTexture}},\ r,\ g,\ b);}
+\DoxyCodeLine{00094\ \}}
+\DoxyCodeLine{00095\ }
+\DoxyCodeLine{00096\ \textcolor{keywordtype}{void}\ \mbox{\hyperlink{class_l_texture_ab4e51b54752ae7b54614078f9128a9c0}{LTexture::setAlpha}}(Uint8\ alpha)\ \{}
+\DoxyCodeLine{00097\ \ \ \ \ SDL\_SetTextureAlphaMod(\mbox{\hyperlink{class_l_texture_a98d76cf42f620b9c2eacd7b71c3c0c2f}{mTexture}},\ alpha);}
+\DoxyCodeLine{00098\ \}}
+\DoxyCodeLine{00099\ }
+\DoxyCodeLine{00100\ \textcolor{keywordtype}{void}\ \mbox{\hyperlink{class_l_texture_abaf56f223336f08de127403b310864c1}{LTexture::setBlending}}(SDL\_BlendMode\ blendMode)\ \{}
+\DoxyCodeLine{00101\ \ \ \ \ SDL\_SetTextureBlendMode(\mbox{\hyperlink{class_l_texture_a98d76cf42f620b9c2eacd7b71c3c0c2f}{mTexture}},\ blendMode);}
+\DoxyCodeLine{00102\ \}}
+\DoxyCodeLine{00103\ }
+\DoxyCodeLine{00104\ \textcolor{keywordtype}{void}\ \mbox{\hyperlink{class_l_texture_ae1011e32e00ae6c60274e456725c0fab}{LTexture::render}}(\textcolor{keywordtype}{float}\ x,\ \textcolor{keywordtype}{float}\ y,\ SDL\_FRect*\ clip,\ \textcolor{keywordtype}{float}\ width,\ \textcolor{keywordtype}{float}\ height,\ \textcolor{keywordtype}{double}\ degrees,\ SDL\_FPoint*\ center,\ SDL\_FlipMode\ flipMode)\ \{}
+\DoxyCodeLine{00105\ \ \ \ \ \textcolor{comment}{//\ Set\ texture\ position}}
+\DoxyCodeLine{00106\ \ \ \ \ SDL\_FRect\ dstRect\ =\ \{\ x,\ y,\ \textcolor{keyword}{static\_cast<}\textcolor{keywordtype}{float}\textcolor{keyword}{>}(\mbox{\hyperlink{class_l_texture_ac6b5edfd40c81b2b40b71b12e7da2b6f}{mWidth}}),\ \textcolor{keyword}{static\_cast<}\textcolor{keywordtype}{float}\textcolor{keyword}{>}(\mbox{\hyperlink{class_l_texture_aea944f7b207bb9e8b57870d6bd3b5e05}{mHeight}})\ \};}
+\DoxyCodeLine{00107\ }
+\DoxyCodeLine{00108\ \ \ \ \ \textcolor{comment}{//\ Default\ to\ clip\ dimensions\ if\ clip\ is\ given}}
+\DoxyCodeLine{00109\ \ \ \ \ \textcolor{keywordflow}{if}\ (clip\ !=\ \textcolor{keyword}{nullptr})\ \{}
+\DoxyCodeLine{00110\ \ \ \ \ \ \ \ \ dstRect.w\ =\ clip-\/>w;}
+\DoxyCodeLine{00111\ \ \ \ \ \ \ \ \ dstRect.h\ =\ clip-\/>h;}
+\DoxyCodeLine{00112\ \ \ \ \ \}}
+\DoxyCodeLine{00113\ }
+\DoxyCodeLine{00114\ \ \ \ \ \textcolor{comment}{//\ Calculate\ the\ aspect\ ratio\ of\ the\ texture}}
+\DoxyCodeLine{00115\ \ \ \ \ \textcolor{keywordtype}{float}\ aspectRatio\ =\ \textcolor{keyword}{static\_cast<}\textcolor{keywordtype}{float}\textcolor{keyword}{>}(\mbox{\hyperlink{class_l_texture_ac6b5edfd40c81b2b40b71b12e7da2b6f}{mWidth}})\ /\ \textcolor{keyword}{static\_cast<}\textcolor{keywordtype}{float}\textcolor{keyword}{>}(\mbox{\hyperlink{class_l_texture_aea944f7b207bb9e8b57870d6bd3b5e05}{mHeight}});}
+\DoxyCodeLine{00116\ }
+\DoxyCodeLine{00117\ \ \ \ \ \textcolor{comment}{//\ Resize\ while\ maintaining\ aspect\ ratio\ if\ necessary}}
+\DoxyCodeLine{00118\ \ \ \ \ \textcolor{keywordflow}{if}\ (width\ >\ 0\ \&\&\ height\ <=\ 0)\ \{}
+\DoxyCodeLine{00119\ \ \ \ \ \ \ \ \ \textcolor{comment}{//\ Only\ width\ is\ provided,\ calculate\ height\ based\ on\ aspect\ ratio}}
+\DoxyCodeLine{00120\ \ \ \ \ \ \ \ \ dstRect.w\ =\ width;}
+\DoxyCodeLine{00121\ \ \ \ \ \ \ \ \ dstRect.h\ =\ dstRect.w\ /\ aspectRatio;}
+\DoxyCodeLine{00122\ \ \ \ \ \}}
+\DoxyCodeLine{00123\ \ \ \ \ \textcolor{keywordflow}{else}\ \textcolor{keywordflow}{if}\ (height\ >\ 0\ \&\&\ width\ <=\ 0)\ \{}
+\DoxyCodeLine{00124\ \ \ \ \ \ \ \ \ \textcolor{comment}{//\ Only\ height\ is\ provided,\ calculate\ width\ based\ on\ aspect\ ratio}}
+\DoxyCodeLine{00125\ \ \ \ \ \ \ \ \ dstRect.h\ =\ height;}
+\DoxyCodeLine{00126\ \ \ \ \ \ \ \ \ dstRect.w\ =\ dstRect.h\ *\ aspectRatio;}
+\DoxyCodeLine{00127\ \ \ \ \ \}}
+\DoxyCodeLine{00128\ \ \ \ \ \textcolor{keywordflow}{else}\ \{}
+\DoxyCodeLine{00129\ \ \ \ \ \ \ \ \ \textcolor{comment}{//\ If\ both\ width\ and\ height\ are\ provided,\ use\ them\ directly}}
+\DoxyCodeLine{00130\ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{if}\ (width\ >\ 0)\ dstRect.w\ =\ width;}
+\DoxyCodeLine{00131\ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{if}\ (height\ >\ 0)\ dstRect.h\ =\ height;}
+\DoxyCodeLine{00132\ \ \ \ \ \}}
+\DoxyCodeLine{00133\ }
+\DoxyCodeLine{00134\ \ \ \ \ \textcolor{comment}{//\ Render\ texture\ with\ the\ updated\ dimensions}}
+\DoxyCodeLine{00135\ \ \ \ \ SDL\_RenderTextureRotated(\mbox{\hyperlink{_global_8h_a4735638969a524c4ac90a88f23c59a1f}{gRenderer}},\ \mbox{\hyperlink{class_l_texture_a98d76cf42f620b9c2eacd7b71c3c0c2f}{mTexture}},\ clip,\ \&dstRect,\ degrees,\ center,\ flipMode);}
+\DoxyCodeLine{00136\ \}}
+\DoxyCodeLine{00137\ }
+\DoxyCodeLine{00138\ }
+\DoxyCodeLine{00139\ \textcolor{keywordtype}{int}\ \mbox{\hyperlink{class_l_texture_a542c1f81d98fd5659a04eb394d61a879}{LTexture::getWidth}}()\ \{}
+\DoxyCodeLine{00140\ \ \ \ \ \textcolor{keywordflow}{return}\ \mbox{\hyperlink{class_l_texture_ac6b5edfd40c81b2b40b71b12e7da2b6f}{mWidth}};}
+\DoxyCodeLine{00141\ \}}
+\DoxyCodeLine{00142\ }
+\DoxyCodeLine{00143\ \textcolor{keywordtype}{int}\ \mbox{\hyperlink{class_l_texture_a277f45af3dae7e35ca846a527039e59a}{LTexture::getHeight}}()\ \{}
+\DoxyCodeLine{00144\ \ \ \ \ \textcolor{keywordflow}{return}\ \mbox{\hyperlink{class_l_texture_aea944f7b207bb9e8b57870d6bd3b5e05}{mHeight}};}
+\DoxyCodeLine{00145\ \}}
+
+\end{DoxyCode}

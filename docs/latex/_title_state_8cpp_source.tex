@@ -1,0 +1,125 @@
+\doxysection{Title\+State.\+cpp}
+\hypertarget{_title_state_8cpp_source}{}\label{_title_state_8cpp_source}\index{src/states/TitleState.cpp@{src/states/TitleState.cpp}}
+\mbox{\hyperlink{_title_state_8cpp}{Go to the documentation of this file.}}
+\begin{DoxyCode}{0}
+\DoxyCodeLine{00001\ \textcolor{preprocessor}{\#include\ <\mbox{\hyperlink{_title_state_8h}{states/TitleState.h}}>}}
+\DoxyCodeLine{00002\ \textcolor{preprocessor}{\#include\ <\mbox{\hyperlink{_main_menu_button_8h}{ui/MainMenuButton.h}}>}\ \ \textcolor{comment}{//\ Include\ the\ MainMenuButton\ header}}
+\DoxyCodeLine{00003\ \textcolor{preprocessor}{\#include\ <\mbox{\hyperlink{_main_game_state_8h}{states/parts/MainGameState.h}}>}}
+\DoxyCodeLine{00004\ \textcolor{preprocessor}{\#include\ <\mbox{\hyperlink{_part1_state_8h}{states/parts/Part1State.h}}>}}
+\DoxyCodeLine{00005\ \textcolor{preprocessor}{\#include\ <\mbox{\hyperlink{_part2_state_8h}{states/parts/Part2State.h}}>}}
+\DoxyCodeLine{00006\ \textcolor{preprocessor}{\#include\ <\mbox{\hyperlink{_part3_state_8h}{states/parts/Part3State.h}}>}}
+\DoxyCodeLine{00007\ \textcolor{preprocessor}{\#include\ <\mbox{\hyperlink{_global_8h}{Global.h}}>}}
+\DoxyCodeLine{00008\ }
+\DoxyCodeLine{00009\ \mbox{\hyperlink{class_title_state}{TitleState}}\ \mbox{\hyperlink{class_title_state_afe21bb198809a033b59f220d8f7a211a}{TitleState::sTitleState}};}
+\DoxyCodeLine{00010\ }
+\DoxyCodeLine{00011\ \textcolor{comment}{//\ Place\ buttons}}
+\DoxyCodeLine{00012\ \textcolor{keyword}{constexpr}\ \textcolor{keywordtype}{int}\ \mbox{\hyperlink{_title_state_8cpp_af7067d7a8ef7888650cda71fe8ebe60d}{kButtonCount}}\ =\ 4;}
+\DoxyCodeLine{00013\ \mbox{\hyperlink{class_main_menu_button}{MainMenuButton}}\ \mbox{\hyperlink{_title_state_8cpp_a2be46df794ec7d071d6e4ce846e4ad25}{buttons}}[\mbox{\hyperlink{_title_state_8cpp_af7067d7a8ef7888650cda71fe8ebe60d}{kButtonCount}}];\ \ \textcolor{comment}{//\ Use\ MainMenuButton\ instead\ of\ LButton}}
+\DoxyCodeLine{00014\ }
+\DoxyCodeLine{00015\ \textcolor{comment}{//\ TitleState\ Implementation}}
+\DoxyCodeLine{00016\ \mbox{\hyperlink{class_title_state}{TitleState}}*\ \mbox{\hyperlink{class_title_state_af85f8e1f727fe0d6d437d3f41c1813a4}{TitleState::get}}()\ \{}
+\DoxyCodeLine{00017\ \ \ \ \ \textcolor{comment}{//\ Get\ static\ instance}}
+\DoxyCodeLine{00018\ \ \ \ \ \textcolor{keywordflow}{return}\ \&\mbox{\hyperlink{class_title_state_afe21bb198809a033b59f220d8f7a211a}{sTitleState}};}
+\DoxyCodeLine{00019\ \}}
+\DoxyCodeLine{00020\ }
+\DoxyCodeLine{00021\ \textcolor{keywordtype}{bool}\ \mbox{\hyperlink{class_title_state_af78e4ac14f2e9c51e10e5a6ef8f1651c}{TitleState::enter}}()\ \{}
+\DoxyCodeLine{00022\ \ \ \ \ \textcolor{keywordtype}{bool}\ success\ =\ \textcolor{keyword}{true};}
+\DoxyCodeLine{00023\ }
+\DoxyCodeLine{00024\ \ \ \ \ SDL\_Color\ textColor\{\ 0x00,\ 0x00,\ 0x00,\ 0xFF\ \};}
+\DoxyCodeLine{00025\ }
+\DoxyCodeLine{00026\ \ \ \ \ \textcolor{keywordflow}{if}\ (!(success\ \&=\ \mbox{\hyperlink{class_title_state_ad5f51cd8136dbf3bc609f001739d9e07}{mMessageTexture}}.\mbox{\hyperlink{class_l_texture_af0ea348d6f108c45372fc5ec5b9296bc}{loadFromRenderedText}}(\textcolor{stringliteral}{"{}Tower\ Defense\ -\/\ The\ Game"{}},\ textColor)))\ \{}
+\DoxyCodeLine{00027\ \ \ \ \ \ \ \ \ printf(\textcolor{stringliteral}{"{}Failed\ to\ render\ title\ text!\(\backslash\)n"{}});}
+\DoxyCodeLine{00028\ \ \ \ \ \}}
+\DoxyCodeLine{00029\ }
+\DoxyCodeLine{00030\ \ \ \ \ \textcolor{comment}{//\ Assign\ text\ to\ buttons}}
+\DoxyCodeLine{00031\ \ \ \ \ \textcolor{keyword}{const}\ \textcolor{keywordtype}{char}*\ buttonLabels[\mbox{\hyperlink{_title_state_8cpp_af7067d7a8ef7888650cda71fe8ebe60d}{kButtonCount}}]\ =\ \{}
+\DoxyCodeLine{00032\ \ \ \ \ \ \ \ \ \textcolor{stringliteral}{"{}Load\ Main\ Game"{}},}
+\DoxyCodeLine{00033\ \ \ \ \ \ \ \ \ \textcolor{stringliteral}{"{}Load\ Part\ 1"{}},}
+\DoxyCodeLine{00034\ \ \ \ \ \ \ \ \ \textcolor{stringliteral}{"{}Load\ Part\ 2"{}},}
+\DoxyCodeLine{00035\ \ \ \ \ \ \ \ \ \textcolor{stringliteral}{"{}Load\ Part\ 3"{}}}
+\DoxyCodeLine{00036\ \ \ \ \ \};}
+\DoxyCodeLine{00037\ }
+\DoxyCodeLine{00038\ \ \ \ \ \textcolor{keywordflow}{for}\ (\textcolor{keywordtype}{int}\ i\ =\ 0;\ i\ <\ \mbox{\hyperlink{_title_state_8cpp_af7067d7a8ef7888650cda71fe8ebe60d}{kButtonCount}};\ ++i)\ \{}
+\DoxyCodeLine{00039\ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{if}\ (!\mbox{\hyperlink{_title_state_8cpp_a2be46df794ec7d071d6e4ce846e4ad25}{buttons}}[i].setText(buttonLabels[i],\ textColor))\ \{}
+\DoxyCodeLine{00040\ \ \ \ \ \ \ \ \ \ \ \ \ printf(\textcolor{stringliteral}{"{}Failed\ to\ set\ button\ text:\ \%s\(\backslash\)n"{}},\ buttonLabels[i]);}
+\DoxyCodeLine{00041\ \ \ \ \ \ \ \ \ \ \ \ \ success\ =\ \textcolor{keyword}{false};}
+\DoxyCodeLine{00042\ \ \ \ \ \ \ \ \ \}}
+\DoxyCodeLine{00043\ \ \ \ \ \}}
+\DoxyCodeLine{00044\ }
+\DoxyCodeLine{00045\ \ \ \ \ \textcolor{comment}{//\ Define\ vertical\ spacing}}
+\DoxyCodeLine{00046\ \ \ \ \ \textcolor{keyword}{constexpr}\ \textcolor{keywordtype}{int}\ buttonSpacing\ =\ 20;\ \ \textcolor{comment}{//\ Space\ between\ buttons}}
+\DoxyCodeLine{00047\ \ \ \ \ \textcolor{keyword}{constexpr}\ \textcolor{keywordtype}{int}\ startY\ =\ (\mbox{\hyperlink{class_global_ac3594b5a8ad2dbb44ebcdcf26590716e}{Global::kScreenHeight}}\ -\/\ ((\mbox{\hyperlink{class_main_menu_button_ab2a9ccf96be6088bdd9b77e9701741d9}{MainMenuButton::kButtonHeight}}\ *\ \mbox{\hyperlink{_title_state_8cpp_af7067d7a8ef7888650cda71fe8ebe60d}{kButtonCount}})\ +\ (buttonSpacing\ *\ (\mbox{\hyperlink{_title_state_8cpp_af7067d7a8ef7888650cda71fe8ebe60d}{kButtonCount}}\ -\/\ 1))))\ /\ 2;}
+\DoxyCodeLine{00048\ }
+\DoxyCodeLine{00049\ \ \ \ \ \textcolor{comment}{//\ Set\ button\ positions}}
+\DoxyCodeLine{00050\ \ \ \ \ \textcolor{keywordflow}{for}\ (\textcolor{keywordtype}{int}\ i\ =\ 0;\ i\ <\ \mbox{\hyperlink{_title_state_8cpp_af7067d7a8ef7888650cda71fe8ebe60d}{kButtonCount}};\ ++i)\ \{}
+\DoxyCodeLine{00051\ \ \ \ \ \ \ \ \ \mbox{\hyperlink{_title_state_8cpp_a2be46df794ec7d071d6e4ce846e4ad25}{buttons}}[i].\mbox{\hyperlink{class_l_button_aab53179dc6006793913f8fbf0924dcf5}{setPosition}}((\mbox{\hyperlink{class_global_a3229e68e91386a22a73a87e13c285b54}{Global::kScreenWidth}}\ -\/\ \mbox{\hyperlink{class_main_menu_button_aee0861f1fe0f35bde966be44260a263d}{MainMenuButton::kButtonWidth}})\ /\ 2,\ startY\ +\ i\ *\ (\mbox{\hyperlink{class_main_menu_button_ab2a9ccf96be6088bdd9b77e9701741d9}{MainMenuButton::kButtonHeight}}\ +\ buttonSpacing));}
+\DoxyCodeLine{00052\ \ \ \ \ \}}
+\DoxyCodeLine{00053\ }
+\DoxyCodeLine{00054\ \ \ \ \ \textcolor{keywordflow}{return}\ success;}
+\DoxyCodeLine{00055\ \}}
+\DoxyCodeLine{00056\ }
+\DoxyCodeLine{00057\ \textcolor{keywordtype}{bool}\ \mbox{\hyperlink{class_title_state_a3beb7e8f831e195eab39e296bae55d82}{TitleState::exit}}()\ \{}
+\DoxyCodeLine{00058\ \ \ \ \ \textcolor{comment}{//\ Free\ background\ and\ text}}
+\DoxyCodeLine{00059\ \ \ \ \ \mbox{\hyperlink{class_title_state_a2d16d6fd5e077dce86ab15ccf0f6c6fb}{mBackgroundTexture}}.\mbox{\hyperlink{class_l_texture_a410a68299fd4baf92220cc390882ac73}{destroy}}();}
+\DoxyCodeLine{00060\ \ \ \ \ \mbox{\hyperlink{class_title_state_ad5f51cd8136dbf3bc609f001739d9e07}{mMessageTexture}}.\mbox{\hyperlink{class_l_texture_a410a68299fd4baf92220cc390882ac73}{destroy}}();}
+\DoxyCodeLine{00061\ }
+\DoxyCodeLine{00062\ \ \ \ \ \textcolor{keywordflow}{return}\ \textcolor{keyword}{true};}
+\DoxyCodeLine{00063\ \}}
+\DoxyCodeLine{00064\ }
+\DoxyCodeLine{00065\ \textcolor{keywordtype}{void}\ \mbox{\hyperlink{class_title_state_ab944bbea89672acba5a870b54ed522f3}{TitleState::handleEvent}}(SDL\_Event\&\ e)\ \{}
+\DoxyCodeLine{00066\ \ \ \ \ \textcolor{comment}{//\ Handle\ button\ events}}
+\DoxyCodeLine{00067\ \ \ \ \ \textcolor{keywordflow}{for}\ (\textcolor{keywordtype}{int}\ i\ =\ 0;\ i\ <\ \mbox{\hyperlink{_title_state_8cpp_af7067d7a8ef7888650cda71fe8ebe60d}{kButtonCount}};\ ++i)\ \{}
+\DoxyCodeLine{00068\ \ \ \ \ \ \ \ \ \mbox{\hyperlink{_title_state_8cpp_a2be46df794ec7d071d6e4ce846e4ad25}{buttons}}[i].\mbox{\hyperlink{class_main_menu_button_aed528d205a98d29572cdbd0a85197eb3}{handleEvent}}(\&e);}
+\DoxyCodeLine{00069\ }
+\DoxyCodeLine{00070\ \ \ \ \ \ \ \ \ \textcolor{comment}{//\ Check\ if\ any\ of\ the\ buttons\ were\ clicked\ and\ set\ the\ next\ state\ accordingly}}
+\DoxyCodeLine{00071\ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{if}\ (e.type\ ==\ SDL\_EVENT\_MOUSE\_BUTTON\_DOWN\ \&\&\ e.button.button\ ==\ SDL\_BUTTON\_LEFT)\ \{}
+\DoxyCodeLine{00072\ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{if}\ (\mbox{\hyperlink{_title_state_8cpp_a2be46df794ec7d071d6e4ce846e4ad25}{buttons}}[i].isClicked())\ \{}
+\DoxyCodeLine{00073\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{comment}{//\ Transition\ to\ the\ corresponding\ part\ state}}
+\DoxyCodeLine{00074\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{switch}\ (i)\ \{}
+\DoxyCodeLine{00075\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{case}\ 0:\ \ \textcolor{comment}{//\ "{}Load\ Main\ Game"{}\ -\/\ Can\ stay\ in\ TitleState\ or\ go\ to\ main\ game}}
+\DoxyCodeLine{00076\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \mbox{\hyperlink{_global_8h_ab0b0c86be4e5dc019e3938585fa1e7ea}{setNextState}}(\mbox{\hyperlink{class_main_game_state_ae74dbfb6ef7ba2fb458911e42582c94d}{MainGameState::get}}());\ \textcolor{comment}{//\ Assuming\ you\ have\ a\ MainGameState}}
+\DoxyCodeLine{00077\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{break};}
+\DoxyCodeLine{00078\ }
+\DoxyCodeLine{00079\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{case}\ 1:\ \ \textcolor{comment}{//\ "{}Load\ Part\ 1"{}}}
+\DoxyCodeLine{00080\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \mbox{\hyperlink{_global_8h_ab0b0c86be4e5dc019e3938585fa1e7ea}{setNextState}}(\mbox{\hyperlink{class_part1_state_a8b98e2eaeb3624b0d41666c07086b382}{Part1State::get}}());}
+\DoxyCodeLine{00081\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{break};}
+\DoxyCodeLine{00082\ }
+\DoxyCodeLine{00083\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{case}\ 2:\ \ \textcolor{comment}{//\ "{}Load\ Part\ 2"{}}}
+\DoxyCodeLine{00084\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \mbox{\hyperlink{_global_8h_ab0b0c86be4e5dc019e3938585fa1e7ea}{setNextState}}(\mbox{\hyperlink{class_part2_state_afd03f10f3282fbe8dd3718b19331d824}{Part2State::get}}());}
+\DoxyCodeLine{00085\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{break};}
+\DoxyCodeLine{00086\ }
+\DoxyCodeLine{00087\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{case}\ 3:\ \ \textcolor{comment}{//\ "{}Load\ Part\ 3"{}}}
+\DoxyCodeLine{00088\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \mbox{\hyperlink{_global_8h_ab0b0c86be4e5dc019e3938585fa1e7ea}{setNextState}}(\mbox{\hyperlink{class_part3_state_a09fbfb138bd85f00e107d7b91d1cf47c}{Part3State::get}}());}
+\DoxyCodeLine{00089\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{break};}
+\DoxyCodeLine{00090\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \}}
+\DoxyCodeLine{00091\ \ \ \ \ \ \ \ \ \ \ \ \ \}}
+\DoxyCodeLine{00092\ \ \ \ \ \ \ \ \ \}}
+\DoxyCodeLine{00093\ \ \ \ \ \}}
+\DoxyCodeLine{00094\ \}}
+\DoxyCodeLine{00095\ }
+\DoxyCodeLine{00096\ \textcolor{keywordtype}{void}\ \mbox{\hyperlink{class_title_state_ab99e975b3b50f79829039072e6d538e6}{TitleState::update}}()\ \{}
+\DoxyCodeLine{00097\ \ \ \ \ \textcolor{comment}{//\ Update\ logic\ if\ any}}
+\DoxyCodeLine{00098\ \}}
+\DoxyCodeLine{00099\ }
+\DoxyCodeLine{00100\ \textcolor{keywordtype}{void}\ \mbox{\hyperlink{class_title_state_a733ec3f3b758b1b4cc9baef6a79e1fdf}{TitleState::render}}()\ \{}
+\DoxyCodeLine{00101\ \ \ \ \ \textcolor{comment}{//\ Fill\ the\ background}}
+\DoxyCodeLine{00102\ \ \ \ \ SDL\_SetRenderDrawColor(\mbox{\hyperlink{_global_8h_a4735638969a524c4ac90a88f23c59a1f}{gRenderer}},\ 0xFF,\ 0xFF,\ 0xFF,\ 0xFF);}
+\DoxyCodeLine{00103\ \ \ \ \ SDL\_RenderClear(\mbox{\hyperlink{_global_8h_a4735638969a524c4ac90a88f23c59a1f}{gRenderer}});}
+\DoxyCodeLine{00104\ }
+\DoxyCodeLine{00105\ \ \ \ \ \textcolor{comment}{//\ Show\ the\ background}}
+\DoxyCodeLine{00106\ \ \ \ \ \mbox{\hyperlink{class_title_state_a2d16d6fd5e077dce86ab15ccf0f6c6fb}{mBackgroundTexture}}.\mbox{\hyperlink{class_l_texture_ae1011e32e00ae6c60274e456725c0fab}{render}}(0,\ 0);}
+\DoxyCodeLine{00107\ }
+\DoxyCodeLine{00108\ \ \ \ \ \textcolor{comment}{//\ Show\ the\ message}}
+\DoxyCodeLine{00109\ \ \ \ \ \mbox{\hyperlink{class_title_state_ad5f51cd8136dbf3bc609f001739d9e07}{mMessageTexture}}.\mbox{\hyperlink{class_l_texture_ae1011e32e00ae6c60274e456725c0fab}{render}}((\mbox{\hyperlink{class_global_a3229e68e91386a22a73a87e13c285b54}{Global::kScreenWidth}}\ -\/\ \mbox{\hyperlink{class_title_state_ad5f51cd8136dbf3bc609f001739d9e07}{mMessageTexture}}.\mbox{\hyperlink{class_l_texture_a542c1f81d98fd5659a04eb394d61a879}{getWidth}}())\ /\ 2.f,\ 20);}
+\DoxyCodeLine{00110\ }
+\DoxyCodeLine{00111\ \ \ \ \ \textcolor{comment}{//\ Render\ buttons}}
+\DoxyCodeLine{00112\ \ \ \ \ \textcolor{keywordflow}{for}\ (\textcolor{keywordtype}{int}\ i\ =\ 0;\ i\ <\ \mbox{\hyperlink{_title_state_8cpp_af7067d7a8ef7888650cda71fe8ebe60d}{kButtonCount}};\ ++i)\ \{}
+\DoxyCodeLine{00113\ \ \ \ \ \ \ \ \ \mbox{\hyperlink{_title_state_8cpp_a2be46df794ec7d071d6e4ce846e4ad25}{buttons}}[i].\mbox{\hyperlink{class_main_menu_button_a5bf888e3b30343585e287a19d951c118}{render}}();\ \ \textcolor{comment}{//\ Render\ the\ MainMenuButton\ instead\ of\ LButton}}
+\DoxyCodeLine{00114\ \ \ \ \ \}}
+\DoxyCodeLine{00115\ \}}
+\DoxyCodeLine{00116\ }
+\DoxyCodeLine{00117\ \mbox{\hyperlink{class_title_state_a50ef2b0f29790d27b3edc50e11f852d0}{TitleState::TitleState}}()\ \{}
+\DoxyCodeLine{00118\ \ \ \ \ \textcolor{comment}{//\ No\ public\ instantiation}}
+\DoxyCodeLine{00119\ \}}
+
+\end{DoxyCode}
