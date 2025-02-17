@@ -1,6 +1,6 @@
 var searchData=
 [
-  ['takedamage_0',['takedamage',['../classCritter.html#a963ccea758c0b04129a372572704c1fc',1,'Critter::takeDamage()'],['../classCritterTower.html#a9690b1cb2d3e811663187d85cc73a445',1,'CritterTower::takeDamage()']]],
+  ['takedamage_0',['takeDamage',['../classCritter.html#a963ccea758c0b04129a372572704c1fc',1,'Critter::takeDamage()'],['../classCritterTower.html#a9690b1cb2d3e811663187d85cc73a445',1,'CritterTower::takeDamage()']]],
   ['target_1',['target',['../classCritterProjectile.html#ac252b8a1c64f582eb0e6c1e025a0b6fb',1,'CritterProjectile']]],
   ['texture_5fpath_2',['TEXTURE_PATH',['../classTextureLoader.html#abfdf0d896177f3c5b29435dc845fa674',1,'TextureLoader']]],
   ['texturecellarrowdown_3',['textureCellArrowDown',['../classMap.html#a4968c57817adce2dccc39dddd6a03a2d',1,'Map']]],
@@ -15,7 +15,7 @@ var searchData=
   ['textureloader_2ecpp_12',['TextureLoader.cpp',['../TextureLoader_8cpp.html',1,'']]],
   ['textureloader_2eh_13',['TextureLoader.h',['../TextureLoader_8h.html',1,'']]],
   ['timesincelastshot_14',['timeSinceLastShot',['../classCritterTower.html#a123ea4aae752813b4eb3d786a8767823',1,'CritterTower']]],
-  ['titlestate_15',['titlestate',['../classTitleState.html#a50ef2b0f29790d27b3edc50e11f852d0',1,'TitleState::TitleState()'],['../classTitleState.html',1,'TitleState']]],
+  ['titlestate_15',['TitleState',['../classTitleState.html',1,'TitleState'],['../classTitleState.html#a50ef2b0f29790d27b3edc50e11f852d0',1,'TitleState::TitleState()']]],
   ['titlestate_2ecpp_16',['TitleState.cpp',['../TitleState_8cpp.html',1,'']]],
   ['titlestate_2eh_17',['TitleState.h',['../TitleState_8h.html',1,'']]],
   ['towers_18',['towers',['../classPart3State.html#adcabed49d6001977efc266c65e942915',1,'Part3State']]]

@@ -1,7 +1,0 @@
-<map id="changeState" name="changeState">
-<area shape="rect" id="Node000001" title=" " alt="" coords="5,31,108,56"/>
-<area shape="rect" id="Node000002" href="$classGameState.html#a7925c211ee1b3690a3a7caddb435581d" title=" " alt="" coords="156,5,293,31"/>
-<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="108,33,142,28,143,33,108,38"/>
-<area shape="rect" id="Node000003" href="$classGameState.html#a1d50a914345d61a5ca87c862136bb523" title=" " alt="" coords="161,55,289,80"/>
-<area shape="poly" id="edge2_Node000001_Node000003" title=" " alt="" coords="108,48,148,54,147,59,108,53"/>
-</map>

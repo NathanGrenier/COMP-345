@@ -4,6 +4,8 @@
 <area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="164,31,211,25,212,30,164,36"/>
 <area shape="rect" id="Node000003" href="$classVector2D.html#a0bb684df2d724e4378dc5fbf0d4faa99" title=" " alt="" coords="212,55,367,80"/>
 <area shape="poly" id="edge2_Node000001_Node000003" title=" " alt="" coords="164,50,198,54,198,59,164,55"/>
-<area shape="rect" id="Node000004" href="$classVector2D.html#a2840db6c516580a39fd5a309d991dae2" title=" " alt="" coords="415,55,573,80"/>
-<area shape="poly" id="edge3_Node000003_Node000004" title=" " alt="" coords="367,65,401,65,401,70,367,70"/>
+<area shape="rect" id="Node000004" href="$classVector2D.html#a2840db6c516580a39fd5a309d991dae2" title=" " alt="" coords="415,29,573,55"/>
+<area shape="poly" id="edge3_Node000003_Node000004" title=" " alt="" coords="367,55,401,51,402,56,367,60"/>
+<area shape="rect" id="Node000005" href="$classVector2D.html#aed766d7e4da09b328e477883dcfdf4fc" title=" " alt="" coords="420,79,568,104"/>
+<area shape="poly" id="edge4_Node000003_Node000005" title=" " alt="" coords="367,74,406,78,406,84,367,79"/>
 </map>

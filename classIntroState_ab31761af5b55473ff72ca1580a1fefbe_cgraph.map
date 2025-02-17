@@ -1,9 +1,0 @@
-<map id="IntroState::render" name="IntroState::render">
-<area shape="rect" id="Node000001" title=" " alt="" coords="5,55,141,80"/>
-<area shape="rect" id="Node000002" href="$classLTexture.html#a277f45af3dae7e35ca846a527039e59a" title=" " alt="" coords="189,5,337,31"/>
-<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="122,52,199,32,201,37,124,57"/>
-<area shape="rect" id="Node000003" href="$classLTexture.html#a542c1f81d98fd5659a04eb394d61a879" title=" " alt="" coords="192,55,335,80"/>
-<area shape="poly" id="edge2_Node000001_Node000003" title=" " alt="" coords="142,65,178,65,178,70,142,70"/>
-<area shape="rect" id="Node000004" href="$classLTexture.html#ae1011e32e00ae6c60274e456725c0fab" title=" " alt="" coords="200,104,327,129"/>
-<area shape="poly" id="edge3_Node000001_Node000004" title=" " alt="" coords="124,77,201,98,199,103,122,83"/>
-</map>

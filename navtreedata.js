@@ -42,8 +42,7 @@ var NAVTREE =
       [ "File Members", "globals.html", [
         [ "All", "globals.html", null ],
         [ "Functions", "globals_func.html", null ],
-        [ "Variables", "globals_vars.html", null ],
-        [ "Macros", "globals_defs.html", null ]
+        [ "Variables", "globals_vars.html", null ]
       ] ]
     ] ]
   ] ]
@@ -52,8 +51,8 @@ var NAVTREE =
 var NAVTREEINDEX =
 [
 "CritterGroup_8cpp.html",
-"classMainMenuButton.html#a5bf888e3b30343585e287a19d951c118"
+"classMainMenuButton.html#a7a7d96361384c9760b4c49937d2b0d76"
 ];
 
-var SYNCONMSG = 'click to disable panel synchronisation';
-var SYNCOFFMSG = 'click to enable panel synchronisation';
+var SYNCONMSG = 'click to disable panel synchronization';
+var SYNCOFFMSG = 'click to enable panel synchronization';

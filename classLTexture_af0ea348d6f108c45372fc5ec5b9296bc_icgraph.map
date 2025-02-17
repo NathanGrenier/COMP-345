@@ -1,24 +1,13 @@
 <map id="LTexture::loadFromRenderedText" name="LTexture::loadFromRenderedText">
-<area shape="rect" id="Node000001" title=" " alt="" coords="407,179,641,204"/>
-<area shape="rect" id="Node000002" href="$classIntroState.html#a63b0705e1d3dc5522360cdf9b231f8ce" title=" " alt="" coords="211,5,339,31"/>
-<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="501,170,441,107,401,73,357,44,332,33,334,28,360,40,404,69,445,103,505,166"/>
-<area shape="rect" id="Node000003" href="$classTitleState.html#af78e4ac14f2e9c51e10e5a6ef8f1651c" title=" " alt="" coords="212,55,339,80"/>
-<area shape="poly" id="edge2_Node000001_Node000003" title=" " alt="" coords="493,173,432,133,358,94,327,83,329,78,360,89,435,129,496,169"/>
-<area shape="rect" id="Node000004" href="$main_8cpp.html#a24b0babc7c151f85567092a4c13fa743" title=" " alt="" coords="230,104,321,129"/>
-<area shape="poly" id="edge3_Node000001_Node000004" title=" " alt="" coords="468,177,358,143,320,132,321,127,359,138,470,172"/>
-<area shape="rect" id="Node000006" href="$classPart1State.html#a5239fb252177bb5ad700b869a6687c3a" title="Render the state." alt="" coords="206,153,345,179"/>
-<area shape="poly" id="edge5_Node000001_Node000006" title=" " alt="" coords="393,181,344,176,345,170,393,175"/>
-<area shape="rect" id="Node000007" href="$classCritterGroup.html#a3d4f149e34ecbac91a771ca748839fa6" title=" " alt="" coords="199,203,351,228"/>
-<area shape="poly" id="edge6_Node000001_Node000007" title=" " alt="" coords="393,207,352,211,351,205,393,201"/>
-<area shape="rect" id="Node000009" href="$classCritterTower.html#ab1b44bcc53dc28249616c41b6e3d06c0" title=" " alt="" coords="200,252,351,277"/>
-<area shape="poly" id="edge8_Node000001_Node000009" title=" " alt="" coords="467,211,320,254,319,249,466,206"/>
-<area shape="rect" id="Node000010" href="$classPart3State.html#a1dc6d1ccbe7ddb71f7777c07c79a89ed" title=" " alt="" coords="192,301,359,327"/>
-<area shape="poly" id="edge9_Node000001_Node000010" title=" " alt="" coords="495,214,434,252,360,291,326,304,324,299,358,286,431,248,492,210"/>
-<area shape="rect" id="Node000011" href="$classLButton.html#a8efc3506953dfacea1e49374e5cd7ed9" title=" " alt="" coords="212,351,339,376"/>
-<area shape="poly" id="edge11_Node000001_Node000011" title=" " alt="" coords="505,216,444,278,404,311,360,340,331,353,329,348,357,336,401,307,440,274,501,213"/>
-<area shape="rect" id="Node000005" href="$main_8cpp.html#a700a0caa5b70a06d1064e576f9f3cf65" title=" " alt="" coords="47,104,102,129"/>
-<area shape="poly" id="edge4_Node000004_Node000005" title=" " alt="" coords="216,119,102,119,102,114,216,114"/>
-<area shape="rect" id="Node000008" href="$classPart3State.html#a52c105ddca0be8aa67e83d6bf75b66e0" title=" " alt="" coords="5,252,144,277"/>
-<area shape="poly" id="edge7_Node000007_Node000008" title=" " alt="" coords="210,234,128,255,127,249,209,229"/>
-<area shape="poly" id="edge10_Node000010_Node000008" title=" " alt="" coords="209,301,127,280,128,275,210,295"/>
+<area shape="rect" id="Node000001" title=" " alt="" coords="407,80,641,105"/>
+<area shape="rect" id="Node000002" href="$classCritterGroup.html#a3d4f149e34ecbac91a771ca748839fa6" title=" " alt="" coords="199,5,351,31"/>
+<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="468,78,358,45,320,33,321,28,359,39,470,73"/>
+<area shape="rect" id="Node000003" href="$classCritterTower.html#ab1b44bcc53dc28249616c41b6e3d06c0" title=" " alt="" coords="200,55,351,80"/>
+<area shape="poly" id="edge2_Node000001_Node000003" title=" " alt="" coords="393,82,351,78,351,72,393,77"/>
+<area shape="rect" id="Node000004" href="$classPart1State.html#a5239fb252177bb5ad700b869a6687c3a" title="Render the state." alt="" coords="206,104,345,129"/>
+<area shape="poly" id="edge3_Node000001_Node000004" title=" " alt="" coords="393,108,345,113,345,107,393,103"/>
+<area shape="rect" id="Node000005" href="$classPart3State.html#a1dc6d1ccbe7ddb71f7777c07c79a89ed" title=" " alt="" coords="192,153,359,179"/>
+<area shape="poly" id="edge4_Node000001_Node000005" title=" " alt="" coords="467,112,320,156,319,151,466,107"/>
+<area shape="rect" id="Node000006" href="$classPart3State.html#a52c105ddca0be8aa67e83d6bf75b66e0" title=" " alt="" coords="5,153,144,179"/>
+<area shape="poly" id="edge5_Node000005_Node000006" title=" " alt="" coords="178,169,144,169,144,163,178,163"/>
 </map>

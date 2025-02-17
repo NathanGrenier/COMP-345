@@ -1,5 +1,7 @@
 <map id="Vector2D::normalize" name="Vector2D::normalize">
-<area shape="rect" id="Node000001" title=" " alt="" coords="5,5,160,31"/>
+<area shape="rect" id="Node000001" title=" " alt="" coords="5,31,160,56"/>
 <area shape="rect" id="Node000002" href="$classVector2D.html#a2840db6c516580a39fd5a309d991dae2" title=" " alt="" coords="208,5,367,31"/>
-<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="160,15,194,15,194,21,160,21"/>
+<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="160,31,194,27,195,32,161,36"/>
+<area shape="rect" id="Node000003" href="$classVector2D.html#aed766d7e4da09b328e477883dcfdf4fc" title=" " alt="" coords="213,55,361,80"/>
+<area shape="poly" id="edge2_Node000001_Node000003" title=" " alt="" coords="161,50,200,54,199,60,160,55"/>
 </map>

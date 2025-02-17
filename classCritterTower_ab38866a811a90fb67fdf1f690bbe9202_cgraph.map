@@ -1,13 +1,11 @@
 <map id="CritterTower::update" name="CritterTower::update">
-<area shape="rect" id="Node000001" title=" " alt="" coords="5,54,160,79"/>
-<area shape="rect" id="Node000002" href="$classCritter.html#aa8ea0367914219c6ee9bb5742cd60a5f" title=" " alt="" coords="463,29,607,54"/>
-<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="106,52,152,31,207,13,265,5,311,3,415,13,472,23,471,28,414,19,311,9,266,10,209,19,154,36,108,56"/>
-<area shape="rect" id="Node000003" href="$classCritterTower.html#afaea576079e62ba47768a50b0ee92cd0" title=" " alt="" coords="225,29,398,54"/>
-<area shape="poly" id="edge2_Node000001_Node000003" title=" " alt="" coords="160,56,211,50,211,55,161,61"/>
-<area shape="rect" id="Node000004" href="$classCritterTower.html#aa3223aa2594f5224328574c7a04e8104" title=" " alt="" coords="208,78,415,103"/>
-<area shape="poly" id="edge4_Node000001_Node000004" title=" " alt="" coords="161,72,195,76,194,81,160,78"/>
-<area shape="rect" id="Node000005" href="$classCritter.html#a963ccea758c0b04129a372572704c1fc" title=" " alt="" coords="234,127,389,153"/>
-<area shape="poly" id="edge6_Node000001_Node000005" title=" " alt="" coords="115,77,209,112,241,121,240,127,207,117,113,82"/>
-<area shape="poly" id="edge3_Node000003_Node000002" title=" " alt="" coords="399,39,449,39,449,44,399,44"/>
-<area shape="poly" id="edge5_Node000004_Node000002" title=" " alt="" coords="369,75,463,54,464,60,370,81"/>
+<area shape="rect" id="Node000001" title=" " alt="" coords="5,25,160,50"/>
+<area shape="rect" id="Node000002" href="$classCritter.html#aa8ea0367914219c6ee9bb5742cd60a5f" title=" " alt="" coords="463,25,607,50"/>
+<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="134,22,208,10,311,3,415,10,472,19,471,25,414,15,311,8,208,15,135,28"/>
+<area shape="rect" id="Node000003" href="$classCritterTower.html#afaea576079e62ba47768a50b0ee92cd0" title=" " alt="" coords="225,25,398,50"/>
+<area shape="poly" id="edge2_Node000001_Node000003" title=" " alt="" coords="161,35,211,35,211,40,161,40"/>
+<area shape="rect" id="Node000004" href="$classCritterTower.html#aa3223aa2594f5224328574c7a04e8104" title=" " alt="" coords="208,74,415,100"/>
+<area shape="poly" id="edge4_Node000001_Node000004" title=" " alt="" coords="143,48,239,69,238,74,142,53"/>
+<area shape="poly" id="edge3_Node000003_Node000002" title=" " alt="" coords="399,35,449,35,449,40,399,40"/>
+<area shape="poly" id="edge5_Node000004_Node000002" title=" " alt="" coords="369,72,463,51,464,56,370,77"/>
 </map>

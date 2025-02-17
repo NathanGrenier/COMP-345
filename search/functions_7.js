@@ -4,7 +4,7 @@ var searchData=
   ['introstate_1',['IntroState',['../classIntroState.html#af64645788d9da58d574a113ae605bcee',1,'IntroState']]],
   ['isalive_2',['isAlive',['../classCritter.html#a0e8311894092fa8e873eb5cfb45c6fac',1,'Critter']]],
   ['iscellwall_3',['isCellWall',['../classMap.html#ab81da0a5aa1563cc7819240741d3ceef',1,'Map']]],
-  ['isclicked_4',['isclicked',['../classLButton.html#a89e46f66954a5c9a99f22fa1f4ed20ef',1,'LButton::isClicked()'],['../classMainMenuButton.html#a92f7f1faea20d7af0aab3e68a18769d9',1,'MainMenuButton::isClicked()']]],
+  ['isclicked_4',['isClicked',['../classLButton.html#a89e46f66954a5c9a99f22fa1f4ed20ef',1,'LButton::isClicked()'],['../classMainMenuButton.html#a92f7f1faea20d7af0aab3e68a18769d9',1,'MainMenuButton::isClicked()']]],
   ['isdestroyed_5',['isDestroyed',['../classCritterTower.html#a8b7133d62639b5503a71017a49bf7160',1,'CritterTower']]],
   ['isinbounds_6',['isInbounds',['../classMap.html#adb274fa58456ff47c52e90c019cf4e64',1,'Map']]],
   ['isinrange_7',['isInRange',['../classCritterTower.html#afaea576079e62ba47768a50b0ee92cd0',1,'CritterTower']]],

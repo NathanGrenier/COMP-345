@@ -1,7 +1,5 @@
 <map id="LTexture::getHeight" name="LTexture::getHeight">
-<area shape="rect" id="Node000001" title=" " alt="" coords="204,31,352,56"/>
-<area shape="rect" id="Node000002" href="$classIntroState.html#ab31761af5b55473ff72ca1580a1fefbe" title=" " alt="" coords="13,5,149,31"/>
-<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="190,35,149,29,149,24,190,29"/>
-<area shape="rect" id="Node000003" href="$classCritterTower.html#ab1b44bcc53dc28249616c41b6e3d06c0" title=" " alt="" coords="5,55,156,80"/>
-<area shape="poly" id="edge2_Node000001_Node000003" title=" " alt="" coords="191,57,156,61,156,56,190,51"/>
+<area shape="rect" id="Node000001" title=" " alt="" coords="204,5,352,31"/>
+<area shape="rect" id="Node000002" href="$classCritterTower.html#ab1b44bcc53dc28249616c41b6e3d06c0" title=" " alt="" coords="5,5,156,31"/>
+<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="190,21,156,21,156,15,190,15"/>
 </map>

@@ -16,7 +16,6 @@ var NAVTREEINDEX0 =
 "Critter_8h_source.html":[1,0,0,1,0,0],
 "ExitState_8cpp.html":[1,0,0,3,1],
 "ExitState_8h.html":[1,0,0,1,2,1],
-"ExitState_8h.html#a42ca7f47998cf62153d0b29e25fedf2a":[1,0,0,1,2,1,1],
 "ExitState_8h_source.html":[1,0,0,1,2,1],
 "GameState_8h.html":[1,0,0,1,2,2],
 "GameState_8h_source.html":[1,0,0,1,2,2],
@@ -249,5 +248,6 @@ var NAVTREEINDEX0 =
 "classMainGameState.html#ab4db0091c1ff8df75bb29f024691cb49":[0,0,11,0],
 "classMainGameState.html#ae74dbfb6ef7ba2fb458911e42582c94d":[0,0,11,3],
 "classMainGameState.html#afe90f8dab2d53bbe9a6fb75c33c3de55":[0,0,11,6],
-"classMainMenuButton.html":[0,0,12]
+"classMainMenuButton.html":[0,0,12],
+"classMainMenuButton.html#a5bf888e3b30343585e287a19d951c118":[0,0,12,3]
 };

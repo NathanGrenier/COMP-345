@@ -1,17 +1,25 @@
 <map id="TitleState::handleEvent" name="TitleState::handleEvent">
-<area shape="rect" id="Node000001" title=" " alt="" coords="5,129,180,155"/>
-<area shape="rect" id="Node000002" href="$classMainGameState.html#ae74dbfb6ef7ba2fb458911e42582c94d" title=" " alt="" coords="261,5,417,31"/>
-<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="105,127,156,84,190,60,227,40,247,32,249,37,229,44,193,64,159,88,109,131"/>
-<area shape="rect" id="Node000003" href="$classPart1State.html#a8b98e2eaeb3624b0d41666c07086b382" title="Get the singleton instance of Part1State." alt="" coords="280,55,399,80"/>
-<area shape="poly" id="edge2_Node000001_Node000003" title=" " alt="" coords="123,127,227,89,266,79,267,84,229,94,125,132"/>
-<area shape="rect" id="Node000004" href="$classPart2State.html#afd03f10f3282fbe8dd3718b19331d824" title=" " alt="" coords="280,104,399,129"/>
-<area shape="poly" id="edge3_Node000001_Node000004" title=" " alt="" coords="180,130,266,121,267,127,180,136"/>
-<area shape="rect" id="Node000005" href="$classPart3State.html#a09fbfb138bd85f00e107d7b91d1cf47c" title=" " alt="" coords="280,153,399,179"/>
-<area shape="poly" id="edge4_Node000001_Node000005" title=" " alt="" coords="180,148,267,156,266,162,180,153"/>
-<area shape="rect" id="Node000006" href="$classMainMenuButton.html#aed528d205a98d29572cdbd0a85197eb3" title=" " alt="" coords="228,203,451,228"/>
-<area shape="poly" id="edge5_Node000001_Node000006" title=" " alt="" coords="127,152,229,187,265,197,263,202,227,193,125,157"/>
-<area shape="rect" id="Node000007" href="$main_8cpp.html#af0dc0ad824f97f7d085e7dd718a089ac" title=" " alt="" coords="286,252,393,277"/>
-<area shape="poly" id="edge6_Node000001_Node000007" title=" " alt="" coords="109,153,160,195,193,217,229,237,273,252,271,257,227,242,191,222,157,199,106,157"/>
-<area shape="rect" id="Node000008" href="$classExitState.html#a607bf68675b52a3a16227106072fb218" title=" " alt="" coords="499,252,609,277"/>
-<area shape="poly" id="edge7_Node000007_Node000008" title=" " alt="" coords="393,262,485,262,485,267,393,267"/>
+<area shape="rect" id="Node000001" title=" " alt="" coords="5,104,180,129"/>
+<area shape="rect" id="Node000002" href="$classMainGameState.html#ae74dbfb6ef7ba2fb458911e42582c94d" title=" " alt="" coords="228,5,384,31"/>
+<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="112,102,163,71,227,40,245,33,247,38,229,44,166,76,115,106"/>
+<area shape="rect" id="Node000004" href="$classPart1State.html#a8b98e2eaeb3624b0d41666c07086b382" title="Get the singleton instance of Part1State." alt="" coords="247,55,365,80"/>
+<area shape="poly" id="edge3_Node000001_Node000004" title=" " alt="" coords="148,101,236,81,238,86,149,107"/>
+<area shape="rect" id="Node000006" href="$classPart2State.html#afd03f10f3282fbe8dd3718b19331d824" title=" " alt="" coords="247,104,365,129"/>
+<area shape="poly" id="edge5_Node000001_Node000006" title=" " alt="" coords="180,114,233,114,233,119,180,119"/>
+<area shape="rect" id="Node000008" href="$classPart3State.html#a09fbfb138bd85f00e107d7b91d1cf47c" title=" " alt="" coords="247,153,365,179"/>
+<area shape="poly" id="edge7_Node000001_Node000008" title=" " alt="" coords="149,127,238,148,236,153,148,132"/>
+<area shape="rect" id="Node000010" href="$main_8cpp.html#af0dc0ad824f97f7d085e7dd718a089ac" title=" " alt="" coords="253,203,359,228"/>
+<area shape="poly" id="edge9_Node000001_Node000010" title=" " alt="" coords="116,127,167,157,229,188,250,196,248,201,227,192,164,161,113,132"/>
+<area shape="rect" id="Node000003" href="$classMainGameState.html#ab4db0091c1ff8df75bb29f024691cb49" title=" " alt="" coords="432,5,672,31"/>
+<area shape="poly" id="edge2_Node000002_Node000003" title=" " alt="" coords="384,15,418,15,418,21,384,21"/>
+<area shape="rect" id="Node000005" href="$classPart1State.html#a6b19ea4a6a41f2e2425325aad0ea02eb" title="Default constructor for Part1State." alt="" coords="470,55,634,80"/>
+<area shape="poly" id="edge4_Node000004_Node000005" title=" " alt="" coords="366,65,456,65,456,70,366,70"/>
+<area shape="rect" id="Node000007" href="$classPart2State.html#a22b62fbdc4212c62de4fd9e304b2fd05" title=" " alt="" coords="470,104,634,129"/>
+<area shape="poly" id="edge6_Node000006_Node000007" title=" " alt="" coords="366,114,456,114,456,119,366,119"/>
+<area shape="rect" id="Node000009" href="$classPart3State.html#a13184651ae78b27e97a61c491b97147d" title=" " alt="" coords="470,153,634,179"/>
+<area shape="poly" id="edge8_Node000008_Node000009" title=" " alt="" coords="366,163,456,163,456,169,366,169"/>
+<area shape="rect" id="Node000011" href="$classExitState.html#a607bf68675b52a3a16227106072fb218" title=" " alt="" coords="497,203,607,228"/>
+<area shape="poly" id="edge10_Node000010_Node000011" title=" " alt="" coords="360,213,483,213,483,218,360,218"/>
+<area shape="rect" id="Node000012" href="$classExitState.html#a6adabccda64bf3dd75aba17fc85834ec" title=" " alt="" coords="720,203,868,228"/>
+<area shape="poly" id="edge11_Node000011_Node000012" title=" " alt="" coords="608,213,707,213,707,218,608,218"/>
 </map>
