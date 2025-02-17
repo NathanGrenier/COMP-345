@@ -6,6 +6,62 @@
 \DoxyCodeLine{00002\ \textcolor{preprocessor}{\#include\ <SDL3/SDL\_log.h>}}
 \DoxyCodeLine{00003\ \textcolor{preprocessor}{\#include\ <\mbox{\hyperlink{_title_state_8h}{states/TitleState.h}}>}}
 \DoxyCodeLine{00004\ \textcolor{preprocessor}{\#include\ <\mbox{\hyperlink{_global_8h}{Global.h}}>}}
+<<<<<<< HEAD
+\DoxyCodeLine{00005\ }
+\DoxyCodeLine{00006\ \mbox{\hyperlink{class_intro_state}{IntroState}}\ \mbox{\hyperlink{class_intro_state_a4d89a7f6389bf09cac4deb5d083ce5b1}{IntroState::sIntroState}};}
+\DoxyCodeLine{00007\ }
+\DoxyCodeLine{00008\ \textcolor{comment}{//InrtoState\ Implementation}}
+\DoxyCodeLine{00009\ \mbox{\hyperlink{class_intro_state_af64645788d9da58d574a113ae605bcee}{IntroState}}*\ \mbox{\hyperlink{class_intro_state_aabcf6208665f06095f41957a9635c837}{IntroState::get}}()\ \{}
+\DoxyCodeLine{00010\ \ \ \ \ \textcolor{comment}{//Get\ static\ instance}}
+\DoxyCodeLine{00011\ \ \ \ \ \textcolor{keywordflow}{return}\ \&\mbox{\hyperlink{class_intro_state_a4d89a7f6389bf09cac4deb5d083ce5b1}{sIntroState}};}
+\DoxyCodeLine{00012\ \}}
+\DoxyCodeLine{00013\ }
+\DoxyCodeLine{00014\ \textcolor{keywordtype}{bool}\ \mbox{\hyperlink{class_intro_state_a63b0705e1d3dc5522360cdf9b231f8ce}{IntroState::enter}}()\ \{}
+\DoxyCodeLine{00015\ \ \ \ \ \textcolor{comment}{//Loading\ success\ flag}}
+\DoxyCodeLine{00016\ \ \ \ \ \textcolor{keywordtype}{bool}\ success\ =\ \textcolor{keyword}{true};}
+\DoxyCodeLine{00017\ }
+\DoxyCodeLine{00018\ \ \ \ \ \textcolor{comment}{//Load\ text}}
+\DoxyCodeLine{00019\ \ \ \ \ SDL\_Color\ textColor\{\ 0x00,\ 0x00,\ 0x00,\ 0xFF\ \};}
+\DoxyCodeLine{00020\ \ \ \ \ \textcolor{keywordflow}{if}\ (success\ \&=\ \mbox{\hyperlink{class_intro_state_a7d655525151243cbcc13f5a8f84923e8}{mMessageTexture}}.loadFromRenderedText(\textcolor{stringliteral}{"{}The\ NullTerminators\ Present..."{}},\ textColor);\ !success)}
+\DoxyCodeLine{00021\ \ \ \ \ \{}
+\DoxyCodeLine{00022\ \ \ \ \ \ \ \ \ SDL\_Log(\textcolor{stringliteral}{"{}Failed\ to\ render\ intro\ text!\(\backslash\)n"{}});}
+\DoxyCodeLine{00023\ \ \ \ \ \ \ \ \ success\ =\ \textcolor{keyword}{false};}
+\DoxyCodeLine{00024\ \ \ \ \ \}}
+\DoxyCodeLine{00025\ }
+\DoxyCodeLine{00026\ \ \ \ \ \textcolor{keywordflow}{return}\ success;}
+\DoxyCodeLine{00027\ \}}
+\DoxyCodeLine{00028\ }
+\DoxyCodeLine{00029\ \textcolor{keywordtype}{bool}\ \mbox{\hyperlink{class_intro_state_af09b82ab5f81b2d16311200a54a1839f}{IntroState::exit}}()\ \{}
+\DoxyCodeLine{00030\ \ \ \ \ \textcolor{comment}{//Free\ background\ and\ text}}
+\DoxyCodeLine{00031\ \ \ \ \ \mbox{\hyperlink{class_intro_state_a12924f7205eaa2e95737176a9681e342}{mBackgroundTexture}}.destroy();}
+\DoxyCodeLine{00032\ \ \ \ \ \mbox{\hyperlink{class_intro_state_a7d655525151243cbcc13f5a8f84923e8}{mMessageTexture}}.destroy();}
+\DoxyCodeLine{00033\ }
+\DoxyCodeLine{00034\ \ \ \ \ \textcolor{keywordflow}{return}\ \textcolor{keyword}{true};}
+\DoxyCodeLine{00035\ \}}
+\DoxyCodeLine{00036\ }
+\DoxyCodeLine{00037\ \textcolor{keywordtype}{void}\ \mbox{\hyperlink{class_intro_state_a9ee0219fcca57238fe20c9fd9c173901}{IntroState::handleEvent}}(SDL\_Event\&\ e)\ \{}
+\DoxyCodeLine{00038\ \ \ \ \ \textcolor{comment}{//If\ the\ user\ pressed\ enter}}
+\DoxyCodeLine{00039\ \ \ \ \ \textcolor{keywordflow}{if}\ ((e.type\ ==\ SDL\_EVENT\_MOUSE\_BUTTON\_DOWN))}
+\DoxyCodeLine{00040\ \ \ \ \ \{}
+\DoxyCodeLine{00041\ \ \ \ \ \ \ \ \ \textcolor{comment}{//Move\ onto\ title\ state}}
+\DoxyCodeLine{00042\ \ \ \ \ \ \ \ \ \mbox{\hyperlink{_global_8h_ab0b0c86be4e5dc019e3938585fa1e7ea}{setNextState}}(\mbox{\hyperlink{class_title_state_af85f8e1f727fe0d6d437d3f41c1813a4}{TitleState::get}}());}
+\DoxyCodeLine{00043\ \ \ \ \ \}}
+\DoxyCodeLine{00044\ \}}
+\DoxyCodeLine{00045\ }
+\DoxyCodeLine{00046\ \textcolor{keywordtype}{void}\ \mbox{\hyperlink{class_intro_state_a05c81554a3e6e0a50d14c9197bf12336}{IntroState::update}}()\ \{}
+\DoxyCodeLine{00047\ }
+\DoxyCodeLine{00048\ \}}
+\DoxyCodeLine{00049\ }
+\DoxyCodeLine{00050\ \textcolor{keywordtype}{void}\ \mbox{\hyperlink{class_intro_state_ab31761af5b55473ff72ca1580a1fefbe}{IntroState::render}}()\ \{}
+\DoxyCodeLine{00051\ \ \ \ \ \textcolor{comment}{//Show\ the\ background}}
+\DoxyCodeLine{00052\ \ \ \ \ \mbox{\hyperlink{class_intro_state_a12924f7205eaa2e95737176a9681e342}{mBackgroundTexture}}.render(0,\ 0);}
+\DoxyCodeLine{00053\ }
+\DoxyCodeLine{00054\ \ \ \ \ \textcolor{comment}{//Show\ the\ message}}
+\DoxyCodeLine{00055\ \ \ \ \ \mbox{\hyperlink{class_intro_state_a7d655525151243cbcc13f5a8f84923e8}{mMessageTexture}}.render((\mbox{\hyperlink{class_global_a3229e68e91386a22a73a87e13c285b54}{Global::kScreenWidth}}\ -\/\ \mbox{\hyperlink{class_intro_state_a7d655525151243cbcc13f5a8f84923e8}{mMessageTexture}}.getWidth())\ /\ 2.f,\ (\mbox{\hyperlink{class_global_ac3594b5a8ad2dbb44ebcdcf26590716e}{Global::kScreenHeight}}\ -\/\ \mbox{\hyperlink{class_intro_state_a7d655525151243cbcc13f5a8f84923e8}{mMessageTexture}}.getHeight())\ /\ 2.f);}
+\DoxyCodeLine{00056\ \}}
+\DoxyCodeLine{00057\ }
+\DoxyCodeLine{00058\ \mbox{\hyperlink{class_intro_state_af64645788d9da58d574a113ae605bcee}{IntroState::IntroState}}()\ \{\}}
+=======
 \DoxyCodeLine{00005\ \textcolor{preprocessor}{\#include\ <cmath>}}
 \DoxyCodeLine{00006\ }
 \DoxyCodeLine{00007\ \mbox{\hyperlink{class_intro_state}{IntroState}}\ \mbox{\hyperlink{class_intro_state_a4d89a7f6389bf09cac4deb5d083ce5b1}{IntroState::sIntroState}};}
@@ -72,5 +128,6 @@
 \DoxyCodeLine{00068\ }
 \DoxyCodeLine{00069\ }
 \DoxyCodeLine{00070\ \mbox{\hyperlink{class_intro_state_af64645788d9da58d574a113ae605bcee}{IntroState::IntroState}}()\ \{\}}
+>>>>>>> origin/master
 
 \end{DoxyCode}

@@ -81,6 +81,13 @@ bool init() {
 				success = false;
 			}
 
+			// Set the correct blend mode
+			if (!SDL_SetRenderDrawBlendMode(gRenderer, SDL_BLENDMODE_BLEND))
+			{
+				SDL_Log("Could not set blend mode! SDL error: %s\n", SDL_GetError());
+				success = false;
+			}
+
 			//Initialize font loading
 			if (!TTF_Init())
 			{

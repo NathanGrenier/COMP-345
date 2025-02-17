@@ -3,6 +3,7 @@
 
 #include <states/GameState.h>
 #include <SDL3_ttf/SDL_ttf.h>
+#include <map/Map.h>
 
 extern SDL_Renderer* gRenderer;
 extern TTF_Font* gFont;
@@ -10,8 +11,8 @@ extern TTF_Font* gFont;
 class Global {
 public:
 	//Screen dimension constants
-	static const int kScreenWidth{ 640 };
-	static const int kScreenHeight{ 480 };
+	static const int kScreenWidth{ Map::PIXELS_PER_CELL * 15 };
+	static const int kScreenHeight{ Map::PIXELS_PER_CELL * 11 };
 };
 
 /* Function Prototypes */

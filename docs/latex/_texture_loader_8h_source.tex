@@ -1,0 +1,22 @@
+\doxysection{Texture\+Loader.\+h}
+\hypertarget{_texture_loader_8h_source}{}\label{_texture_loader_8h_source}\index{src/include/util/TextureLoader.h@{src/include/util/TextureLoader.h}}
+\mbox{\hyperlink{_texture_loader_8h}{Go to the documentation of this file.}}
+\begin{DoxyCode}{0}
+\DoxyCodeLine{00001\ }
+\DoxyCodeLine{00007\ \textcolor{preprocessor}{\#pragma\ once}}
+\DoxyCodeLine{00008\ }
+\DoxyCodeLine{00009\ \textcolor{preprocessor}{\#include\ <string>}}
+\DoxyCodeLine{00010\ \textcolor{preprocessor}{\#include\ <unordered\_map>}}
+\DoxyCodeLine{00011\ \textcolor{preprocessor}{\#include\ <SDL3/SDL\_render.h>}}
+\DoxyCodeLine{00012\ }
+\DoxyCodeLine{00013\ \textcolor{keyword}{class\ }\mbox{\hyperlink{class_texture_loader}{TextureLoader}}\ \{}
+\DoxyCodeLine{00014\ \textcolor{keyword}{public}:}
+\DoxyCodeLine{00015\ \ \ \ \ \textcolor{keyword}{static}\ SDL\_Texture*\ \mbox{\hyperlink{class_texture_loader_a420de276f42be1ca80bc64c427dc23c3}{loadTexture}}(SDL\_Renderer*\ renderer,\ std::string\ filename);}
+\DoxyCodeLine{00016\ \ \ \ \ \textcolor{keyword}{static}\ \textcolor{keywordtype}{void}\ \mbox{\hyperlink{class_texture_loader_a0e27192edf068dfd015e19e21440a286}{deallocateTextures}}();}
+\DoxyCodeLine{00017\ }
+\DoxyCodeLine{00018\ \textcolor{keyword}{private}:}
+\DoxyCodeLine{00019\ \ \ \ \ \textcolor{keyword}{static}\ std::unordered\_map<std::string,\ SDL\_Texture*>\ \mbox{\hyperlink{class_texture_loader_af20d179beb33826e10ec2441e8f142c7}{loadedTextures}};}
+\DoxyCodeLine{00020\ \ \ \ \ \textcolor{keyword}{static}\ \textcolor{keyword}{inline}\ \textcolor{keyword}{const}\ std::string\ \mbox{\hyperlink{class_texture_loader_abfdf0d896177f3c5b29435dc845fa674}{TEXTURE\_PATH}}\ =\ \textcolor{stringliteral}{"{}assets/"{}};}
+\DoxyCodeLine{00021\ \};}
+
+\end{DoxyCode}

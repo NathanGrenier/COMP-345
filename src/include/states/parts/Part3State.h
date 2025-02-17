@@ -1,7 +1,7 @@
 #ifndef PART3STATE_H
 #define PART3STATE_H
 
-#include "../GameState.h"
+#include <states/GameState.h>
 #include <ui/LTexture.h>
 #include <critter/CritterGroup.h>
 #include <tower/CritterTower.h>

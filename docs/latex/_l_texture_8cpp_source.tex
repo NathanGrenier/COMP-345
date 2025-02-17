@@ -10,9 +10,15 @@
 \DoxyCodeLine{00006\ \textcolor{comment}{//LTexture\ Implementation}}
 \DoxyCodeLine{00007\ \mbox{\hyperlink{class_l_texture_a12fbc9278f97388cce5ce18863b462ff}{LTexture::LTexture}}()\ :}
 \DoxyCodeLine{00008\ \ \ \ \ \textcolor{comment}{//Initialize\ texture\ variables}}
+<<<<<<< HEAD
+\DoxyCodeLine{00009\ \ \ \ \ \mbox{\hyperlink{class_l_texture_a98d76cf42f620b9c2eacd7b71c3c0c2f}{mTexture}}\{\ nullptr\ \},}
+\DoxyCodeLine{00010\ \ \ \ \ \mbox{\hyperlink{class_l_texture_ac6b5edfd40c81b2b40b71b12e7da2b6f}{mWidth}}\{\ 0\ \},}
+\DoxyCodeLine{00011\ \ \ \ \ \mbox{\hyperlink{class_l_texture_aea944f7b207bb9e8b57870d6bd3b5e05}{mHeight}}\{\ 0\ \}\ \{}
+=======
 \DoxyCodeLine{00009\ \ \ \ \ mTexture\{\ nullptr\ \},}
 \DoxyCodeLine{00010\ \ \ \ \ mWidth\{\ 0\ \},}
 \DoxyCodeLine{00011\ \ \ \ \ mHeight\{\ 0\ \}\ \{}
+>>>>>>> origin/master
 \DoxyCodeLine{00012\ }
 \DoxyCodeLine{00013\ \}}
 \DoxyCodeLine{00014\ }
@@ -106,6 +112,39 @@
 \DoxyCodeLine{00102\ \}}
 \DoxyCodeLine{00103\ }
 \DoxyCodeLine{00104\ \textcolor{keywordtype}{void}\ \mbox{\hyperlink{class_l_texture_ae1011e32e00ae6c60274e456725c0fab}{LTexture::render}}(\textcolor{keywordtype}{float}\ x,\ \textcolor{keywordtype}{float}\ y,\ SDL\_FRect*\ clip,\ \textcolor{keywordtype}{float}\ width,\ \textcolor{keywordtype}{float}\ height,\ \textcolor{keywordtype}{double}\ degrees,\ SDL\_FPoint*\ center,\ SDL\_FlipMode\ flipMode)\ \{}
+<<<<<<< HEAD
+\DoxyCodeLine{00105\ \ \ \ \ \textcolor{comment}{//Set\ texture\ position}}
+\DoxyCodeLine{00106\ \ \ \ \ SDL\_FRect\ dstRect\ =\ \{\ x,\ y,\ \textcolor{keyword}{static\_cast<}\textcolor{keywordtype}{float}\textcolor{keyword}{>}(\mbox{\hyperlink{class_l_texture_ac6b5edfd40c81b2b40b71b12e7da2b6f}{mWidth}}),\ \textcolor{keyword}{static\_cast<}\textcolor{keywordtype}{float}\textcolor{keyword}{>}(\mbox{\hyperlink{class_l_texture_aea944f7b207bb9e8b57870d6bd3b5e05}{mHeight}})\ \};}
+\DoxyCodeLine{00107\ }
+\DoxyCodeLine{00108\ \ \ \ \ \textcolor{comment}{//Default\ to\ clip\ dimensions\ if\ clip\ is\ given}}
+\DoxyCodeLine{00109\ \ \ \ \ \textcolor{keywordflow}{if}\ (clip\ !=\ \textcolor{keyword}{nullptr})}
+\DoxyCodeLine{00110\ \ \ \ \ \{}
+\DoxyCodeLine{00111\ \ \ \ \ \ \ \ \ dstRect.w\ =\ clip-\/>w;}
+\DoxyCodeLine{00112\ \ \ \ \ \ \ \ \ dstRect.h\ =\ clip-\/>h;}
+\DoxyCodeLine{00113\ \ \ \ \ \}}
+\DoxyCodeLine{00114\ }
+\DoxyCodeLine{00115\ \ \ \ \ \textcolor{comment}{//Resize\ if\ new\ dimensions\ are\ given}}
+\DoxyCodeLine{00116\ \ \ \ \ \textcolor{keywordflow}{if}\ (width\ >\ 0)}
+\DoxyCodeLine{00117\ \ \ \ \ \{}
+\DoxyCodeLine{00118\ \ \ \ \ \ \ \ \ dstRect.w\ =\ width;}
+\DoxyCodeLine{00119\ \ \ \ \ \}}
+\DoxyCodeLine{00120\ \ \ \ \ \textcolor{keywordflow}{if}\ (height\ >\ 0)}
+\DoxyCodeLine{00121\ \ \ \ \ \{}
+\DoxyCodeLine{00122\ \ \ \ \ \ \ \ \ dstRect.h\ =\ height;}
+\DoxyCodeLine{00123\ \ \ \ \ \}}
+\DoxyCodeLine{00124\ }
+\DoxyCodeLine{00125\ \ \ \ \ \textcolor{comment}{//Render\ texture}}
+\DoxyCodeLine{00126\ \ \ \ \ SDL\_RenderTextureRotated(\mbox{\hyperlink{_global_8h_a4735638969a524c4ac90a88f23c59a1f}{gRenderer}},\ \mbox{\hyperlink{class_l_texture_a98d76cf42f620b9c2eacd7b71c3c0c2f}{mTexture}},\ clip,\ \&dstRect,\ degrees,\ center,\ flipMode);}
+\DoxyCodeLine{00127\ \}}
+\DoxyCodeLine{00128\ }
+\DoxyCodeLine{00129\ \textcolor{keywordtype}{int}\ \mbox{\hyperlink{class_l_texture_a542c1f81d98fd5659a04eb394d61a879}{LTexture::getWidth}}()\ \{}
+\DoxyCodeLine{00130\ \ \ \ \ \textcolor{keywordflow}{return}\ \mbox{\hyperlink{class_l_texture_ac6b5edfd40c81b2b40b71b12e7da2b6f}{mWidth}};}
+\DoxyCodeLine{00131\ \}}
+\DoxyCodeLine{00132\ }
+\DoxyCodeLine{00133\ \textcolor{keywordtype}{int}\ \mbox{\hyperlink{class_l_texture_a277f45af3dae7e35ca846a527039e59a}{LTexture::getHeight}}()\ \{}
+\DoxyCodeLine{00134\ \ \ \ \ \textcolor{keywordflow}{return}\ \mbox{\hyperlink{class_l_texture_aea944f7b207bb9e8b57870d6bd3b5e05}{mHeight}};}
+\DoxyCodeLine{00135\ \}}
+=======
 \DoxyCodeLine{00105\ \ \ \ \ \textcolor{comment}{//\ Set\ texture\ position}}
 \DoxyCodeLine{00106\ \ \ \ \ SDL\_FRect\ dstRect\ =\ \{\ x,\ y,\ \textcolor{keyword}{static\_cast<}\textcolor{keywordtype}{float}\textcolor{keyword}{>}(\mbox{\hyperlink{class_l_texture_ac6b5edfd40c81b2b40b71b12e7da2b6f}{mWidth}}),\ \textcolor{keyword}{static\_cast<}\textcolor{keywordtype}{float}\textcolor{keyword}{>}(\mbox{\hyperlink{class_l_texture_aea944f7b207bb9e8b57870d6bd3b5e05}{mHeight}})\ \};}
 \DoxyCodeLine{00107\ }
@@ -147,5 +186,6 @@
 \DoxyCodeLine{00143\ \textcolor{keywordtype}{int}\ \mbox{\hyperlink{class_l_texture_a277f45af3dae7e35ca846a527039e59a}{LTexture::getHeight}}()\ \{}
 \DoxyCodeLine{00144\ \ \ \ \ \textcolor{keywordflow}{return}\ \mbox{\hyperlink{class_l_texture_aea944f7b207bb9e8b57870d6bd3b5e05}{mHeight}};}
 \DoxyCodeLine{00145\ \}}
+>>>>>>> origin/master
 
 \end{DoxyCode}
