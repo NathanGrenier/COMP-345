@@ -131,11 +131,11 @@ $(function(){initNavTree('CritterTower_8cpp_source.html',''); initResizable(true
 </div>
 <div class="line"><a id="l00025" name="l00025"></a><span class="lineno">   25</span> </div>
 <div class="foldopen" id="foldopen00026" data-start="{" data-end="}">
-<div class="line"><a id="l00026" name="l00026"></a><span class="lineno"><a class="line" href="classCritterTower.html#ab38866a811a90fb67fdf1f690bbe9202">   26</a></span><span class="keywordtype">void</span> <a class="code hl_function" href="classCritterTower.html#ab38866a811a90fb67fdf1f690bbe9202">CritterTower::update</a>(<span class="keywordtype">float</span> deltaTime, std::vector&lt;Critter&gt;&amp; critters) {</div>
+<div class="line"><a id="l00026" name="l00026"></a><span class="lineno"><a class="line" href="classCritterTower.html#ab38866a811a90fb67fdf1f690bbe9202">   26</a></span><span class="keywordtype">void</span> <a class="code hl_function" href="classCritterTower.html#ab38866a811a90fb67fdf1f690bbe9202">CritterTower::update</a>(<span class="keywordtype">float</span> deltaTime, std::vector&lt;Critter&gt;&amp; <a class="code hl_variable" href="Part2State_8cpp.html#acb51bac3175c4e4b05aa6871cb7c8cb4">critters</a>) {</div>
 <div class="line"><a id="l00027" name="l00027"></a><span class="lineno">   27</span>    <span class="keywordflow">if</span> (<a class="code hl_variable" href="classCritterTower.html#a123ea4aae752813b4eb3d786a8767823">timeSinceLastShot</a> &gt;= <a class="code hl_variable" href="classCritterTower.html#aaa83435acce293dc1d2f5da54dd4741b">fireRate</a>) {</div>
 <div class="line"><a id="l00028" name="l00028"></a><span class="lineno">   28</span>        <span class="comment">// Find nearest critter within range</span></div>
 <div class="line"><a id="l00029" name="l00029"></a><span class="lineno">   29</span>        <a class="code hl_class" href="classCritter.html">Critter</a>* target = <span class="keyword">nullptr</span>;</div>
-<div class="line"><a id="l00030" name="l00030"></a><span class="lineno">   30</span>        <span class="keywordflow">for</span> (<span class="keyword">auto</span>&amp; critter : critters) {</div>
+<div class="line"><a id="l00030" name="l00030"></a><span class="lineno">   30</span>        <span class="keywordflow">for</span> (<span class="keyword">auto</span>&amp; critter : <a class="code hl_variable" href="Part2State_8cpp.html#acb51bac3175c4e4b05aa6871cb7c8cb4">critters</a>) {</div>
 <div class="line"><a id="l00031" name="l00031"></a><span class="lineno">   31</span>            <span class="keywordflow">if</span> (<a class="code hl_function" href="classCritterTower.html#afaea576079e62ba47768a50b0ee92cd0">isInRange</a>(critter)) {</div>
 <div class="line"><a id="l00032" name="l00032"></a><span class="lineno">   32</span>                target = &amp;critter;</div>
 <div class="line"><a id="l00033" name="l00033"></a><span class="lineno">   33</span>                <span class="keywordflow">break</span>;</div>
@@ -149,7 +149,7 @@ $(function(){initNavTree('CritterTower_8cpp_source.html',''); initResizable(true
 <div class="line"><a id="l00041" name="l00041"></a><span class="lineno">   41</span>        }</div>
 <div class="line"><a id="l00042" name="l00042"></a><span class="lineno">   42</span>    }</div>
 <div class="line"><a id="l00043" name="l00043"></a><span class="lineno">   43</span> </div>
-<div class="line"><a id="l00044" name="l00044"></a><span class="lineno">   44</span>    <span class="keywordflow">if</span> (critters.empty())</div>
+<div class="line"><a id="l00044" name="l00044"></a><span class="lineno">   44</span>    <span class="keywordflow">if</span> (<a class="code hl_variable" href="Part2State_8cpp.html#acb51bac3175c4e4b05aa6871cb7c8cb4">critters</a>.empty())</div>
 <div class="line"><a id="l00045" name="l00045"></a><span class="lineno">   45</span>    {</div>
 <div class="line"><a id="l00046" name="l00046"></a><span class="lineno">   46</span>        <a class="code hl_variable" href="classCritterTower.html#aca63951f230a60902081c1b854f454e3">projectiles</a>.clear();</div>
 <div class="line"><a id="l00047" name="l00047"></a><span class="lineno">   47</span>    }</div>
@@ -160,7 +160,7 @@ $(function(){initNavTree('CritterTower_8cpp_source.html',''); initResizable(true
 <div class="line"><a id="l00052" name="l00052"></a><span class="lineno">   52</span>        <a class="code hl_class" href="classCritter.html">Critter</a>* closestCritter = <span class="keyword">nullptr</span>;</div>
 <div class="line"><a id="l00053" name="l00053"></a><span class="lineno">   53</span>        <span class="keywordtype">float</span> closestDistance = std::numeric_limits&lt;float&gt;::max();</div>
 <div class="line"><a id="l00054" name="l00054"></a><span class="lineno">   54</span> </div>
-<div class="line"><a id="l00055" name="l00055"></a><span class="lineno">   55</span>        <span class="keywordflow">for</span> (<span class="keyword">auto</span>&amp; critter : critters) {</div>
+<div class="line"><a id="l00055" name="l00055"></a><span class="lineno">   55</span>        <span class="keywordflow">for</span> (<span class="keyword">auto</span>&amp; critter : <a class="code hl_variable" href="Part2State_8cpp.html#acb51bac3175c4e4b05aa6871cb7c8cb4">critters</a>) {</div>
 <div class="line"><a id="l00056" name="l00056"></a><span class="lineno">   56</span>            <span class="keywordtype">float</span> dx = critter.getPosition().x - proj.getPosition().x;</div>
 <div class="line"><a id="l00057" name="l00057"></a><span class="lineno">   57</span>            <span class="keywordtype">float</span> dy = critter.getPosition().y - proj.getPosition().y;</div>
 <div class="line"><a id="l00058" name="l00058"></a><span class="lineno">   58</span>            <span class="keywordtype">float</span> distance = std::sqrt(dx * dx + dy * dy);</div>
@@ -180,7 +180,7 @@ $(function(){initNavTree('CritterTower_8cpp_source.html',''); initResizable(true
 <div class="line"><a id="l00072" name="l00072"></a><span class="lineno">   72</span>    <span class="keywordflow">for</span> (<span class="keyword">auto</span> it = <a class="code hl_variable" href="classCritterTower.html#aca63951f230a60902081c1b854f454e3">projectiles</a>.begin(); it != <a class="code hl_variable" href="classCritterTower.html#aca63951f230a60902081c1b854f454e3">projectiles</a>.end();) {</div>
 <div class="line"><a id="l00073" name="l00073"></a><span class="lineno">   73</span>        <span class="keywordtype">bool</span> hit = <span class="keyword">false</span>;</div>
 <div class="line"><a id="l00074" name="l00074"></a><span class="lineno">   74</span> </div>
-<div class="line"><a id="l00075" name="l00075"></a><span class="lineno">   75</span>        <span class="keywordflow">for</span> (<span class="keyword">auto</span>&amp; critter : critters) {</div>
+<div class="line"><a id="l00075" name="l00075"></a><span class="lineno">   75</span>        <span class="keywordflow">for</span> (<span class="keyword">auto</span>&amp; critter : <a class="code hl_variable" href="Part2State_8cpp.html#acb51bac3175c4e4b05aa6871cb7c8cb4">critters</a>) {</div>
 <div class="line"><a id="l00076" name="l00076"></a><span class="lineno">   76</span>            <span class="keywordflow">if</span> (it-&gt;checkCollision(critter.getPosition())) {</div>
 <div class="line"><a id="l00077" name="l00077"></a><span class="lineno">   77</span>                critter.takeDamage(it-&gt;getDamage());  <span class="comment">// Deal damage to the critter</span></div>
 <div class="line"><a id="l00078" name="l00078"></a><span class="lineno">   78</span>                hit = <span class="keyword">true</span>;</div>
@@ -268,6 +268,7 @@ $(function(){initNavTree('CritterTower_8cpp_source.html',''); initResizable(true
 <div class="ttc" id="aCritterTower_8h_html"><div class="ttname"><a href="CritterTower_8h.html">CritterTower.h</a></div></div>
 <div class="ttc" id="aCritter_8h_html"><div class="ttname"><a href="Critter_8h.html">Critter.h</a></div></div>
 <div class="ttc" id="aLTexture_8h_html"><div class="ttname"><a href="LTexture_8h.html">LTexture.h</a></div></div>
+<div class="ttc" id="aPart2State_8cpp_html_acb51bac3175c4e4b05aa6871cb7c8cb4"><div class="ttname"><a href="Part2State_8cpp.html#acb51bac3175c4e4b05aa6871cb7c8cb4">critters</a></div><div class="ttdeci">vector&lt; DummyCritter * &gt; critters</div><div class="ttdef"><b>Definition</b> Part2State.cpp:26</div></div>
 <div class="ttc" id="aclassCritterProjectile_html"><div class="ttname"><a href="classCritterProjectile.html">CritterProjectile</a></div><div class="ttdef"><b>Definition</b> CritterProjectile.h:7</div></div>
 <div class="ttc" id="aclassCritterTower_html_a06448e2942773f9e1bebae72ef0b6ff3"><div class="ttname"><a href="classCritterTower.html#a06448e2942773f9e1bebae72ef0b6ff3">CritterTower::health</a></div><div class="ttdeci">int health</div><div class="ttdef"><b>Definition</b> CritterTower.h:35</div></div>
 <div class="ttc" id="aclassCritterTower_html_a0d0acafe5ad51f7bebdd0d49736285b8"><div class="ttname"><a href="classCritterTower.html#a0d0acafe5ad51f7bebdd0d49736285b8">CritterTower::damage</a></div><div class="ttdeci">int damage</div><div class="ttdef"><b>Definition</b> CritterTower.h:31</div></div>

@@ -5,6 +5,7 @@ var hierarchy =
     [ "CritterGroup", "classCritterGroup.html", null ],
     [ "CritterProjectile", "classCritterProjectile.html", null ],
     [ "CritterTower", "classCritterTower.html", null ],
+    [ "DummyCritter", "classDummyCritter.html", null ],
     [ "GameState", "classGameState.html", [
       [ "ExitState", "classExitState.html", null ],
       [ "IntroState", "classIntroState.html", null ],
@@ -16,11 +17,18 @@ var hierarchy =
     ] ],
     [ "Global", "classGlobal.html", null ],
     [ "LButton", "classLButton.html", [
-      [ "MainMenuButton", "classMainMenuButton.html", null ]
+      [ "MainMenuButton", "classMainMenuButton.html", null ],
+      [ "TowerButton", "classTowerButton.html", null ]
     ] ],
     [ "LTexture", "classLTexture.html", null ],
     [ "LTimer", "classLTimer.html", null ],
     [ "Map", "classMap.html", null ],
+    [ "Projectile", "classProjectile.html", null ],
     [ "TextureLoader", "classTextureLoader.html", null ],
+    [ "Tower", "classTower.html", [
+      [ "CannonTower", "classCannonTower.html", null ],
+      [ "RapidFireTower", "classRapidFireTower.html", null ],
+      [ "StandardTower", "classStandardTower.html", null ]
+    ] ],
     [ "Vector2D", "classVector2D.html", null ]
 ];

@@ -1,4 +1,4 @@
 var searchData=
 [
-  ['exitstate_0',['ExitState',['../classExitState.html',1,'']]]
+  ['dummycritter_0',['DummyCritter',['../classDummyCritter.html',1,'']]]
 ];

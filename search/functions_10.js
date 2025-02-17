@@ -1,6 +1,7 @@
 var searchData=
 [
-  ['unpause_0',['unpause',['../classLTimer.html#a67a946bffb25cf5eb8ab430ffb5f7cec',1,'LTimer']]],
-  ['update_1',['update',['../classCritterGroup.html#a4f3ec3f3aad7c83dfe8f6c504421e682',1,'CritterGroup::update()'],['../classExitState.html#a1cc9b5ec77b6caaf4450ec7104704ca9',1,'ExitState::update()'],['../classGameState.html#ab2864bfa04f92f6966861a1f2883bda0',1,'GameState::update()'],['../classIntroState.html#a05c81554a3e6e0a50d14c9197bf12336',1,'IntroState::update()'],['../classMainGameState.html#afe90f8dab2d53bbe9a6fb75c33c3de55',1,'MainGameState::update()'],['../classPart1State.html#a799cbc679394ef98a8f7b96d428911d6',1,'Part1State::update()'],['../classPart2State.html#afe8588565cd79f5fe8febb4a140a7527',1,'Part2State::update()'],['../classPart3State.html#adbee0e1f7c2aa98f7ffb3c4f328c30dc',1,'Part3State::update()'],['../classTitleState.html#ab99e975b3b50f79829039072e6d538e6',1,'TitleState::update()'],['../classCritterProjectile.html#ae85c20687d267145cebcfe150b571c7e',1,'CritterProjectile::update()'],['../classCritterTower.html#ab38866a811a90fb67fdf1f690bbe9202',1,'CritterTower::update()']]],
-  ['updategoldtween_2',['updateGoldTween',['../classPart3State.html#a9aa378f2ea873a4bd07c11cb4f0a4ccc',1,'Part3State']]]
+  ['takedamage_0',['takeDamage',['../classCritter.html#a963ccea758c0b04129a372572704c1fc',1,'Critter::takeDamage()'],['../classCritterTower.html#a9690b1cb2d3e811663187d85cc73a445',1,'CritterTower::takeDamage()']]],
+  ['titlestate_1',['TitleState',['../classTitleState.html#a50ef2b0f29790d27b3edc50e11f852d0',1,'TitleState']]],
+  ['tower_2',['Tower',['../classTower.html#a1b785dc1e9fb979a10620ca183b5761d',1,'Tower::Tower()'],['../classTower.html#a2ee58d86f84c8e960d5423d31396e86a',1,'Tower::Tower(float x, float y, int buyingCost, int range, int power, int rateOfFire)'],['../classTower.html#a823bf81bb3cb507a840b90bac103d049',1,'Tower::Tower(float x, float y, int buyingCost, int refundValue, int range, int power, int rateOfFire)']]],
+  ['towerbutton_3',['TowerButton',['../classTowerButton.html#a6219e371617fddc963861c925b0b3a8b',1,'TowerButton']]]
 ];

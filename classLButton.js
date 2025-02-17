@@ -14,8 +14,8 @@ var classLButton =
     [ "setPosition", "classLButton.html#aab53179dc6006793913f8fbf0924dcf5", null ],
     [ "setText", "classLButton.html#a8efc3506953dfacea1e49374e5cd7ed9", null ],
     [ "gButtonSpriteTexture", "classLButton.html#ad6bf4017f5872d4dfa8075ace38f43fc", null ],
-    [ "kButtonHeight", "classLButton.html#a20001446044453bfd67d2ed6960d80ec", null ],
-    [ "kButtonWidth", "classLButton.html#a66f6ba0ad3d0aa8ebb8682d2a0147097", null ],
+    [ "kButtonHeight", "classLButton.html#ade86696abc99ef692465241e282f7bc1", null ],
+    [ "kButtonWidth", "classLButton.html#a5f5ec981d9f346746ad4f5ff3226e54c", null ],
     [ "mCurrentSprite", "classLButton.html#ac6583b858966331b7c21de0a9d19ebb0", null ],
     [ "mPosition", "classLButton.html#a360bd8a8c2aad72c1ebfe9003d9f1419", null ]
 ];

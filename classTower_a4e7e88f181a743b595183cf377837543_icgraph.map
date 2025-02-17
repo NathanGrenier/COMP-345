@@ -1,0 +1,5 @@
+<map id="Tower::isCritterInRange" name="Tower::isCritterInRange">
+<area shape="rect" id="Node000001" title=" " alt="" coords="187,5,360,31"/>
+<area shape="rect" id="Node000002" href="$classTower.html#a0f35d2d760c234f6cb65c4e694374d52" title=" " alt="" coords="5,5,139,31"/>
+<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="173,21,139,21,139,15,173,15"/>
+</map>

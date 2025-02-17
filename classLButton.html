@@ -100,7 +100,7 @@ $(function(){initNavTree('classLButton.html',''); initResizable(true); });
 <div class="header">
   <div class="summary">
 <a href="#pub-methods">Public Member Functions</a> &#124;
-<a href="#pub-attribs">Public Attributes</a> &#124;
+<a href="#pub-static-attribs">Static Public Attributes</a> &#124;
 <a href="#pro-types">Protected Types</a> &#124;
 <a href="#pro-attribs">Protected Attributes</a> &#124;
 <a href="classLButton-members.html">List of all members</a>  </div>
@@ -114,9 +114,11 @@ Inheritance diagram for LButton:</div>
 <div class="dyncontent">
 <div class="center"><img src="classLButton__inherit__graph.png" border="0" usemap="#aLButton_inherit__map" alt="Inheritance graph"/></div>
 <map name="aLButton_inherit__map" id="aLButton_inherit__map">
-<area shape="rect" title=" " alt="" coords="36,5,108,31"/>
+<area shape="rect" title=" " alt="" coords="107,5,179,31"/>
 <area shape="rect" href="classMainMenuButton.html" title=" " alt="" coords="5,79,139,104"/>
-<area shape="poly" title=" " alt="" coords="75,44,75,79,69,79,69,44"/>
+<area shape="poly" title=" " alt="" coords="123,43,85,80,82,77,119,39"/>
+<area shape="rect" href="classTowerButton.html" title=" " alt="" coords="163,79,266,104"/>
+<area shape="poly" title=" " alt="" coords="166,39,205,77,201,80,163,43"/>
 </map>
 <center><span class="legend">[<a target="top" href="graph_legend.html">legend</a>]</span></center></div>
 <div class="dynheader">
@@ -147,12 +149,12 @@ Public Member Functions</h2></td></tr>
 <tr class="memitem:a89e46f66954a5c9a99f22fa1f4ed20ef" id="r_a89e46f66954a5c9a99f22fa1f4ed20ef"><td class="memItemLeft" align="right" valign="top">bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#a89e46f66954a5c9a99f22fa1f4ed20ef">isClicked</a> ()</td></tr>
 <tr class="separator:a89e46f66954a5c9a99f22fa1f4ed20ef"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table><table class="memberdecls">
-<tr class="heading"><td colspan="2"><h2 class="groupheader"><a id="pub-attribs" name="pub-attribs"></a>
-Public Attributes</h2></td></tr>
-<tr class="memitem:a66f6ba0ad3d0aa8ebb8682d2a0147097" id="r_a66f6ba0ad3d0aa8ebb8682d2a0147097"><td class="memItemLeft" align="right" valign="top">int&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#a66f6ba0ad3d0aa8ebb8682d2a0147097">kButtonWidth</a></td></tr>
-<tr class="separator:a66f6ba0ad3d0aa8ebb8682d2a0147097"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a20001446044453bfd67d2ed6960d80ec" id="r_a20001446044453bfd67d2ed6960d80ec"><td class="memItemLeft" align="right" valign="top">int&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#a20001446044453bfd67d2ed6960d80ec">kButtonHeight</a></td></tr>
-<tr class="separator:a20001446044453bfd67d2ed6960d80ec"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="heading"><td colspan="2"><h2 class="groupheader"><a id="pub-static-attribs" name="pub-static-attribs"></a>
+Static Public Attributes</h2></td></tr>
+<tr class="memitem:a5f5ec981d9f346746ad4f5ff3226e54c" id="r_a5f5ec981d9f346746ad4f5ff3226e54c"><td class="memItemLeft" align="right" valign="top">static const int&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#a5f5ec981d9f346746ad4f5ff3226e54c">kButtonWidth</a> = 200</td></tr>
+<tr class="separator:a5f5ec981d9f346746ad4f5ff3226e54c"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:ade86696abc99ef692465241e282f7bc1" id="r_ade86696abc99ef692465241e282f7bc1"><td class="memItemLeft" align="right" valign="top">static const int&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#ade86696abc99ef692465241e282f7bc1">kButtonHeight</a> = 100</td></tr>
+<tr class="separator:ade86696abc99ef692465241e282f7bc1"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table><table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a id="pro-types" name="pro-types"></a>
 Protected Types</h2></td></tr>
@@ -353,30 +355,46 @@ Protected Attributes</h2></td></tr>
 
 </div>
 </div>
-<a id="a20001446044453bfd67d2ed6960d80ec" name="a20001446044453bfd67d2ed6960d80ec"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#a20001446044453bfd67d2ed6960d80ec">&#9670;&#160;</a></span>kButtonHeight</h2>
+<a id="ade86696abc99ef692465241e282f7bc1" name="ade86696abc99ef692465241e282f7bc1"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#ade86696abc99ef692465241e282f7bc1">&#9670;&#160;</a></span>kButtonHeight</h2>
 
 <div class="memitem">
 <div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
       <table class="memname">
         <tr>
-          <td class="memname">int LButton::kButtonHeight</td>
+          <td class="memname">const int LButton::kButtonHeight = 100</td>
         </tr>
       </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel static">static</span></span>  </td>
+  </tr>
+</table>
 </div><div class="memdoc">
 
 </div>
 </div>
-<a id="a66f6ba0ad3d0aa8ebb8682d2a0147097" name="a66f6ba0ad3d0aa8ebb8682d2a0147097"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#a66f6ba0ad3d0aa8ebb8682d2a0147097">&#9670;&#160;</a></span>kButtonWidth</h2>
+<a id="a5f5ec981d9f346746ad4f5ff3226e54c" name="a5f5ec981d9f346746ad4f5ff3226e54c"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a5f5ec981d9f346746ad4f5ff3226e54c">&#9670;&#160;</a></span>kButtonWidth</h2>
 
 <div class="memitem">
 <div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
       <table class="memname">
         <tr>
-          <td class="memname">int LButton::kButtonWidth</td>
+          <td class="memname">const int LButton::kButtonWidth = 200</td>
         </tr>
       </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel static">static</span></span>  </td>
+  </tr>
+</table>
 </div><div class="memdoc">
 
 </div>

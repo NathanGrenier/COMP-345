@@ -1,4 +1,5 @@
 var searchData=
 [
-  ['introstate_0',['IntroState',['../classIntroState.html',1,'']]]
+  ['gamestate_0',['GameState',['../classGameState.html',1,'']]],
+  ['global_1',['Global',['../classGlobal.html',1,'']]]
 ];

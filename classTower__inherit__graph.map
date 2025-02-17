@@ -1,0 +1,9 @@
+<map id="Tower" name="Tower">
+<area shape="rect" id="Node000001" title=" " alt="" coords="170,5,230,31"/>
+<area shape="rect" id="Node000002" href="$classCannonTower.html" title=" " alt="" coords="5,79,115,104"/>
+<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="167,39,84,81,82,76,164,34"/>
+<area shape="rect" id="Node000003" href="$classRapidFireTower.html" title=" " alt="" coords="139,79,261,104"/>
+<area shape="poly" id="edge2_Node000001_Node000003" title=" " alt="" coords="203,44,203,79,197,79,197,44"/>
+<area shape="rect" id="Node000004" href="$classStandardTower.html" title=" " alt="" coords="285,79,403,104"/>
+<area shape="poly" id="edge3_Node000001_Node000004" title=" " alt="" coords="236,34,322,76,319,81,234,39"/>
+</map>

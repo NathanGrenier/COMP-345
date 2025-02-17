@@ -1,0 +1,11 @@
+<map id="RapidFireTower::shootProjectile" name="RapidFireTower::shootProjectile">
+<area shape="rect" id="Node000001" title=" " alt="" coords="5,80,232,105"/>
+<area shape="rect" id="Node000002" href="$classDummyCritter.html#a54aa0b8acc33429522567df6186fc09d" title=" " alt="" coords="280,5,497,31"/>
+<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="156,77,279,39,313,31,314,36,281,45,158,82"/>
+<area shape="rect" id="Node000003" href="$classDummyCritter.html#ad313492c74236bb0761d9e0ca90b4145" title=" " alt="" coords="295,55,482,80"/>
+<area shape="poly" id="edge2_Node000001_Node000003" title=" " alt="" coords="232,79,281,75,282,80,232,85"/>
+<area shape="rect" id="Node000004" href="$classDummyCritter.html#aeaa134a4ec161e3e7ff55b0c578c9f59" title=" " alt="" coords="312,104,465,129"/>
+<area shape="poly" id="edge3_Node000001_Node000004" title=" " alt="" coords="232,100,298,106,298,111,232,105"/>
+<area shape="rect" id="Node000005" href="$classDummyCritter.html#a8df90c2cfd09e1f6bd54141b34760a32" title=" " alt="" coords="313,153,465,179"/>
+<area shape="poly" id="edge4_Node000001_Node000005" title=" " alt="" coords="161,103,281,138,318,147,316,153,279,143,159,108"/>
+</map>

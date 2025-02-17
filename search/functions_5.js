@@ -1,20 +1,4 @@
 var searchData=
 [
-  ['generatecritters_0',['generateCritters',['../classCritterGroup.html#a8ef744c7ef9c224be3a8ec680aeae18f',1,'CritterGroup']]],
-  ['get_1',['get',['../classExitState.html#a607bf68675b52a3a16227106072fb218',1,'ExitState::get()'],['../classIntroState.html#aabcf6208665f06095f41957a9635c837',1,'IntroState::get()'],['../classMainGameState.html#ae74dbfb6ef7ba2fb458911e42582c94d',1,'MainGameState::get()'],['../classPart1State.html#a8b98e2eaeb3624b0d41666c07086b382',1,'Part1State::get()'],['../classPart2State.html#afd03f10f3282fbe8dd3718b19331d824',1,'Part2State::get()'],['../classPart3State.html#a09fbfb138bd85f00e107d7b91d1cf47c',1,'Part3State::get()'],['../classTitleState.html#af85f8e1f727fe0d6d437d3f41c1813a4',1,'TitleState::get()']]],
-  ['getcost_2',['getCost',['../classCritterTower.html#a99b7a6d24e9fa5a975b03703d873d951',1,'CritterTower']]],
-  ['getcritters_3',['getCritters',['../classCritterGroup.html#a3a6b8033dddddff6cab1ea9a2f0942df',1,'CritterGroup']]],
-  ['getdamage_4',['getDamage',['../classCritterProjectile.html#ada62e1fb4cafdc15390512b41aa6c60b',1,'CritterProjectile']]],
-  ['getendposition_5',['getEndPosition',['../classCritter.html#a5993f8270f0ef675d81f0f2f5ce884d5',1,'Critter']]],
-  ['getflownormal_6',['getFlowNormal',['../classMap.html#a2734ab8649d21ac4a335ea16ae402767',1,'Map']]],
-  ['getheight_7',['getHeight',['../classLTexture.html#a277f45af3dae7e35ca846a527039e59a',1,'LTexture']]],
-  ['gethitpoints_8',['getHitPoints',['../classCritter.html#a48de9921380cb05439698149510a2aab',1,'Critter']]],
-  ['getloadedtextures_9',['getLoadedTextures',['../TextureLoader_8cpp.html#a1a2534fea8ce1efea246f3ae8b1c9db0',1,'TextureLoader.cpp']]],
-  ['getnegativereciprocal_10',['getNegativeReciprocal',['../classVector2D.html#a6daf29104afc3708aa81b287636668c8',1,'Vector2D']]],
-  ['getposition_11',['getPosition',['../classCritter.html#aa8ea0367914219c6ee9bb5742cd60a5f',1,'Critter::getPosition()'],['../classCritterProjectile.html#af9b2bb401eab55c182728b679d192f27',1,'CritterProjectile::getPosition()'],['../classCritterTower.html#ad8d0a7a33d32ee46681ae4b89e94647a',1,'CritterTower::getPosition()'],['../classLButton.html#a76f9b0df26daf7b1c8ab1d005056c215',1,'LButton::getPosition()']]],
-  ['getreward_12',['getReward',['../classCritter.html#a76197401205862d6e944d936b4cb64a8',1,'Critter']]],
-  ['getstrength_13',['getStrength',['../classCritter.html#a2d332a030accf035ecb21d9a8e3291cf',1,'Critter']]],
-  ['gettargetpos_14',['getTargetPos',['../classMap.html#ab525c6579219b594a82ef879b756b880',1,'Map']]],
-  ['getticksns_15',['getTicksNS',['../classLTimer.html#a00dcc3c37d079ed37770533286fa5fe6',1,'LTimer']]],
-  ['getwidth_16',['getWidth',['../classLTexture.html#a542c1f81d98fd5659a04eb394d61a879',1,'LTexture']]]
+  ['findcritter_0',['findCritter',['../classTower.html#a0f35d2d760c234f6cb65c4e694374d52',1,'Tower']]]
 ];

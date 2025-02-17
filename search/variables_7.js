@@ -1,6 +1,6 @@
 var searchData=
 [
-  ['health_0',['health',['../classCritterTower.html#a06448e2942773f9e1bebae72ef0b6ff3',1,'CritterTower']]],
+  ['health_0',['health',['../classCritterTower.html#a06448e2942773f9e1bebae72ef0b6ff3',1,'CritterTower::health'],['../classDummyCritter.html#ad082301e83956ff8774ac729e5cb4160',1,'DummyCritter::health']]],
   ['healthbartime_1',['healthBarTime',['../classCritter.html#a35d4c8fb40b89ff331bdfec52c962bba',1,'Critter']]],
   ['healthbarvisible_2',['healthBarVisible',['../classCritter.html#ad018e22f83c58657c42cd5e2719d0501',1,'Critter']]],
   ['healthbarwidth_3',['healthBarWidth',['../classCritter.html#a1ca36334336a80802e5dbfbf605bf2f4',1,'Critter']]],

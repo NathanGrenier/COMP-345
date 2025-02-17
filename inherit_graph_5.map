@@ -1,3 +1,17 @@
 <map id="Graphical Class Hierarchy" name="Graphical Class Hierarchy">
-<area shape="rect" id="Node000000" href="$classGlobal.html" title=" " alt="" coords="5,5,69,31"/>
+<area shape="rect" id="Node000000" href="$classGameState.html" title=" " alt="" coords="5,153,100,179"/>
+<area shape="rect" id="Node000001" href="$classExitState.html" title=" " alt="" coords="171,5,252,31"/>
+<area shape="poly" id="edge1_Node000000_Node000001" title=" " alt="" coords="65,140,98,90,120,63,146,40,169,27,172,32,150,44,124,67,102,93,69,143"/>
+<area shape="rect" id="Node000002" href="$classIntroState.html" title=" " alt="" coords="168,55,255,80"/>
+<area shape="poly" id="edge2_Node000000_Node000002" title=" " alt="" coords="76,142,108,115,147,89,171,78,173,82,149,94,112,119,80,146"/>
+<area shape="rect" id="Node000003" href="$classMainGameState.html" title=" " alt="" coords="148,104,275,129"/>
+<area shape="poly" id="edge3_Node000000_Node000003" title=" " alt="" coords="106,147,169,127,170,132,108,152"/>
+<area shape="rect" id="Node000004" href="$classPart1State.html" title=" " alt="" coords="167,153,256,179"/>
+<area shape="poly" id="edge4_Node000000_Node000004" title=" " alt="" coords="114,163,166,163,166,169,114,169"/>
+<area shape="rect" id="Node000005" href="$classPart2State.html" title=" " alt="" coords="167,203,256,228"/>
+<area shape="poly" id="edge5_Node000000_Node000005" title=" " alt="" coords="108,180,170,200,169,205,106,185"/>
+<area shape="rect" id="Node000006" href="$classPart3State.html" title=" " alt="" coords="167,252,256,277"/>
+<area shape="poly" id="edge6_Node000000_Node000006" title=" " alt="" coords="80,186,112,212,149,237,175,249,173,254,147,242,109,216,76,190"/>
+<area shape="rect" id="Node000007" href="$classTitleState.html" title=" " alt="" coords="169,301,254,327"/>
+<area shape="poly" id="edge7_Node000000_Node000007" title=" " alt="" coords="70,189,103,238,125,264,150,287,171,299,168,303,146,291,121,268,98,241,65,192"/>
 </map>

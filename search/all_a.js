@@ -3,7 +3,7 @@ var searchData=
   ['lbutton_0',['LButton',['../classLButton.html',1,'LButton'],['../classLButton.html#a0de0fa6527e5647aa041e8cad426a8be',1,'LButton::LButton()']]],
   ['lbutton_2ecpp_1',['LButton.cpp',['../LButton_8cpp.html',1,'']]],
   ['lbutton_2eh_2',['LButton.h',['../LButton_8h.html',1,'']]],
-  ['level_3',['level',['../classCritter.html#a9f9a6408a55212036f317710dc3da410',1,'Critter']]],
+  ['level_3',['level',['../classCritter.html#a9f9a6408a55212036f317710dc3da410',1,'Critter::level'],['../classTower.html#a586375a39e6817983339b36225379da0',1,'Tower::level']]],
   ['loadedtextures_4',['loadedTextures',['../classTextureLoader.html#af20d179beb33826e10ec2441e8f142c7',1,'TextureLoader']]],
   ['loadfromfile_5',['loadFromFile',['../classLTexture.html#ae5b2b930a619203755988c16d6403665',1,'LTexture']]],
   ['loadfromrenderedtext_6',['loadFromRenderedText',['../classLTexture.html#af0ea348d6f108c45372fc5ec5b9296bc',1,'LTexture']]],

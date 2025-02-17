@@ -1,0 +1,11 @@
+<map id="CannonTower::shootProjectile" name="CannonTower::shootProjectile">
+<area shape="rect" id="Node000001" title=" " alt="" coords="5,80,220,105"/>
+<area shape="rect" id="Node000002" href="$classDummyCritter.html#a54aa0b8acc33429522567df6186fc09d" title=" " alt="" coords="268,5,485,31"/>
+<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="149,77,267,39,300,31,301,36,269,45,151,82"/>
+<area shape="rect" id="Node000003" href="$classDummyCritter.html#ad313492c74236bb0761d9e0ca90b4145" title=" " alt="" coords="283,55,470,80"/>
+<area shape="poly" id="edge2_Node000001_Node000003" title=" " alt="" coords="220,80,269,75,270,80,221,85"/>
+<area shape="rect" id="Node000004" href="$classDummyCritter.html#aeaa134a4ec161e3e7ff55b0c578c9f59" title=" " alt="" coords="300,104,453,129"/>
+<area shape="poly" id="edge3_Node000001_Node000004" title=" " alt="" coords="221,100,287,106,286,111,220,105"/>
+<area shape="rect" id="Node000005" href="$classDummyCritter.html#a8df90c2cfd09e1f6bd54141b34760a32" title=" " alt="" coords="301,153,453,179"/>
+<area shape="poly" id="edge4_Node000001_Node000005" title=" " alt="" coords="153,103,269,138,306,148,304,153,267,143,152,108"/>
+</map>

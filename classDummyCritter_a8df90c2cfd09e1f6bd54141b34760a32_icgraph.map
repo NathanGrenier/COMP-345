@@ -1,0 +1,15 @@
+<map id="DummyCritter::getY" name="DummyCritter::getY">
+<area shape="rect" id="Node000001" title=" " alt="" coords="683,80,835,105"/>
+<area shape="rect" id="Node000002" href="$classTower.html#a83c9444cd65070a2eec7c7bf299efb9d" title=" " alt="" coords="446,5,597,31"/>
+<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="717,77,634,45,591,33,593,28,635,39,719,72"/>
+<area shape="rect" id="Node000005" href="$classCannonTower.html#a92f504c5f0826eba9c8860f2207f6ebe" title=" " alt="" coords="414,55,629,80"/>
+<area shape="poly" id="edge4_Node000001_Node000005" title=" " alt="" coords="669,86,629,81,629,76,669,80"/>
+<area shape="rect" id="Node000006" href="$classRapidFireTower.html#a417ecb8bb939d6c85d245c04caf983a7" title=" " alt="" coords="408,104,635,129"/>
+<area shape="poly" id="edge5_Node000001_Node000006" title=" " alt="" coords="669,104,635,108,635,103,669,99"/>
+<area shape="rect" id="Node000007" href="$classStandardTower.html#a634d64bc9a673660f98616c019e72adc" title=" " alt="" coords="410,153,633,179"/>
+<area shape="poly" id="edge6_Node000001_Node000007" title=" " alt="" coords="717,113,635,143,587,156,586,151,634,138,715,108"/>
+<area shape="rect" id="Node000003" href="$classTower.html#a4e7e88f181a743b595183cf377837543" title=" " alt="" coords="187,5,360,31"/>
+<area shape="poly" id="edge2_Node000002_Node000003" title=" " alt="" coords="432,21,360,21,360,15,432,15"/>
+<area shape="rect" id="Node000004" href="$classTower.html#a0f35d2d760c234f6cb65c4e694374d52" title=" " alt="" coords="5,5,139,31"/>
+<area shape="poly" id="edge3_Node000003_Node000004" title=" " alt="" coords="173,21,139,21,139,15,173,15"/>
+</map>

@@ -1,9 +1,11 @@
 var annotated_dup =
 [
+    [ "CannonTower", "classCannonTower.html", "classCannonTower" ],
     [ "Critter", "classCritter.html", "classCritter" ],
     [ "CritterGroup", "classCritterGroup.html", "classCritterGroup" ],
     [ "CritterProjectile", "classCritterProjectile.html", "classCritterProjectile" ],
     [ "CritterTower", "classCritterTower.html", "classCritterTower" ],
+    [ "DummyCritter", "classDummyCritter.html", "classDummyCritter" ],
     [ "ExitState", "classExitState.html", "classExitState" ],
     [ "GameState", "classGameState.html", "classGameState" ],
     [ "Global", "classGlobal.html", "classGlobal" ],
@@ -17,7 +19,12 @@ var annotated_dup =
     [ "Part1State", "classPart1State.html", "classPart1State" ],
     [ "Part2State", "classPart2State.html", "classPart2State" ],
     [ "Part3State", "classPart3State.html", "classPart3State" ],
+    [ "Projectile", "classProjectile.html", "classProjectile" ],
+    [ "RapidFireTower", "classRapidFireTower.html", "classRapidFireTower" ],
+    [ "StandardTower", "classStandardTower.html", "classStandardTower" ],
     [ "TextureLoader", "classTextureLoader.html", "classTextureLoader" ],
     [ "TitleState", "classTitleState.html", "classTitleState" ],
+    [ "Tower", "classTower.html", "classTower" ],
+    [ "TowerButton", "classTowerButton.html", "classTowerButton" ],
     [ "Vector2D", "classVector2D.html", "classVector2D" ]
 ];

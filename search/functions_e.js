@@ -1,20 +1,6 @@
 var searchData=
 [
-  ['selltower_0',['sellTower',['../classPart3State.html#ab3c4ff187b3b811a2c39892ccc5e649d',1,'Part3State::sellTower()'],['../classCritterTower.html#a2e98508e04d612611942cb67bd04a167',1,'CritterTower::sellTower()']]],
-  ['setalpha_1',['setAlpha',['../classLTexture.html#ab4e51b54752ae7b54614078f9128a9c0',1,'LTexture']]],
-  ['setatexit_2',['setAtExit',['../classCritter.html#a18cb96c49c3b20d943ac8a43242b9934',1,'Critter']]],
-  ['setblending_3',['setBlending',['../classLTexture.html#abaf56f223336f08de127403b310864c1',1,'LTexture']]],
-  ['setcellwall_4',['setCellWall',['../classMap.html#a02b3c0c6085005d4c1d235222ac74e69',1,'Map']]],
-  ['setcolor_5',['setColor',['../classLTexture.html#aead3e0fd603db038782f15e9845e50d4',1,'LTexture']]],
-  ['setendposition_6',['setEndPosition',['../classCritter.html#ae903cda1331c3ce08ba88595937207d7',1,'Critter']]],
-  ['sethitpoints_7',['setHitPoints',['../classCritter.html#a8a312a3ed6f0aa79a878267ecec86c26',1,'Critter']]],
-  ['setnextstate_8',['setNextState',['../Global_8h.html#ab0b0c86be4e5dc019e3938585fa1e7ea',1,'setNextState(GameState *nextState):&#160;main.cpp'],['../main_8cpp.html#af0dc0ad824f97f7d085e7dd718a089ac',1,'setNextState(GameState *newState):&#160;main.cpp']]],
-  ['setposition_9',['setPosition',['../classLButton.html#aab53179dc6006793913f8fbf0924dcf5',1,'LButton']]],
-  ['setspawner_10',['setSpawner',['../classMap.html#aaf1c519a5395976d1d9f9383f0379bb2',1,'Map']]],
-  ['settarget_11',['setTarget',['../classMap.html#abd6ce71c5c44f4bc273dac543cdb0363',1,'Map']]],
-  ['settext_12',['setText',['../classLButton.html#a8efc3506953dfacea1e49374e5cd7ed9',1,'LButton']]],
-  ['shootprojectile_13',['shootProjectile',['../classCritterTower.html#aa3223aa2594f5224328574c7a04e8104',1,'CritterTower']]],
-  ['start_14',['start',['../classLTimer.html#a7dc11f05cf5098a6d06ebd6ebec96ed6',1,'LTimer']]],
-  ['stealgold_15',['stealGold',['../classCritter.html#a56cd3b51468f4000ce0fee9438637a2a',1,'Critter']]],
-  ['stop_16',['stop',['../classLTimer.html#aeabbf5f935907fcfeaa7f4403741e4ae',1,'LTimer']]]
+  ['rapidfiretower_0',['RapidFireTower',['../classRapidFireTower.html#ac9d0322e9c675ed51e2f0296c76b57ca',1,'RapidFireTower::RapidFireTower()'],['../classRapidFireTower.html#a434111d0ee79ee706cea3d74133ea48f',1,'RapidFireTower::RapidFireTower(float x, float y, int buyingCost)'],['../classRapidFireTower.html#af1c94b56dc4a74c35ce49c28ab771883',1,'RapidFireTower::RapidFireTower(float x, float y, int buyingCost, int refundValue)']]],
+  ['render_1',['render',['../classCritter.html#ad5ca1b593dbd2d38a83f4174e07d1e96',1,'Critter::render()'],['../classCritterGroup.html#a3d4f149e34ecbac91a771ca748839fa6',1,'CritterGroup::render()'],['../classExitState.html#aa7488eb447496a8580d4f2fc432de6c0',1,'ExitState::render()'],['../classGameState.html#abb892a3560e8fbedb3e4526af5deed7b',1,'GameState::render()'],['../classIntroState.html#ab31761af5b55473ff72ca1580a1fefbe',1,'IntroState::render()'],['../classMainGameState.html#a8dd2bc74fbc49be25c51411a6cf20644',1,'MainGameState::render()'],['../classPart1State.html#a5239fb252177bb5ad700b869a6687c3a',1,'Part1State::render()'],['../classPart2State.html#a306f83bca4a67c7b13d5ce0eec21f167',1,'Part2State::render()'],['../classPart3State.html#a52c105ddca0be8aa67e83d6bf75b66e0',1,'Part3State::render()'],['../classTitleState.html#a733ec3f3b758b1b4cc9baef6a79e1fdf',1,'TitleState::render()'],['../classCritterProjectile.html#a4a996c836a5fb96021d4514cab628416',1,'CritterProjectile::render()'],['../classCritterTower.html#ab1b44bcc53dc28249616c41b6e3d06c0',1,'CritterTower::render()'],['../classLButton.html#a35154b0af02a0b098109b07c5b9568e0',1,'LButton::render()'],['../classLTexture.html#ae1011e32e00ae6c60274e456725c0fab',1,'LTexture::render()'],['../classMainMenuButton.html#a5bf888e3b30343585e287a19d951c118',1,'MainMenuButton::render()'],['../classTowerButton.html#a303775d8181e60347c7fa8e6c114e968',1,'TowerButton::render()']]],
+  ['rendertext_2',['renderText',['../classPart3State.html#a1dc6d1ccbe7ddb71f7777c07c79a89ed',1,'Part3State']]]
 ];
