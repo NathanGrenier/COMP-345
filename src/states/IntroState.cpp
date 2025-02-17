@@ -2,8 +2,10 @@
 #include <SDL3/SDL_log.h>
 #include <states/TitleState.h>
 #include <Global.h>
+#include <cmath>
 
 IntroState IntroState::sIntroState;
+float mOscillationTime = 0.0f;
 
 //InrtoState Implementation
 IntroState* IntroState::get() {
@@ -17,7 +19,7 @@ bool IntroState::enter() {
 
 	//Load text
 	SDL_Color textColor{ 0x00, 0x00, 0x00, 0xFF };
-	if (success &= mMessageTexture.loadFromRenderedText("The NullTerminators Present...", textColor); !success)
+	if (success &= mMessageTexture.loadFromRenderedText("The NullTerminators Presents...", textColor); !success)
 	{
 		SDL_Log("Failed to render intro text!\n");
 		success = false;
@@ -48,11 +50,21 @@ void IntroState::update() {
 }
 
 void IntroState::render() {
-	//Show the background
+	// Update oscillation time
+	mOscillationTime += 0.05f; // Adjust speed of oscillation
+
+	// Calculate the vertical oscillation offset (range of -5 to 5 pixels)
+	float oscillationOffset = std::sin(mOscillationTime) * 5.0f;
+
+	// Show the background
 	mBackgroundTexture.render(0, 0);
 
-	//Show the message
-	mMessageTexture.render((Global::kScreenWidth - mMessageTexture.getWidth()) / 2.f, (Global::kScreenHeight - mMessageTexture.getHeight()) / 2.f);
+	// Show the message with the oscillation effect
+	mMessageTexture.render(
+		(Global::kScreenWidth - mMessageTexture.getWidth()) / 2.f,
+		(Global::kScreenHeight - mMessageTexture.getHeight()) / 2.f + oscillationOffset
+	);
 }
+
 
 IntroState::IntroState() {}

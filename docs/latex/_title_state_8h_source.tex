@@ -1,0 +1,50 @@
+\doxysection{Title\+State.\+h}
+\hypertarget{_title_state_8h_source}{}\label{_title_state_8h_source}\index{src/include/states/TitleState.h@{src/include/states/TitleState.h}}
+\mbox{\hyperlink{_title_state_8h}{Go to the documentation of this file.}}
+\begin{DoxyCode}{0}
+\DoxyCodeLine{00001\ \textcolor{preprocessor}{\#include\ "{}\mbox{\hyperlink{_game_state_8h}{GameState.h}}"{}}}
+\DoxyCodeLine{00002\ \textcolor{preprocessor}{\#include\ "{}\mbox{\hyperlink{_l_texture_8h}{../UI/LTexture.h}}"{}}}
+\DoxyCodeLine{00003\ }
+\DoxyCodeLine{00004\ \textcolor{preprocessor}{\#ifndef\ TITLESTATE\_H}}
+\DoxyCodeLine{00005\ \textcolor{preprocessor}{\#define\ TITLESTATE\_H}}
+<<<<<<< HEAD
+\DoxyCodeLine{00006\ \textcolor{keyword}{class\ }\mbox{\hyperlink{class_title_state_a50ef2b0f29790d27b3edc50e11f852d0}{TitleState}}\ :\ \textcolor{keyword}{public}\ \mbox{\hyperlink{class_game_state}{GameState}}\ \{}
+\DoxyCodeLine{00007\ \textcolor{keyword}{public}:}
+\DoxyCodeLine{00008\ \ \ \ \ \textcolor{comment}{//Static\ accessor}}
+\DoxyCodeLine{00009\ \ \ \ \ \textcolor{keyword}{static}\ \mbox{\hyperlink{class_title_state_a50ef2b0f29790d27b3edc50e11f852d0}{TitleState}}*\ \mbox{\hyperlink{class_title_state_af85f8e1f727fe0d6d437d3f41c1813a4}{get}}();}
+=======
+\DoxyCodeLine{00006\ \textcolor{keyword}{class\ }\mbox{\hyperlink{class_title_state}{TitleState}}\ :\ \textcolor{keyword}{public}\ \mbox{\hyperlink{class_game_state}{GameState}}\ \{}
+\DoxyCodeLine{00007\ \textcolor{keyword}{public}:}
+\DoxyCodeLine{00008\ \ \ \ \ \textcolor{comment}{//Static\ accessor}}
+\DoxyCodeLine{00009\ \ \ \ \ \textcolor{keyword}{static}\ \mbox{\hyperlink{class_title_state}{TitleState}}*\ \mbox{\hyperlink{class_title_state_af85f8e1f727fe0d6d437d3f41c1813a4}{get}}();}
+>>>>>>> origin/master
+\DoxyCodeLine{00010\ }
+\DoxyCodeLine{00011\ \ \ \ \ \textcolor{comment}{//Transitions}}
+\DoxyCodeLine{00012\ \ \ \ \ \textcolor{keywordtype}{bool}\ \mbox{\hyperlink{class_title_state_af78e4ac14f2e9c51e10e5a6ef8f1651c}{enter}}()\ \textcolor{keyword}{override};}
+\DoxyCodeLine{00013\ \ \ \ \ \textcolor{keywordtype}{bool}\ \mbox{\hyperlink{class_title_state_a3beb7e8f831e195eab39e296bae55d82}{exit}}()\ \textcolor{keyword}{override};}
+\DoxyCodeLine{00014\ }
+\DoxyCodeLine{00015\ \ \ \ \ \textcolor{comment}{//Main\ loop\ functions}}
+\DoxyCodeLine{00016\ \ \ \ \ \textcolor{keywordtype}{void}\ \mbox{\hyperlink{class_title_state_ab944bbea89672acba5a870b54ed522f3}{handleEvent}}(SDL\_Event\&\ e)\ \textcolor{keyword}{override};}
+\DoxyCodeLine{00017\ \ \ \ \ \textcolor{keywordtype}{void}\ \mbox{\hyperlink{class_title_state_ab99e975b3b50f79829039072e6d538e6}{update}}()\ \textcolor{keyword}{override};}
+\DoxyCodeLine{00018\ \ \ \ \ \textcolor{keywordtype}{void}\ \mbox{\hyperlink{class_title_state_a733ec3f3b758b1b4cc9baef6a79e1fdf}{render}}()\ \textcolor{keyword}{override};}
+\DoxyCodeLine{00019\ }
+\DoxyCodeLine{00020\ \textcolor{keyword}{private}:}
+\DoxyCodeLine{00021\ \ \ \ \ \textcolor{comment}{//Static\ instance}}
+<<<<<<< HEAD
+\DoxyCodeLine{00022\ \ \ \ \ \textcolor{keyword}{static}\ \mbox{\hyperlink{class_title_state_a50ef2b0f29790d27b3edc50e11f852d0}{TitleState}}\ \mbox{\hyperlink{class_title_state_afe21bb198809a033b59f220d8f7a211a}{sTitleState}};}
+=======
+\DoxyCodeLine{00022\ \ \ \ \ \textcolor{keyword}{static}\ \mbox{\hyperlink{class_title_state}{TitleState}}\ \mbox{\hyperlink{class_title_state_afe21bb198809a033b59f220d8f7a211a}{sTitleState}};}
+>>>>>>> origin/master
+\DoxyCodeLine{00023\ }
+\DoxyCodeLine{00024\ \ \ \ \ \textcolor{comment}{//Private\ constructor}}
+\DoxyCodeLine{00025\ \ \ \ \ \mbox{\hyperlink{class_title_state_a50ef2b0f29790d27b3edc50e11f852d0}{TitleState}}();}
+\DoxyCodeLine{00026\ }
+\DoxyCodeLine{00027\ \ \ \ \ \textcolor{comment}{//Intro\ background}}
+\DoxyCodeLine{00028\ \ \ \ \ \mbox{\hyperlink{class_l_texture}{LTexture}}\ \mbox{\hyperlink{class_title_state_a2d16d6fd5e077dce86ab15ccf0f6c6fb}{mBackgroundTexture}};}
+\DoxyCodeLine{00029\ }
+\DoxyCodeLine{00030\ \ \ \ \ \textcolor{comment}{//Intro\ message}}
+\DoxyCodeLine{00031\ \ \ \ \ \mbox{\hyperlink{class_l_texture}{LTexture}}\ \mbox{\hyperlink{class_title_state_ad5f51cd8136dbf3bc609f001739d9e07}{mMessageTexture}};}
+\DoxyCodeLine{00032\ \};}
+\DoxyCodeLine{00033\ \textcolor{preprocessor}{\#endif}}
+
+\end{DoxyCode}

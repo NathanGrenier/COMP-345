@@ -12,6 +12,10 @@ void LButton::setPosition(float x, float y) {
 	mPosition.y = y;
 }
 
+SDL_FPoint LButton::getPosition() {
+	return mPosition;
+}
+
 void LButton::handleEvent(SDL_Event* e) {
 	//If mouse event happened
 	if (e->type == SDL_EVENT_MOUSE_MOTION || e->type == SDL_EVENT_MOUSE_BUTTON_DOWN || e->type == SDL_EVENT_MOUSE_BUTTON_UP)
@@ -87,7 +91,7 @@ void LButton::render() {
 	gButtonSpriteTexture.render(mPosition.x, mPosition.y, &spriteClips[mCurrentSprite]);
 }
 
-bool LButton::isClicked() const {
+bool LButton::isClicked() {
 	// Get the current mouse position
 	float x, y;
 	SDL_GetMouseState(&x, &y);

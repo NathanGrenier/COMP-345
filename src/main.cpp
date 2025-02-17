@@ -10,6 +10,7 @@
 #include "States/ExitState.cpp"
 #include "ui/LTexture.cpp"
 #include <LTimer.h>
+#include <iostream>
 
 /* Constants */
 constexpr int kScreenFps{ 60 };
@@ -80,6 +81,13 @@ bool init() {
 				success = false;
 			}
 
+			// Set the correct blend mode
+			if (!SDL_SetRenderDrawBlendMode(gRenderer, SDL_BLENDMODE_BLEND))
+			{
+				SDL_Log("Could not set blend mode! SDL error: %s\n", SDL_GetError());
+				success = false;
+			}
+
 			//Initialize font loading
 			if (!TTF_Init())
 			{
@@ -138,7 +146,7 @@ void close() {
 int main(int argc, char* args[]) {
 	//Final exit code
 	int exitCode{ 0 };
-
+	
 	//Initialize
 	if (!init())
 	{
@@ -174,9 +182,6 @@ int main(int argc, char* args[]) {
 			//Reset FPS calculation flag
 			bool resetFps = true;
 
-			//In memory text stream
-			std::stringstream timeText;
-
 			//Set the current game state object and start state machine
 			gCurrentState = IntroState::get();
 			gCurrentState->enter();
@@ -208,6 +213,11 @@ int main(int argc, char* args[]) {
 					if (e.type == SDL_EVENT_QUIT)
 					{
 						setNextState(ExitState::get());
+						quit = true;
+					}
+					else if (e.type == SDL_EVENT_KEY_DOWN && e.key.key == SDLK_ESCAPE)
+					{
+						setNextState(TitleState::get());
 					}
 				}
 

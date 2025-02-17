@@ -2,85 +2,240 @@
 \hypertarget{main_8cpp}{}\label{main_8cpp}\index{src/main.cpp@{src/main.cpp}}
 {\ttfamily \#include $<$SDL3/\+SDL.\+h$>$}\newline
 {\ttfamily \#include $<$SDL3/\+SDL\+\_\+main.\+h$>$}\newline
-Include dependency graph for main.\+cpp\+:
-\nopagebreak
+{\ttfamily \#include $<$SDL3\+\_\+image/\+SDL\+\_\+image.\+h$>$}\newline
+{\ttfamily \#include $<$SDL3\+\_\+ttf/\+SDL\+\_\+ttf.\+h$>$}\newline
+{\ttfamily \#include $<$string$>$}\newline
+{\ttfamily \#include $<$sstream$>$}\newline
+{\ttfamily \#include "{}States/\+Title\+State.\+cpp"{}}\newline
+{\ttfamily \#include "{}States/\+Intro\+State.\+cpp"{}}\newline
+{\ttfamily \#include "{}States/\+Exit\+State.\+cpp"{}}\newline
+{\ttfamily \#include "{}ui/\+LTexture.\+cpp"{}}\newline
+{\ttfamily \#include $<$LTimer.\+h$>$}\newline
+<<<<<<< HEAD
+=======
+{\ttfamily \#include $<$iostream$>$}\newline
+>>>>>>> origin/master
+Include dependency graph for main.\+cpp\+:\nopagebreak
 \begin{figure}[H]
 \begin{center}
 \leavevmode
-\includegraphics[width=268pt]{main_8cpp__incl}
+\includegraphics[width=350pt]{main_8cpp__incl}
 \end{center}
 \end{figure}
-\doxysubsubsection*{Macros}
-\begin{DoxyCompactItemize}
-\item 
-\#define \mbox{\hyperlink{main_8cpp_a8aa5d9cdf38353a6c4919e0d1fab61cb}{SDL\+\_\+\+MAIN\+\_\+\+USE\+\_\+\+CALLBACKS}}~1  /\texorpdfstring{$\ast$}{*} use the callbacks instead of main() \texorpdfstring{$\ast$}{*}/
-\end{DoxyCompactItemize}
 \doxysubsubsection*{Functions}
 \begin{DoxyCompactItemize}
 \item 
-SDL\+\_\+\+App\+Result \mbox{\hyperlink{main_8cpp_a4985adfb048a4ae4e1c5296a4fc7affe}{SDL\+\_\+\+App\+Init}} (void \texorpdfstring{$\ast$}{*}\texorpdfstring{$\ast$}{*}appstate, int argc, char \texorpdfstring{$\ast$}{*}argv\mbox{[}$\,$\mbox{]})
+void \mbox{\hyperlink{main_8cpp_af0dc0ad824f97f7d085e7dd718a089ac}{set\+Next\+State}} (\mbox{\hyperlink{class_game_state}{Game\+State}} \texorpdfstring{$\ast$}{*}new\+State)
 \item 
-SDL\+\_\+\+App\+Result \mbox{\hyperlink{main_8cpp_aa1a484aa7972b8018e724425066066b4}{SDL\+\_\+\+App\+Event}} (void \texorpdfstring{$\ast$}{*}appstate, SDL\+\_\+\+Event \texorpdfstring{$\ast$}{*}event)
+void \mbox{\hyperlink{main_8cpp_ab813c6f8436492261f3869d21ded2f17}{change\+State}} ()
+<<<<<<< HEAD
 \item 
-SDL\+\_\+\+App\+Result \mbox{\hyperlink{main_8cpp_a7038050dca8c80a0133d600fb008b6db}{SDL\+\_\+\+App\+Iterate}} (void \texorpdfstring{$\ast$}{*}appstate)
+bool \mbox{\hyperlink{main_8cpp_aee8048628ff2b5c026c9e15acdcaacb8}{init}} ()
 \item 
-void \mbox{\hyperlink{main_8cpp_a31f80ce4f4926b0c6fe01a9644f3c837}{SDL\+\_\+\+App\+Quit}} (void \texorpdfstring{$\ast$}{*}appstate, SDL\+\_\+\+App\+Result result)
+bool \mbox{\hyperlink{main_8cpp_a24b0babc7c151f85567092a4c13fa743}{load\+Media}} ()
+\item 
+void \mbox{\hyperlink{main_8cpp_a5ae591df94fc66ccb85cbb6565368bca}{close}} ()
+\item 
+=======
+\item 
+bool \mbox{\hyperlink{main_8cpp_aee8048628ff2b5c026c9e15acdcaacb8}{init}} ()
+\item 
+bool \mbox{\hyperlink{main_8cpp_a24b0babc7c151f85567092a4c13fa743}{load\+Media}} ()
+\item 
+void \mbox{\hyperlink{main_8cpp_a5ae591df94fc66ccb85cbb6565368bca}{close}} ()
+\item 
+>>>>>>> origin/master
+int \mbox{\hyperlink{main_8cpp_a700a0caa5b70a06d1064e576f9f3cf65}{main}} (int argc, char \texorpdfstring{$\ast$}{*}args\mbox{[}$\,$\mbox{]})
 \end{DoxyCompactItemize}
 \doxysubsubsection*{Variables}
 \begin{DoxyCompactItemize}
 \item 
-static SDL\+\_\+\+Window \texorpdfstring{$\ast$}{*} \mbox{\hyperlink{main_8cpp_aaa8e409e04dcf575ef63fd5fb3db06f9}{window}} = NULL
+constexpr int \mbox{\hyperlink{main_8cpp_a9101e9bdb6209d81a3f7a5065b275971}{k\+Screen\+Fps}} \{ 60 \}
 \item 
-static SDL\+\_\+\+Renderer \texorpdfstring{$\ast$}{*} \mbox{\hyperlink{main_8cpp_a966da7a60c4ea3ba301e26ccc5efe452}{renderer}} = NULL
+SDL\+\_\+\+Window \texorpdfstring{$\ast$}{*} \mbox{\hyperlink{main_8cpp_a222f53a6a442d8f716dffd665e83528a}{g\+Window}} \{ nullptr \}
+\item 
+SDL\+\_\+\+Renderer \texorpdfstring{$\ast$}{*} \mbox{\hyperlink{main_8cpp_a4735638969a524c4ac90a88f23c59a1f}{g\+Renderer}} = nullptr
+<<<<<<< HEAD
+\item 
+TTF\+\_\+\+Font \texorpdfstring{$\ast$}{*} \mbox{\hyperlink{main_8cpp_a88e76957ec56f067af762125afcac25f}{g\+Font}} = nullptr
+\item 
+\mbox{\hyperlink{class_l_texture}{LTexture}} \mbox{\hyperlink{main_8cpp_a26e6dc2957cfa61fd5c7f25e9bab1508}{g\+Fps\+Texture}}
+\item 
+=======
+\item 
+TTF\+\_\+\+Font \texorpdfstring{$\ast$}{*} \mbox{\hyperlink{main_8cpp_a88e76957ec56f067af762125afcac25f}{g\+Font}} = nullptr
+\item 
+\mbox{\hyperlink{class_l_texture}{LTexture}} \mbox{\hyperlink{main_8cpp_a26e6dc2957cfa61fd5c7f25e9bab1508}{g\+Fps\+Texture}}
+\item 
+>>>>>>> origin/master
+\mbox{\hyperlink{class_game_state}{Game\+State}} \texorpdfstring{$\ast$}{*} \mbox{\hyperlink{main_8cpp_acf6fa843c13210fec6a78af02807cef9}{g\+Current\+State}} \{ nullptr \}
+\item 
+\mbox{\hyperlink{class_game_state}{Game\+State}} \texorpdfstring{$\ast$}{*} \mbox{\hyperlink{main_8cpp_a0465cc45f9b3bd3ceeacfc89327100b2}{g\+Next\+State}} \{ nullptr \}
 \end{DoxyCompactItemize}
 
 
-\doxysubsection{Macro Definition Documentation}
-\Hypertarget{main_8cpp_a8aa5d9cdf38353a6c4919e0d1fab61cb}\index{main.cpp@{main.cpp}!SDL\_MAIN\_USE\_CALLBACKS@{SDL\_MAIN\_USE\_CALLBACKS}}
-\index{SDL\_MAIN\_USE\_CALLBACKS@{SDL\_MAIN\_USE\_CALLBACKS}!main.cpp@{main.cpp}}
-\doxysubsubsection{\texorpdfstring{SDL\_MAIN\_USE\_CALLBACKS}{SDL\_MAIN\_USE\_CALLBACKS}}
-{\footnotesize\ttfamily \label{main_8cpp_a8aa5d9cdf38353a6c4919e0d1fab61cb} 
-\#define SDL\+\_\+\+MAIN\+\_\+\+USE\+\_\+\+CALLBACKS~1  /\texorpdfstring{$\ast$}{*} use the callbacks instead of main() \texorpdfstring{$\ast$}{*}/}
-
-
-
 \doxysubsection{Function Documentation}
-\Hypertarget{main_8cpp_aa1a484aa7972b8018e724425066066b4}\index{main.cpp@{main.cpp}!SDL\_AppEvent@{SDL\_AppEvent}}
-\index{SDL\_AppEvent@{SDL\_AppEvent}!main.cpp@{main.cpp}}
-\doxysubsubsection{\texorpdfstring{SDL\_AppEvent()}{SDL\_AppEvent()}}
-{\footnotesize\ttfamily \label{main_8cpp_aa1a484aa7972b8018e724425066066b4} 
-SDL\+\_\+\+App\+Result SDL\+\_\+\+App\+Event (\begin{DoxyParamCaption}\item[{void \texorpdfstring{$\ast$}{*}}]{appstate}{, }\item[{SDL\+\_\+\+Event \texorpdfstring{$\ast$}{*}}]{event}{}\end{DoxyParamCaption})}
+\Hypertarget{main_8cpp_ab813c6f8436492261f3869d21ded2f17}\index{main.cpp@{main.cpp}!changeState@{changeState}}
+\index{changeState@{changeState}!main.cpp@{main.cpp}}
+\doxysubsubsection{\texorpdfstring{changeState()}{changeState()}}
+{\footnotesize\ttfamily \label{main_8cpp_ab813c6f8436492261f3869d21ded2f17} 
+void change\+State (\begin{DoxyParamCaption}{}{}\end{DoxyParamCaption})}
 
-\Hypertarget{main_8cpp_a4985adfb048a4ae4e1c5296a4fc7affe}\index{main.cpp@{main.cpp}!SDL\_AppInit@{SDL\_AppInit}}
-\index{SDL\_AppInit@{SDL\_AppInit}!main.cpp@{main.cpp}}
-\doxysubsubsection{\texorpdfstring{SDL\_AppInit()}{SDL\_AppInit()}}
-{\footnotesize\ttfamily \label{main_8cpp_a4985adfb048a4ae4e1c5296a4fc7affe} 
-SDL\+\_\+\+App\+Result SDL\+\_\+\+App\+Init (\begin{DoxyParamCaption}\item[{void \texorpdfstring{$\ast$}{*}\texorpdfstring{$\ast$}{*}}]{appstate}{, }\item[{int}]{argc}{, }\item[{char \texorpdfstring{$\ast$}{*}}]{argv}{\mbox{[}$\,$\mbox{]}}\end{DoxyParamCaption})}
+<<<<<<< HEAD
+=======
+Here is the call graph for this function\+:\nopagebreak
+\begin{figure}[H]
+\begin{center}
+\leavevmode
+\includegraphics[width=280pt]{main_8cpp_ab813c6f8436492261f3869d21ded2f17_cgraph}
+\end{center}
+\end{figure}
+>>>>>>> origin/master
+Here is the caller graph for this function\+:\nopagebreak
+\begin{figure}[H]
+\begin{center}
+\leavevmode
+\includegraphics[width=224pt]{main_8cpp_ab813c6f8436492261f3869d21ded2f17_icgraph}
+\end{center}
+\end{figure}
+\Hypertarget{main_8cpp_a5ae591df94fc66ccb85cbb6565368bca}\index{main.cpp@{main.cpp}!close@{close}}
+\index{close@{close}!main.cpp@{main.cpp}}
+\doxysubsubsection{\texorpdfstring{close()}{close()}}
+{\footnotesize\ttfamily \label{main_8cpp_a5ae591df94fc66ccb85cbb6565368bca} 
+void close (\begin{DoxyParamCaption}{}{}\end{DoxyParamCaption})}
 
-\Hypertarget{main_8cpp_a7038050dca8c80a0133d600fb008b6db}\index{main.cpp@{main.cpp}!SDL\_AppIterate@{SDL\_AppIterate}}
-\index{SDL\_AppIterate@{SDL\_AppIterate}!main.cpp@{main.cpp}}
-\doxysubsubsection{\texorpdfstring{SDL\_AppIterate()}{SDL\_AppIterate()}}
-{\footnotesize\ttfamily \label{main_8cpp_a7038050dca8c80a0133d600fb008b6db} 
-SDL\+\_\+\+App\+Result SDL\+\_\+\+App\+Iterate (\begin{DoxyParamCaption}\item[{void \texorpdfstring{$\ast$}{*}}]{appstate}{}\end{DoxyParamCaption})}
+<<<<<<< HEAD
+=======
+Here is the call graph for this function\+:\nopagebreak
+\begin{figure}[H]
+\begin{center}
+\leavevmode
+\includegraphics[width=246pt]{main_8cpp_a5ae591df94fc66ccb85cbb6565368bca_cgraph}
+\end{center}
+\end{figure}
+>>>>>>> origin/master
+Here is the caller graph for this function\+:\nopagebreak
+\begin{figure}[H]
+\begin{center}
+\leavevmode
+\includegraphics[width=192pt]{main_8cpp_a5ae591df94fc66ccb85cbb6565368bca_icgraph}
+\end{center}
+\end{figure}
+\Hypertarget{main_8cpp_aee8048628ff2b5c026c9e15acdcaacb8}\index{main.cpp@{main.cpp}!init@{init}}
+\index{init@{init}!main.cpp@{main.cpp}}
+\doxysubsubsection{\texorpdfstring{init()}{init()}}
+{\footnotesize\ttfamily \label{main_8cpp_aee8048628ff2b5c026c9e15acdcaacb8} 
+bool init (\begin{DoxyParamCaption}{}{}\end{DoxyParamCaption})}
 
-\Hypertarget{main_8cpp_a31f80ce4f4926b0c6fe01a9644f3c837}\index{main.cpp@{main.cpp}!SDL\_AppQuit@{SDL\_AppQuit}}
-\index{SDL\_AppQuit@{SDL\_AppQuit}!main.cpp@{main.cpp}}
-\doxysubsubsection{\texorpdfstring{SDL\_AppQuit()}{SDL\_AppQuit()}}
-{\footnotesize\ttfamily \label{main_8cpp_a31f80ce4f4926b0c6fe01a9644f3c837} 
-void SDL\+\_\+\+App\+Quit (\begin{DoxyParamCaption}\item[{void \texorpdfstring{$\ast$}{*}}]{appstate}{, }\item[{SDL\+\_\+\+App\+Result}]{result}{}\end{DoxyParamCaption})}
+Here is the caller graph for this function\+:\nopagebreak
+\begin{figure}[H]
+\begin{center}
+\leavevmode
+\includegraphics[width=182pt]{main_8cpp_aee8048628ff2b5c026c9e15acdcaacb8_icgraph}
+\end{center}
+\end{figure}
+\Hypertarget{main_8cpp_a24b0babc7c151f85567092a4c13fa743}\index{main.cpp@{main.cpp}!loadMedia@{loadMedia}}
+\index{loadMedia@{loadMedia}!main.cpp@{main.cpp}}
+\doxysubsubsection{\texorpdfstring{loadMedia()}{loadMedia()}}
+{\footnotesize\ttfamily \label{main_8cpp_a24b0babc7c151f85567092a4c13fa743} 
+bool load\+Media (\begin{DoxyParamCaption}{}{}\end{DoxyParamCaption})}
 
+<<<<<<< HEAD
+=======
+Here is the call graph for this function\+:\nopagebreak
+\begin{figure}[H]
+\begin{center}
+\leavevmode
+\includegraphics[width=350pt]{main_8cpp_a24b0babc7c151f85567092a4c13fa743_cgraph}
+\end{center}
+\end{figure}
+>>>>>>> origin/master
+Here is the caller graph for this function\+:\nopagebreak
+\begin{figure}[H]
+\begin{center}
+\leavevmode
+\includegraphics[width=213pt]{main_8cpp_a24b0babc7c151f85567092a4c13fa743_icgraph}
+\end{center}
+\end{figure}
+\Hypertarget{main_8cpp_a700a0caa5b70a06d1064e576f9f3cf65}\index{main.cpp@{main.cpp}!main@{main}}
+\index{main@{main}!main.cpp@{main.cpp}}
+\doxysubsubsection{\texorpdfstring{main()}{main()}}
+{\footnotesize\ttfamily \label{main_8cpp_a700a0caa5b70a06d1064e576f9f3cf65} 
+int main (\begin{DoxyParamCaption}\item[{int}]{argc}{, }\item[{char \texorpdfstring{$\ast$}{*}}]{args}{\mbox{[}$\,$\mbox{]}}\end{DoxyParamCaption})}
+
+Here is the call graph for this function\+:\nopagebreak
+\begin{figure}[H]
+\begin{center}
+\leavevmode
+\includegraphics[width=350pt]{main_8cpp_a700a0caa5b70a06d1064e576f9f3cf65_cgraph}
+\end{center}
+\end{figure}
+\Hypertarget{main_8cpp_af0dc0ad824f97f7d085e7dd718a089ac}\index{main.cpp@{main.cpp}!setNextState@{setNextState}}
+\index{setNextState@{setNextState}!main.cpp@{main.cpp}}
+\doxysubsubsection{\texorpdfstring{setNextState()}{setNextState()}}
+{\footnotesize\ttfamily \label{main_8cpp_af0dc0ad824f97f7d085e7dd718a089ac} 
+void set\+Next\+State (\begin{DoxyParamCaption}\item[{\mbox{\hyperlink{class_game_state}{Game\+State}} \texorpdfstring{$\ast$}{*}}]{new\+State}{}\end{DoxyParamCaption})}
+
+Here is the call graph for this function\+:\nopagebreak
+\begin{figure}[H]
+\begin{center}
+\leavevmode
+<<<<<<< HEAD
+\includegraphics[width=350pt]{main_8cpp_af0dc0ad824f97f7d085e7dd718a089ac_cgraph}
+=======
+\includegraphics[width=266pt]{main_8cpp_af0dc0ad824f97f7d085e7dd718a089ac_cgraph}
+>>>>>>> origin/master
+\end{center}
+\end{figure}
+Here is the caller graph for this function\+:\nopagebreak
+\begin{figure}[H]
+\begin{center}
+\leavevmode
+\includegraphics[width=309pt]{main_8cpp_af0dc0ad824f97f7d085e7dd718a089ac_icgraph}
+\end{center}
+\end{figure}
 
 
 \doxysubsection{Variable Documentation}
-\Hypertarget{main_8cpp_a966da7a60c4ea3ba301e26ccc5efe452}\index{main.cpp@{main.cpp}!renderer@{renderer}}
-\index{renderer@{renderer}!main.cpp@{main.cpp}}
-\doxysubsubsection{\texorpdfstring{renderer}{renderer}}
-{\footnotesize\ttfamily \label{main_8cpp_a966da7a60c4ea3ba301e26ccc5efe452} 
-SDL\+\_\+\+Renderer\texorpdfstring{$\ast$}{*} renderer = NULL\hspace{0.3cm}{\ttfamily [static]}}
+\Hypertarget{main_8cpp_acf6fa843c13210fec6a78af02807cef9}\index{main.cpp@{main.cpp}!gCurrentState@{gCurrentState}}
+\index{gCurrentState@{gCurrentState}!main.cpp@{main.cpp}}
+\doxysubsubsection{\texorpdfstring{gCurrentState}{gCurrentState}}
+{\footnotesize\ttfamily \label{main_8cpp_acf6fa843c13210fec6a78af02807cef9} 
+\mbox{\hyperlink{class_game_state}{Game\+State}}\texorpdfstring{$\ast$}{*} g\+Current\+State \{ nullptr \}}
 
-\Hypertarget{main_8cpp_aaa8e409e04dcf575ef63fd5fb3db06f9}\index{main.cpp@{main.cpp}!window@{window}}
-\index{window@{window}!main.cpp@{main.cpp}}
-\doxysubsubsection{\texorpdfstring{window}{window}}
-{\footnotesize\ttfamily \label{main_8cpp_aaa8e409e04dcf575ef63fd5fb3db06f9} 
-SDL\+\_\+\+Window\texorpdfstring{$\ast$}{*} window = NULL\hspace{0.3cm}{\ttfamily [static]}}
+\Hypertarget{main_8cpp_a88e76957ec56f067af762125afcac25f}\index{main.cpp@{main.cpp}!gFont@{gFont}}
+\index{gFont@{gFont}!main.cpp@{main.cpp}}
+\doxysubsubsection{\texorpdfstring{gFont}{gFont}}
+{\footnotesize\ttfamily \label{main_8cpp_a88e76957ec56f067af762125afcac25f} 
+TTF\+\_\+\+Font\texorpdfstring{$\ast$}{*} g\+Font = nullptr}
+
+\Hypertarget{main_8cpp_a26e6dc2957cfa61fd5c7f25e9bab1508}\index{main.cpp@{main.cpp}!gFpsTexture@{gFpsTexture}}
+\index{gFpsTexture@{gFpsTexture}!main.cpp@{main.cpp}}
+\doxysubsubsection{\texorpdfstring{gFpsTexture}{gFpsTexture}}
+{\footnotesize\ttfamily \label{main_8cpp_a26e6dc2957cfa61fd5c7f25e9bab1508} 
+\mbox{\hyperlink{class_l_texture}{LTexture}} g\+Fps\+Texture}
+
+\Hypertarget{main_8cpp_a0465cc45f9b3bd3ceeacfc89327100b2}\index{main.cpp@{main.cpp}!gNextState@{gNextState}}
+\index{gNextState@{gNextState}!main.cpp@{main.cpp}}
+\doxysubsubsection{\texorpdfstring{gNextState}{gNextState}}
+{\footnotesize\ttfamily \label{main_8cpp_a0465cc45f9b3bd3ceeacfc89327100b2} 
+\mbox{\hyperlink{class_game_state}{Game\+State}}\texorpdfstring{$\ast$}{*} g\+Next\+State \{ nullptr \}}
+
+\Hypertarget{main_8cpp_a4735638969a524c4ac90a88f23c59a1f}\index{main.cpp@{main.cpp}!gRenderer@{gRenderer}}
+\index{gRenderer@{gRenderer}!main.cpp@{main.cpp}}
+\doxysubsubsection{\texorpdfstring{gRenderer}{gRenderer}}
+{\footnotesize\ttfamily \label{main_8cpp_a4735638969a524c4ac90a88f23c59a1f} 
+SDL\+\_\+\+Renderer\texorpdfstring{$\ast$}{*} g\+Renderer = nullptr}
+
+\Hypertarget{main_8cpp_a222f53a6a442d8f716dffd665e83528a}\index{main.cpp@{main.cpp}!gWindow@{gWindow}}
+\index{gWindow@{gWindow}!main.cpp@{main.cpp}}
+\doxysubsubsection{\texorpdfstring{gWindow}{gWindow}}
+{\footnotesize\ttfamily \label{main_8cpp_a222f53a6a442d8f716dffd665e83528a} 
+SDL\+\_\+\+Window\texorpdfstring{$\ast$}{*} g\+Window \{ nullptr \}}
+
+\Hypertarget{main_8cpp_a9101e9bdb6209d81a3f7a5065b275971}\index{main.cpp@{main.cpp}!kScreenFps@{kScreenFps}}
+\index{kScreenFps@{kScreenFps}!main.cpp@{main.cpp}}
+\doxysubsubsection{\texorpdfstring{kScreenFps}{kScreenFps}}
+{\footnotesize\ttfamily \label{main_8cpp_a9101e9bdb6209d81a3f7a5065b275971} 
+int k\+Screen\+Fps \{ 60 \}\hspace{0.3cm}{\ttfamily [constexpr]}}
 

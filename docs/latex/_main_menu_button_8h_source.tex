@@ -1,0 +1,36 @@
+\doxysection{Main\+Menu\+Button.\+h}
+\hypertarget{_main_menu_button_8h_source}{}\label{_main_menu_button_8h_source}\index{src/include/ui/MainMenuButton.h@{src/include/ui/MainMenuButton.h}}
+\mbox{\hyperlink{_main_menu_button_8h}{Go to the documentation of this file.}}
+\begin{DoxyCode}{0}
+\DoxyCodeLine{00001\ \textcolor{preprocessor}{\#pragma\ once}}
+\DoxyCodeLine{00002\ \textcolor{preprocessor}{\#include\ "{}\mbox{\hyperlink{_l_button_8h}{LButton.h}}"{}}}
+\DoxyCodeLine{00003\ \textcolor{preprocessor}{\#include\ <SDL3/SDL\_timer.h>}\ \textcolor{comment}{//\ For\ time-\/based\ animations}}
+\DoxyCodeLine{00004\ }
+\DoxyCodeLine{00005\ \textcolor{keyword}{class\ }\mbox{\hyperlink{class_main_menu_button}{MainMenuButton}}\ :\ \textcolor{keyword}{public}\ \mbox{\hyperlink{class_l_button}{LButton}}\ \{}
+\DoxyCodeLine{00006\ \textcolor{keyword}{public}:}
+\DoxyCodeLine{00007\ \ \ \ \ \textcolor{comment}{//\ Constructor}}
+\DoxyCodeLine{00008\ \ \ \ \ \mbox{\hyperlink{class_main_menu_button_a7a7d96361384c9760b4c49937d2b0d76}{MainMenuButton}}();}
+\DoxyCodeLine{00009\ }
+\DoxyCodeLine{00010\ \ \ \ \ \textcolor{keyword}{static}\ \textcolor{keyword}{const}\ \textcolor{keywordtype}{int}\ \mbox{\hyperlink{class_main_menu_button_aee0861f1fe0f35bde966be44260a263d}{kButtonWidth}}\{\ 150\ \};}
+\DoxyCodeLine{00011\ \ \ \ \ \textcolor{keyword}{static}\ \textcolor{keyword}{const}\ \textcolor{keywordtype}{int}\ \mbox{\hyperlink{class_main_menu_button_ab2a9ccf96be6088bdd9b77e9701741d9}{kButtonHeight}}\{\ 50\ \};}
+\DoxyCodeLine{00012\ }
+\DoxyCodeLine{00013\ \ \ \ \ \textcolor{comment}{//\ Handles\ mouse\ events\ and\ triggers\ scaling\ animation}}
+\DoxyCodeLine{00014\ \ \ \ \ \textcolor{keywordtype}{void}\ \mbox{\hyperlink{class_main_menu_button_aed528d205a98d29572cdbd0a85197eb3}{handleEvent}}(SDL\_Event*\ e);}
+\DoxyCodeLine{00015\ }
+\DoxyCodeLine{00016\ \ \ \ \ \textcolor{comment}{//\ Render\ with\ scaling\ effect}}
+\DoxyCodeLine{00017\ \ \ \ \ \textcolor{keywordtype}{void}\ \mbox{\hyperlink{class_main_menu_button_a5bf888e3b30343585e287a19d951c118}{render}}()\ ;}
+\DoxyCodeLine{00018\ }
+\DoxyCodeLine{00019\ \ \ \ \ \textcolor{keywordtype}{bool}\ \mbox{\hyperlink{class_main_menu_button_a92f7f1faea20d7af0aab3e68a18769d9}{isClicked}}();}
+\DoxyCodeLine{00020\ }
+\DoxyCodeLine{00021\ \textcolor{keyword}{private}:}
+\DoxyCodeLine{00022\ \ \ \ \ \textcolor{comment}{//\ Scale\ factor\ for\ the\ animation}}
+\DoxyCodeLine{00023\ \ \ \ \ \textcolor{keywordtype}{float}\ \mbox{\hyperlink{class_main_menu_button_ac689940ea19f3c0d3c3955e9fbce4cd6}{mScale}};}
+\DoxyCodeLine{00024\ }
+\DoxyCodeLine{00025\ \ \ \ \ \textcolor{comment}{//\ Target\ scale\ (1.0f\ normal,\ 1.2f\ when\ hovered)}}
+\DoxyCodeLine{00026\ \ \ \ \ \textcolor{keywordtype}{float}\ \mbox{\hyperlink{class_main_menu_button_a7c683e480966f5fe5769812b8d95f9f6}{mTargetScale}};}
+\DoxyCodeLine{00027\ }
+\DoxyCodeLine{00028\ \ \ \ \ \textcolor{comment}{//\ Animation\ speed}}
+\DoxyCodeLine{00029\ \ \ \ \ \textcolor{keyword}{static}\ \textcolor{keyword}{constexpr}\ \textcolor{keywordtype}{float}\ \mbox{\hyperlink{class_main_menu_button_ae54901b81f018603851cac5299f9866a}{kAnimationSpeed}}\ =\ 5.0f;}
+\DoxyCodeLine{00030\ \};}
+
+\end{DoxyCode}
