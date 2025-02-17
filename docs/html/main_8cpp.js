@@ -1,10 +1,16 @@
 var main_8cpp =
 [
-    [ "SDL_MAIN_USE_CALLBACKS", "main_8cpp.html#a8aa5d9cdf38353a6c4919e0d1fab61cb", null ],
-    [ "SDL_AppEvent", "main_8cpp.html#aa1a484aa7972b8018e724425066066b4", null ],
-    [ "SDL_AppInit", "main_8cpp.html#a4985adfb048a4ae4e1c5296a4fc7affe", null ],
-    [ "SDL_AppIterate", "main_8cpp.html#a7038050dca8c80a0133d600fb008b6db", null ],
-    [ "SDL_AppQuit", "main_8cpp.html#a31f80ce4f4926b0c6fe01a9644f3c837", null ],
-    [ "renderer", "main_8cpp.html#a966da7a60c4ea3ba301e26ccc5efe452", null ],
-    [ "window", "main_8cpp.html#aaa8e409e04dcf575ef63fd5fb3db06f9", null ]
+    [ "changeState", "main_8cpp.html#ab813c6f8436492261f3869d21ded2f17", null ],
+    [ "close", "main_8cpp.html#a5ae591df94fc66ccb85cbb6565368bca", null ],
+    [ "init", "main_8cpp.html#aee8048628ff2b5c026c9e15acdcaacb8", null ],
+    [ "loadMedia", "main_8cpp.html#a24b0babc7c151f85567092a4c13fa743", null ],
+    [ "main", "main_8cpp.html#a700a0caa5b70a06d1064e576f9f3cf65", null ],
+    [ "setNextState", "main_8cpp.html#af0dc0ad824f97f7d085e7dd718a089ac", null ],
+    [ "gCurrentState", "main_8cpp.html#acf6fa843c13210fec6a78af02807cef9", null ],
+    [ "gFont", "main_8cpp.html#a88e76957ec56f067af762125afcac25f", null ],
+    [ "gFpsTexture", "main_8cpp.html#a26e6dc2957cfa61fd5c7f25e9bab1508", null ],
+    [ "gNextState", "main_8cpp.html#a0465cc45f9b3bd3ceeacfc89327100b2", null ],
+    [ "gRenderer", "main_8cpp.html#a4735638969a524c4ac90a88f23c59a1f", null ],
+    [ "gWindow", "main_8cpp.html#a222f53a6a442d8f716dffd665e83528a", null ],
+    [ "kScreenFps", "main_8cpp.html#a9101e9bdb6209d81a3f7a5065b275971", null ]
 ];

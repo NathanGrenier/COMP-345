@@ -1,0 +1,5 @@
+<map id="TextureLoader::loadTexture" name="TextureLoader::loadTexture">
+<area shape="rect" id="Node000001" title="Load a texture from a file and return it." alt="" coords="133,5,311,32"/>
+<area shape="rect" id="Node000002" href="$class_map.html#a9b4f799a8a3338acdeeb66c17a9337ff" title="Constructs a new Map object." alt="" coords="5,5,85,32"/>
+<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="117,21,85,21,85,16,117,16"/>
+</map>

@@ -1,0 +1,5 @@
+<map id="Part1State::get" name="Part1State::get">
+<area shape="rect" id="Node000001" title="Get the singleton instance of Part1State." alt="" coords="211,5,320,32"/>
+<area shape="rect" id="Node000002" href="$class_title_state.html#ab944bbea89672acba5a870b54ed522f3" title=" " alt="" coords="5,5,163,32"/>
+<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="195,21,163,21,163,16,195,16"/>
+</map>

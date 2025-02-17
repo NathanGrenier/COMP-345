@@ -1,0 +1,7 @@
+<map id="Map::isValidPath" name="Map::isValidPath">
+<area shape="rect" id="Node000001" title="Checks if a valid path exists from spawner to target." alt="" coords="5,5,125,32"/>
+<area shape="rect" id="Node000002" href="$class_map.html#a4bd58745f6075f5e9a3409a69792a97d" title="Checks if a cell is a spawner." alt="" coords="173,5,288,32"/>
+<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="125,16,157,16,157,21,125,21"/>
+<area shape="rect" id="Node000003" href="$class_map.html#adb274fa58456ff47c52e90c019cf4e64" title="Checks if a coordinate is within map boundaries." alt="" coords="336,5,453,32"/>
+<area shape="poly" id="edge2_Node000002_Node000003" title=" " alt="" coords="289,16,321,16,321,21,289,21"/>
+</map>

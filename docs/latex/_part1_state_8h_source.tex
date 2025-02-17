@@ -1,0 +1,45 @@
+\doxysection{Part1\+State.\+h}
+\hypertarget{_part1_state_8h_source}{}\label{_part1_state_8h_source}\index{src/include/states/parts/Part1State.h@{src/include/states/parts/Part1State.h}}
+\mbox{\hyperlink{_part1_state_8h}{Go to the documentation of this file.}}
+\begin{DoxyCode}{0}
+\DoxyCodeLine{00001\ }
+\DoxyCodeLine{00007\ \textcolor{preprocessor}{\#pragma\ once}}
+\DoxyCodeLine{00008\ }
+\DoxyCodeLine{00009\ \textcolor{preprocessor}{\#include\ <\mbox{\hyperlink{_game_state_8h}{states/GameState.h}}>}}
+\DoxyCodeLine{00010\ \textcolor{preprocessor}{\#include\ <\mbox{\hyperlink{_l_texture_8h}{ui/LTexture.h}}>}}
+\DoxyCodeLine{00011\ \textcolor{preprocessor}{\#include\ <\mbox{\hyperlink{_map_8h}{map/Map.h}}>}}
+\DoxyCodeLine{00012\ }
+\DoxyCodeLine{00013\ \textcolor{keyword}{class\ }\mbox{\hyperlink{class_part1_state_a6b19ea4a6a41f2e2425325aad0ea02eb}{Part1State}}\ :\ \textcolor{keyword}{public}\ \mbox{\hyperlink{class_game_state}{GameState}}\ \{}
+\DoxyCodeLine{00014\ \textcolor{keyword}{public}:}
+\DoxyCodeLine{00015\ \ \ \ \ \textcolor{comment}{//Static\ accessor}}
+\DoxyCodeLine{00016\ \ \ \ \ \textcolor{keyword}{static}\ \mbox{\hyperlink{class_part1_state_a6b19ea4a6a41f2e2425325aad0ea02eb}{Part1State}}*\ \mbox{\hyperlink{class_part1_state_a8b98e2eaeb3624b0d41666c07086b382}{get}}();}
+\DoxyCodeLine{00017\ }
+\DoxyCodeLine{00018\ \ \ \ \ \textcolor{comment}{//Transitions}}
+\DoxyCodeLine{00019\ \ \ \ \ \textcolor{keywordtype}{bool}\ \mbox{\hyperlink{class_part1_state_ad70f3aa7481eede165c5fdcbd9d318f5}{enter}}()\ \textcolor{keyword}{override};}
+\DoxyCodeLine{00020\ \ \ \ \ \textcolor{keywordtype}{bool}\ \mbox{\hyperlink{class_part1_state_ac57dab37ed0ffab5884763d4410867a8}{exit}}()\ \textcolor{keyword}{override};}
+\DoxyCodeLine{00021\ }
+\DoxyCodeLine{00022\ \ \ \ \ \textcolor{comment}{//Main\ loop\ functions}}
+\DoxyCodeLine{00023\ \ \ \ \ \textcolor{keywordtype}{void}\ \mbox{\hyperlink{class_part1_state_ac97db0f566dbb0b646c4ab8d6e66b699}{handleEvent}}(SDL\_Event\&\ e)\ \textcolor{keyword}{override};}
+\DoxyCodeLine{00024\ \ \ \ \ \textcolor{keywordtype}{void}\ \mbox{\hyperlink{class_part1_state_a799cbc679394ef98a8f7b96d428911d6}{update}}()\ \textcolor{keyword}{override};}
+\DoxyCodeLine{00025\ \ \ \ \ \textcolor{keywordtype}{void}\ \mbox{\hyperlink{class_part1_state_a5239fb252177bb5ad700b869a6687c3a}{render}}()\ \textcolor{keyword}{override};}
+\DoxyCodeLine{00026\ }
+\DoxyCodeLine{00027\ \textcolor{keyword}{private}:}
+\DoxyCodeLine{00028\ \ \ \ \ \textcolor{comment}{//Static\ instance}}
+\DoxyCodeLine{00029\ \ \ \ \ \textcolor{keyword}{static}\ \mbox{\hyperlink{class_part1_state_a6b19ea4a6a41f2e2425325aad0ea02eb}{Part1State}}\ \mbox{\hyperlink{class_part1_state_a5a38e4b6ba6368ab997b1147b992c942}{sPart1State}};}
+\DoxyCodeLine{00030\ }
+\DoxyCodeLine{00031\ \ \ \ \ \textcolor{comment}{//Private\ constructor}}
+\DoxyCodeLine{00032\ \ \ \ \ \mbox{\hyperlink{class_part1_state_a6b19ea4a6a41f2e2425325aad0ea02eb}{Part1State}}();}
+\DoxyCodeLine{00033\ }
+\DoxyCodeLine{00034\ \ \ \ \ \textcolor{comment}{//Intro\ background}}
+\DoxyCodeLine{00035\ \ \ \ \ \mbox{\hyperlink{class_l_texture}{LTexture}}\ \mbox{\hyperlink{class_part1_state_a3cd15f00ac079915392e25764af6c51b}{mBackgroundTexture}};}
+\DoxyCodeLine{00036\ }
+\DoxyCodeLine{00037\ \ \ \ \ \textcolor{comment}{//Intro\ message}}
+\DoxyCodeLine{00038\ \ \ \ \ \mbox{\hyperlink{class_l_texture}{LTexture}}\ \mbox{\hyperlink{class_part1_state_a6935222c3228b243103c4bafed5d88a3}{mMessageTexture}};}
+\DoxyCodeLine{00039\ }
+\DoxyCodeLine{00040\ \ \ \ \ \textcolor{keywordtype}{int}\ \mbox{\hyperlink{class_part1_state_aaa3ba14adbaccb5f13ce458af3667773}{mouseDownStatus}}\ =\ 0;}
+\DoxyCodeLine{00041\ \ \ \ \ \textcolor{keywordtype}{int}\ \mbox{\hyperlink{class_part1_state_a538c6ef71649341105c00fa3faad9f7d}{keyDownStatus}}\ =\ 0;}
+\DoxyCodeLine{00042\ }
+\DoxyCodeLine{00046\ \ \ \ \ \mbox{\hyperlink{class_map}{Map}}*\ \mbox{\hyperlink{class_part1_state_afdfb057a1bcf2b3eb7975e7c0f818afd}{map}}\ =\ \textcolor{keyword}{nullptr};}
+\DoxyCodeLine{00047\ \};}
+
+\end{DoxyCode}

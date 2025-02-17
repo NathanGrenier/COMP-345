@@ -1,0 +1,11 @@
+<map id="Vector2D::angleBetween" name="Vector2D::angleBetween">
+<area shape="rect" id="Node000001" title=" " alt="" coords="5,56,171,83"/>
+<area shape="rect" id="Node000002" href="$class_vector2_d.html#ab07892ef156761ccf5cf56a3df03d628" title=" " alt="" coords="219,5,334,32"/>
+<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="140,53,209,34,210,39,141,58"/>
+<area shape="rect" id="Node000003" href="$class_vector2_d.html#aed766d7e4da09b328e477883dcfdf4fc" title=" " alt="" coords="382,56,519,83"/>
+<area shape="poly" id="edge5_Node000001_Node000003" title=" " alt="" coords="171,67,367,67,367,72,171,72"/>
+<area shape="rect" id="Node000004" href="$class_vector2_d.html#a11ab8d57d96b44b35355c96a040c3049" title=" " alt="" coords="226,107,327,133"/>
+<area shape="poly" id="edge3_Node000001_Node000004" title=" " alt="" coords="141,81,211,100,210,105,140,86"/>
+<area shape="poly" id="edge2_Node000002_Node000003" title=" " alt="" coords="326,30,388,49,387,54,324,35"/>
+<area shape="poly" id="edge4_Node000004_Node000003" title=" " alt="" coords="324,103,387,85,388,90,326,109"/>
+</map>

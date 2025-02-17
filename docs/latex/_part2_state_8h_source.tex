@@ -1,0 +1,40 @@
+\doxysection{Part2\+State.\+h}
+\hypertarget{_part2_state_8h_source}{}\label{_part2_state_8h_source}\index{src/include/states/parts/Part2State.h@{src/include/states/parts/Part2State.h}}
+\mbox{\hyperlink{_part2_state_8h}{Go to the documentation of this file.}}
+\begin{DoxyCode}{0}
+\DoxyCodeLine{00001\ \textcolor{preprocessor}{\#ifndef\ PART2STATE\_H}}
+\DoxyCodeLine{00002\ \textcolor{preprocessor}{\#define\ PART2STATE\_H}}
+\DoxyCodeLine{00003\ }
+\DoxyCodeLine{00004\ \textcolor{preprocessor}{\#include\ <\mbox{\hyperlink{_game_state_8h}{states/GameState.h}}>}}
+\DoxyCodeLine{00005\ \textcolor{preprocessor}{\#include\ <\mbox{\hyperlink{_l_texture_8h}{ui/LTexture.h}}>}}
+\DoxyCodeLine{00006\ }
+\DoxyCodeLine{00007\ \textcolor{keyword}{class\ }\mbox{\hyperlink{class_part2_state_a22b62fbdc4212c62de4fd9e304b2fd05}{Part2State}}\ :\ \textcolor{keyword}{public}\ \mbox{\hyperlink{class_game_state}{GameState}}\ \{}
+\DoxyCodeLine{00008\ \textcolor{keyword}{public}:}
+\DoxyCodeLine{00009\ \ \ \ \ \textcolor{comment}{//Static\ accessor}}
+\DoxyCodeLine{00010\ \ \ \ \ \textcolor{keyword}{static}\ \mbox{\hyperlink{class_part2_state_a22b62fbdc4212c62de4fd9e304b2fd05}{Part2State}}*\ \mbox{\hyperlink{class_part2_state_afd03f10f3282fbe8dd3718b19331d824}{get}}();}
+\DoxyCodeLine{00011\ }
+\DoxyCodeLine{00012\ \ \ \ \ \textcolor{comment}{//Transitions}}
+\DoxyCodeLine{00013\ \ \ \ \ \textcolor{keywordtype}{bool}\ \mbox{\hyperlink{class_part2_state_a93aaee40b666ec7a577730de67753ada}{enter}}()\ \textcolor{keyword}{override};}
+\DoxyCodeLine{00014\ \ \ \ \ \textcolor{keywordtype}{bool}\ \mbox{\hyperlink{class_part2_state_a12abe44819005e06ff2f1aaa5032e091}{exit}}()\ \textcolor{keyword}{override};}
+\DoxyCodeLine{00015\ }
+\DoxyCodeLine{00016\ \ \ \ \ \textcolor{comment}{//Main\ loop\ functions}}
+\DoxyCodeLine{00017\ \ \ \ \ \textcolor{keywordtype}{void}\ \mbox{\hyperlink{class_part2_state_a24768d697f99f5d3802ef72aa0e78081}{handleEvent}}(SDL\_Event\&\ e)\ \textcolor{keyword}{override};}
+\DoxyCodeLine{00018\ \ \ \ \ \textcolor{keywordtype}{void}\ \mbox{\hyperlink{class_part2_state_afe8588565cd79f5fe8febb4a140a7527}{update}}()\ \textcolor{keyword}{override};}
+\DoxyCodeLine{00019\ \ \ \ \ \textcolor{keywordtype}{void}\ \mbox{\hyperlink{class_part2_state_a306f83bca4a67c7b13d5ce0eec21f167}{render}}()\ \textcolor{keyword}{override};}
+\DoxyCodeLine{00020\ }
+\DoxyCodeLine{00021\ \textcolor{keyword}{private}:}
+\DoxyCodeLine{00022\ \ \ \ \ \textcolor{comment}{//Static\ instance}}
+\DoxyCodeLine{00023\ \ \ \ \ \textcolor{keyword}{static}\ \mbox{\hyperlink{class_part2_state_a22b62fbdc4212c62de4fd9e304b2fd05}{Part2State}}\ \mbox{\hyperlink{class_part2_state_a32f98d7ee0328bca6ccd58e7ae59502f}{sPart2State}};}
+\DoxyCodeLine{00024\ }
+\DoxyCodeLine{00025\ \ \ \ \ \textcolor{comment}{//Private\ constructor}}
+\DoxyCodeLine{00026\ \ \ \ \ \mbox{\hyperlink{class_part2_state_a22b62fbdc4212c62de4fd9e304b2fd05}{Part2State}}();}
+\DoxyCodeLine{00027\ }
+\DoxyCodeLine{00028\ \ \ \ \ \textcolor{comment}{//Intro\ background}}
+\DoxyCodeLine{00029\ \ \ \ \ \mbox{\hyperlink{class_l_texture}{LTexture}}\ \mbox{\hyperlink{class_part2_state_a19a391601fcfb4b6ee212cb08d35a3c4}{mBackgroundTexture}};}
+\DoxyCodeLine{00030\ }
+\DoxyCodeLine{00031\ \ \ \ \ \textcolor{comment}{//Intro\ message}}
+\DoxyCodeLine{00032\ \ \ \ \ \mbox{\hyperlink{class_l_texture}{LTexture}}\ \mbox{\hyperlink{class_part2_state_a687dfb2efc3aba1ec5444761e0adcf83}{mMessageTexture}};}
+\DoxyCodeLine{00033\ \};}
+\DoxyCodeLine{00034\ \textcolor{preprocessor}{\#endif}}
+
+\end{DoxyCode}

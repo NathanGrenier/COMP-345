@@ -1,0 +1,48 @@
+\doxysection{LButton.\+h}
+\hypertarget{_l_button_8h_source}{}\label{_l_button_8h_source}\index{src/include/ui/LButton.h@{src/include/ui/LButton.h}}
+\mbox{\hyperlink{_l_button_8h}{Go to the documentation of this file.}}
+\begin{DoxyCode}{0}
+\DoxyCodeLine{00001\ \textcolor{preprocessor}{\#pragma\ once}}
+\DoxyCodeLine{00002\ \textcolor{preprocessor}{\#include\ <SDL3/SDL\_events.h>}}
+\DoxyCodeLine{00003\ \textcolor{preprocessor}{\#include\ <string>}}
+\DoxyCodeLine{00004\ \textcolor{preprocessor}{\#include\ "{}\mbox{\hyperlink{_l_texture_8h}{LTexture.h}}"{}}}
+\DoxyCodeLine{00005\ \textcolor{keyword}{class\ }\mbox{\hyperlink{class_l_button_a0de0fa6527e5647aa041e8cad426a8be}{LButton}}\ \{}
+\DoxyCodeLine{00006\ \textcolor{keyword}{public}:}
+\DoxyCodeLine{00007\ \ \ \ \ \textcolor{comment}{//Button\ dimensions}}
+\DoxyCodeLine{00008\ \ \ \ \ \textcolor{keyword}{static}\ \textcolor{keyword}{constexpr}\ \textcolor{keywordtype}{int}\ \mbox{\hyperlink{class_l_button_a69a00d57c0b558291512bb36c0d65e4e}{kButtonWidth}}\ =\ 300;}
+\DoxyCodeLine{00009\ \ \ \ \ \textcolor{keyword}{static}\ \textcolor{keyword}{constexpr}\ \textcolor{keywordtype}{int}\ \mbox{\hyperlink{class_l_button_aac11bf2f055d85c17e9138bde773f121}{kButtonHeight}}\ =\ 50;}
+\DoxyCodeLine{00010\ }
+\DoxyCodeLine{00011\ \ \ \ \ \textcolor{comment}{//Initializes\ internal\ variables}}
+\DoxyCodeLine{00012\ \ \ \ \ \mbox{\hyperlink{class_l_button_a0de0fa6527e5647aa041e8cad426a8be}{LButton}}();}
+\DoxyCodeLine{00013\ }
+\DoxyCodeLine{00014\ \ \ \ \ \textcolor{comment}{//Sets\ top\ left\ position}}
+\DoxyCodeLine{00015\ \ \ \ \ \textcolor{keywordtype}{void}\ \mbox{\hyperlink{class_l_button_aab53179dc6006793913f8fbf0924dcf5}{setPosition}}(\textcolor{keywordtype}{float}\ x,\ \textcolor{keywordtype}{float}\ y);}
+\DoxyCodeLine{00016\ }
+\DoxyCodeLine{00017\ \ \ \ \ \textcolor{comment}{//Handles\ mouse\ event}}
+\DoxyCodeLine{00018\ \ \ \ \ \textcolor{keywordtype}{void}\ \mbox{\hyperlink{class_l_button_a6dd54388797d4059315988878d376d55}{handleEvent}}(SDL\_Event*\ e);}
+\DoxyCodeLine{00019\ }
+\DoxyCodeLine{00020\ \ \ \ \ \textcolor{keywordtype}{bool}\ \mbox{\hyperlink{class_l_button_a8efc3506953dfacea1e49374e5cd7ed9}{setText}}(\textcolor{keyword}{const}\ std::string\&\ text,\ SDL\_Color\ textColor);}
+\DoxyCodeLine{00021\ }
+\DoxyCodeLine{00022\ \ \ \ \ \textcolor{comment}{//Shows\ button\ sprite}}
+\DoxyCodeLine{00023\ \ \ \ \ \textcolor{keywordtype}{void}\ \mbox{\hyperlink{class_l_button_a35154b0af02a0b098109b07c5b9568e0}{render}}();}
+\DoxyCodeLine{00024\ }
+\DoxyCodeLine{00025\ \ \ \ \ \textcolor{keywordtype}{bool}\ \mbox{\hyperlink{class_l_button_a7c39d036f705fb00926ac59be3e4cf53}{isClicked}}()\ \textcolor{keyword}{const};}
+\DoxyCodeLine{00026\ }
+\DoxyCodeLine{00027\ \textcolor{keyword}{private}:}
+\DoxyCodeLine{00028\ \ \ \ \ \textcolor{keyword}{enum}\ \mbox{\hyperlink{class_l_button_a2a33a33699c0947cc2bcbae0d61dfc81}{eButtonSprite}}\ \{}
+\DoxyCodeLine{00029\ \ \ \ \ \ \ \ \ \mbox{\hyperlink{class_l_button_a2a33a33699c0947cc2bcbae0d61dfc81a43ab1b6c96a26edf860496d8a37fd202}{eButtonSpriteMouseOut}}\ =\ 0,}
+\DoxyCodeLine{00030\ \ \ \ \ \ \ \ \ \mbox{\hyperlink{class_l_button_a2a33a33699c0947cc2bcbae0d61dfc81a5e03ffca5752988cf57cc71ca8ce7927}{eButtonSpriteMouseOverMotion}}\ =\ 1,}
+\DoxyCodeLine{00031\ \ \ \ \ \ \ \ \ \mbox{\hyperlink{class_l_button_a2a33a33699c0947cc2bcbae0d61dfc81a5ce568631975b3320bfeafdde2540e84}{eButtonSpriteMouseDown}}\ =\ 2,}
+\DoxyCodeLine{00032\ \ \ \ \ \ \ \ \ \mbox{\hyperlink{class_l_button_a2a33a33699c0947cc2bcbae0d61dfc81a5e32280da7e06aabc03e360774ee6985}{eButtonSpriteMouseUp}}\ =\ 3}
+\DoxyCodeLine{00033\ \ \ \ \ \};}
+\DoxyCodeLine{00034\ }
+\DoxyCodeLine{00035\ \ \ \ \ \textcolor{comment}{//Top\ left\ position}}
+\DoxyCodeLine{00036\ \ \ \ \ SDL\_FPoint\ \mbox{\hyperlink{class_l_button_a360bd8a8c2aad72c1ebfe9003d9f1419}{mPosition}};}
+\DoxyCodeLine{00037\ }
+\DoxyCodeLine{00038\ \ \ \ \ \textcolor{comment}{//Currently\ used\ global\ sprite}}
+\DoxyCodeLine{00039\ \ \ \ \ \mbox{\hyperlink{class_l_button_a2a33a33699c0947cc2bcbae0d61dfc81}{eButtonSprite}}\ \mbox{\hyperlink{class_l_button_ac6583b858966331b7c21de0a9d19ebb0}{mCurrentSprite}};}
+\DoxyCodeLine{00040\ }
+\DoxyCodeLine{00041\ \ \ \ \ \mbox{\hyperlink{class_l_texture}{LTexture}}\ \mbox{\hyperlink{class_l_button_ad6bf4017f5872d4dfa8075ace38f43fc}{gButtonSpriteTexture}};}
+\DoxyCodeLine{00042\ \};}
+
+\end{DoxyCode}

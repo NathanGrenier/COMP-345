@@ -1,0 +1,7 @@
+var class_texture_loader =
+[
+    [ "deallocateTextures", "class_texture_loader.html#a0e27192edf068dfd015e19e21440a286", null ],
+    [ "loadTexture", "class_texture_loader.html#a420de276f42be1ca80bc64c427dc23c3", null ],
+    [ "loadedTextures", "class_texture_loader.html#af20d179beb33826e10ec2441e8f142c7", null ],
+    [ "TEXTURE_PATH", "class_texture_loader.html#abfdf0d896177f3c5b29435dc845fa674", null ]
+];

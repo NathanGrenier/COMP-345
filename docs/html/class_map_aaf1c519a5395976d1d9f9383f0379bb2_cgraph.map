@@ -1,0 +1,17 @@
+<map id="Map::setSpawner" name="Map::setSpawner">
+<area shape="rect" id="Node000001" title="Sets a cell as the new spawner." alt="" coords="5,107,129,133"/>
+<area shape="rect" id="Node000002" href="$class_map.html#acee9f3455cd53c742b49f9e2e412823d" title="Recalculates the flow field for pathfinding." alt="" coords="177,56,339,83"/>
+<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="120,103,189,85,191,90,121,109"/>
+<area shape="rect" id="Node000004" href="$class_map.html#adb274fa58456ff47c52e90c019cf4e64" title="Checks if a coordinate is within map boundaries." alt="" coords="842,81,959,108"/>
+<area shape="poly" id="edge8_Node000001_Node000004" title=" " alt="" coords="129,130,252,150,418,166,511,169,606,167,701,159,793,143,830,130,864,114,866,118,832,135,794,148,701,164,606,173,511,174,418,171,252,155,129,135"/>
+<area shape="rect" id="Node000005" href="$class_map.html#a5e4b6f317da8de53e4788986bfa2c5ba" title="Checks if a cell is a target." alt="" coords="647,107,747,133"/>
+<area shape="poly" id="edge9_Node000001_Node000005" title=" " alt="" coords="129,117,631,117,631,123,129,123"/>
+<area shape="rect" id="Node000003" href="$class_map.html#a49b43a8bec3a832a0afc09b228eedfae" title="Calculates distance values from target cells using BFS." alt="" coords="387,56,552,83"/>
+<area shape="poly" id="edge2_Node000002_Node000003" title=" " alt="" coords="339,67,371,67,371,72,339,72"/>
+<area shape="rect" id="Node000006" href="$class_map.html#a0bcdcc85f3a9521d3b87e90c9133f4f2" title="Determines flow directions based on calculated distances." alt="" coords="600,5,794,32"/>
+<area shape="poly" id="edge6_Node000002_Node000006" title=" " alt="" coords="322,53,387,41,488,30,585,22,585,27,489,35,387,47,322,58"/>
+<area shape="poly" id="edge3_Node000003_Node000004" title=" " alt="" coords="553,71,826,88,826,93,552,77"/>
+<area shape="poly" id="edge4_Node000003_Node000005" title=" " alt="" coords="534,81,632,103,631,108,532,86"/>
+<area shape="poly" id="edge5_Node000005_Node000004" title=" " alt="" coords="747,111,826,101,826,107,748,116"/>
+<area shape="poly" id="edge7_Node000006_Node000004" title=" " alt="" coords="743,30,795,48,854,72,852,77,793,53,741,35"/>
+</map>
