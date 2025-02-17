@@ -1,0 +1,13 @@
+<map id="CritterTower::render" name="CritterTower::render">
+<area shape="rect" id="Node000001" title=" " alt="" coords="5,81,142,108"/>
+<area shape="rect" id="Node000002" href="$class_l_texture.html#a277f45af3dae7e35ca846a527039e59a" title=" " alt="" coords="229,5,364,32"/>
+<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="102,78,189,41,214,34,216,39,191,47,104,83"/>
+<area shape="rect" id="Node000003" href="$class_l_texture.html#a542c1f81d98fd5659a04eb394d61a879" title=" " alt="" coords="231,56,362,83"/>
+<area shape="poly" id="edge2_Node000001_Node000003" title=" " alt="" coords="142,84,215,76,216,81,142,90"/>
+<area shape="rect" id="Node000004" href="$class_l_texture.html#af0ea348d6f108c45372fc5ec5b9296bc" title=" " alt="" coords="190,107,403,133"/>
+<area shape="poly" id="edge3_Node000001_Node000004" title=" " alt="" coords="142,100,174,103,174,109,142,105"/>
+<area shape="rect" id="Node000006" href="$class_l_texture.html#ae1011e32e00ae6c60274e456725c0fab" title=" " alt="" coords="239,157,354,184"/>
+<area shape="poly" id="edge5_Node000001_Node000006" title=" " alt="" coords="104,106,191,143,225,153,223,158,189,148,102,111"/>
+<area shape="rect" id="Node000005" href="$class_l_texture.html#a410a68299fd4baf92220cc390882ac73" title=" " alt="" coords="451,107,572,133"/>
+<area shape="poly" id="edge4_Node000004_Node000005" title=" " alt="" coords="403,117,435,117,435,123,403,123"/>
+</map>

@@ -1,0 +1,198 @@
+\doxysection{Critter\+Group Class Reference}
+\hypertarget{class_critter_group}{}\label{class_critter_group}\index{CritterGroup@{CritterGroup}}
+
+
+{\ttfamily \#include $<$Critter\+Group.\+h$>$}
+
+\doxysubsubsection*{Public Member Functions}
+\begin{DoxyCompactItemize}
+\item 
+\mbox{\hyperlink{class_critter_group_a424ae645b92e9fdc8bea150480d7d4c7}{Critter\+Group}} (int \&\mbox{\hyperlink{class_critter_group_a5710ee2f917de8d8b174c996384df359}{wave\+Level}}, int \&\mbox{\hyperlink{class_critter_group_accd5cf513825cbff63273dab56e8a960}{player\+Gold}}, SDL\+\_\+\+FRect \mbox{\hyperlink{class_critter_group_a6f653699d83e3f80807909308d514dc1}{start\+Position}}, SDL\+\_\+\+FRect \mbox{\hyperlink{class_critter_group_a0a34c151badb067f0d9a360e1de49368}{end\+Position}})
+\item 
+void \mbox{\hyperlink{class_critter_group_a8ef744c7ef9c224be3a8ec680aeae18f}{generate\+Critters}} (SDL\+\_\+\+FRect \mbox{\hyperlink{class_critter_group_a6f653699d83e3f80807909308d514dc1}{start\+Position}}, SDL\+\_\+\+FRect \mbox{\hyperlink{class_critter_group_a0a34c151badb067f0d9a360e1de49368}{end\+Position}}, float delta\+Time)
+\item 
+void \mbox{\hyperlink{class_critter_group_a4f3ec3f3aad7c83dfe8f6c504421e682}{update}} (float delta\+Time, SDL\+\_\+\+FRect new\+End\+Position)
+\item 
+void \mbox{\hyperlink{class_critter_group_a3d4f149e34ecbac91a771ca748839fa6}{render}} (SDL\+\_\+\+Renderer \texorpdfstring{$\ast$}{*}renderer)
+\item 
+void \mbox{\hyperlink{class_critter_group_aab30f0319043ae2e822c27e5c365bba9}{attack\+Towers}} (int damage)
+\item 
+void \mbox{\hyperlink{class_critter_group_a7fc51673da5d4acd922b3c5ff3932e33}{handle\+Exit}} ()
+\item 
+std\+::vector$<$ \mbox{\hyperlink{class_critter}{Critter}} $>$ \& \mbox{\hyperlink{class_critter_group_a3a6b8033dddddff6cab1ea9a2f0942df}{get\+Critters}} ()
+\end{DoxyCompactItemize}
+\doxysubsubsection*{Private Attributes}
+\begin{DoxyCompactItemize}
+\item 
+int \& \mbox{\hyperlink{class_critter_group_a5710ee2f917de8d8b174c996384df359}{wave\+Level}}
+\item 
+int \& \mbox{\hyperlink{class_critter_group_accd5cf513825cbff63273dab56e8a960}{player\+Gold}}
+\item 
+std\+::vector$<$ \mbox{\hyperlink{class_critter}{Critter}} $>$ \mbox{\hyperlink{class_critter_group_ab92d1524f94e92f802460ad8e8f426bd}{critters}}
+\item 
+SDL\+\_\+\+FRect \mbox{\hyperlink{class_critter_group_a6f653699d83e3f80807909308d514dc1}{start\+Position}}
+\item 
+SDL\+\_\+\+FRect \mbox{\hyperlink{class_critter_group_a0a34c151badb067f0d9a360e1de49368}{end\+Position}}
+\item 
+float \mbox{\hyperlink{class_critter_group_ac9cf5f22b38ce0d847398789cd37993c}{spawn\+Timer}} = 0.\+0f
+\item 
+const float \mbox{\hyperlink{class_critter_group_a2c30a741561f85f51b1d084db3ff7c33}{spawn\+Interval}} = 1.\+0f
+\item 
+int \mbox{\hyperlink{class_critter_group_acb07f5a835380bb676d5874bea402d65}{critters\+Spawned}} = 0
+\item 
+bool \mbox{\hyperlink{class_critter_group_a52bda6550e4678f5833a8065f8668ea3}{wave\+In\+Progress}} = true
+\item 
+float \mbox{\hyperlink{class_critter_group_aa5c8d45703935fecdc9bd380158e8b39}{wave\+Countdown}} = 3.\+0f
+\end{DoxyCompactItemize}
+
+
+\doxysubsection{Constructor \& Destructor Documentation}
+\Hypertarget{class_critter_group_a424ae645b92e9fdc8bea150480d7d4c7}\index{CritterGroup@{CritterGroup}!CritterGroup@{CritterGroup}}
+\index{CritterGroup@{CritterGroup}!CritterGroup@{CritterGroup}}
+\doxysubsubsection{\texorpdfstring{CritterGroup()}{CritterGroup()}}
+{\footnotesize\ttfamily \label{class_critter_group_a424ae645b92e9fdc8bea150480d7d4c7} 
+Critter\+Group\+::\+Critter\+Group (\begin{DoxyParamCaption}\item[{int \&}]{wave\+Level}{, }\item[{int \&}]{player\+Gold}{, }\item[{SDL\+\_\+\+FRect}]{start\+Position}{, }\item[{SDL\+\_\+\+FRect}]{end\+Position}{}\end{DoxyParamCaption})}
+
+
+
+\doxysubsection{Member Function Documentation}
+\Hypertarget{class_critter_group_aab30f0319043ae2e822c27e5c365bba9}\index{CritterGroup@{CritterGroup}!attackTowers@{attackTowers}}
+\index{attackTowers@{attackTowers}!CritterGroup@{CritterGroup}}
+\doxysubsubsection{\texorpdfstring{attackTowers()}{attackTowers()}}
+{\footnotesize\ttfamily \label{class_critter_group_aab30f0319043ae2e822c27e5c365bba9} 
+void Critter\+Group\+::attack\+Towers (\begin{DoxyParamCaption}\item[{int}]{damage}{}\end{DoxyParamCaption})}
+
+\Hypertarget{class_critter_group_a8ef744c7ef9c224be3a8ec680aeae18f}\index{CritterGroup@{CritterGroup}!generateCritters@{generateCritters}}
+\index{generateCritters@{generateCritters}!CritterGroup@{CritterGroup}}
+\doxysubsubsection{\texorpdfstring{generateCritters()}{generateCritters()}}
+{\footnotesize\ttfamily \label{class_critter_group_a8ef744c7ef9c224be3a8ec680aeae18f} 
+void Critter\+Group\+::generate\+Critters (\begin{DoxyParamCaption}\item[{SDL\+\_\+\+FRect}]{start\+Position}{, }\item[{SDL\+\_\+\+FRect}]{end\+Position}{, }\item[{float}]{delta\+Time}{}\end{DoxyParamCaption})}
+
+Here is the caller graph for this function\+:\nopagebreak
+\begin{figure}[H]
+\begin{center}
+\leavevmode
+\includegraphics[width=350pt]{class_critter_group_a8ef744c7ef9c224be3a8ec680aeae18f_icgraph}
+\end{center}
+\end{figure}
+\Hypertarget{class_critter_group_a3a6b8033dddddff6cab1ea9a2f0942df}\index{CritterGroup@{CritterGroup}!getCritters@{getCritters}}
+\index{getCritters@{getCritters}!CritterGroup@{CritterGroup}}
+\doxysubsubsection{\texorpdfstring{getCritters()}{getCritters()}}
+{\footnotesize\ttfamily \label{class_critter_group_a3a6b8033dddddff6cab1ea9a2f0942df} 
+std\+::vector$<$ \mbox{\hyperlink{class_critter}{Critter}} $>$ \& Critter\+Group\+::get\+Critters (\begin{DoxyParamCaption}{}{}\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [inline]}}
+
+Here is the caller graph for this function\+:\nopagebreak
+\begin{figure}[H]
+\begin{center}
+\leavevmode
+\includegraphics[width=335pt]{class_critter_group_a3a6b8033dddddff6cab1ea9a2f0942df_icgraph}
+\end{center}
+\end{figure}
+\Hypertarget{class_critter_group_a7fc51673da5d4acd922b3c5ff3932e33}\index{CritterGroup@{CritterGroup}!handleExit@{handleExit}}
+\index{handleExit@{handleExit}!CritterGroup@{CritterGroup}}
+\doxysubsubsection{\texorpdfstring{handleExit()}{handleExit()}}
+{\footnotesize\ttfamily \label{class_critter_group_a7fc51673da5d4acd922b3c5ff3932e33} 
+void Critter\+Group\+::handle\+Exit (\begin{DoxyParamCaption}{}{}\end{DoxyParamCaption})}
+
+\Hypertarget{class_critter_group_a3d4f149e34ecbac91a771ca748839fa6}\index{CritterGroup@{CritterGroup}!render@{render}}
+\index{render@{render}!CritterGroup@{CritterGroup}}
+\doxysubsubsection{\texorpdfstring{render()}{render()}}
+{\footnotesize\ttfamily \label{class_critter_group_a3d4f149e34ecbac91a771ca748839fa6} 
+void Critter\+Group\+::render (\begin{DoxyParamCaption}\item[{SDL\+\_\+\+Renderer \texorpdfstring{$\ast$}{*}}]{renderer}{}\end{DoxyParamCaption})}
+
+Here is the call graph for this function\+:\nopagebreak
+\begin{figure}[H]
+\begin{center}
+\leavevmode
+\includegraphics[width=350pt]{class_critter_group_a3d4f149e34ecbac91a771ca748839fa6_cgraph}
+\end{center}
+\end{figure}
+Here is the caller graph for this function\+:\nopagebreak
+\begin{figure}[H]
+\begin{center}
+\leavevmode
+\includegraphics[width=314pt]{class_critter_group_a3d4f149e34ecbac91a771ca748839fa6_icgraph}
+\end{center}
+\end{figure}
+\Hypertarget{class_critter_group_a4f3ec3f3aad7c83dfe8f6c504421e682}\index{CritterGroup@{CritterGroup}!update@{update}}
+\index{update@{update}!CritterGroup@{CritterGroup}}
+\doxysubsubsection{\texorpdfstring{update()}{update()}}
+{\footnotesize\ttfamily \label{class_critter_group_a4f3ec3f3aad7c83dfe8f6c504421e682} 
+void Critter\+Group\+::update (\begin{DoxyParamCaption}\item[{float}]{delta\+Time}{, }\item[{SDL\+\_\+\+FRect}]{new\+End\+Position}{}\end{DoxyParamCaption})}
+
+Here is the caller graph for this function\+:\nopagebreak
+\begin{figure}[H]
+\begin{center}
+\leavevmode
+\includegraphics[width=318pt]{class_critter_group_a4f3ec3f3aad7c83dfe8f6c504421e682_icgraph}
+\end{center}
+\end{figure}
+
+
+\doxysubsection{Member Data Documentation}
+\Hypertarget{class_critter_group_ab92d1524f94e92f802460ad8e8f426bd}\index{CritterGroup@{CritterGroup}!critters@{critters}}
+\index{critters@{critters}!CritterGroup@{CritterGroup}}
+\doxysubsubsection{\texorpdfstring{critters}{critters}}
+{\footnotesize\ttfamily \label{class_critter_group_ab92d1524f94e92f802460ad8e8f426bd} 
+std\+::vector$<$\mbox{\hyperlink{class_critter}{Critter}}$>$ Critter\+Group\+::critters\hspace{0.3cm}{\ttfamily [private]}}
+
+\Hypertarget{class_critter_group_acb07f5a835380bb676d5874bea402d65}\index{CritterGroup@{CritterGroup}!crittersSpawned@{crittersSpawned}}
+\index{crittersSpawned@{crittersSpawned}!CritterGroup@{CritterGroup}}
+\doxysubsubsection{\texorpdfstring{crittersSpawned}{crittersSpawned}}
+{\footnotesize\ttfamily \label{class_critter_group_acb07f5a835380bb676d5874bea402d65} 
+int Critter\+Group\+::critters\+Spawned = 0\hspace{0.3cm}{\ttfamily [private]}}
+
+\Hypertarget{class_critter_group_a0a34c151badb067f0d9a360e1de49368}\index{CritterGroup@{CritterGroup}!endPosition@{endPosition}}
+\index{endPosition@{endPosition}!CritterGroup@{CritterGroup}}
+\doxysubsubsection{\texorpdfstring{endPosition}{endPosition}}
+{\footnotesize\ttfamily \label{class_critter_group_a0a34c151badb067f0d9a360e1de49368} 
+SDL\+\_\+\+FRect Critter\+Group\+::end\+Position\hspace{0.3cm}{\ttfamily [private]}}
+
+\Hypertarget{class_critter_group_accd5cf513825cbff63273dab56e8a960}\index{CritterGroup@{CritterGroup}!playerGold@{playerGold}}
+\index{playerGold@{playerGold}!CritterGroup@{CritterGroup}}
+\doxysubsubsection{\texorpdfstring{playerGold}{playerGold}}
+{\footnotesize\ttfamily \label{class_critter_group_accd5cf513825cbff63273dab56e8a960} 
+int\& Critter\+Group\+::player\+Gold\hspace{0.3cm}{\ttfamily [private]}}
+
+\Hypertarget{class_critter_group_a2c30a741561f85f51b1d084db3ff7c33}\index{CritterGroup@{CritterGroup}!spawnInterval@{spawnInterval}}
+\index{spawnInterval@{spawnInterval}!CritterGroup@{CritterGroup}}
+\doxysubsubsection{\texorpdfstring{spawnInterval}{spawnInterval}}
+{\footnotesize\ttfamily \label{class_critter_group_a2c30a741561f85f51b1d084db3ff7c33} 
+const float Critter\+Group\+::spawn\+Interval = 1.\+0f\hspace{0.3cm}{\ttfamily [private]}}
+
+\Hypertarget{class_critter_group_ac9cf5f22b38ce0d847398789cd37993c}\index{CritterGroup@{CritterGroup}!spawnTimer@{spawnTimer}}
+\index{spawnTimer@{spawnTimer}!CritterGroup@{CritterGroup}}
+\doxysubsubsection{\texorpdfstring{spawnTimer}{spawnTimer}}
+{\footnotesize\ttfamily \label{class_critter_group_ac9cf5f22b38ce0d847398789cd37993c} 
+float Critter\+Group\+::spawn\+Timer = 0.\+0f\hspace{0.3cm}{\ttfamily [private]}}
+
+\Hypertarget{class_critter_group_a6f653699d83e3f80807909308d514dc1}\index{CritterGroup@{CritterGroup}!startPosition@{startPosition}}
+\index{startPosition@{startPosition}!CritterGroup@{CritterGroup}}
+\doxysubsubsection{\texorpdfstring{startPosition}{startPosition}}
+{\footnotesize\ttfamily \label{class_critter_group_a6f653699d83e3f80807909308d514dc1} 
+SDL\+\_\+\+FRect Critter\+Group\+::start\+Position\hspace{0.3cm}{\ttfamily [private]}}
+
+\Hypertarget{class_critter_group_aa5c8d45703935fecdc9bd380158e8b39}\index{CritterGroup@{CritterGroup}!waveCountdown@{waveCountdown}}
+\index{waveCountdown@{waveCountdown}!CritterGroup@{CritterGroup}}
+\doxysubsubsection{\texorpdfstring{waveCountdown}{waveCountdown}}
+{\footnotesize\ttfamily \label{class_critter_group_aa5c8d45703935fecdc9bd380158e8b39} 
+float Critter\+Group\+::wave\+Countdown = 3.\+0f\hspace{0.3cm}{\ttfamily [private]}}
+
+\Hypertarget{class_critter_group_a52bda6550e4678f5833a8065f8668ea3}\index{CritterGroup@{CritterGroup}!waveInProgress@{waveInProgress}}
+\index{waveInProgress@{waveInProgress}!CritterGroup@{CritterGroup}}
+\doxysubsubsection{\texorpdfstring{waveInProgress}{waveInProgress}}
+{\footnotesize\ttfamily \label{class_critter_group_a52bda6550e4678f5833a8065f8668ea3} 
+bool Critter\+Group\+::wave\+In\+Progress = true\hspace{0.3cm}{\ttfamily [private]}}
+
+\Hypertarget{class_critter_group_a5710ee2f917de8d8b174c996384df359}\index{CritterGroup@{CritterGroup}!waveLevel@{waveLevel}}
+\index{waveLevel@{waveLevel}!CritterGroup@{CritterGroup}}
+\doxysubsubsection{\texorpdfstring{waveLevel}{waveLevel}}
+{\footnotesize\ttfamily \label{class_critter_group_a5710ee2f917de8d8b174c996384df359} 
+int\& Critter\+Group\+::wave\+Level\hspace{0.3cm}{\ttfamily [private]}}
+
+
+
+The documentation for this class was generated from the following files\+:\begin{DoxyCompactItemize}
+\item 
+src/include/critter/\mbox{\hyperlink{_critter_group_8h}{Critter\+Group.\+h}}\item 
+src/critter/\mbox{\hyperlink{_critter_group_8cpp}{Critter\+Group.\+cpp}}\end{DoxyCompactItemize}

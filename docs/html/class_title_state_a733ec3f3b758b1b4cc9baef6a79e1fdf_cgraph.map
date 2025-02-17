@@ -1,0 +1,10 @@
+<map id="TitleState::render" name="TitleState::render">
+<area shape="rect" id="Node000001" title=" " alt="" coords="5,56,127,83"/>
+<area shape="rect" id="Node000002" href="$class_l_texture.html#a542c1f81d98fd5659a04eb394d61a879" title=" " alt="" coords="191,5,322,32"/>
+<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="118,53,188,34,189,39,120,58"/>
+<area shape="rect" id="Node000003" href="$class_l_texture.html#ae1011e32e00ae6c60274e456725c0fab" title=" " alt="" coords="386,81,500,108"/>
+<area shape="poly" id="edge2_Node000001_Node000003" title=" " alt="" coords="127,71,371,87,370,92,127,76"/>
+<area shape="rect" id="Node000004" href="$class_main_menu_button.html#a5bf888e3b30343585e287a19d951c118" title=" " alt="" coords="175,107,338,133"/>
+<area shape="poly" id="edge3_Node000001_Node000004" title=" " alt="" coords="120,81,189,100,188,105,118,86"/>
+<area shape="poly" id="edge4_Node000004_Node000003" title=" " alt="" coords="338,106,370,102,371,107,339,112"/>
+</map>

@@ -1,0 +1,8 @@
+<map id="Part3State::placeTower" name="Part3State::placeTower">
+<area shape="rect" id="Node000001" title=" " alt="" coords="5,31,163,57"/>
+<area shape="rect" id="Node000002" href="$class_critter_tower.html#a675d902b8dc064ab4e52377f9d28d3e3" title=" " alt="" coords="211,5,367,32"/>
+<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="163,32,195,28,195,33,163,37"/>
+<area shape="rect" id="Node000003" href="$class_critter_tower.html#abd55a2ecd2d1d4c127c6647624e06707" title=" " alt="" coords="415,31,559,57"/>
+<area shape="poly" id="edge3_Node000001_Node000003" title=" " alt="" coords="163,41,399,41,399,47,163,47"/>
+<area shape="poly" id="edge2_Node000002_Node000003" title=" " alt="" coords="368,26,400,30,399,36,367,31"/>
+</map>

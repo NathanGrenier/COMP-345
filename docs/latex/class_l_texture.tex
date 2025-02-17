@@ -1,0 +1,206 @@
+\doxysection{LTexture Class Reference}
+\hypertarget{class_l_texture}{}\label{class_l_texture}\index{LTexture@{LTexture}}
+
+
+{\ttfamily \#include $<$LTexture.\+h$>$}
+
+\doxysubsubsection*{Public Member Functions}
+\begin{DoxyCompactItemize}
+\item 
+\mbox{\hyperlink{class_l_texture_a12fbc9278f97388cce5ce18863b462ff}{LTexture}} ()
+\item 
+\mbox{\hyperlink{class_l_texture_a49cfe57c36e58ad99c1ea73fc274b77b}{\texorpdfstring{$\sim$}{\string~}\+LTexture}} ()
+\item 
+bool \mbox{\hyperlink{class_l_texture_ae5b2b930a619203755988c16d6403665}{load\+From\+File}} (std\+::string path)
+\item 
+bool \mbox{\hyperlink{class_l_texture_af0ea348d6f108c45372fc5ec5b9296bc}{load\+From\+Rendered\+Text}} (std\+::string texture\+Text, SDL\+\_\+\+Color text\+Color)
+\item 
+void \mbox{\hyperlink{class_l_texture_a410a68299fd4baf92220cc390882ac73}{destroy}} ()
+\item 
+void \mbox{\hyperlink{class_l_texture_aead3e0fd603db038782f15e9845e50d4}{set\+Color}} (Uint8 r, Uint8 g, Uint8 b)
+\item 
+void \mbox{\hyperlink{class_l_texture_ab4e51b54752ae7b54614078f9128a9c0}{set\+Alpha}} (Uint8 alpha)
+\item 
+void \mbox{\hyperlink{class_l_texture_abaf56f223336f08de127403b310864c1}{set\+Blending}} (SDL\+\_\+\+Blend\+Mode blend\+Mode)
+\item 
+void \mbox{\hyperlink{class_l_texture_ae1011e32e00ae6c60274e456725c0fab}{render}} (float x, float y, SDL\+\_\+\+FRect \texorpdfstring{$\ast$}{*}clip=nullptr, float width=\mbox{\hyperlink{class_l_texture_a4489efa8c9f2a39b90cf1e58fc18915a}{k\+Original\+Size}}, float height=\mbox{\hyperlink{class_l_texture_a4489efa8c9f2a39b90cf1e58fc18915a}{k\+Original\+Size}}, double degrees=0.\+0, SDL\+\_\+\+FPoint \texorpdfstring{$\ast$}{*}center=nullptr, SDL\+\_\+\+Flip\+Mode flip\+Mode=SDL\+\_\+\+FLIP\+\_\+\+NONE)
+\item 
+int \mbox{\hyperlink{class_l_texture_a542c1f81d98fd5659a04eb394d61a879}{get\+Width}} ()
+\item 
+int \mbox{\hyperlink{class_l_texture_a277f45af3dae7e35ca846a527039e59a}{get\+Height}} ()
+\end{DoxyCompactItemize}
+\doxysubsubsection*{Static Public Attributes}
+\begin{DoxyCompactItemize}
+\item 
+static constexpr float \mbox{\hyperlink{class_l_texture_a4489efa8c9f2a39b90cf1e58fc18915a}{k\+Original\+Size}} = -\/1.f
+\end{DoxyCompactItemize}
+\doxysubsubsection*{Private Attributes}
+\begin{DoxyCompactItemize}
+\item 
+SDL\+\_\+\+Texture \texorpdfstring{$\ast$}{*} \mbox{\hyperlink{class_l_texture_a98d76cf42f620b9c2eacd7b71c3c0c2f}{m\+Texture}}
+\item 
+int \mbox{\hyperlink{class_l_texture_ac6b5edfd40c81b2b40b71b12e7da2b6f}{m\+Width}}
+\item 
+int \mbox{\hyperlink{class_l_texture_aea944f7b207bb9e8b57870d6bd3b5e05}{m\+Height}}
+\end{DoxyCompactItemize}
+
+
+\doxysubsection{Constructor \& Destructor Documentation}
+\Hypertarget{class_l_texture_a12fbc9278f97388cce5ce18863b462ff}\index{LTexture@{LTexture}!LTexture@{LTexture}}
+\index{LTexture@{LTexture}!LTexture@{LTexture}}
+\doxysubsubsection{\texorpdfstring{LTexture()}{LTexture()}}
+{\footnotesize\ttfamily \label{class_l_texture_a12fbc9278f97388cce5ce18863b462ff} 
+LTexture\+::\+LTexture (\begin{DoxyParamCaption}{}{}\end{DoxyParamCaption})}
+
+\Hypertarget{class_l_texture_a49cfe57c36e58ad99c1ea73fc274b77b}\index{LTexture@{LTexture}!````~LTexture@{\texorpdfstring{$\sim$}{\string~}LTexture}}
+\index{````~LTexture@{\texorpdfstring{$\sim$}{\string~}LTexture}!LTexture@{LTexture}}
+\doxysubsubsection{\texorpdfstring{\texorpdfstring{$\sim$}{\string~}LTexture()}{\string~LTexture()}}
+{\footnotesize\ttfamily \label{class_l_texture_a49cfe57c36e58ad99c1ea73fc274b77b} 
+LTexture\+::\texorpdfstring{$\sim$}{\string~}\+LTexture (\begin{DoxyParamCaption}{}{}\end{DoxyParamCaption})}
+
+Here is the call graph for this function\+:\nopagebreak
+\begin{figure}[H]
+\begin{center}
+\leavevmode
+\includegraphics[width=309pt]{class_l_texture_a49cfe57c36e58ad99c1ea73fc274b77b_cgraph}
+\end{center}
+\end{figure}
+
+
+\doxysubsection{Member Function Documentation}
+\Hypertarget{class_l_texture_a410a68299fd4baf92220cc390882ac73}\index{LTexture@{LTexture}!destroy@{destroy}}
+\index{destroy@{destroy}!LTexture@{LTexture}}
+\doxysubsubsection{\texorpdfstring{destroy()}{destroy()}}
+{\footnotesize\ttfamily \label{class_l_texture_a410a68299fd4baf92220cc390882ac73} 
+void LTexture\+::destroy (\begin{DoxyParamCaption}{}{}\end{DoxyParamCaption})}
+
+Here is the caller graph for this function\+:\nopagebreak
+\begin{figure}[H]
+\begin{center}
+\leavevmode
+\includegraphics[width=350pt]{class_l_texture_a410a68299fd4baf92220cc390882ac73_icgraph}
+\end{center}
+\end{figure}
+\Hypertarget{class_l_texture_a277f45af3dae7e35ca846a527039e59a}\index{LTexture@{LTexture}!getHeight@{getHeight}}
+\index{getHeight@{getHeight}!LTexture@{LTexture}}
+\doxysubsubsection{\texorpdfstring{getHeight()}{getHeight()}}
+{\footnotesize\ttfamily \label{class_l_texture_a277f45af3dae7e35ca846a527039e59a} 
+int LTexture\+::get\+Height (\begin{DoxyParamCaption}{}{}\end{DoxyParamCaption})}
+
+Here is the caller graph for this function\+:\nopagebreak
+\begin{figure}[H]
+\begin{center}
+\leavevmode
+\includegraphics[width=319pt]{class_l_texture_a277f45af3dae7e35ca846a527039e59a_icgraph}
+\end{center}
+\end{figure}
+\Hypertarget{class_l_texture_a542c1f81d98fd5659a04eb394d61a879}\index{LTexture@{LTexture}!getWidth@{getWidth}}
+\index{getWidth@{getWidth}!LTexture@{LTexture}}
+\doxysubsubsection{\texorpdfstring{getWidth()}{getWidth()}}
+{\footnotesize\ttfamily \label{class_l_texture_a542c1f81d98fd5659a04eb394d61a879} 
+int LTexture\+::get\+Width (\begin{DoxyParamCaption}{}{}\end{DoxyParamCaption})}
+
+Here is the caller graph for this function\+:\nopagebreak
+\begin{figure}[H]
+\begin{center}
+\leavevmode
+\includegraphics[width=316pt]{class_l_texture_a542c1f81d98fd5659a04eb394d61a879_icgraph}
+\end{center}
+\end{figure}
+\Hypertarget{class_l_texture_ae5b2b930a619203755988c16d6403665}\index{LTexture@{LTexture}!loadFromFile@{loadFromFile}}
+\index{loadFromFile@{loadFromFile}!LTexture@{LTexture}}
+\doxysubsubsection{\texorpdfstring{loadFromFile()}{loadFromFile()}}
+{\footnotesize\ttfamily \label{class_l_texture_ae5b2b930a619203755988c16d6403665} 
+bool LTexture\+::load\+From\+File (\begin{DoxyParamCaption}\item[{std\+::string}]{path}{}\end{DoxyParamCaption})}
+
+Here is the call graph for this function\+:\nopagebreak
+\begin{figure}[H]
+\begin{center}
+\leavevmode
+\includegraphics[width=322pt]{class_l_texture_ae5b2b930a619203755988c16d6403665_cgraph}
+\end{center}
+\end{figure}
+\Hypertarget{class_l_texture_af0ea348d6f108c45372fc5ec5b9296bc}\index{LTexture@{LTexture}!loadFromRenderedText@{loadFromRenderedText}}
+\index{loadFromRenderedText@{loadFromRenderedText}!LTexture@{LTexture}}
+\doxysubsubsection{\texorpdfstring{loadFromRenderedText()}{loadFromRenderedText()}}
+{\footnotesize\ttfamily \label{class_l_texture_af0ea348d6f108c45372fc5ec5b9296bc} 
+bool LTexture\+::load\+From\+Rendered\+Text (\begin{DoxyParamCaption}\item[{std\+::string}]{texture\+Text}{, }\item[{SDL\+\_\+\+Color}]{text\+Color}{}\end{DoxyParamCaption})}
+
+Here is the call graph for this function\+:\nopagebreak
+\begin{figure}[H]
+\begin{center}
+\leavevmode
+\includegraphics[width=350pt]{class_l_texture_af0ea348d6f108c45372fc5ec5b9296bc_cgraph}
+\end{center}
+\end{figure}
+Here is the caller graph for this function\+:\nopagebreak
+\begin{figure}[H]
+\begin{center}
+\leavevmode
+\includegraphics[width=350pt]{class_l_texture_af0ea348d6f108c45372fc5ec5b9296bc_icgraph}
+\end{center}
+\end{figure}
+\Hypertarget{class_l_texture_ae1011e32e00ae6c60274e456725c0fab}\index{LTexture@{LTexture}!render@{render}}
+\index{render@{render}!LTexture@{LTexture}}
+\doxysubsubsection{\texorpdfstring{render()}{render()}}
+{\footnotesize\ttfamily \label{class_l_texture_ae1011e32e00ae6c60274e456725c0fab} 
+void LTexture\+::render (\begin{DoxyParamCaption}\item[{float}]{x}{, }\item[{float}]{y}{, }\item[{SDL\+\_\+\+FRect \texorpdfstring{$\ast$}{*}}]{clip}{ = {\ttfamily nullptr}, }\item[{float}]{width}{ = {\ttfamily \mbox{\hyperlink{class_l_texture_a4489efa8c9f2a39b90cf1e58fc18915a}{k\+Original\+Size}}}, }\item[{float}]{height}{ = {\ttfamily \mbox{\hyperlink{class_l_texture_a4489efa8c9f2a39b90cf1e58fc18915a}{k\+Original\+Size}}}, }\item[{double}]{degrees}{ = {\ttfamily 0.0}, }\item[{SDL\+\_\+\+FPoint \texorpdfstring{$\ast$}{*}}]{center}{ = {\ttfamily nullptr}, }\item[{SDL\+\_\+\+Flip\+Mode}]{flip\+Mode}{ = {\ttfamily SDL\+\_\+FLIP\+\_\+NONE}}\end{DoxyParamCaption})}
+
+Here is the caller graph for this function\+:\nopagebreak
+\begin{figure}[H]
+\begin{center}
+\leavevmode
+\includegraphics[width=350pt]{class_l_texture_ae1011e32e00ae6c60274e456725c0fab_icgraph}
+\end{center}
+\end{figure}
+\Hypertarget{class_l_texture_ab4e51b54752ae7b54614078f9128a9c0}\index{LTexture@{LTexture}!setAlpha@{setAlpha}}
+\index{setAlpha@{setAlpha}!LTexture@{LTexture}}
+\doxysubsubsection{\texorpdfstring{setAlpha()}{setAlpha()}}
+{\footnotesize\ttfamily \label{class_l_texture_ab4e51b54752ae7b54614078f9128a9c0} 
+void LTexture\+::set\+Alpha (\begin{DoxyParamCaption}\item[{Uint8}]{alpha}{}\end{DoxyParamCaption})}
+
+\Hypertarget{class_l_texture_abaf56f223336f08de127403b310864c1}\index{LTexture@{LTexture}!setBlending@{setBlending}}
+\index{setBlending@{setBlending}!LTexture@{LTexture}}
+\doxysubsubsection{\texorpdfstring{setBlending()}{setBlending()}}
+{\footnotesize\ttfamily \label{class_l_texture_abaf56f223336f08de127403b310864c1} 
+void LTexture\+::set\+Blending (\begin{DoxyParamCaption}\item[{SDL\+\_\+\+Blend\+Mode}]{blend\+Mode}{}\end{DoxyParamCaption})}
+
+\Hypertarget{class_l_texture_aead3e0fd603db038782f15e9845e50d4}\index{LTexture@{LTexture}!setColor@{setColor}}
+\index{setColor@{setColor}!LTexture@{LTexture}}
+\doxysubsubsection{\texorpdfstring{setColor()}{setColor()}}
+{\footnotesize\ttfamily \label{class_l_texture_aead3e0fd603db038782f15e9845e50d4} 
+void LTexture\+::set\+Color (\begin{DoxyParamCaption}\item[{Uint8}]{r}{, }\item[{Uint8}]{g}{, }\item[{Uint8}]{b}{}\end{DoxyParamCaption})}
+
+
+
+\doxysubsection{Member Data Documentation}
+\Hypertarget{class_l_texture_a4489efa8c9f2a39b90cf1e58fc18915a}\index{LTexture@{LTexture}!kOriginalSize@{kOriginalSize}}
+\index{kOriginalSize@{kOriginalSize}!LTexture@{LTexture}}
+\doxysubsubsection{\texorpdfstring{kOriginalSize}{kOriginalSize}}
+{\footnotesize\ttfamily \label{class_l_texture_a4489efa8c9f2a39b90cf1e58fc18915a} 
+float LTexture\+::k\+Original\+Size = -\/1.f\hspace{0.3cm}{\ttfamily [static]}, {\ttfamily [constexpr]}}
+
+\Hypertarget{class_l_texture_aea944f7b207bb9e8b57870d6bd3b5e05}\index{LTexture@{LTexture}!mHeight@{mHeight}}
+\index{mHeight@{mHeight}!LTexture@{LTexture}}
+\doxysubsubsection{\texorpdfstring{mHeight}{mHeight}}
+{\footnotesize\ttfamily \label{class_l_texture_aea944f7b207bb9e8b57870d6bd3b5e05} 
+int LTexture\+::m\+Height\hspace{0.3cm}{\ttfamily [private]}}
+
+\Hypertarget{class_l_texture_a98d76cf42f620b9c2eacd7b71c3c0c2f}\index{LTexture@{LTexture}!mTexture@{mTexture}}
+\index{mTexture@{mTexture}!LTexture@{LTexture}}
+\doxysubsubsection{\texorpdfstring{mTexture}{mTexture}}
+{\footnotesize\ttfamily \label{class_l_texture_a98d76cf42f620b9c2eacd7b71c3c0c2f} 
+SDL\+\_\+\+Texture\texorpdfstring{$\ast$}{*} LTexture\+::m\+Texture\hspace{0.3cm}{\ttfamily [private]}}
+
+\Hypertarget{class_l_texture_ac6b5edfd40c81b2b40b71b12e7da2b6f}\index{LTexture@{LTexture}!mWidth@{mWidth}}
+\index{mWidth@{mWidth}!LTexture@{LTexture}}
+\doxysubsubsection{\texorpdfstring{mWidth}{mWidth}}
+{\footnotesize\ttfamily \label{class_l_texture_ac6b5edfd40c81b2b40b71b12e7da2b6f} 
+int LTexture\+::m\+Width\hspace{0.3cm}{\ttfamily [private]}}
+
+
+
+The documentation for this class was generated from the following files\+:\begin{DoxyCompactItemize}
+\item 
+src/include/ui/\mbox{\hyperlink{_l_texture_8h}{LTexture.\+h}}\item 
+src/ui/\mbox{\hyperlink{_l_texture_8cpp}{LTexture.\+cpp}}\end{DoxyCompactItemize}
