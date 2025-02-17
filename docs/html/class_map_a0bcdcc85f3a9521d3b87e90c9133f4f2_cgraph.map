@@ -1,5 +1,0 @@
-<map id="Map::calculateFlowDirections" name="Map::calculateFlowDirections">
-<area shape="rect" id="Node000001" title="Determines flow directions based on calculated distances." alt="" coords="5,5,199,32"/>
-<area shape="rect" id="Node000002" href="$class_map.html#adb274fa58456ff47c52e90c019cf4e64" title="Checks if a coordinate is within map boundaries." alt="" coords="247,5,364,32"/>
-<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="199,16,231,16,231,21,199,21"/>
-</map>

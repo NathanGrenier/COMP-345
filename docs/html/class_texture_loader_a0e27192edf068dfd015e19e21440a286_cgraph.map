@@ -1,5 +1,0 @@
-<map id="TextureLoader::deallocateTextures" name="TextureLoader::deallocateTextures">
-<area shape="rect" id="Node000001" title="Destroy all loaded textures and clear the texture cache." alt="" coords="5,5,176,48"/>
-<area shape="rect" id="Node000002" href="$_texture_loader_8cpp.html#a1a2534fea8ce1efea246f3ae8b1c9db0" title="Gets the static map of loaded textures." alt="" coords="224,13,355,40"/>
-<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="176,24,208,24,208,29,176,29"/>
-</map>

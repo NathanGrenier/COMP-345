@@ -1,5 +1,0 @@
-<map id="Map::isCellWall" name="Map::isCellWall">
-<area shape="rect" id="Node000001" title="Checks if a cell is a wall." alt="" coords="5,5,118,32"/>
-<area shape="rect" id="Node000002" href="$class_map.html#adb274fa58456ff47c52e90c019cf4e64" title="Checks if a coordinate is within map boundaries." alt="" coords="166,5,283,32"/>
-<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="118,16,150,16,150,21,118,21"/>
-</map>

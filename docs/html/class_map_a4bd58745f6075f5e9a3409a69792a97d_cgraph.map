@@ -1,5 +1,0 @@
-<map id="Map::isSpawner" name="Map::isSpawner">
-<area shape="rect" id="Node000001" title="Checks if a cell is a spawner." alt="" coords="5,5,121,32"/>
-<area shape="rect" id="Node000002" href="$class_map.html#adb274fa58456ff47c52e90c019cf4e64" title="Checks if a coordinate is within map boundaries." alt="" coords="169,5,286,32"/>
-<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="121,16,153,16,153,21,121,21"/>
-</map>

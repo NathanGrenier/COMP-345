@@ -1,7 +1,0 @@
-<map id="Map::setTarget" name="Map::setTarget">
-<area shape="rect" id="Node000001" title="Sets a cell as the new target." alt="" coords="185,31,293,57"/>
-<area shape="rect" id="Node000002" href="$class_map.html#ab525c6579219b594a82ef879b756b880" title="Gets the position of the first target cell found." alt="" coords="5,5,137,32"/>
-<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="169,36,137,31,137,26,170,31"/>
-<area shape="rect" id="Node000003" href="$class_map.html#a9b4f799a8a3338acdeeb66c17a9337ff" title="Constructs a new Map object." alt="" coords="31,56,111,83"/>
-<area shape="poly" id="edge2_Node000001_Node000003" title=" " alt="" coords="170,57,112,66,111,61,169,52"/>
-</map>

@@ -1,9 +1,0 @@
-<map id="src/include/util/TextureLoader.h" name="src/include/util/TextureLoader.h">
-<area shape="rect" id="Node000001" title="Load and store textures." alt="" coords="61,5,214,48"/>
-<area shape="rect" id="Node000002" title=" " alt="" coords="5,96,59,123"/>
-<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="112,51,62,88,59,84,109,46"/>
-<area shape="rect" id="Node000003" title=" " alt="" coords="82,96,192,123"/>
-<area shape="poly" id="edge2_Node000001_Node000003" title=" " alt="" coords="140,49,140,80,135,80,135,49"/>
-<area shape="rect" id="Node000004" title=" " alt="" coords="216,96,354,123"/>
-<area shape="poly" id="edge3_Node000001_Node000004" title=" " alt="" coords="177,46,250,86,248,91,174,51"/>
-</map>

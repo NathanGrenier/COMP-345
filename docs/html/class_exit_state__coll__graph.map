@@ -1,6 +1,0 @@
-<map id="ExitState" name="ExitState">
-<area shape="rect" id="Node000001" title=" " alt="" coords="11,81,87,108"/>
-<area shape="poly" id="edge2_Node000001_Node000001" title=" " alt="" coords="104,87,113,95,105,103,87,104,87,99,103,98,108,95,101,91"/>
-<area shape="rect" id="Node000002" href="$class_game_state.html" title=" " alt="" coords="5,5,93,32"/>
-<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="52,47,52,81,46,81,46,47"/>
-</map>
