@@ -8,7 +8,6 @@ LTimer::LTimer() :
 
 	mPaused{ false },
 	mStarted{ false } {
-
 }
 
 void LTimer::start() {
