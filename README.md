@@ -14,6 +14,8 @@ A document outlining the project's analysis and design considerations can be fou
 
 ## Project Documentation
 
+The project's documentation can be found online here: 
+
 The [project's documentation](docs/html/index.html), generated using Doxygen, can be viewed in any web browser. It can also be [viewed as a PDF](docs/latex/refman.pdf).
 
 # Getting Started
