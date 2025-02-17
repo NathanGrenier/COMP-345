@@ -1,4 +1,4 @@
-#include <tower/CritterProjectile.h>
+#include <towers/CritterProjectile.h>
 #include <cmath>
 
 CritterProjectile::CritterProjectile(SDL_FRect startPosition, SDL_FRect target, int damage)

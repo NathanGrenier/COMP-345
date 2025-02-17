@@ -1,6 +1,7 @@
 #include <Global.h>
-#include <Towers/Projectile.h>
+#include <towers/Projectile.h>
 #include <iostream>
+#include <towers/DummyCritter.h>
 
 Projectile::Projectile(float x, float y, int damage, bool isArea)
     : x(x), y(y), damage(damage), isArea(isArea), projectileSize(3)

@@ -1,9 +1,9 @@
 #pragma once
 
-#include <tower/CritterTower.h>
+#include <towers/CritterTower.h>
 #include <vector>
 #include <SDL3/SDL.h>
-#include <tower/CritterProjectile.h>
+#include <towers/CritterProjectile.h>
 #include <critter/Critter.h>
 #include <ui/LTexture.h>
 

@@ -1,6 +1,6 @@
 #include <states/parts/Part3State.h>
 #include "../../critter/CritterGroup.cpp"
-#include "../../tower/CritterTower.cpp"
+#include "../../towers/CritterTower.cpp"
 #include <Global.h>
 
 SDL_FRect startSquare;  // Start square at left edge (adjust position as needed)

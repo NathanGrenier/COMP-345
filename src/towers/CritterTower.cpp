@@ -1,4 +1,4 @@
-#include <tower/CritterTower.h>
+#include <towers/CritterTower.h>
 #include <critter/Critter.h>
 #include <cmath>
 #include <ui/LTexture.h>

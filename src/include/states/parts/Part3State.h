@@ -4,7 +4,7 @@
 #include <states/GameState.h>
 #include <ui/LTexture.h>
 #include <critter/CritterGroup.h>
-#include <tower/CritterTower.h>
+#include <towers/CritterTower.h>
 
 class Part3State : public GameState {
 public:
