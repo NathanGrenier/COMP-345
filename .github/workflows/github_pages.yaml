@@ -24,10 +24,10 @@ jobs:
       - name: Generate Documentation
         run: doxygen Doxyfile
 
-      - name: Generate PDF Version Of Documentation
-        run: |
-          cd docs/latex
-          make  
+      # - name: Generate PDF Version Of Documentation
+      #   run: |
+      #     cd docs/latex
+      #     make  
 
       - name: Create .nojekyll file
         run: touch docs/html/.nojekyll
