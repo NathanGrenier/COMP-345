@@ -5,8 +5,8 @@
 class LButton {
 public:
 	//Button dimensions
-	int kButtonWidth;
-	int kButtonHeight;
+	static const int kButtonWidth = 200;
+	static const int kButtonHeight = 100;
 
 	//Initializes internal variables
 	LButton();
