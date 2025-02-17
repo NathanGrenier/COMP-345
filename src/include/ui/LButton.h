@@ -24,7 +24,7 @@ public:
 
 	bool isClicked() const;
 
-private:
+protected:
 	enum eButtonSprite {
 		eButtonSpriteMouseOut = 0,
 		eButtonSpriteMouseOverMotion = 1,
