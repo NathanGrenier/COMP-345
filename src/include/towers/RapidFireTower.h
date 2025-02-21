@@ -1,12 +1,26 @@
+/**
+ * @file RapidFireTower.h
+ * @brief Tower class for a tower that shoots faster relative to a standard tower
+ * @author Denmar Ermitano
+ * @date 2025-02-22
+ *
+ * @details Class of RapidFireTower
+ * Shoots projectiles at a quicker pace than StandardTower
+ * However, has a pause in shooting, fires projectiles in small intervals
+ * Slightly more expensive variation of StandardTower
+ * Implements shooting projectiles at critters at a fast pace but broken into intervals
+ * Upgrades are for range, rate of fire, and in the number of projectiles in an interval
+ */
+
 #pragma once
 #include "Tower.h"
 
-const int RAPID_RANGE = 75;
-const int RAPID_POWER = 1;
-const int RAPID_RATE_OF_FIRE = 10;
-static const int RAPID_MAX_LEVEL = 3;
+const int RAPID_RANGE = 75; /** @brief default range for rapid fire towers */
+const int RAPID_POWER = 1; /** @brief default projectile damage for rapid fire towers */
+const int RAPID_RATE_OF_FIRE = 10; /** @brief default rate of fire for rapid fire towers */
+static const int RAPID_MAX_LEVEL = 3; /** @brief default max level for rapid fire towers */
 
-const int MAX_RAPID_FIRE_BREAK = 200;
+const int MAX_RAPID_FIRE_BREAK = 200; /** @brief break maximum for no shooting intervals */
 
 class RapidFireTower : public Tower
 {
@@ -20,8 +34,8 @@ public:
     void generateTower();
 
 private:
-    int fireBreak;
-    int fireBreakRate;
-    int burstSize;
-    int burstCount;
+    int fireBreak; /** decremented for no shooting interval */
+    int fireBreakRate; /** amount to decrement fireBreak by */
+    int burstSize; /** number of projectiles to be fired in an interval */
+    int burstCount; /** current number of projectiles fired in interval */
 };
