@@ -1,5 +1,5 @@
 /**
- * @file Tower.cpp
+ * @class Tower
  * @brief Implementation of Tower Parent class
  * @author Denmar Ermitano
  * @date 2025-02-22
