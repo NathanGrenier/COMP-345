@@ -32,7 +32,7 @@ public:
     virtual bool upgrade();
     virtual int getRefundValue();
     virtual int getUpgradeCost();
-    virtual void shootProjectile(DummyCritter* critter);
+    virtual void shootProjectile(DummyCritter* critter); /** should be pure virtual */
 
     DummyCritter* findCritter(std::vector<DummyCritter *> critters); /** finds critter in range of tower */
     void clearProjectiles();

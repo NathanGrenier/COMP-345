@@ -36,6 +36,6 @@ public:
 private:
     int fireBreak; /** decremented for no shooting interval */
     int fireBreakRate; /** amount to decrement fireBreak by */
-    int burstSize; /** number of projectiles to be fired in an interval */
-    int burstCount; /** current number of projectiles fired in interval */
+    int burstSize; /** time for projectiles to be fired in an interval */
+    int burstCount; /** counts time for firing projectiles in interval */
 };
