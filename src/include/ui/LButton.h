@@ -1,4 +1,11 @@
+/**
+ * @file LButton.h
+ * @brief The header file for the LButton class.
+ * @author Nirav Patel
+ * @date 2025-02-16
+ */
 #pragma once
+
 #include <SDL3/SDL_events.h>
 #include <string>
 #include "LTexture.h"

@@ -1,3 +1,9 @@
+/**
+ * @file LTexture.h
+ * @brief The header file for the LTexture class.
+ * @author Nirav Patel
+ * @date 2025-02-16
+ */
 #pragma once
 
 #include <string>

@@ -1,3 +1,11 @@
+/**
+ * @file Part3State.h
+ * @brief The header file of part 3's (Critter) driver.
+ * @author Nirav Patel
+ * @date 2025-02-21
+ */
+#pragma once
+
 #ifndef PART3STATE_H
 #define PART3STATE_H
 

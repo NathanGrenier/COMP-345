@@ -1,3 +1,9 @@
+/**
+ * @file CritterGroup.h
+ * @brief The header file for the CritterGroup class.
+ * @author Nirav Patel
+ * @date 2025-02-21
+ */
 #pragma once
 
 #include <vector>

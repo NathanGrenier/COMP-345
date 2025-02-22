@@ -1,3 +1,11 @@
+/**
+ * @file IntroState.h
+ * @brief The header file for the IntroState class.
+ * @author Nirav Patel
+ * @date 2025-02-16
+ */
+#pragma once
+
 #include "GameState.h"
 #include "../UI/LTexture.h"
 

@@ -1,4 +1,11 @@
+/**
+ * @file MainMenuButton.h
+ * @brief The header file for the MainMenuButton class.
+ * @author Nirav Patel
+ * @date 2025-02-16
+ */
 #pragma once
+
 #include "LButton.h"
 #include <SDL3/SDL_timer.h> // For time-based animations
 

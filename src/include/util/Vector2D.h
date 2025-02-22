@@ -2,7 +2,6 @@
  * @file Vector2D.h
  * @brief Representation of a 2D vector.
  */
-
 #pragma once
 
 #include <cmath>

@@ -1,3 +1,11 @@
+/**
+ * @file LTimer.h
+ * @brief The header file for the LTimer class.
+ * @author Nirav Patel
+ * @date 2025-02-16
+ */
+#pragma once
+
 class LTimer {
 public:
 	//Initializes variables

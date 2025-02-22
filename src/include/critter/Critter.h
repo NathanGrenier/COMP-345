@@ -1,3 +1,9 @@
+/**
+ * @file Critter.h
+ * @brief The header file for the Critter class.
+ * @author Nirav Patel
+ * @date 2025-02-21
+ */
 #pragma once
 
 #include <SDL3/SDL.h>

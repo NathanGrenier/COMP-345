@@ -1,12 +1,28 @@
 #include <ui/MainMenuButton.h>
 #include <Global.h>
 
+/**
+ * @class MainMenuButton
+ * @brief A UI button class for the main menu with hover and click scaling effects.
+ *
+ * This class handles mouse interactions, scales smoothly when hovered or clicked,
+ * and renders a button with an appropriate sprite.
+ *
+ * @author Nirav Patel
+ */
 MainMenuButton::MainMenuButton()
     : mScale(1.0f), mTargetScale(1.0f) {
 }
 
+/**
+ * @brief Handles mouse events for the button.
+ *
+ * Detects mouse movement, button clicks, and updates the scale of the button accordingly.
+ * The button grows when hovered over and shrinks slightly when clicked.
+ *
+ * @param e The SDL_Event containing mouse interaction details.
+ */
 void MainMenuButton::handleEvent(SDL_Event* e) {
-
     // Handle mouse events, similar to LButton
     if (e->type == SDL_EVENT_MOUSE_MOTION || e->type == SDL_EVENT_MOUSE_BUTTON_DOWN || e->type == SDL_EVENT_MOUSE_BUTTON_UP) {
         // Get mouse position
@@ -44,6 +60,11 @@ void MainMenuButton::handleEvent(SDL_Event* e) {
     }
 }
 
+/**
+ * @brief Renders the main menu button with its scaling effect.
+ *
+ * Interpolates the scale smoothly and renders the button using a sprite texture.
+ */
 void MainMenuButton::render() {
     // Interpolate the scale between current and target scale
     if (mScale < mTargetScale) {
@@ -78,7 +99,13 @@ void MainMenuButton::render() {
         destRect.w, NULL, 0, nullptr, SDL_FLIP_NONE);
 }
 
-
+/**
+ * @brief Checks if the button was clicked.
+ *
+ * Compares the current mouse position with the button's position and scale.
+ *
+ * @return True if the button was clicked, false otherwise.
+ */
 bool MainMenuButton::isClicked() {
     // Get the current mouse position
     float x, y;
@@ -94,4 +121,3 @@ bool MainMenuButton::isClicked() {
     }
     return false;
 }
-
