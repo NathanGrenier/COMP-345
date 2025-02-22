@@ -1,11 +1,20 @@
 #include <ui/TowerButton.h>
 #include <Global.h>
 
+/**
+ * @brief Default Constructor
+ */
 TowerButton::TowerButton()
 {
 
 }
 
+/**
+ * @brief Generates TowerButton
+ * 
+ * @details Uses default button sizes to create the button
+ * Draws the rectangle using SDL 
+ */
 void TowerButton::render() {
     //Define sprites
     SDL_FRect spriteClips[] = {
