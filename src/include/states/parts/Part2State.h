@@ -1,3 +1,10 @@
+/**
+ * @file Part2State.h
+ * @brief Header file for the state for part 2 of assignment 1
+ * @author Denmar Ermitano
+ * @date 2025-02-22
+ */
+
 #ifndef PART2STATE_H
 #define PART2STATE_H
 

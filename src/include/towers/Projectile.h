@@ -1,3 +1,15 @@
+/**
+ * @file Projectile.h
+ * @brief Projectile fired from towers, damaging critters
+ * @author Denmar Ermitano
+ * @date 2025-02-22
+ *
+ * @details Class that provides a visual indicator for a tower firing
+ * Projectiles of different speeds and sizes are fired from towers
+ * Damages critter when collision is detected
+ * isArea still needs to be implemented for damage in an area
+ */
+
 #pragma once
 
 class Projectile
@@ -15,9 +27,9 @@ class Projectile
         bool checkCollision(float critterX, float critterY);
 
     private:
-        float x;
-        float y;
+        float x; /** @brief x position for projectile */
+        float y; /** @brief y position for projectile */
         int damage;
         int projectileSize;
-        bool isArea;
+        bool isArea; /** @brief if projectile has area of effect, to be implemented */
 };
