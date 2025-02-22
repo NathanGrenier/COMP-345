@@ -5,10 +5,29 @@
 #include <ui/LTexture.h>
 #include <iostream>
 
+/**
+ * @class CritterGroup
+ * @brief Represents a group of critters that spawn and move towards the exit.
+ * 
+ * Manages waves of critters and tracks player gold.
+ * 
+ * @author Nirav Patel
+ */
 CritterGroup::CritterGroup(int& waveLevel, int& playerGold, SDL_FRect startPosition, SDL_FRect endPosition)
     : waveLevel(waveLevel), playerGold(playerGold), startPosition(startPosition), endPosition(endPosition) {
 }
 
+/**
+ * @brief Generates critters for the current wave, adding them to the critter group.
+ *
+ * Critters are generated sequentially at the start position. The function checks if
+ * the start position is clear before spawning new critters, ensuring no overlap.
+ *
+ * @param startPosition The starting position of the critters.
+ * @param endPosition The end (exit) position for the critters.
+ * @param deltaTime Time elapsed since the last frame.
+ * 
+ */
 void CritterGroup::generateCritters(SDL_FRect startPosition, SDL_FRect endPosition, float deltaTime) {
     static int critterIndex = 0;  // Tracks which critter we're generating
     static float timeElapsed = 0.0f;  // Tracks elapsed time for sequential generation
@@ -48,6 +67,16 @@ void CritterGroup::generateCritters(SDL_FRect startPosition, SDL_FRect endPositi
     }
 }
 
+/**
+ * @brief Updates the state of critters, including their movement and handling of waves.
+ *
+ * If the wave is not in progress, it counts down to the next wave. When the wave starts,
+ * it updates the critters, checking for their death, movement, and gold rewards.
+ *
+ * @param deltaTime Time elapsed since the last frame.
+ * @param newEndPosition The updated end position (exit) for critters.
+ * 
+ */
 void CritterGroup::update(float deltaTime, SDL_FRect newEndPosition) {
     if (!waveInProgress) {
         waveCountdown -= deltaTime;
@@ -95,6 +124,14 @@ void CritterGroup::update(float deltaTime, SDL_FRect newEndPosition) {
     }
 }
 
+/**
+ * @brief Renders the critter group, including the number of alive critters, wave countdown, and the critters themselves.
+ *
+ * The function displays the number of alive critters and the countdown for the next wave on the screen.
+ * It also renders each critter.
+ *
+ * @param renderer The SDL_Renderer used to render the game elements.
+ */
 void CritterGroup::render(SDL_Renderer* renderer) {
     int aliveCrittersCount = 0;
 
@@ -126,6 +163,13 @@ void CritterGroup::render(SDL_Renderer* renderer) {
     }
 }
 
+/**
+ * @brief Attacks all critters in the group with the specified damage.
+ *
+ * This function reduces the hit points of all critters in the group by the specified damage amount.
+ *
+ * @param damage The amount of damage to deal to each critter.
+ */
 void CritterGroup::attackTowers(int damage) {
     for (auto& critter : critters) {
         critter.takeDamage(damage);

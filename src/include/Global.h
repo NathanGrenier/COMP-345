@@ -1,3 +1,15 @@
+/**
+ * @file Global.h
+ * @brief The header file for the Global class, which manages global settings and state transitions.
+ *
+ * This file contains constants for screen dimensions, external variables for SDL components,
+ * and prototypes for functions related to initialization, media loading, and state management.
+ *
+ * @author Nirav Patel
+ * @date 2025-02-16
+ */
+#pragma once
+
 #ifndef GLOBAL_H
 #define GLOBAL_H
 
@@ -5,27 +17,72 @@
 #include <SDL3_ttf/SDL_ttf.h>
 #include <map/Map.h>
 
-extern SDL_Renderer* gRenderer;
-extern TTF_Font* gFont;
+ // External SDL variables
+extern SDL_Renderer* gRenderer; ///< Global pointer to the SDL renderer.
+extern TTF_Font* gFont; ///< Global pointer to the font used for rendering text.
 
 class Global {
 public:
-	//Screen dimension constants
-	static const int kScreenWidth{ Map::PIXELS_PER_CELL * 15 };
-	static const int kScreenHeight{ Map::PIXELS_PER_CELL * 11 };
+    /**
+     * @brief Screen width in pixels.
+     *
+     * This constant defines the width of the game screen based on the number of pixels per cell
+     * and the number of cells across the screen.
+     */
+    static const int kScreenWidth{ Map::PIXELS_PER_CELL * 15 };
+
+    /**
+     * @brief Screen height in pixels.
+     *
+     * This constant defines the height of the game screen based on the number of pixels per cell
+     * and the number of cells vertically on the screen.
+     */
+    static const int kScreenHeight{ Map::PIXELS_PER_CELL * 11 };
 };
 
-/* Function Prototypes */
-//Starts up SDL and creates window
+/**
+ * @brief Initializes SDL and creates the game window and renderer.
+ *
+ * This function starts up the SDL library, creates a window for rendering, and prepares the necessary
+ * resources for the game to run.
+ *
+ * @return `true` if initialization is successful, `false` otherwise.
+ */
 bool init();
 
-//Loads media
+/**
+ * @brief Loads necessary media files such as fonts, textures, and other assets.
+ *
+ * This function loads all the media assets required by the game, such as fonts and textures, into
+ * the program's memory for rendering.
+ *
+ * @return `true` if media loading is successful, `false` otherwise.
+ */
 bool loadMedia();
 
-//Frees media and shuts down SDL
+/**
+ * @brief Frees media resources and shuts down SDL.
+ *
+ * This function frees any dynamically allocated media and shuts down SDL systems to cleanly exit
+ * the game.
+ */
 void close();
 
-//State managers
+/**
+ * @brief Sets the next game state.
+ *
+ * This function sets the state that the game will transition to after the current state finishes.
+ *
+ * @param nextState A pointer to the new game state.
+ */
 void setNextState(GameState* nextState);
+
+/**
+ * @brief Changes the current game state to the next state.
+ *
+ * This function triggers the state change, ensuring that the transition from the current state
+ * to the next state is executed properly.
+ */
 void changeState();
+
 #endif

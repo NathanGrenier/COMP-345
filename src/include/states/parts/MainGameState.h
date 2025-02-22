@@ -1,3 +1,11 @@
+/**
+ * @file MainGameState.h
+ * @brief The header file for the MainGameState class.
+ * @author Nirav Patel
+ * @date 2025-02-16
+ */
+#pragma once
+
 #ifndef MAINGAMESTATE_H
 #define MAINGAMESTATE_H
 

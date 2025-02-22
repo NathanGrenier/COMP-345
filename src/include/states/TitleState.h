@@ -1,3 +1,11 @@
+/**
+ * @file TitleState.h
+ * @brief The header file for the TitleState class.
+ * @author Nirav Patel
+ * @date 2025-02-16
+ */
+#pragma once
+
 #include "GameState.h"
 #include "../UI/LTexture.h"
 
