@@ -59,14 +59,14 @@ Tower::Tower(float x, float y, int buyingCost, int refundValue, int range, int p
 }
 
 /**
- * @brief Finds a Critter to target
+ * @brief Finds a DummyCritter to target
  * 
- * @param critters Vector of currently existing Critters within the map
- * @details Iterates through all Critters in the map
- * Checks if each Critter is in range of the Tower
- * Stops after the first Critter that is in range of the Tower is found
- * @return Critter pointer for first Critter that is in range of the Tower
- * @return nullptr if no Critter is in range
+ * @param critters Vector of currently existing DummyCritter within the map
+ * @details Iterates through all DummyCritter in the map
+ * Checks if each DummyCritter is in range of the Tower
+ * Stops after the first DummyCritter that is in range of the Tower is found
+ * @return DummyCritter pointer for first DummyCritter that is in range of the Tower
+ * @return nullptr if no DummyCritter is in range
  */
 DummyCritter * Tower::findCritter(std::vector<DummyCritter*> critters)
 {
@@ -86,7 +86,7 @@ DummyCritter * Tower::findCritter(std::vector<DummyCritter*> critters)
 /**
  * @brief Clears projectiles previously fired from the Tower
  * 
- * @details Used when targeted Critter is invalid, usually when Critter dies and target changes
+ * @details Used when targeted DummyCritter is invalid, usually when DummyCritter dies and target changes
  */
 void Tower::clearProjectiles() 
 {
@@ -96,7 +96,7 @@ void Tower::clearProjectiles()
 /**
  * @brief Shoots projectile from Tower, to be overridden by sub classes 
  * 
- * @param critter The Critter targeted by the Tower
+ * @param critter The DummyCritter targeted by the Tower
  */
 void Tower::shootProjectile(DummyCritter* critter) 
 {
@@ -185,12 +185,12 @@ bool Tower::isClicked() const
 }
 
 /**
- * @brief Checks if a Critter is in range of the Tower
+ * @brief Checks if a DummyCritter is in range of the Tower
  * 
- * @param critter Critter to check if Tower can damage
- * @details Compares the range of the Tower with the distance between the Tower and the Critter
- * @return true if the Critter is in range of the Tower and can be fired a Projectile at 
- * @return false if the Critter is out of range of the Tower and cannot be damaged 
+ * @param critter DummyCritter to check if Tower can damage
+ * @details Compares the range of the Tower with the distance between the Tower and the DummyCritter
+ * @return true if the DummyCritter is in range of the Tower and can be fired a Projectile at 
+ * @return false if the DummyCritter is out of range of the Tower and cannot be damaged 
  */
 bool Tower::isCritterInRange(DummyCritter critter) 
 {
@@ -198,14 +198,14 @@ bool Tower::isCritterInRange(DummyCritter critter)
 }
 
 /**
- * @brief Calculates the distance between the Critter and Tower
+ * @brief Calculates the distance between the DummyCritter and Tower
  * 
- * @param critter Critter to check distance from Tower
- * @details Calculates the horizontal and vertical distance between the Tower and the Critter 
+ * @param critter DummyCritter to check distance from Tower
+ * @details Calculates the horizontal and vertical distance between the Tower and the DummyCritter 
  * Then uses both distances to calculate the direct distance 
  * Uses hypotenuse of a triangle/distance formula
- * Takes Tower and Critter size in account for distance
- * @return the absolute distance between the Tower and the Critter
+ * Takes Tower and DummyCritter size in account for distance
+ * @return the absolute distance between the Tower and the DummyCritter
  */
 float Tower::calcDistance(DummyCritter critter) 
 {

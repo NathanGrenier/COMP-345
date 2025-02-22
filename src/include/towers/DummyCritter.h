@@ -27,7 +27,7 @@ public:
     void generateCritter();
 
 private:
-    float x; /** x position for projectile */
-    float y; /** y position for projectile */
-    int health; /** health points until dummy critter is considered dead */
+    float x; /** x @brief position for projectile */
+    float y; /** y @brief  for projectile */
+    int health; /** @brief health points until dummy critter is considered dead */
 };

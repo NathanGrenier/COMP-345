@@ -13,10 +13,10 @@
 #pragma once
 #include "Tower.h"
 
-const int STANDARD_RANGE = 100; /** @brief default range for standard towers */
-const int STANDARD_POWER = 3; /** @brief default projectile damage for standard towers */
-const int STANDARD_RATE_OF_FIRE = 4; /** @brief default rate of fire for standard towers */
-static const int STANDARD_MAX_LEVEL = 5; /** @brief default max level for standard towers */
+const int STANDARD_RANGE = 100; /** @brief default range for StandardTower */
+const int STANDARD_POWER = 3; /** @brief default projectile damage for StandardTower */
+const int STANDARD_RATE_OF_FIRE = 4; /** @brief default rate of fire for StandardTower */
+static const int STANDARD_MAX_LEVEL = 5; /** @brief default max level for StandardTower */
 
 class StandardTower : public Tower
 {

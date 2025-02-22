@@ -27,9 +27,9 @@ class Projectile
         bool checkCollision(float critterX, float critterY);
 
     private:
-        float x; /** x position for projectile */
-        float y; /** y position for projectile */
+        float x; /** @brief x position for projectile */
+        float y; /** @brief y position for projectile */
         int damage;
         int projectileSize;
-        bool isArea; /** if projectile has area of effect, to be implemented */
+        bool isArea; /** @brief if projectile has area of effect, to be implemented */
 };

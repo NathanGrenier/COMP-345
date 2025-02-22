@@ -15,10 +15,10 @@
 #pragma once
 #include "Tower.h"
 
-const int RAPID_RANGE = 75; /** @brief default range for rapid fire towers */
-const int RAPID_POWER = 1; /** @brief default projectile damage for rapid fire towers */
-const int RAPID_RATE_OF_FIRE = 10; /** @brief default rate of fire for rapid fire towers */
-static const int RAPID_MAX_LEVEL = 3; /** @brief default max level for rapid fire towers */
+const int RAPID_RANGE = 75; /** @brief default range for RapidFireTower */
+const int RAPID_POWER = 1; /** @brief default projectile damage for RapidFireTower */
+const int RAPID_RATE_OF_FIRE = 10; /** @brief default rate of fire for RapidFireTower */
+static const int RAPID_MAX_LEVEL = 3; /** @brief default max level for RapidFireTower */
 
 const int MAX_RAPID_FIRE_BREAK = 200; /** @brief break maximum for no shooting intervals */
 
@@ -34,8 +34,8 @@ public:
     void generateTower();
 
 private:
-    int fireBreak; /** decremented for no shooting interval */
-    int fireBreakRate; /** amount to decrement fireBreak by */
-    int burstSize; /** time for projectiles to be fired in an interval */
-    int burstCount; /** counts time for firing projectiles in interval */
+    int fireBreak; /** @brief decremented for no shooting interval */
+    int fireBreakRate; /** @brief amount to decrement fireBreak by */
+    int burstSize; /** @brief time for projectiles to be fired in an interval */
+    int burstCount; /** @brief counts time for firing projectiles in interval */
 };

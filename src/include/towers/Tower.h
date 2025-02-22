@@ -40,15 +40,15 @@ public:
     bool isCritterInRange(DummyCritter critter);
 
 protected: 
-    float x; /** x position for projectile */
-    float y; /** y position for projectile */
+    float x; /** @brief x position for projectile */
+    float y; /** @brief y position for projectile */
     int buyingCost;
     int refundValue;
     int range;
     int power;
-    int rateOfFire; /** higher rate of fire indicates faster shooting */
+    int rateOfFire; /** @brief higher rate of fire indicates faster shooting */
     int level;
-    int shootingTimer; /** decremented with rate of fire for shooting */
+    int shootingTimer; /** @brief decremented with rate of fire for shooting */
     float calcDistance(DummyCritter critter); 
-    std::vector<Projectile *> projectiles; /** vector of all projectile */
+    std::vector<Projectile *> projectiles; /** @brief vector of all projectile */
 };

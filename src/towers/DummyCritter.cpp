@@ -13,9 +13,9 @@
  * 
  * @param x Horizontal position using pixels
  * @param y Vertical position using pixels
- * @param health Health points for critter
+ * @param health Health points for DummyCritter
  * @details Constructor for DummyCritter with x, y position and health
- * Uses health as damage points, with critter "dying" should it reach 0 health
+ * Uses health as damage points, with DummyCritter "dying" should it reach 0 health
  */
 DummyCritter::DummyCritter(float x, float y, int health)
     : x(x), y(y), health(health)
@@ -28,8 +28,8 @@ DummyCritter::DummyCritter(float x, float y, int health)
  * 
  * @param damage the amount of health to remove from the DummyCritter
  * @details Decrements the health for the DummyCritter
- * @return true if critter reaches 0 health
- * @return false if critter still has health remaining
+ * @return true if DummyCritter reaches 0 health
+ * @return false if DummyCritter still has health remaining
  */
 bool DummyCritter::damageCritter(int damage)
 {
