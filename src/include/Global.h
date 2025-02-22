@@ -10,6 +10,12 @@
  */
 #pragma once
 
+ /**
+  * @class Global
+  * @brief The header file for the Global class.
+  * @author Nirav Patel
+  * @date 2025-02-16
+  */
 #ifndef GLOBAL_H
 #define GLOBAL_H
 

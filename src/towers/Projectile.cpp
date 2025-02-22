@@ -1,5 +1,5 @@
 /**
- * @file Projectile.cpp
+ * @class Projectile
  * @brief Implementation of Projectile class, no implementation for area damage
  * @author Denmar Ermitano
  * @date 2025-02-22

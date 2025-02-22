@@ -1,5 +1,5 @@
 /**
- * @file DummyCritter.cpp
+ * @class DummyCritter
  * @brief Implementation of DummyCritter class
  * @author Denmar Ermitano
  * @date 2025-02-22

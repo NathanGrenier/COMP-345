@@ -1,5 +1,5 @@
 /**
- * @file Part2State.cpp
+ * @class Part2State
  * @brief Driver file for assignment 1, part 2
  * @author Denmar Ermitano
  * @date 2025-02-22

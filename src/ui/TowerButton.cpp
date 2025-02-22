@@ -2,7 +2,10 @@
 #include <Global.h>
 
 /**
- * @brief Default Constructor
+ * @class TowerButton
+ * @brief Implementation of TowerButton class
+ * @author Denmar Ermitano
+ * @date 2025-02-22
  */
 TowerButton::TowerButton()
 {
