@@ -4,6 +4,7 @@
 #include <states/parts/Part1State.h>
 #include <states/parts/Part2State.h>
 #include <states/parts/Part3State.h>
+#include <states/parts/UITestState.h>
 #include <Global.h>
 
 /** @class TitleState
@@ -112,7 +113,8 @@ void TitleState::handleEvent(SDL_Event& e) {
                     setNextState(Part1State::get());  // Load Part 1
                     break;
                 case 2:
-                    setNextState(Part2State::get());  // Load Part 2
+                    //setNextState(Part2State::get());  // Load Part 2
+                    setNextState(UITestState::get());  // Load Part 2
                     break;
                 case 3:
                     setNextState(Part3State::get());  // Load Part 3
