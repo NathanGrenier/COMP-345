@@ -13,13 +13,15 @@
  /// Static instance of the ExitState
 MapEditorState MapEditorState::sMapEditorState;
 
+int Global::cellWidth = 11;
+int Global::cellHeight = 11;
+
 MapEditorState* MapEditorState::get() {
     return &sMapEditorState;
 }
 
 bool MapEditorState::enter() {
     if (currentMap == "") {
-        map = new Map(gRenderer, (Global::kScreenWidth - Global::viewerWidth) / Map::PIXELS_PER_CELL, (Global::kScreenHeight - Global::headerHeight) / Map::PIXELS_PER_CELL);
     }
 
     return true;
@@ -40,9 +42,6 @@ void MapEditorState::update() {
 }
 
 void MapEditorState::render() {
-    if (map != nullptr) {
-        map->draw(gRenderer);
-    }
 }
 
 MapEditorState::MapEditorState() {}

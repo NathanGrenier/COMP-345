@@ -23,7 +23,7 @@ TitleState TitleState::sTitleState;
 constexpr int kButtonCount = 4;
 
 /// @brief Array of main menu buttons.
-LButton buttons[kButtonCount];  // Use MainMenuButton instead of LButton
+LButton buttons[kButtonCount];
 
 /**
  * @brief Gets the singleton instance of TitleState.
@@ -58,16 +58,19 @@ bool TitleState::enter() {
     };
 
     // Initialize buttons
-    buttons[0].loadFromFile("assets/ui/StartButton.png");
+    buttons[0].loadFromFile("assets/ui/Start.png");
 
     for (int i = 1; i < kButtonCount; ++i) {
-        if (!buttons[i].setText(buttonLabels[i], textColor)) {
+        if (!buttons[i].loadFromFile("assets/ui/LoadPart" + std::to_string(i) + ".png")) {
             printf("Failed to set button text: %s\n", buttonLabels[i]);
             success = false;
         }
+        else {
+            buttons[i].setSizeWithAspectRatio(400, 0);
+        }
     }
 
-    buttons[0].setSizeWithAspectRatio(200, 0);
+    buttons[0].setSizeWithAspectRatio(400, 0);
 
     // Define vertical spacing for buttons
     constexpr int buttonSpacing = 20;
@@ -99,6 +102,9 @@ bool TitleState::enter() {
 bool TitleState::exit() {
     mBackgroundTexture.destroy();
     mMessageTexture.destroy();
+    for (int i = 0; i < kButtonCount; ++i) {
+        buttons[i].destroy();
+    }
     return true;
 }
 

@@ -11,9 +11,11 @@
 
 #include <states/GameState.h>
 #include <vector>
+#include <map/Map.h>
 #include <string>
 #include <ui/LTexture.h>
 #include <ui/LButton.h>
+#include <unordered_map>
 
 class MapSelectState : public GameState {
 public:
@@ -33,7 +35,8 @@ private:
     //Static instance
     static MapSelectState sMapSelectState;
 
-    std::vector<std::string> availableMaps; ///< List of available maps
+    std::unordered_map<std::string, Map> availableMaps;
+
     int selectedIndex; ///< Index of the currently selected map
 
     void loadAvailableMaps(); ///< Loads available map names from the map directory

@@ -43,10 +43,8 @@ GameState* gCurrentState{ nullptr };
 GameState* gNextState{ nullptr };
 
 
-int Global::viewerWidth = 400;
-int Global::headerHeight = 200;
-int Global::cellWidth = 15;
-int Global::cellHeight = 11;
+int Global::viewerWidth = 100;
+int Global::headerHeight = 20;
 
 std::string currentMap;
 

@@ -14,14 +14,16 @@
 #include <SDL3/SDL_render.h>
 #include <util/Vector2D.h>
 #include <vector>
+#include <iostream>
 
 class Map {
 public:
-	Map(SDL_Renderer* renderer, int cellCountX, int cellCountY);
-	void draw(SDL_Renderer* renderer);
-
+	Map(int cellCountX, int cellCountY);
+	Map();
+	
 	/** @brief Number of pixels each cell occupies on screen */
-	static int PIXELS_PER_CELL;
+	int PIXELS_PER_CELL;
+	int cellCountX, cellCountY;     /**< Grid dimensions */
 
 	bool isCellWall(int x, int y);
 	void setCellWall(int x, int y, bool setWall);
@@ -33,9 +35,14 @@ public:
 	Vector2D getTargetPos();
 	Vector2D getFlowNormal(int x, int y);
 
+	bool loadFromJson(const std::string& filePath);
+	void calculatePixelsPerCell();
+	void drawOnTargetRect(SDL_Renderer* renderer, const SDL_FRect& targetRect);
+	SDL_FRect getCurrentRenderRect();
+
 private:
 	static const unsigned char flowDistanceMax = 255;
-	void calculatePixelsPerCell();
+	SDL_FRect currentRenderRect;
 
 	/**
 	 * @struct Cell
@@ -55,13 +62,12 @@ private:
 	};
 
 	bool isInbounds(int x, int y);
-	void drawCell(SDL_Renderer* renderer, const Cell& cell);
+	void drawCell(SDL_Renderer* renderer, const Cell& cell, const SDL_FRect& rect);
 	void calculateFlowField();
 	void calculateDistances();
 	void calculateFlowDirections();
 
 	std::vector<Cell> cells;              /**< Grid cells storage */
-	const int cellCountX, cellCountY;     /**< Grid dimensions */
 
 	SDL_Texture* textureCellWall;         /**< Texture for wall cells */
 	SDL_Texture* textureCellTarget;       /**< Texture for target cells */

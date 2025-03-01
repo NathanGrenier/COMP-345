@@ -16,6 +16,7 @@ public:
 
 	//Initializes internal variables
 	LButton();
+	void destroy();
 
 	//Sets top left position
 	void setPosition(float x, float y);

@@ -88,6 +88,9 @@ void LButton::handleEvent(SDL_Event* e) {
 	}
 }
 
+void LButton::destroy() {
+	gButtonSpriteTexture.destroy(); // Free the texture
+}
 
 /**
  * @brief Sets the text on the button.
