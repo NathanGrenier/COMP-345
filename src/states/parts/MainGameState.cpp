@@ -1,4 +1,5 @@
 #include <states/parts/MainGameState.h>
+#include <Global.h>
 
 /** @class MainGameState
  *  @brief Implementation of the main game state.
@@ -28,6 +29,7 @@ MainGameState* MainGameState::get() {
  * @return Always returns true.
  */
 bool MainGameState::enter() {
+    map = new Map(gRenderer, (Global::kScreenWidth) / Map::PIXELS_PER_CELL, (Global::kScreenHeight) / Map::PIXELS_PER_CELL);
     return true;
 }
 

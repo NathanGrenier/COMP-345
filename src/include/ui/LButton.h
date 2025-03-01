@@ -11,9 +11,8 @@
 #include "LTexture.h"
 class LButton {
 public:
-	//Button dimensions
-	static const int kButtonWidth = 200;
-	static const int kButtonHeight = 100;
+	int kButtonWidth;
+	int kButtonHeight;
 
 	//Initializes internal variables
 	LButton();
@@ -27,19 +26,25 @@ public:
 	void handleEvent(SDL_Event* e);
 
 	bool setText(const std::string& text, SDL_Color textColor);
+	bool loadFromFile(std::string path);
 
 	//Shows button sprite
 	void render();
 
 	bool isClicked();
 
-protected:
+	void setSizeWithAspectRatio(int newWidth, int newHeight);
+
 	enum eButtonSprite {
 		eButtonSpriteMouseOut = 0,
 		eButtonSpriteMouseOverMotion = 1,
 		eButtonSpriteMouseDown = 2,
-		eButtonSpriteMouseUp = 3
+		eButtonSpriteMouseUp = 3,
+		eButtonSpriteCount
 	};
+private:
+	int originalWidth;
+	int originalHeight;
 
 	//Top left position
 	SDL_FPoint mPosition;

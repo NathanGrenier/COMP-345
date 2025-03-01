@@ -6,6 +6,8 @@ add_library(states STATIC
     parts/Part1State.cpp
     parts/Part2State.cpp
     parts/Part3State.cpp
+    parts/MapSelectState.cpp 
+    parts/MapEditorState.cpp
 )
 
 target_include_directories(states PUBLIC ${CMAKE_SOURCE_DIR}/src/include)

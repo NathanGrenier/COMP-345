@@ -44,7 +44,7 @@ Part1State* Part1State::get() {
  * @return true if initialization was successful
  */
 bool Part1State::enter() {
-	map = new Map(gRenderer, Global::kScreenWidth / Map::PIXELS_PER_CELL, Global::kScreenHeight / Map::PIXELS_PER_CELL);
+	map = new Map(gRenderer, (Global::kScreenWidth - Global::viewerWidth) / Map::PIXELS_PER_CELL, (Global::kScreenHeight - Global::headerHeight )/ Map::PIXELS_PER_CELL);
 	return true;
 }
 

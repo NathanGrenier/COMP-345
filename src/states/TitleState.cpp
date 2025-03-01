@@ -1,10 +1,11 @@
 #include <states/TitleState.h>
-#include <ui/MainMenuButton.h>
 #include <states/parts/MainGameState.h>
 #include <states/parts/Part1State.h>
+#include <states/parts/MapSelectState.h>
 #include <states/parts/Part2State.h>
 #include <states/parts/Part3State.h>
 #include <Global.h>
+#include <ui/LButton.h>
 
 /** @class TitleState
  *  @brief Implementation of the title screen state.
@@ -22,7 +23,7 @@ TitleState TitleState::sTitleState;
 constexpr int kButtonCount = 4;
 
 /// @brief Array of main menu buttons.
-MainMenuButton buttons[kButtonCount];  // Use MainMenuButton instead of LButton
+LButton buttons[kButtonCount];  // Use MainMenuButton instead of LButton
 
 /**
  * @brief Gets the singleton instance of TitleState.
@@ -44,7 +45,7 @@ bool TitleState::enter() {
     bool success = true;
     SDL_Color textColor{ 0x00, 0x00, 0x00, 0xFF };
 
-    if (!(success &= mMessageTexture.loadFromRenderedText("Tower Defense - The Game", textColor))) {
+    if (!(success &= mMessageTexture.loadFromFile("assets/ui/TitleMessage.png"))) {
         printf("Failed to render title text!\n");
     }
 
@@ -57,24 +58,36 @@ bool TitleState::enter() {
     };
 
     // Initialize buttons
-    for (int i = 0; i < kButtonCount; ++i) {
+    buttons[0].loadFromFile("assets/ui/StartButton.png");
+
+    for (int i = 1; i < kButtonCount; ++i) {
         if (!buttons[i].setText(buttonLabels[i], textColor)) {
             printf("Failed to set button text: %s\n", buttonLabels[i]);
             success = false;
         }
     }
 
+    buttons[0].setSizeWithAspectRatio(200, 0);
+
     // Define vertical spacing for buttons
     constexpr int buttonSpacing = 20;
-    constexpr int startY = (Global::kScreenHeight - ((MainMenuButton::kButtonHeight * kButtonCount) + (buttonSpacing * (kButtonCount - 1)))) / 2;
+    int totalHeight = 0;
+    for (int i = 0; i < kButtonCount; ++i) {
+        totalHeight += buttons[i].kButtonHeight + buttonSpacing;
+    }
+    totalHeight -= buttonSpacing; // Remove extra spacing after the last button
+
+    int startY = (Global::kScreenHeight - totalHeight) / 2;
 
     // Set button positions centered on the screen
     for (int i = 0; i < kButtonCount; ++i) {
-        buttons[i].setPosition((Global::kScreenWidth - MainMenuButton::kButtonWidth) / 2, startY + i * (MainMenuButton::kButtonHeight + buttonSpacing));
+        buttons[i].setPosition((Global::kScreenWidth - buttons[i].kButtonWidth) / 2, startY);
+        startY += buttons[i].kButtonHeight + buttonSpacing;
     }
 
     return success;
 }
+
 
 /**
  * @brief Exits the title state and frees resources.
@@ -106,7 +119,7 @@ void TitleState::handleEvent(SDL_Event& e) {
                 // Transition to the corresponding game state
                 switch (i) {
                 case 0:
-                    setNextState(MainGameState::get());  // Load main game
+                    setNextState(MapSelectState::get());  // Load main game
                     break;
                 case 1:
                     setNextState(Part1State::get());  // Load Part 1
@@ -146,9 +159,8 @@ void TitleState::render() {
     mBackgroundTexture.render(0, 0);
 
     // Render title text centered at the top
-    mMessageTexture.render((Global::kScreenWidth - mMessageTexture.getWidth()) / 2.f, 20);
+    mMessageTexture.render((Global::kScreenWidth - Global::kScreenWidth * 0.9) / 2.f, 40, nullptr, Global::kScreenWidth * 0.9, -1);
 
-    // Render menu buttons
     for (int i = 0; i < kButtonCount; ++i) {
         buttons[i].render();
     }

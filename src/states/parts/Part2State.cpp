@@ -14,7 +14,7 @@
 
 #include <states/parts/Part2State.h>
 #include <Global.h>
-#include <ui/TowerButton.h>
+#include <ui/LButton.h>
 #include <vector>
 
 //#include <towers/Tower.h>
@@ -52,7 +52,7 @@ const int RAPID_FIRE_TOWER_COST = 50; /** @brief gold cost for rapid fire tower 
 
 const int DUMMY_CRITTER_COUNT = 4; /** @brief number of testing critters */
 
-TowerButton towerButtons[TOWER_BUTTON_COUNT]; /** @brief array for buttons */
+LButton towerButtons[TOWER_BUTTON_COUNT]; /** @brief array for buttons */
 int currentTowerSelection = -1; /** @brief class selection for buying towers */
 bool sellTower = false; /** @brief if selling tower */
 bool upgradeTower = false; /** @brief if upgrading tower */
@@ -334,8 +334,8 @@ void Part2State::render()
 
 	// generates buttons 
 	for (int i = 0; i < TOWER_BUTTON_COUNT; i++) {
-		towerButtons[i].setPosition(Global::kScreenWidth - TowerButton::kButtonWidth - X_TOWER_BUTTON_SPACING,
-			i * (LButton::kButtonHeight + Y_TOWER_BUTTON_SPACING));
+		towerButtons[i].setPosition(Global::kScreenWidth - towerButtons[i].kButtonWidth - X_TOWER_BUTTON_SPACING,
+			i * (towerButtons[i].kButtonHeight + Y_TOWER_BUTTON_SPACING));
 	}
 	// Show the message
 	mMessageTexture.render((Global::kScreenWidth - mMessageTexture.getWidth()) / 2.f, 20);

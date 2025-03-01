@@ -42,6 +42,15 @@ GameState* gCurrentState{ nullptr };
 /** @brief The next game state to transition to. */
 GameState* gNextState{ nullptr };
 
+
+int Global::viewerWidth = 400;
+int Global::headerHeight = 200;
+int Global::cellWidth = 15;
+int Global::cellHeight = 11;
+
+std::string currentMap;
+
+
 /**
  * @brief Sets the next game state.
  *

@@ -10,10 +10,10 @@
 #include <ui/LTexture.h>
 #include <map/Map.h>
 
-class MainGameState : public GameState {
+class MapEditorState : public GameState {
 public:
 	//Static accessor
-	static MainGameState* get();
+	static MapEditorState* get();
 
 	//Transitions
 	bool enter() override;
@@ -26,10 +26,10 @@ public:
 
 private:
 	//Static instance
-	static MainGameState sMainGameState;
+	static MapEditorState sMapEditorState;
 
 	//Private constructor
-	MainGameState();
+	MapEditorState();
 
 	//Intro background
 	LTexture mBackgroundTexture;

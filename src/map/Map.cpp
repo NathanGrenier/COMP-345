@@ -8,8 +8,20 @@
 #include <queue>
 #include <SDL3/SDL_log.h>
 #include <iostream>
+#include <Global.h>
 
+int Map::PIXELS_PER_CELL = 24;
 
+void Map::calculatePixelsPerCell() {
+	// Perform the calculation based on Global's static parameters
+	PIXELS_PER_CELL = (Global::kScreenWidth - Global::viewerWidth) / Global::cellWidth;
+
+	// You may want to handle edge cases, like division by zero, or unexpected values.
+	if (Global::cellWidth == 0) {
+		// Handle error (e.g., set PIXELS_PER_CELL to a default value or throw an exception)
+		PIXELS_PER_CELL = 0; // Or some default fallback value
+	}
+}
  /**
   * @brief Constructs a new Map object.
   *
@@ -21,6 +33,7 @@
   */
 Map::Map(SDL_Renderer* renderer, int setCellCountX, int setCellCountY) :
 	cellCountX(setCellCountX), cellCountY(setCellCountY) {
+	calculatePixelsPerCell();
 	textureCellWall = TextureLoader::loadTexture(renderer, "map/cell-wall.bmp");
 	textureCellTarget = TextureLoader::loadTexture(renderer, "map/cell-target.bmp");
 	textureCellSpawner = TextureLoader::loadTexture(renderer, "map/cell-spawner.bmp");

@@ -16,8 +16,26 @@
 #include <vector>
 
 class Map {
+public:
+	Map(SDL_Renderer* renderer, int cellCountX, int cellCountY);
+	void draw(SDL_Renderer* renderer);
+
+	/** @brief Number of pixels each cell occupies on screen */
+	static int PIXELS_PER_CELL;
+
+	bool isCellWall(int x, int y);
+	void setCellWall(int x, int y, bool setWall);
+	bool isTarget(int x, int y);
+	void setTarget(int x, int y);
+	bool isSpawner(int x, int y);
+	void setSpawner(int x, int y);
+	bool isValidPath();
+	Vector2D getTargetPos();
+	Vector2D getFlowNormal(int x, int y);
+
 private:
 	static const unsigned char flowDistanceMax = 255;
+	void calculatePixelsPerCell();
 
 	/**
 	 * @struct Cell
@@ -36,25 +54,6 @@ private:
 		unsigned char flowDistance = flowDistanceMax; /**< Distance to target in flow field */
 	};
 
-public:
-	/** @brief Number of pixels each cell occupies on screen */
-	static constexpr int PIXELS_PER_CELL = 48;
-
-public:
-	Map(SDL_Renderer* renderer, int cellCountX, int cellCountY);
-	void draw(SDL_Renderer* renderer);
-
-	bool isCellWall(int x, int y);
-	void setCellWall(int x, int y, bool setWall);
-	bool isTarget(int x, int y);
-	void setTarget(int x, int y);
-	bool isSpawner(int x, int y);
-	void setSpawner(int x, int y);
-	bool isValidPath();
-	Vector2D getTargetPos();
-	Vector2D getFlowNormal(int x, int y);
-
-private:
 	bool isInbounds(int x, int y);
 	void drawCell(SDL_Renderer* renderer, const Cell& cell);
 	void calculateFlowField();
