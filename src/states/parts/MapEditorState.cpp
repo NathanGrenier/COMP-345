@@ -28,6 +28,8 @@ bool MapEditorState::enter() {
 
 	map = new Map(*Global::currentMap);
 
+	map->setFlowFieldVisibility(true);
+
 	return true;
 }
 

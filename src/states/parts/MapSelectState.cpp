@@ -168,6 +168,7 @@ void MapSelectState::loadAvailableMaps() {
 
 				// Store the loaded Map object in the dictionary
 				availableMaps[mapFileName] = std::move(map);
+				availableMaps[mapFileName].setFlowFieldVisibility(false);
 			}
 		}
 	} catch (const fs::filesystem_error& e) {

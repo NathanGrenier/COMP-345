@@ -42,7 +42,7 @@ bool MainGameState::enter() {
 	std::cout << "Global::currentMap name: " + Global::currentMap->name << std::endl;
 
 	map = new Map(*Global::currentMap);
-
+	map->setFlowFieldVisibility(false);
 	map->setCurrentRenderRect(Global::mapViewRect);
 
 	critterGroup = new CritterGroup(waveLevel, playerGold, map->getSpawnerPos(Global::mapViewRect), map->getTargetPos(Global::mapViewRect), map);

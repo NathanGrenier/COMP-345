@@ -33,6 +33,7 @@ public:
 	/** @brief Number of pixels each cell occupies on screen */
 	int PIXELS_PER_CELL;
 	int cellCountX, cellCountY;     /**< Grid dimensions */
+	bool isFlowFieldVisible = false;
 
 	bool isCellWall(int x, int y);
 	void setCellWall(int x, int y, bool setWall);
@@ -44,6 +45,8 @@ public:
 	SDL_FRect getTargetPos(const SDL_FRect& targetRect);
 	SDL_FRect getSpawnerPos(const SDL_FRect& targetRect);
 	Vector2D getFlowNormal(int x, int y);
+	void setFlowFieldVisibility(bool value);
+	void toggleFlowFieldVisibility();
 
 	bool loadFromJson(const std::string& filePath);
 	void calculatePixelsPerCell();
@@ -81,6 +84,7 @@ private:
 		bool isWall = false;    /**< Whether this cell is a wall */
 		bool isSpawner = false; /**< Whether this cell is an enemy spawner */
 		bool isTarget = false;  /**< Whether this cell is a target */
+		bool isOnPath = false;  /**< Whether this cell is on the path */
 		int flowDirectionX = 0; /**< X component of flow direction */
 		int flowDirectionY = 0; /**< Y component of flow direction */
 		unsigned char flowDistance = flowDistanceMax; /**< Distance to target in flow field */
@@ -91,6 +95,7 @@ private:
 	void calculateFlowField();
 	void calculateDistances();
 	void calculateFlowDirections();
+	std::vector<Cell> walkPath();
 
 	std::vector<FlowFieldObserver*> observers; /**< List of subscribers */
 

@@ -45,6 +45,7 @@ Part1State* Part1State::get() {
  */
 bool Part1State::enter() {
 	map = new Map(15, 15, "Default");
+	map->setFlowFieldVisibility(true);
 	return true;
 }
 
