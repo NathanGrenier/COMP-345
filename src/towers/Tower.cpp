@@ -15,7 +15,7 @@
  * @brief Default Constructor, setting all values to 0
  */
 Tower::Tower() 
-    : x(0), y(0), buyingCost(0), refundValue(0), range(0), power(0), rateOfFire(0), level(0), shootingTimer(0)
+    : x(0), y(0), buyingCost(0), refundValue(0), range(0), power(0), rateOfFire(0), level(0), shootingTimer(0), upgradeValues{ 0, 0, 0}
 {
 
 }
@@ -34,7 +34,7 @@ Tower::Tower()
  * Uses default refund value ratio in Tower class 
  */
 Tower::Tower(float x, float y, int buyingCost, int range, int power, int rateOfFire)
-    : x(x), y(y), buyingCost(buyingCost), range(range), power(power), rateOfFire(rateOfFire), level(1), shootingTimer(0)
+    : x(x), y(y), buyingCost(buyingCost), range(range), power(power), rateOfFire(rateOfFire), level(1), shootingTimer(0), upgradeValues{ 0, 0, 0 }
 {
     refundValue = static_cast<int>(REFUND_RATIO * buyingCost);
 }
@@ -53,7 +53,7 @@ Tower::Tower(float x, float y, int buyingCost, int range, int power, int rateOfF
  * Sets Tower level to 1 and shootingTimer to 0 to immediately start firing once placed
  */
 Tower::Tower(float x, float y, int buyingCost, int refundValue, int range, int power, int rateOfFire)
-    : x(x), y(y), buyingCost(buyingCost), refundValue(refundValue), range(range), power(power), rateOfFire(rateOfFire), level(1), shootingTimer(0)
+    : x(x), y(y), buyingCost(buyingCost), refundValue(refundValue), range(range), power(power), rateOfFire(rateOfFire), level(1), shootingTimer(0), upgradeValues{ 0, 0, 0 }
 {
     
 }
@@ -94,16 +94,6 @@ void Tower::clearProjectiles()
 }
 
 /**
- * @brief Shoots projectile from Tower, to be overridden by sub classes 
- * 
- * @param critter The DummyCritter targeted by the Tower
- */
-void Tower::shootProjectile(DummyCritter* critter) 
-{
-
-}
-
-/**
  * @brief Generates Tower
  * 
  * @details Represents a Tower with a black square
@@ -128,14 +118,24 @@ void Tower::generateAllProjectiles()
     }
 }
 
-/**
- * @brief Upgrades Tower, to be overridden by sub classes. Cannot be used for Tower class 
- * 
- * @return false if Tower cannot be upgraded
- */
-bool Tower::upgrade()
+int Tower::getRange()
 {
-    return false;
+    return range;
+}
+
+int Tower::getPower()
+{
+    return power;
+}
+
+int Tower::getRateOfFire()
+{
+    return rateOfFire;
+}
+
+int Tower::getLevel()
+{
+    return level;
 }
 
 /**
@@ -160,6 +160,29 @@ int Tower::getRefundValue()
 int Tower::getUpgradeCost()
 {
     return 100 + level * 50;
+}
+
+Tower::UpgradeValues Tower::getUpgradeValues()
+{
+    return upgradeValues;
+}
+
+bool Tower::upgrade()
+{
+    // check if not yet max level
+    if (level < getMaxLevel())
+    {
+        range += upgradeValues.rangeIncrease;
+        power += upgradeValues.powerIncrease;
+        rateOfFire += upgradeValues.rateOfFireIncrease;
+
+        level++;
+
+        notify();
+        return true;
+    }
+
+    return false;
 }
 
 /**

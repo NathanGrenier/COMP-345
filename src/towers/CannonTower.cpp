@@ -15,7 +15,9 @@
  */
 CannonTower::CannonTower() : Tower()
 {
-
+    upgradeValues.rangeIncrease = 50;
+    upgradeValues.powerIncrease = 5;
+    upgradeValues.rateOfFireIncrease = 1;
 }
 
 /**
@@ -31,7 +33,9 @@ CannonTower::CannonTower() : Tower()
 CannonTower::CannonTower(float x, float y, int buyingCost)
     : Tower(x, y, buyingCost, CANNON_RANGE, CANNON_POWER, CANNON_RATE_OF_FIRE)
 {
-    
+    upgradeValues.rangeIncrease = 50;
+    upgradeValues.powerIncrease = 5;
+    upgradeValues.rateOfFireIncrease = 1;
 }
 
 /**
@@ -47,34 +51,19 @@ CannonTower::CannonTower(float x, float y, int buyingCost)
 CannonTower::CannonTower(float x, float y, int buyingCost, int refundValue)
     : Tower(x, y, buyingCost, refundValue, CANNON_RANGE, CANNON_POWER, CANNON_RATE_OF_FIRE)
 {
-
+    upgradeValues.rangeIncrease = 50;
+    upgradeValues.powerIncrease = 5;
+    upgradeValues.rateOfFireIncrease = 1;
 }
 
 /**
- * @brief Upgrades a TowerCannon
- * 
- * @details Greatly increases the range
- * Slightly increases rate of fire
- * Moderately increaes the power of projectiles
- * Performs check for level, if not already max level
- * @return true if CannonTower is upgraded successfully
- * @return false if CannonTower could not be upgraded because it has already reached maximum level
+ * @brief Accessor for maximum level
+ *
+ * @return The maximum level for CannonTower upgrades
  */
-bool CannonTower::upgrade()
+int CannonTower::getMaxLevel()
 {
-    // check if not yet max level
-    if (level < CANNON_MAX_LEVEL)
-    {
-        range += 50;
-        rateOfFire += 1;
-        power += 5;
-
-        level++;
-
-        return true;
-    }
-
-    return false;
+    return CANNON_MAX_LEVEL;
 }
 
 /**

@@ -4,6 +4,7 @@
 #include <states/parts/MapSelectState.h>
 #include <states/parts/Part2State.h>
 #include <states/parts/Part3State.h>
+#include <states/parts/UITestState.h>
 #include <Global.h>
 #include <ui/LButton.h>
 
@@ -115,30 +116,31 @@ bool TitleState::exit() {
  * @param e The SDL_Event object containing input data.
  */
 void TitleState::handleEvent(SDL_Event& e) {
-	for (int i = 0; i < kButtonCount; ++i) {
-		buttons[i].handleEvent(&e);
+    for (int i = 0; i < kButtonCount; ++i) {
+        buttons[i].handleEvent(&e);
 
-		// Check if a button is clicked
-		if (e.type == SDL_EVENT_MOUSE_BUTTON_DOWN && e.button.button == SDL_BUTTON_LEFT) {
-			if (buttons[i].isClicked()) {
-				// Transition to the corresponding game state
-				switch (i) {
-					case 0:
-						setNextState(MapSelectState::get());  // Load main game
-						break;
-					case 1:
-						setNextState(Part1State::get());  // Load Part 1
-						break;
-					case 2:
-						setNextState(Part2State::get());  // Load Part 2
-						break;
-						//case 3:
+        // Check if a button is clicked
+        if (e.type == SDL_EVENT_MOUSE_BUTTON_DOWN && e.button.button == SDL_BUTTON_LEFT) {
+            if (buttons[i].isClicked()) {
+                // Transition to the corresponding game state
+                switch (i) {
+                case 0:
+                    setNextState(MainGameState::get());  // Load main game
+                    break;
+                case 1:
+                    setNextState(Part1State::get());  // Load Part 1
+                    break;
+                case 2:
+                    //setNextState(Part2State::get());  // Load Part 2
+                    setNextState(UITestState::get());  // Load UI test
+                    break;
+                //case 3:
 						//    setNextState(Part3State::get());  // Load Part 3
 						//    break;
-				}
-			}
-		}
-	}
+                }
+            }
+        }
+    }
 }
 
 /**

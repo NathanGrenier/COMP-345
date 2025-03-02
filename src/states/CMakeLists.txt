@@ -7,7 +7,8 @@ add_library(states STATIC
     parts/MainGameState.cpp
     parts/MapSelectState.cpp 
     parts/MapEditorState.cpp
-)
+    parts/Part3State.cpp
+    parts/UITestState.cpp)
 
 target_include_directories(states PUBLIC ${CMAKE_SOURCE_DIR}/src/include)
 
