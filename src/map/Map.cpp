@@ -447,6 +447,9 @@ nlohmann::json loadMapData(const std::string& filePath) {
 		return {};  // Return an empty json object on failure
 	}
 
+	std::cout << "File path: " << filePath << std::endl;
+
+
 	// Attempt to parse the file into a json object
 	try {
 		nlohmann::json mapData;
