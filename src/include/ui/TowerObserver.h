@@ -24,6 +24,8 @@ public:
 	~TowerObserver();
 	
 	void update(Observable* observable);
+	void handleButtonEvents(SDL_Event* e);
+
 	void setCurrentTower(Tower* tower);
 	Tower* getCurrentTower();
 
@@ -41,5 +43,5 @@ protected:
 
 private:
 	void updateAttributes();
-	std::string formatValueStr(int currentValue, int upgradeValue);
+	std::string formatValueStr(int currentValue, int upgradeValue, bool towerAtMaxLevel);
 };

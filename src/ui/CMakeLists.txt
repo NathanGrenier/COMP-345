@@ -1,8 +1,6 @@
 add_library(ui STATIC
     LButton.cpp
     LTexture.cpp
-    TowerButton.cpp
-    MainMenuButton.cpp 
     DetailDisplay.cpp
     DetailAttributeDisplay.cpp
     DetailDisplayComponent.cpp

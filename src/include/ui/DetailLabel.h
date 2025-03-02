@@ -10,18 +10,15 @@
 #include <ui/DetailDisplayComponent.h>
 #include <string>
 
-class DetailLabel : public DetailDisplayComponent 
+class DetailLabel : public DetailDisplayComponent, public LTexture
 {
 public:
-	static const int DETAIL_LABEL_HEIGHT = 30;
-
 	DetailLabel();
-	DetailLabel(int width);
+	DetailLabel(int width, std::string path);
 
-	bool setText(const std::string& text, SDL_Color textColor);
+	//bool setText(const std::string& text, SDL_Color textColor);
 	void render();
 
 protected:
-	LTexture detailLabelTexture;
 };
 

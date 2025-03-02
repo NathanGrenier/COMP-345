@@ -13,7 +13,7 @@
 class DetailAttribute : public DetailDisplayComponent
 {
 public:
-	static const int DETAIL_LABEL_HEIGHT = 20;
+	static const int DETAIL_ATTRIBUTE_SPACING = 20;
 	static const int DETAIL_VALUE_PADDING = 120;
 
 	DetailAttribute();

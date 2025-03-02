@@ -7,32 +7,36 @@
 #pragma once
 
 #include <Global.h>
-#include "LTexture.h"
+#include <ui/LTexture.h>
 
 class DetailDisplayComponent {
 public:
-	static const int DETAIL_COMPONENT_PADDING = 4;
+	static const int DETAIL_COMPONENT_PADDING = 10;
+	static const int DETAIL_COMPONENT_SPACING = 50;
 	static const int COMPONENT_BORDER_WIDTH = 2;
+	static const int DETAIL_COMPONENT_HEIGHT = 15;
 
 	DetailDisplayComponent();
-	DetailDisplayComponent(int width, int height);
+	DetailDisplayComponent(int width);
 
-	void setPosition(float x, float y);
-	SDL_FPoint getPosition();
+	virtual void setComponentPosition(float x, float y);
+	//SDL_FPoint getPosition();
 
-	void setWidth(int width);
-	int getWidth();
+	//void setWidth(int width);
+	//int getWidth();
 
-	void setHeight(int height);
-	int getHeight();
+	//void setHeight(int height);
+	//int getHeight();
 
-	virtual void render() = 0;
+	virtual void render();
 
 protected:
+	float xPosition;
+	float yPosition;
 	int width;
-	int height;
-
-	//Top left position
-	SDL_FPoint mPosition;
+//	int height;
+//
+//	//Top left position
+//	SDL_FPoint mPosition;
 };
 

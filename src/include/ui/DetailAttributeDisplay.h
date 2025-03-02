@@ -28,6 +28,8 @@ public:
 	void selectTower(Tower* tower);
 	bool isDisplayingTower();
 
+	void handleButtonEvents(SDL_Event* e);
+
 	TowerObserver* getTowerObserver();
 
 	std::vector<DetailDisplayComponent*> getComponents();

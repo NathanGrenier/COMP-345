@@ -8,7 +8,7 @@ DetailAttribute::DetailAttribute()
 }
 
 DetailAttribute::DetailAttribute(int width)
-	: DetailDisplayComponent::DetailDisplayComponent(width, DETAIL_LABEL_HEIGHT)
+	: DetailDisplayComponent::DetailDisplayComponent(width)
 {
 
 }
@@ -42,10 +42,10 @@ void DetailAttribute::render()
 {
 	DetailDisplayComponent::render();
 
-	SDL_FRect attributeRect = { 0.f, 0.f, width, height };
-	SDL_FRect valueRect = { 0.f, 0.f, width, height };
+	//SDL_FRect attributeRect = { 0.f, 0.f, width, height };
+	//SDL_FRect valueRect = { 0.f, 0.f, width, height };
 
-	detailAttributeTexture.render(mPosition.x, mPosition.y, &attributeRect, 0.0f, 15.0f);
-	detailValueTexture.render(mPosition.x + DETAIL_VALUE_PADDING, mPosition.y, &valueRect, 0.0f, 15.0f);
+	detailAttributeTexture.render(xPosition, yPosition, nullptr, 0, DetailDisplayComponent::DETAIL_COMPONENT_HEIGHT);
+	detailValueTexture.render(xPosition + DETAIL_VALUE_PADDING, yPosition, nullptr, 0, DetailDisplayComponent::DETAIL_COMPONENT_HEIGHT);
 }
 

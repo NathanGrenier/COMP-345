@@ -16,7 +16,7 @@ TowerObserver::TowerObserver(int startingX, int startingY) : currentTower(nullpt
     int componentWidth = DetailAttributeDisplay::ATTRIBUTE_DISPLAY_WIDTH - 2 * DetailDisplayComponent::DETAIL_COMPONENT_PADDING;
     
     // label for Tower information
-    towerComponents.push_back(new DetailLabel(componentWidth));
+    towerComponents.push_back(new DetailLabel(componentWidth, "assets/ui/TowerInformation.png"));
 
     // attribute for Towers
     towerComponents.push_back(new DetailAttribute(componentWidth));
@@ -27,13 +27,20 @@ TowerObserver::TowerObserver(int startingX, int startingY) : currentTower(nullpt
     towerComponents.push_back(new DetailAttribute(componentWidth));
 
     // buttons to sell and upgrade Towers
-    towerComponents.push_back(new DetailButton(componentWidth));
-    towerComponents.push_back(new DetailButton(componentWidth));
+    towerComponents.push_back(new DetailButton(componentWidth, "assets/ui/UpgradeTower.png"));
+    towerComponents.push_back(new DetailButton(componentWidth, "assets/ui/SellTower.png"));
 
     for (int i = 0; i < towerComponents.size(); i++) {
-        towerComponents[i]->setPosition(startingX + DetailDisplayComponent::DETAIL_COMPONENT_PADDING, startingY);
+        towerComponents[i]->setComponentPosition(startingX, startingY);
 
-        startingY += towerComponents[i]->getHeight() + DetailDisplayComponent::DETAIL_COMPONENT_PADDING;
+        if (i > 5 || i == 0)
+        {
+            startingY += DetailDisplayComponent::DETAIL_COMPONENT_SPACING;
+        }
+        else 
+        {
+            startingY += DetailAttribute::DETAIL_ATTRIBUTE_SPACING;
+        }
     }
 }
 
@@ -42,19 +49,14 @@ bool TowerObserver::initializeTowerComponents()
 {
     SDL_Color textColor{ 0x00, 0x00, 0x00, 0xFF };
 
-    (dynamic_cast<DetailLabel*>(towerComponents[0]))->setText("Tower Information", textColor);
-    (dynamic_cast<DetailAttribute*>(towerComponents[1]))->setAttributeText("Range", textColor);
-    (dynamic_cast<DetailAttribute*>(towerComponents[2]))->setAttributeText("Power", textColor);
-    (dynamic_cast<DetailAttribute*>(towerComponents[3]))->setAttributeText("Rate of fire", textColor);
-    (dynamic_cast<DetailAttribute*>(towerComponents[4]))->setAttributeText("Level", textColor);
-    (dynamic_cast<DetailAttribute*>(towerComponents[5]))->setAttributeText("Upgrade cost", textColor);
-    (dynamic_cast<DetailAttribute*>(towerComponents[6]))->setAttributeText("Refund value", textColor);
-    (dynamic_cast<DetailButton*>(towerComponents[7]))->setText("Upgrade Tower", textColor);
-    (dynamic_cast<DetailButton*>(towerComponents[8]))->setText("Sell Tower", textColor);
+    bool success1 = (dynamic_cast<DetailAttribute*>(towerComponents[1]))->setAttributeText("Range", textColor);
+    bool success2 = (dynamic_cast<DetailAttribute*>(towerComponents[2]))->setAttributeText("Power", textColor);
+    bool success3 = (dynamic_cast<DetailAttribute*>(towerComponents[3]))->setAttributeText("Rate of fire", textColor);
+    bool success4 = (dynamic_cast<DetailAttribute*>(towerComponents[4]))->setAttributeText("Level", textColor);
+    bool success5 = (dynamic_cast<DetailAttribute*>(towerComponents[5]))->setAttributeText("Upgrade cost", textColor);
+    bool success6 = (dynamic_cast<DetailAttribute*>(towerComponents[6]))->setAttributeText("Refund value", textColor);
 
-    //updateAttributes();
-
-    return true;
+    return (success1 && success2 && success3 && success4 && success5 && success6);
 }
 
 std::vector<DetailDisplayComponent*> TowerObserver::getTowerComponents()
@@ -82,8 +84,9 @@ void TowerObserver::render()
 
 TowerObserver::~TowerObserver()
 {
-    for (int i = 0; i < towerComponents.size(); i++) {
-        delete(towerComponents[i]);
+    for (int i = 0; i < towerComponents.size(); i++) 
+    {
+        delete towerComponents[i];
     }
 
     towerComponents.clear();
@@ -109,17 +112,37 @@ Tower* TowerObserver::getCurrentTower()
     return currentTower;
 }
 
+void TowerObserver::handleButtonEvents(SDL_Event* e)
+{
+    (dynamic_cast<DetailButton*>(towerComponents[7]))->handleEvent(e);
+    (dynamic_cast<DetailButton*>(towerComponents[8]))->handleEvent(e);
+}
+
 void TowerObserver::updateAttributes()
 {
     SDL_Color textColor{ 0x00, 0x00, 0x00, 0xFF };
 
     Tower::UpgradeValues upgradeValues = currentTower->getUpgradeValues();
+    int maxLevel = currentTower->getMaxLevel();
+    int currentLevel = currentTower->getLevel();
+    bool towerAtMaxLevel = (maxLevel == currentLevel);
 
-    std::string rangeStr = formatValueStr(currentTower->getRange(), upgradeValues.rangeIncrease);
-    std::string powerStr = formatValueStr(currentTower->getPower(), upgradeValues.powerIncrease);
-    std::string rateOfFireStr = formatValueStr(currentTower->getRateOfFire(), upgradeValues.rateOfFireIncrease);
+    std::string rangeStr = formatValueStr(currentTower->getRange(), upgradeValues.rangeIncrease, towerAtMaxLevel);
+    std::string powerStr = formatValueStr(currentTower->getPower(), upgradeValues.powerIncrease, towerAtMaxLevel);
+    std::string rateOfFireStr = formatValueStr(currentTower->getRateOfFire(), upgradeValues.rateOfFireIncrease, towerAtMaxLevel);
     std::string levelStr = std::format("{} / {}", currentTower->getLevel(), currentTower->getMaxLevel());
-    std::string upgradeCostStr = std::format("{}", currentTower->getUpgradeCost());
+
+
+    std::string upgradeCostStr;
+    if (towerAtMaxLevel)
+    {
+        upgradeCostStr = "-";
+    }
+    else
+    {
+        upgradeCostStr = std::to_string(currentTower->getUpgradeCost());
+    }
+
     std::string refundValueStr = std::format("{}", currentTower->getRefundValue());
 
     (dynamic_cast<DetailAttribute*>(towerComponents[1]))->setValueText(rangeStr, textColor);
@@ -131,11 +154,11 @@ void TowerObserver::updateAttributes()
     (dynamic_cast<DetailAttribute*>(towerComponents[6]))->setValueText(refundValueStr, textColor);
 }
 
-std::string TowerObserver::formatValueStr(int currentValue, int upgradeValue)
+std::string TowerObserver::formatValueStr(int currentValue, int upgradeValue, bool towerAtMaxLevel)
 {
     std::string valueStr;
 
-    if (upgradeValue == 0)
+    if (upgradeValue == 0 || towerAtMaxLevel)
     {
         return valueStr = std::to_string(currentValue);
     }

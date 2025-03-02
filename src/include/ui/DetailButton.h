@@ -8,15 +8,15 @@
 
 #include <Global.h>
 #include <ui/DetailDisplayComponent.h>
-#include "LButton.h"
+#include <string>
+#include <ui/LButton.h>
 
 class DetailButton : public DetailDisplayComponent, public LButton {
 public:
-	static const int DETAIL_BUTTON_HEIGHT = 50;
-
 	DetailButton();
-	DetailButton(int width);
-	void setButtonPosition();
+	DetailButton(int width, std::string path);
+
+	void setComponentPosition(float x, float y);
 
 	void render();
 };

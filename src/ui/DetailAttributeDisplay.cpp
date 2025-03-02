@@ -13,22 +13,22 @@ DetailAttributeDisplay::DetailAttributeDisplay()
     int componentWidth = ATTRIBUTE_DISPLAY_WIDTH - 2 * DetailDisplayComponent::DETAIL_COMPONENT_PADDING;
 
     // label to buy Towers
-    components.push_back(new DetailLabel(componentWidth));
+    components.push_back(new DetailLabel(componentWidth, "assets/ui/BuyTower.png"));
     
     // buttons to buy Towers
-    components.push_back(new DetailButton(componentWidth));
-    components.push_back(new DetailButton(componentWidth));
-    components.push_back(new DetailButton(componentWidth));
+    components.push_back(new DetailButton(componentWidth, "assets/ui/StandardTower.png"));
+    components.push_back(new DetailButton(componentWidth, "assets/ui/RapidFireTower.png"));
+    components.push_back(new DetailButton(componentWidth, "assets/ui/CannonTower.png"));
 
     int currentY = DetailDisplayComponent::DETAIL_COMPONENT_PADDING;
     
     for (int i = 0; i < components.size(); i++) {
-        components[i]->setPosition(mPosition.x + DetailDisplayComponent::DETAIL_COMPONENT_PADDING, currentY);
+        components[i]->setComponentPosition(mPosition.x + DetailDisplayComponent::DETAIL_COMPONENT_PADDING, currentY);
 
-        currentY += components[i]->getHeight() + DetailDisplayComponent::DETAIL_COMPONENT_PADDING;
+        currentY += DetailDisplayComponent::DETAIL_COMPONENT_SPACING;
     }
 
-    towerObserver = new TowerObserver(mPosition.x + DetailDisplayComponent::DETAIL_COMPONENT_PADDING, currentY + 5 * DetailDisplayComponent::DETAIL_COMPONENT_PADDING);
+    towerObserver = new TowerObserver(mPosition.x + DetailDisplayComponent::DETAIL_COMPONENT_PADDING, currentY + DetailDisplayComponent::DETAIL_COMPONENT_SPACING);
     
 }
 
@@ -45,16 +45,7 @@ std::vector<DetailDisplayComponent*> DetailAttributeDisplay::getTowerComponents(
 
 bool DetailAttributeDisplay::initializeComponents()
 {
-    SDL_Color textColor{ 0x00, 0x00, 0x00, 0xFF };
-    (dynamic_cast<DetailLabel*>(components[0]))->setText("Buy Tower", textColor);
-
-    (dynamic_cast<DetailButton*>(components[1]))->setText("Standard Tower", textColor);
-    (dynamic_cast<DetailButton*>(components[2]))->setText("Rapid Fire Tower", textColor);
-    (dynamic_cast<DetailButton*>(components[3]))->setText("Cannon Tower", textColor);
-    
-    towerObserver->initializeTowerComponents();
-
-    return true;
+    return towerObserver->initializeTowerComponents();
 }
 
 void DetailAttributeDisplay::selectTower(Tower* tower)
@@ -73,6 +64,15 @@ bool DetailAttributeDisplay::isDisplayingTower()
 TowerObserver* DetailAttributeDisplay::getTowerObserver()
 {
     return towerObserver;
+}
+
+
+void DetailAttributeDisplay::handleButtonEvents(SDL_Event* e)
+{
+    (dynamic_cast<DetailButton*>(components[1]))->handleEvent(e);
+    (dynamic_cast<DetailButton*>(components[2]))->handleEvent(e);
+    (dynamic_cast<DetailButton*>(components[3]))->handleEvent(e);
+    towerObserver->handleButtonEvents(e);
 }
 
 /**
