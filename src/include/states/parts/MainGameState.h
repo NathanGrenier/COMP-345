@@ -9,6 +9,8 @@
 #include "../GameState.h"
 #include <ui/LTexture.h>
 #include <map/Map.h>
+#include <string>
+#include <critter/CritterGroup.h>
 
 class MainGameState : public GameState {
 public:
@@ -23,6 +25,9 @@ public:
 	void handleEvent(SDL_Event& e) override;
 	void update() override;
 	void render() override;
+
+	// Helper functions
+	void renderText(const std::string& text, float x, float y);
 
 private:
 	//Static instance
@@ -41,4 +46,6 @@ private:
 	 *  @details nullptr if no map is currently loaded
 	 */
 	Map* map = nullptr;
+
+	CritterGroup* critterGroup = nullptr;
 };

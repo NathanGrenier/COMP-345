@@ -22,21 +22,22 @@
 #include <map/Map.h>
 #include <string>
 
- // External SDL variables
+  // External SDL variables
 extern SDL_Renderer* gRenderer; ///< Global pointer to the SDL renderer.
 extern TTF_Font* gFont; ///< Global pointer to the font used for rendering text.
-extern std::string currentMap;
 
 class Global {
 public:
-    static int viewerWidth;
-    static int headerHeight;
+	static int viewerWidth;
+	static int headerHeight;
 
-    static int cellWidth;  
-    static int cellHeight;
+	static int cellWidth;
+	static int cellHeight;
 
-    static constexpr int kScreenWidth{ 800 };
-    static constexpr int kScreenHeight{ 600 };
+	static constexpr int kScreenWidth{ 800 };
+	static constexpr int kScreenHeight{ 600 };
+
+	static Map* currentMap;
 };
 
 /**
