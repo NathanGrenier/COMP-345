@@ -10,13 +10,14 @@
  */
 
 #pragma once
-#include "DummyCritter.h"
-#include "Projectile.h"
+#include <towers/DummyCritter.h>
+#include <towers/Projectile.h>
+#include <util/Observable.h>
 
  /** @brief ratio between original tower cost and refund value */
 const double REFUND_RATIO = 0.5;
 
-class Tower
+class Tower : public Observable
 {
 public:
     static const int TOWER_SIZE = 30; /** @brief size of tower in pixels; to change to match with level gen */
@@ -29,15 +30,31 @@ public:
     
     virtual void generateTower();
     virtual void generateAllProjectiles();
-    virtual bool upgrade();
+    
+    int getRange();
+    int getPower();
+    int getRateOfFire();
+    int getLevel();
+
     virtual int getRefundValue();
     virtual int getUpgradeCost();
-    virtual void shootProjectile(DummyCritter* critter); /** should be pure virtual */
+    virtual int getMaxLevel() = 0;
+
+    virtual bool upgrade();
+    virtual void shootProjectile(DummyCritter* critter) = 0;
 
     DummyCritter* findCritter(std::vector<DummyCritter *> critters); /** finds critter in range of tower */
     void clearProjectiles();
     bool isClicked() const;
     bool isCritterInRange(DummyCritter critter);
+
+    struct UpgradeValues {
+        int rangeIncrease;
+        int powerIncrease;
+        int rateOfFireIncrease;
+    };
+
+    UpgradeValues getUpgradeValues();
 
 protected: 
     float x; /** @brief x position for projectile */
@@ -51,4 +68,6 @@ protected:
     int shootingTimer; /** @brief decremented with rate of fire for shooting */
     float calcDistance(DummyCritter critter); 
     std::vector<Projectile *> projectiles; /** @brief vector of all projectile */
+
+    UpgradeValues upgradeValues;
 };
