@@ -15,7 +15,9 @@
  */
 StandardTower::StandardTower() : Tower()
 {
-
+    upgradeValues.rangeIncrease = 20;
+    upgradeValues.powerIncrease = 1;
+    upgradeValues.rateOfFireIncrease = 1;
 }
 
 /**
@@ -31,7 +33,9 @@ StandardTower::StandardTower() : Tower()
 StandardTower::StandardTower(float x, float y, int buyingCost)
     : Tower(x, y, buyingCost, STANDARD_RANGE, STANDARD_POWER, STANDARD_RATE_OF_FIRE)
 {
-    
+    upgradeValues.rangeIncrease = 20;
+    upgradeValues.powerIncrease = 1;
+    upgradeValues.rateOfFireIncrease = 1;
 }
 
 /**
@@ -47,35 +51,19 @@ StandardTower::StandardTower(float x, float y, int buyingCost)
 StandardTower::StandardTower(float x, float y, int buyingCost, int refundValue)
     : Tower(x, y, buyingCost, refundValue, STANDARD_RANGE, STANDARD_POWER, STANDARD_RATE_OF_FIRE)
 {
-
+    upgradeValues.rangeIncrease = 20;
+    upgradeValues.powerIncrease = 1;
+    upgradeValues.rateOfFireIncrease = 1;
 }
 
 /**
- * @brief Upgrades a StandardTower
- * 
- * @details Slightly increases the range
- * Slightly increases power of projectiles
- * Slightly increases rate of fire
- * Also allows more upgrades than StandardTower and RapidFireTower since upgrades are less impactful
- * Performs check for level, if not already max level
- * @return true if StandardTower is upgraded successfully
- * @return false if StandardTower could not be upgraded because it has already reached maximum level
+ * @brief Accessor for maximum level
+ *
+ * @return The maximum level for StandardTower upgrades
  */
-bool StandardTower::upgrade()
+int StandardTower::getMaxLevel()
 {
-    // check if not yet max level
-    if (level < STANDARD_MAX_LEVEL)
-    {
-        range += 20;
-        power += 1;
-        rateOfFire += 1;
-        
-        level++;
-
-        return true;
-    }
-
-    return false;
+    return STANDARD_MAX_LEVEL;
 }
 
 /**

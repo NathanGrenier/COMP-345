@@ -13,9 +13,10 @@
 /**
  * @brief Default Constructor
  */
-RapidFireTower::RapidFireTower() : Tower()
+RapidFireTower::RapidFireTower() : Tower(), fireBreak(0), fireBreakRate(0), burstSize(0), burstCount(0)
 {
-
+    upgradeValues.rangeIncrease = 10;
+    upgradeValues.rateOfFireIncrease = 3;
 }
 
 /**
@@ -33,7 +34,8 @@ RapidFireTower::RapidFireTower() : Tower()
 RapidFireTower::RapidFireTower(float x, float y, int buyingCost)
     : fireBreak(0), fireBreakRate(5), burstSize(50), burstCount(0), Tower(x, y, buyingCost, RAPID_RANGE, RAPID_POWER, RAPID_RATE_OF_FIRE)
 {
-    
+    upgradeValues.rangeIncrease = 10;
+    upgradeValues.rateOfFireIncrease = 3;
 }
 
 /**
@@ -52,7 +54,8 @@ RapidFireTower::RapidFireTower(float x, float y, int buyingCost)
 RapidFireTower::RapidFireTower(float x, float y, int buyingCost, int refundValue)
     : fireBreak(0), fireBreakRate(5), burstSize(50), burstCount(0), Tower(x, y, buyingCost, refundValue, RAPID_RANGE, RAPID_POWER, RAPID_RATE_OF_FIRE)
 {
-
+    upgradeValues.rangeIncrease = 10;
+    upgradeValues.rateOfFireIncrease = 3;
 }
 
 /**
@@ -69,18 +72,23 @@ RapidFireTower::RapidFireTower(float x, float y, int buyingCost, int refundValue
 bool RapidFireTower::upgrade()
 {
     // check if not yet max level
-    if (level < RAPID_MAX_LEVEL)
+    if (Tower::upgrade())
     {
-        range += 10;
-        rateOfFire += 3;
         burstSize += 20;
-
-        level++;
-
         return true;
     }
 
     return false;
+}
+
+/**
+ * @brief Accessor for maximum level
+ *
+ * @return The maximum level for RapidFireTower upgrades
+ */
+int RapidFireTower::getMaxLevel()
+{
+    return RAPID_MAX_LEVEL;
 }
 
 /**
