@@ -84,12 +84,12 @@ bool MapSelectState::enter() {
 }
 
 bool MapSelectState::exit() {
-    createButton.destroy();
-    editButton.destroy();
-    selectButton.destroy();
-    mTitle.destroy();
-    mHoveredMapName.destroy();
-    return true;
+	createButton.destroy();
+	editButton.destroy();
+	selectButton.destroy();
+	mTitle.destroy();
+	mHoveredMapName.destroy();
+	return true;
 }
 
 void MapSelectState::handleEvent(SDL_Event& e) {
@@ -103,9 +103,19 @@ void MapSelectState::handleEvent(SDL_Event& e) {
 	if (e.type == SDL_EVENT_MOUSE_BUTTON_DOWN && e.button.button == SDL_BUTTON_LEFT) {
 		if (leftArrow.isClicked()) {
 			selectedIndex = (selectedIndex > 0) ? selectedIndex - 1 : availableMaps.size() - 1;
-		}
-		else if (rightArrow.isClicked()) {
+		} else if (rightArrow.isClicked()) {
 			selectedIndex = (selectedIndex + 1) % availableMaps.size();
+		}
+	}
+
+	if (e.type == SDL_EVENT_KEY_DOWN) {
+		switch (e.key.key) {
+			case SDLK_LEFT:
+				selectedIndex = (selectedIndex > 0) ? selectedIndex - 1 : availableMaps.size() - 1;
+				break;
+			case SDLK_RIGHT:
+				selectedIndex = (selectedIndex + 1) % availableMaps.size();
+				break;
 		}
 	}
 
@@ -134,7 +144,7 @@ void MapSelectState::update() {
 	}
 
 	if (!selectedMapFilePath.empty() && availableMaps.find(selectedMapFilePath) != availableMaps.end()) {
-		mHoveredMapName.loadFromRenderedText(availableMaps[selectedMapFilePath].name, { 0, 0, 0, 255});
+		mHoveredMapName.loadFromRenderedText(availableMaps[selectedMapFilePath].name, { 0, 0, 0, 255 });
 	}
 }
 
@@ -144,21 +154,21 @@ void MapSelectState::render() {
 
 	mTitle.render((kScreenWidth - kScreenWidth * 0.5) / 2, 20, nullptr, kScreenWidth * 0.5, -1);
 
-    if (!selectedMapFilePath.empty()) {
-        auto mapIter = availableMaps.find(selectedMapFilePath);
-        if (mapIter != availableMaps.end()) {
-            // Map found, render it
-            SDL_FRect targetRect = { (kScreenWidth - 300) / 2.0f, (kScreenHeight - 300) / 2.0f - 50, 300, 300 };
-        
-            // Ensure that the map can be drawn
-            mapIter->second.drawOnTargetRect(gRenderer, targetRect);
-        } else {
-            // Map not found
-            std::cerr << "Error: Map '" << selectedMapFilePath << "' not found in available maps." << std::endl;
-        }
-    } else {
-        std::cerr << "Error: selectedMapName is empty." << std::endl;
-    }
+	if (!selectedMapFilePath.empty()) {
+		auto mapIter = availableMaps.find(selectedMapFilePath);
+		if (mapIter != availableMaps.end()) {
+			// Map found, render it
+			SDL_FRect targetRect = { (kScreenWidth - 300) / 2.0f, (kScreenHeight - 300) / 2.0f - 50, 300, 300 };
+
+			// Ensure that the map can be drawn
+			mapIter->second.drawOnTargetRect(gRenderer, targetRect);
+		} else {
+			// Map not found
+			std::cerr << "Error: Map '" << selectedMapFilePath << "' not found in available maps." << std::endl;
+		}
+	} else {
+		std::cerr << "Error: selectedMapName is empty." << std::endl;
+	}
 
 	mHoveredMapName.render((kScreenWidth - mHoveredMapName.getWidth()) / 2, (kScreenHeight - mHoveredMapName.getHeight()) / 2 + 125);
 
@@ -206,8 +216,7 @@ void MapSelectState::loadAvailableMaps() {
 
 	if (availableMaps.empty()) {
 		std::cout << "No maps found in " << mapsDirectory << std::endl;
-	}
-	else {
+	} else {
 		// Set the first map as the selected one
 		selectedMapFilePath = availableMaps.begin()->first;
 		std::cout << "First map set as selected: " << availableMaps.begin()->first << std::endl;

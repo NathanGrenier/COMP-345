@@ -37,8 +37,8 @@ bool MapEditorState::enter() {
 
 	selectStartPos.loadFromFile("assets/ui/SetStartPositionButton.png");
 	selectEndPos.loadFromFile("assets/ui/SetEndPositionButton.png");
-	selectWallCell.loadFromFile("assets/ui/SetWallButton.png");
-	eraser.loadFromFile("assets/ui/EraseButton.png");
+	selectWallCell.loadFromFile("assets/ui/EditWallButton.png");
+	toggleFlowFieldVisibility.loadFromFile("assets/ui/ToggleFlowVisibilityButton.png");
 
 	saveMapButton.loadFromFile("assets/ui/SaveButton.png");
 	renameButton.loadFromFile("assets/ui/RenameButton.png");
@@ -78,7 +78,7 @@ bool MapEditorState::enter() {
 	selectStartPos.setSizeWithAspectRatio(buttonWidth, 0);
 	selectEndPos.setSizeWithAspectRatio(buttonWidth, 0);
 	selectWallCell.setSizeWithAspectRatio(buttonWidth, 0);
-	eraser.setSizeWithAspectRatio(buttonWidth, 0);
+	toggleFlowFieldVisibility.setSizeWithAspectRatio(buttonWidth, 0);
 
 	saveMapButton.setSizeWithAspectRatio(Global::viewerWidth / 2 - 5, 0);
 	renameButton.setSizeWithAspectRatio(Global::viewerWidth / 2 - 5, 0);
@@ -95,9 +95,9 @@ bool MapEditorState::enter() {
 	selectStartPos.setPosition(buttonStartX, addRow.getPosition().y + addRow.kButtonHeight + groupSpacing);
 	selectEndPos.setPosition(buttonStartX, selectStartPos.getPosition().y + selectStartPos.kButtonHeight + buttonSpacing);
 	selectWallCell.setPosition(buttonStartX, selectEndPos.getPosition().y + selectEndPos.kButtonHeight + buttonSpacing);
-	eraser.setPosition(buttonStartX, selectWallCell.getPosition().y + selectWallCell.kButtonHeight + buttonSpacing);
+	toggleFlowFieldVisibility.setPosition(buttonStartX, selectWallCell.getPosition().y + selectWallCell.kButtonHeight + buttonSpacing);
 
-	saveMapButton.setPosition(eraser.getPosition().x, selectWallCell.getPosition().y + selectWallCell.kButtonHeight + groupSpacing + 5);
+	saveMapButton.setPosition(toggleFlowFieldVisibility.getPosition().x, selectWallCell.getPosition().y + selectWallCell.kButtonHeight + groupSpacing + 5);
 	renameButton.setPosition(saveMapButton.getPosition().x + saveMapButton.kButtonWidth + buttonSpacing, saveMapButton.getPosition().y);
 
 	return true;
@@ -119,7 +119,7 @@ bool MapEditorState::exit() {
 	selectStartPos.destroy();
 	selectEndPos.destroy();
 	selectWallCell.destroy();
-	eraser.destroy();
+	toggleFlowFieldVisibility.destroy();
 
 	saveMapButton.destroy();
 	renameButton.destroy();
@@ -139,7 +139,7 @@ void MapEditorState::handleEvent(SDL_Event& e) {
 	selectStartPos.handleEvent(&e);
 	selectEndPos.handleEvent(&e);
 	selectWallCell.handleEvent(&e);
-	eraser.handleEvent(&e);
+	toggleFlowFieldVisibility.handleEvent(&e);
 
 	saveMapButton.handleEvent(&e);
 	renameButton.handleEvent(&e);
@@ -154,10 +154,11 @@ void MapEditorState::handleEvent(SDL_Event& e) {
 			currentMessage.loadFromRenderedText("Selected: End", { 0, 0, 0, 255 });
 		} else if (selectWallCell.isClicked()) {
 			currentSelection = "Wall";
-			currentMessage.loadFromRenderedText("Selected: Wall", { 0, 0, 0, 255 });
-		} else if (eraser.isClicked()) {
-			currentSelection = "Erase";
-			currentMessage.loadFromRenderedText("Selected: Erase", { 0, 0, 0, 255 });
+			currentMessage.loadFromRenderedText("Selected: Edit Wall", { 0, 0, 0, 255 });
+		} else if (toggleFlowFieldVisibility.isClicked()) {
+			std::string textToDisplay = "Flow Visibility: " + std::string(map->isFlowFieldVisible ? "On" : "Off");
+			currentMessage.loadFromRenderedText(textToDisplay, { 0, 0, 0, 255 });
+			map->toggleFlowFieldVisibility();
 		} else if (renameButton.isClicked()) {
 			currentSelection = "Rename";
 			currentMessage.loadFromRenderedText("Selected: Rename", { 0, 0, 0, 255 });
@@ -205,9 +206,16 @@ void MapEditorState::handleEvent(SDL_Event& e) {
 	}
 
 	// Track mouse button state
-	if (e.type == SDL_EVENT_MOUSE_BUTTON_DOWN && e.button.button == SDL_BUTTON_LEFT) {
-		mouseDownStatus = SDL_BUTTON_LEFT; // Set flag for continuous placement
-	} else if (e.type == SDL_EVENT_MOUSE_BUTTON_UP && e.button.button == SDL_BUTTON_LEFT) {
+	if (e.type == SDL_EVENT_MOUSE_BUTTON_DOWN) {
+		switch (e.button.button) {
+			case SDL_BUTTON_LEFT:
+				mouseDownStatus = SDL_BUTTON_LEFT;
+				break;
+			case SDL_BUTTON_RIGHT:
+				mouseDownStatus = SDL_BUTTON_RIGHT;
+				break;
+		}
+	} else if (e.type == SDL_EVENT_MOUSE_BUTTON_UP && (e.button.button == SDL_BUTTON_LEFT || e.button.button == SDL_BUTTON_RIGHT)) {
 		mouseDownStatus = 0; // Reset flag
 	}
 
@@ -229,16 +237,20 @@ void MapEditorState::handleEvent(SDL_Event& e) {
 		(mouseY - currentRenderRect.y) / scale / map->PIXELS_PER_CELL
 	);
 
-	// Continuous placement while holding left click
-	if (mouseDownStatus == SDL_BUTTON_LEFT && map != nullptr) {
-		if (currentSelection == "Start") {
-			map->setSpawner((int)mousePosition.x, (int)mousePosition.y);
-		} else if (currentSelection == "End") {
-			map->setTarget((int)mousePosition.x, (int)mousePosition.y);
-		} else if (currentSelection == "Wall") {
-			map->setCellWall((int)mousePosition.x, (int)mousePosition.y, true);
-		} else if (currentSelection == "Erase") {
-			map->setCellWall((int)mousePosition.x, (int)mousePosition.y, false);
+	if (map != nullptr) {
+		// Continuous placement while holding left click
+		if (mouseDownStatus == SDL_BUTTON_LEFT) {
+			if (currentSelection == "Start") {
+				map->setSpawner((int)mousePosition.x, (int)mousePosition.y);
+			} else if (currentSelection == "End") {
+				map->setTarget((int)mousePosition.x, (int)mousePosition.y);
+			} else if (currentSelection == "Wall") {
+				map->setCellWall((int)mousePosition.x, (int)mousePosition.y, true);
+			}
+		} else if (mouseDownStatus == SDL_BUTTON_RIGHT) {
+			if (currentSelection == "Wall") {
+				map->setCellWall((int)mousePosition.x, (int)mousePosition.y, false);
+			}
 		}
 	}
 
@@ -305,7 +317,7 @@ void MapEditorState::render() {
 	selectStartPos.render();
 	selectEndPos.render();
 	selectWallCell.render();
-	eraser.render();
+	toggleFlowFieldVisibility.render();
 
 	saveMapButton.render();
 	renameButton.render();
