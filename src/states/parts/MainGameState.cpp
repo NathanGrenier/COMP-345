@@ -15,27 +15,6 @@
 MainGameState MainGameState::sMainGameState;
 
 /**
- * @brief Player's current gold amount.
- */
-int playerGold;
-
-/**
- * @brief Current wave level in the game.
- */
-int waveLevel;
-
-/**
- * @brief Warning message that can be displayed on the screen.
- */
-std::string warningMessage = "";
-
-/**
- * @brief Time duration for which the warning message will be displayed.
- */
-float warningTime = 0.0f;
-
-
-/**
  * @brief Retrieves the singleton instance of the MainGameState.
  *
  * @return Pointer to the MainGameState instance.
@@ -63,10 +42,10 @@ bool MainGameState::enter() {
 	std::cout << "Global::currentMap name: " + Global::currentMap->name << std::endl;
 
 	map = new Map(*Global::currentMap);
-	SDL_FRect targetRect{ 0.0f, Global::headerHeight, static_cast<float>(Global::kScreenWidth - Global::viewerWidth), static_cast<float>(Global::kScreenHeight - Global::headerHeight) };
-	map->setCurrentRenderRect(targetRect);
 
-	critterGroup = new CritterGroup(waveLevel, playerGold, map->getSpawnerPos(targetRect), map->getTargetPos(targetRect), map);
+	map->setCurrentRenderRect(Global::mapViewRect);
+
+	critterGroup = new CritterGroup(waveLevel, playerGold, map->getSpawnerPos(Global::mapViewRect), map->getTargetPos(Global::mapViewRect), map);
 
 	return true;
 }
@@ -111,6 +90,12 @@ void MainGameState::handleEvent(SDL_Event& e) {
 void MainGameState::update() {
 	critterGroup->generateCritters(0.16f);
 	critterGroup->update(0.016f);
+
+	if (playerGold < 0) {
+		warningMessage = "You are out of gold!";
+	} else {
+		warningMessage = "";
+	}
 }
 
 /**
@@ -148,7 +133,7 @@ void MainGameState::render() {
  *
  * The MainGameState follows the singleton pattern.
  */
-MainGameState::MainGameState() {}
+MainGameState::MainGameState() : playerGold(0), waveLevel(0) {}
 
 /**
  * @brief Helper function to render text at a specific position on the screen.

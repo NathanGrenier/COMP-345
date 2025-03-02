@@ -14,7 +14,7 @@
 
 void Map::calculatePixelsPerCell() {
 	// Perform the calculation based on Global's static parameters
-	PIXELS_PER_CELL = (Global::kScreenWidth - Global::viewerWidth) / Global::cellWidth;
+	PIXELS_PER_CELL = Global::mapViewRect.w / Global::cellWidth;
 
 	// You may want to handle edge cases, like division by zero, or unexpected values.
 	if (Global::cellWidth == 0) {
@@ -143,6 +143,22 @@ void Map::drawCell(SDL_Renderer* renderer, const Cell& cell, const SDL_FRect& re
 	if (textureSelected != nullptr) {
 		SDL_RenderTexture(renderer, textureSelected, nullptr, &rect);
 	}
+}
+
+std::pair<int, int> Map::getCellFromPosition(float x, float y, const SDL_FRect& targetRect) const {
+	float cellW = targetRect.w / cellCountX;
+	float cellH = targetRect.h / cellCountY;
+	int cellX = static_cast<int>((x - targetRect.x) / cellW);
+	int cellY = static_cast<int>((y - targetRect.y) / cellH);
+	if (cellX >= 0 && cellX < cellCountX && cellY >= 0 && cellY < cellCountY) {
+		return { cellX, cellY };
+	}
+	return { -1, -1 }; // Out of bounds
+}
+
+SDL_FPoint Map::getCellCenter(int x, int y, const SDL_FRect& targetRect) const {
+	SDL_FRect cellRect = scaleCellRect(cells[x + y * cellCountX], targetRect);
+	return { cellRect.x + cellRect.w / 2.0f, cellRect.y + cellRect.h / 2.0f };
 }
 
 /**
@@ -447,9 +463,6 @@ nlohmann::json loadMapData(const std::string& filePath) {
 		return {};  // Return an empty json object on failure
 	}
 
-	std::cout << "File path: " << filePath << std::endl;
-
-
 	// Attempt to parse the file into a json object
 	try {
 		nlohmann::json mapData;
@@ -537,6 +550,11 @@ SDL_FRect Map::getCurrentRenderRect() {
 
 void Map::setCurrentRenderRect(SDL_FRect newTargetRect) {
 	currentRenderRect = newTargetRect;
+}
+
+SDL_FRect Map::getPixelPerCell() {
+	SDL_FRect currentMapRect = getCurrentRenderRect();
+	return SDL_FRect{ 0, 0, currentMapRect.w / cellCountX, currentMapRect.h / cellCountY };
 }
 
 /**

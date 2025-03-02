@@ -26,6 +26,11 @@ public:
 	void update() override;
 	void render() override;
 
+	int playerGold;
+	int waveLevel;
+	std::string warningMessage = "";
+	float warningTime = 0.0f;
+
 	// Helper functions
 	void renderText(const std::string& text, float x, float y);
 

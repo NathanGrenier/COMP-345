@@ -4,6 +4,7 @@
 #include <cmath>
 #include <ui/LTexture.h>
 #include <iostream>
+#include <Global.h>
 
 /**
  * @class CritterGroup
@@ -50,11 +51,13 @@ void CritterGroup::generateCritters(float deltaTime) {
 		int strength = level * 5;
 		int reward = level * 10;
 
+		SDL_FRect currentCellSize = Global::currentMap->getPixelPerCell();
+
 		SDL_FRect spawnCenter = {
-			startPosition.x + (startPosition.w / 2.0f) - 10.0f,  // Adjust for critter width
-			startPosition.y + (startPosition.h / 2.0f) - 10.0f,  // Adjust for critter height
-			Critter::CRITTER_WIDTH,
-			Critter::CRITTER_HEIGHT
+			startPosition.x + (startPosition.w / 2.0f) - (currentCellSize.w * Critter::CRITTER_WIDTH_SCALE / 2.0f),  // Adjust for half of critter width
+			startPosition.y + (startPosition.h / 2.0f) - (currentCellSize.h * Critter::CRITTER_HEIGHT_SCALE / 2.0f),  // Adjust for half of critter height
+			currentCellSize.w * Critter::CRITTER_WIDTH_SCALE,
+			currentCellSize.h * Critter::CRITTER_HEIGHT_SCALE
 		};
 
 		// Check if the start position is clear (no existing critters overlap)
@@ -92,18 +95,15 @@ void CritterGroup::generateCritters(float deltaTime) {
 void CritterGroup::update(float deltaTime) {
 	if (!waveInProgress) {
 		waveCountdown -= deltaTime;
-
-		// Debug statement to track countdown progress
 		if (waveCountdown <= 0.0f) {
 			waveInProgress = true;
-			waveLevel++;  // Increase wave level
+			waveLevel++;
 		}
-		return; // Skip updating critters during countdown
+		return;
 	}
 
 	int aliveCritters = 0;
 
-	// Iterate through critters and update their status
 	for (auto it = critters.begin(); it != critters.end(); ) {
 		if (!it->isAlive()) {
 			if (!it->atExit()) {
@@ -111,25 +111,18 @@ void CritterGroup::update(float deltaTime) {
 			} else {
 				it->stealGold(playerGold);
 			}
-			it = critters.erase(it);  // Remove the critter if it's dead
+			it = critters.erase(it);
 			++crittersSpawned;
 		} else {
 			++aliveCritters;
 			it->move(deltaTime, critters, 5.0f);
-
-			// Check if the critter has reached the exit
-			if (!it->atExit() && std::abs(it->getPosition().x - endPosition.x) <= 1.0f &&
-				std::abs(it->getPosition().y - endPosition.y) <= 1.0f) {
-				it->setAtExit(true);
-			}
 			++it;
 		}
 	}
 
-	// If no critters are alive and all have been spawned, start the countdown for the next wave
 	if (aliveCritters == 0 && crittersSpawned >= waveLevel * 10) {
-		waveInProgress = false;  // End current wave
-		waveCountdown = 3.0f;  // Start countdown for new wave
+		waveInProgress = false;
+		waveCountdown = 3.0f;
 	}
 }
 

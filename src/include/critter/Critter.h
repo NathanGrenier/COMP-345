@@ -15,9 +15,12 @@ public:
 	Critter(int level, float speed, int hitPoints, int strength, int reward, SDL_FRect start, Map* map);
 	~Critter();
 
-	static constexpr float CRITTER_WIDTH = 20.0f;
-	static constexpr float CRITTER_HEIGHT = 20.0f;
-	
+	static constexpr float CRITTER_WIDTH_SCALE = 0.65f;
+	static constexpr float CRITTER_HEIGHT_SCALE = 0.65f;
+
+	static constexpr float CRITTER_HEALTHBAR_HEIGHT = CRITTER_HEIGHT_SCALE * 0.4f;
+	static constexpr float CRITTER_HEALTHBAR_PADDING = CRITTER_HEIGHT_SCALE * 0.65f;
+
 	void onFlowFieldChanged() override;
 
 	void move(float deltaTime, const std::vector<Critter>& critters, float spacing);  // Move critter towards exit
@@ -45,9 +48,10 @@ private:
 	int reward;
 	SDL_FRect position;
 	bool isAtExit;
-	float healthBarWidth;
-	bool healthBarVisible;
-	float healthBarTime;
 	int maxHitPoints;
 	Map* map;
+
+	int targetCellX;
+	int targetCellY;
+	SDL_FPoint targetPos; // Pixel position of the target (center of the target cell)
 };

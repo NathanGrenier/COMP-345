@@ -38,6 +38,7 @@ public:
 	static constexpr int kScreenHeight{ 600 };
 
 	static Map* currentMap;
+	static SDL_FRect mapViewRect;
 };
 
 /**
