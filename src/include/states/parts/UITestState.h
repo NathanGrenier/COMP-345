@@ -1,8 +1,8 @@
 /**
  * @file UITestState.h
- * @brief Header file for the state for part 2 of assignment 1
+ * @brief Header file for testing the UI for assignment 2
  * @author Denmar Ermitano
- * @date 2025-02-22
+ * @date 2025-03-02
  */
 
 #ifndef UITESTSTATE_H
