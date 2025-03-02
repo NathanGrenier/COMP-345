@@ -73,7 +73,7 @@ bool Part3State::enter() {
 	endSquare = { Global::kScreenWidth - 50.0f, 300.0f, 50.0f, 50.0f };
 	playerGold = 100;
 	waveLevel = 1;
-	critterGroup = new CritterGroup(waveLevel, playerGold, startSquare, endSquare);
+	critterGroup = new CritterGroup(waveLevel, playerGold, startSquare, endSquare, Global::currentMap);
 	return true;
 }
 
@@ -123,8 +123,8 @@ void Part3State::handleEvent(SDL_Event& e) {
  * @brief Updates the game logic for the Part3State, including generating and moving critters.
  */
 void Part3State::update() {
-	critterGroup->generateCritters(startSquare, endSquare, 0.16f);
-	critterGroup->update(0.016f, endSquare);
+	critterGroup->generateCritters(0.16f);
+	critterGroup->update(0.016f);
 
 	for (auto& tower : towers) {
 		tower.update(0.016f, critterGroup->getCritters());

@@ -82,8 +82,6 @@ void changeState() {
  */
 bool init() {
 	bool success{ true };
-
-	// Initialize SDL
 	if (!SDL_Init(SDL_INIT_VIDEO)) {
 		SDL_Log("SDL could not initialize! SDL error: %s\n", SDL_GetError());
 		success = false;

@@ -21,6 +21,6 @@ public:
 	DetailLabel(int width, std::string path);
 
 	void render();
-protected:
+private:
 };
 

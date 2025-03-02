@@ -16,13 +16,7 @@
 #include <Global.h>
 #include <ui/LButton.h>
 #include <vector>
-
- //#include <towers/Tower.h>
- //#include <towers/CannonTower.h>
- //#include <towers/RapidFireTower.h>
- //#include <towers/StandardTower.h>
- //#include <towers/Projectile.h>
- //#include <towers/DummyCritter.h>
+#include <vector>
 
 #include "../towers/Tower.cpp"
 #include "../towers/CannonTower.cpp"
