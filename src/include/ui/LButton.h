@@ -13,7 +13,16 @@ class LButton {
 public:
 	//Button dimensions
 	static const int kButtonWidth = 200;
-	static const int kButtonHeight = 100;
+	//static const int kButtonHeight = 100;
+
+	// currently changed to 50 to work with DetailButton in UI
+	// will be reworked after button refactor
+	static const int kButtonHeight = 50;
+
+
+
+
+
 
 	//Initializes internal variables
 	LButton();
