@@ -1,44 +1,50 @@
 /**
  * @file DetailAttributeDisplay.h
- * @brief The header file for the DetailDisplay class.
+ * @brief The header file for the DetailAttributeDisplay class.
  * @author Denmar Ermitano
- * @date 2025-02-16
+ * @date 2025-03-02
+ * 
+ * @details Renders the UI on the right side
+ * Displays buttons for buying Towers
+ * Displays attributes of a selected Tower
+ * Displays buttons for upgrading and selling a selected Tower
  */
 #pragma once
 
 #include <Global.h>
 #include <ui/DetailDisplayComponent.h>
 #include <ui/DetailDisplay.h>
-#include <ui/DetailLabel.h>
-#include <ui/DetailButton.h>
-#include <ui/DetailAttribute.h>
 #include <ui/TowerObserver.h>
 #include <vector>
 
 class DetailAttributeDisplay : public DetailDisplay {
 
 public:
-	static const int ATTRIBUTE_DISPLAY_WIDTH = 225;
+	static const int ATTRIBUTE_DISPLAY_WIDTH = 225; /** @brief width of the display */
 
+	// constructor
 	DetailAttributeDisplay();
-	//~DetailAttributeDisplay();
-	void render();
+	void addToBuyTowers(Tower* tower);
 
+	// methods for towerObserver
 	bool initializeComponents();
 	void selectTower(Tower* tower);
-	bool isDisplayingTower();
-
+	bool isDisplayingTower();		// also needs function for displaying critter
+	//bool isDisplayingCritter();
+	
+	// for button hovers, clicks
 	void handleButtonEvents(SDL_Event* e);
 
+	// accessors
 	TowerObserver* getTowerObserver();
-
 	std::vector<DetailDisplayComponent*> getComponents();
 	std::vector<DetailDisplayComponent*> getTowerComponents();
+
+	void render();
 
 protected:
 	std::vector<DetailDisplayComponent*> components; /** @brief vector of all components */
 
-	TowerObserver* towerObserver;
-	//CritterObserver critterObserver;
+	TowerObserver* towerObserver; /** @brief contains details for Towers */
 };
 

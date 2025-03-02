@@ -1,5 +1,5 @@
 /**
- * @file CannonTower.cpp
+ * @class CannonTower
  * @brief Implementation of CannonTower class
  * @author Denmar Ermitano
  * @date 2025-02-22

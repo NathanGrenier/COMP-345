@@ -1,20 +1,20 @@
 /**
  * @class UITestState
- * @brief Driver file for assignment 1, part 2
+ * @brief Driver file for testing assignment 2, part 1
  * @author Denmar Ermitano
- * @date 2025-02-22
+ * @date 2025-03-02
  *
- * @details Class that shows tower behaviors
- * Select to buy a tower, upgrade a tower, or sell a tower using the buttons on the left.
- * After selecting a tower, left clicking will place it and reduce gold
- * After selecting upgrade, left clicking a tower will upgrade it by 1 level, using gold
- * After selecting sell, left clicking a tower will delete it, refunding a set amount of gold
- * Gold is shown through console as display is shown in Part3
+ * @details Class that shows Tower behaviors
+ * Select to buy a Tower, upgrade a Tower, or sell a tower using the buttons on the left.
+ * After selecting a Tower class, left clicking will place a single Tower and reduce gold
+ * After selecting a Tower, upgrading a Tower will upgrade it by 1 level, using gold
+ * After selecting a Tower, selling a Tower will delete it, refunding a set amount of gold
+ * Tower attributes are shown on the right
  */
 
 #include <states/parts/UITestState.h>
 #include <Global.h>
-#include <ui/TowerButton.h>
+#include <ui/LButton.h>
 #include <vector>
 
  //#include <towers/Tower.h>
@@ -30,6 +30,7 @@
 #include "../towers/StandardTower.cpp"
 #include "../towers/DummyCritter.cpp"
 #include "../towers/Projectile.cpp"
+#include "../ui/DetailButton.cpp"
 #include <iostream>
 #include <ui/DetailDisplay.h>
 #include <ui/DetailAttributeDisplay.h>
@@ -50,30 +51,19 @@ const int RAPID_FIRE_TOWER_COST = 50; /** @brief gold cost for rapid fire tower 
 
 const int DUMMY_CRITTER_COUNT = 4; /** @brief number of testing critters */
 
-int coins = 700; /** @brief coins for testing buying, upgrading, and selling */
+int coins = 7000; /** @brief coins for testing buying, upgrading, and selling */
 
 
+DetailAttributeDisplay detailDisplay; /** @brief ui display for details */
+int towerBuySelect; /** @brief selected Tower as index */
 
-
-
-
-
-
-
-DetailAttributeDisplay detailDisplay;
-int towerBuySelect;
-
-Tower* dummyStandardTower;
-Tower* dummyRapidFireTower;
-Tower* dummyCannonTower;
-
-
-
-
+Tower* dummyStandardTower; /** @brief dummy StandardTower for details before buying Tower */
+Tower* dummyRapidFireTower; /** @brief dummy RapidFireTower for details before buying Tower */
+Tower* dummyCannonTower; /** @brief dummy CannonTower for details before buying Tower */
 
 
 /**
- * @brief Get the singleton instance of Part2State
+ * @brief Get the singleton instance of UITestState
  * @return Pointer to the Part2State singleton
  */
 UITestState* UITestState::get() {
@@ -89,12 +79,13 @@ UITestState* UITestState::get() {
  * @return true if initialization was successful
  */
 bool UITestState::enter() {
-	bool success = true;
-
 	// prints starting amount of coins
 	cout << "Starting coins: " << coins << "\n" << endl;
+	towerBuySelect = -1;
 
-	SDL_Color textColor{ 0x00, 0x00, 0x00, 0xFF };
+	// Creates display
+	detailDisplay = DetailAttributeDisplay::DetailAttributeDisplay();
+	bool success = detailDisplay.initializeComponents();
 
 	// creates critters 
 	critters.push_back(new DummyCritter(100, 100, 40));
@@ -102,29 +93,28 @@ bool UITestState::enter() {
 	critters.push_back(new DummyCritter(100, 300, 40));
 	critters.push_back(new DummyCritter(300, 300, 40));
 
-	// Creates display
-	detailDisplay = DetailAttributeDisplay::DetailAttributeDisplay();
-	detailDisplay.initializeComponents();
+	// creating dummy Towers
+	dummyStandardTower = new StandardTower(0, 0, 0, 12);
+	dummyRapidFireTower = new RapidFireTower(0, 0, 0, 25);
+	dummyCannonTower = new CannonTower(0, 0, 0, 50);
 
-	towerBuySelect = -1;
+	TowerObserver* towerObserver = detailDisplay.getTowerObserver();
 
-	dummyStandardTower = new StandardTower(0, 0, 12);
-	dummyRapidFireTower = new RapidFireTower(0, 0, 25);
-	dummyCannonTower = new CannonTower(0, 0, 50);
+	// adding dummy Towers to display values before buying Towers
+	towerObserver->addToBuyTowers(dummyStandardTower);
+	towerObserver->addToBuyTowers(dummyRapidFireTower);
+	towerObserver->addToBuyTowers(dummyCannonTower);
 
-	detailDisplay.getTowerObserver()->addToBuyTowers(dummyStandardTower);
-	detailDisplay.getTowerObserver()->addToBuyTowers(dummyRapidFireTower);
-	detailDisplay.getTowerObserver()->addToBuyTowers(dummyCannonTower);
-
-	dummyStandardTower->attach(detailDisplay.getTowerObserver());
-	dummyRapidFireTower->attach(detailDisplay.getTowerObserver());
-	dummyCannonTower->attach(detailDisplay.getTowerObserver());
+	// attaching dummy Towers to Observer
+	dummyStandardTower->attach(towerObserver);
+	dummyRapidFireTower->attach(towerObserver);
+	dummyCannonTower->attach(towerObserver);
 
 	return success;
 }
 
 /**
- * @brief Cleans up Part2State
+ * @brief Cleans up UITestState
  *
  * @details Deallocates DefaultCritters and Towers
  *
@@ -132,16 +122,29 @@ bool UITestState::enter() {
  * @return false if could not deallocate either towers or critters
  */
 bool UITestState::exit() {
-	// todo: check critter and tower vectors
+	// deallocates Tower objects
+	for (int i = 0; i < towers.size(); i++)
+	{
+		delete towers[i];
+	}
+	towers.clear();
+
+	// deallocates DummyCritter objects
+	for (DummyCritter* critter : critters) 
+	{
+		delete critter;
+	}
+	critters.clear();
+
 	return true;
 }
 
 /**
- * @brief Handles events to process in Part2State
+ * @brief Handles events to process in UITestState
  *
- * @details If button is clicked on, updates the selection
- * If left clicking on scenery, places selected tower if applicable
- * If left clicking on tower, either upgrades or sells tower based on selection
+ * @details If buy Tower button is clicked on, updates the selection
+ * If left clicking on scenery, places selected tower if previously pressed on a Tower selection
+ * If left clicking on tower, shows Tower details, allowing upgrading and selling of that specific Tower
  *
  * @param e the SDL event
  */
@@ -150,19 +153,24 @@ void UITestState::handleEvent(SDL_Event& e)
 	// resets tower buy selection
 	bool buttonClick = false;
 
-	// buttons for buying towers
+	// handles hovering, clicking of buttons
+	detailDisplay.handleButtonEvents(&e);
+
+	// if click happens
 	if (e.type == SDL_EVENT_MOUSE_BUTTON_DOWN && e.button.button == SDL_BUTTON_LEFT)
 	{
+		// checking if buying tower
 		std::vector<DetailDisplayComponent*> components = detailDisplay.getComponents();
 		for (int i = 0; i < components.size(); i++)
 		{
 			if (dynamic_cast<DetailButton*>(components[i]) != NULL)
 			{
-
 				if (dynamic_cast<DetailButton*>(components[i])->isClicked())
 				{
 					towerBuySelect = i - 1;
 					buttonClick = true;
+					
+					// displays different values from dummy Towers
 					switch (i)
 					{
 					case 1:
@@ -182,6 +190,7 @@ void UITestState::handleEvent(SDL_Event& e)
 			}
 		}
 
+		// checking if upgrading tower
 		if ((dynamic_cast<DetailButton*>(detailDisplay.getTowerComponents()[7]))->isClicked())
 		{
 			buttonClick = true;
@@ -193,19 +202,15 @@ void UITestState::handleEvent(SDL_Event& e)
 				// checks if tower is already max level
 				if (detailDisplay.getTowerObserver()->getCurrentTower()->upgrade())
 				{
-					cout << "Upgrading tower\n";
 					coins -= upgradeCost;
 				}
-				else
-				{
-					cout << "Could not upgrade Tower\n";
-				}
 			}
-			else
-				cout << "Not enough coins for Tower upgrade\n";
+
 			cout << "Current coins: " << coins << "\n" << endl;
 
 		}
+
+		// checking if selling tower
 		if ((dynamic_cast<DetailButton*>(detailDisplay.getTowerComponents()[8]))->isClicked())
 		{
 			buttonClick = true;
@@ -230,6 +235,7 @@ void UITestState::handleEvent(SDL_Event& e)
 	if (!buttonClick && e.type == SDL_EVENT_MOUSE_BUTTON_DOWN && e.button.button == SDL_BUTTON_LEFT)
 	{
 		bool towerClick = false;
+		
 		// if clicking on current tower
 		for (int i = 0; i < towers.size(); i++) {
 			//towers[i]->handleEvent(&e);
@@ -241,6 +247,7 @@ void UITestState::handleEvent(SDL_Event& e)
 			}
 		}
 
+		// if not clicking on a tower
 		if (!towerClick)
 		{
 			// if placing down tower
@@ -259,33 +266,27 @@ void UITestState::handleEvent(SDL_Event& e)
 				case 0: // buy standard tower
 					if (coins >= STANDARD_TOWER_COST) {
 						coins -= STANDARD_TOWER_COST;
-						cout << "Placing down StandardTower\n";
 						newTower = new StandardTower(x, y, STANDARD_TOWER_COST);
 					}
-					else
-						cout << "Not enough coins for StandardTower\n";
+
 					cout << "Current coins: " << coins << "\n" << endl;
 					towerBuySelect = -1;
 					break;
 				case 1: // buy rapid fire tower
 					if (coins >= RAPID_FIRE_TOWER_COST) {
 						coins -= RAPID_FIRE_TOWER_COST;
-						cout << "Placing down RapidFireTower\n";
 						newTower = new RapidFireTower(x, y, RAPID_FIRE_TOWER_COST);
 					}
-					else
-						cout << "Not enough coins for RapidFireTower\n";
+
 					cout << "Current coins: " << coins << "\n" << endl;
 					towerBuySelect = -1;
 					break;
 				case 2: // buy cannon tower
 					if (coins >= CANNON_TOWER_COST) {
 						coins -= CANNON_TOWER_COST;
-						cout << "Placing down CannonTower\n";
 						newTower = new CannonTower(x, y, CANNON_TOWER_COST);
 					}
-					else
-						cout << "Not enough coins for CannonTower\n";
+
 					cout << "Current coins: " << coins << "\n" << endl;
 					towerBuySelect = -1;
 					break;
@@ -308,7 +309,7 @@ void UITestState::handleEvent(SDL_Event& e)
 }
 
 /**
- * @brief Handles updates to Part2State
+ * @brief Handles updates to UITestState
  *
  * @details Allows towers to find critters in range and fire projectiles at those DummyCritters
  * Also deletes DummyCritters if their health reaches 0
@@ -352,18 +353,18 @@ void UITestState::update()
 			critters.erase(critters.begin() + i);
 		}
 	}
-
-
 }
 
 /**
- * @brief Renders objects in Part2State
+ * @brief Renders objects in UITestState
  *
- * @details Generates towers that are placed down
- * Generates buttons for selecting, selling, and upgrading towers
+ * @details Generates towers that are placed down, along with their projectiles
+ * Generates display for Tower details
+ * Generates DummyCritters
  */
 void UITestState::render()
 {
+	// renders display
 	detailDisplay.render();
 
 	// generates towers and projectiles associated with towers
@@ -379,7 +380,7 @@ void UITestState::render()
 	}
 }
 /**
- * @brief Part2State default constructor
+ * @brief UITestState default constructor
  */
 UITestState::UITestState() {
 

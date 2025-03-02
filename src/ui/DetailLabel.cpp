@@ -1,40 +1,39 @@
+/**
+ * @class DetailLabel
+ * @brief Implementation of the DetailLabel class.
+ * @author Denmar Ermitano
+ * @date 2025-03-02
+ */
+
 #include <ui/DetailLabel.h>
 #include <Global.h>
 
+/**
+ * @brief Default constructor.
+ */
 DetailLabel::DetailLabel()
 	: DetailDisplayComponent::DetailDisplayComponent()
 {
 
 }
 
+/**
+ * @brief Constructor for DetailLabel with width and image path
+ * @param width the width of the DetailLabel
+ * @param path the path of the LTexture image
+ */
 DetailLabel::DetailLabel(int width, std::string path)
 	: DetailDisplayComponent::DetailDisplayComponent(width)
 {
 	LTexture::loadFromFile(path);
 }
 
-///**
-// * @brief Sets the text on the DetailLabel.
-// *
-// * @param text The text to be displayed.
-// * @param textColor The color of the text.
-// * @return True if the text texture was successfully created, false otherwise.
-// */
-//bool DetailLabel::setText(const std::string& text, SDL_Color textColor) {
-//	return detailLabelTexture.loadFromRenderedText(text, textColor);
-//}
-
 /**
- * @brief
+ * @brief Renders the DetailLabel
  */
 void DetailLabel::render()
 {
+	// sets height to 0, leaving height to be calculated with width and aspect ratio of image
 	LTexture::render(xPosition, yPosition, nullptr, width, 0);
-	
-	//DetailDisplayComponent::render();
-	//int additionalTextLength = 100;
-
-	//SDL_FRect fRect = { 0.f, 0.f, width + additionalTextLength, height };
-	//detailLabelTexture.render(mPosition.x, mPosition.y, &fRect, 0.0f, 20.0f);
 }
 

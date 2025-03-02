@@ -124,9 +124,9 @@ void TitleState::handleEvent(SDL_Event& e) {
             if (buttons[i].isClicked()) {
                 // Transition to the corresponding game state
                 switch (i) {
-                case 0:
-                    setNextState(MainGameState::get());  // Load main game
-                    break;
+                //case 0:
+                //    setNextState(MainGameState::get());  // Load main game
+                //    break;
                 case 1:
                     setNextState(Part1State::get());  // Load Part 1
                     break;
@@ -134,9 +134,9 @@ void TitleState::handleEvent(SDL_Event& e) {
                     //setNextState(Part2State::get());  // Load Part 2
                     setNextState(UITestState::get());  // Load UI test
                     break;
-                //case 3:
-						//    setNextState(Part3State::get());  // Load Part 3
-						//    break;
+     //           case 3:
+					//setNextState(Part3State::get());  // Load Part 3
+					//break;
                 }
             }
         }
