@@ -31,9 +31,6 @@ public:
 	static int viewerWidth;
 	static int headerHeight;
 
-	static int cellWidth;
-	static int cellHeight;
-
 	static constexpr int kScreenWidth{ 800 };
 	static constexpr int kScreenHeight{ 600 };
 

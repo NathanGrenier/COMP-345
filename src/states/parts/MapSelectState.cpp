@@ -65,7 +65,12 @@ bool MapSelectState::enter() {
 }
 
 bool MapSelectState::exit() {
-	return true;
+    createButton.destroy();
+    editButton.destroy();
+    selectButton.destroy();
+    mTitle.destroy();
+    mHoveredMapName.destroy();
+    return true;
 }
 
 void MapSelectState::handleEvent(SDL_Event& e) {
@@ -119,22 +124,21 @@ void MapSelectState::render() {
 
 	mTitle.render((kScreenWidth - kScreenWidth * 0.5) / 2, 20, nullptr, kScreenWidth * 0.5, -1);
 
-	// Debug output for checking selectedMapFilePath and map existence
-	if (!selectedMapFilePath.empty()) {
-		auto mapIter = availableMaps.find(selectedMapFilePath);
-		if (mapIter != availableMaps.end()) {
-			// Map found, render it
-			SDL_FRect targetRect = { (kScreenWidth - 300) / 2.0f, (kScreenHeight - 300) / 2.0f - 50, 300, 300 };
-
-			// Ensure that the map can be drawn
-			mapIter->second.drawOnTargetRect(gRenderer, targetRect);
-		} else {
-			// Map not found
-			std::cerr << "Error: Map '" << selectedMapFilePath << "' not found in available maps." << std::endl;
-		}
-	} else {
-		std::cerr << "Error: selectedMapFilePath is empty." << std::endl;
-	}
+    if (!selectedMapFilePath.empty()) {
+        auto mapIter = availableMaps.find(selectedMapFilePath);
+        if (mapIter != availableMaps.end()) {
+            // Map found, render it
+            SDL_FRect targetRect = { (kScreenWidth - 300) / 2.0f, (kScreenHeight - 300) / 2.0f - 50, 300, 300 };
+        
+            // Ensure that the map can be drawn
+            mapIter->second.drawOnTargetRect(gRenderer, targetRect);
+        } else {
+            // Map not found
+            std::cerr << "Error: Map '" << selectedMapFilePath << "' not found in available maps." << std::endl;
+        }
+    } else {
+        std::cerr << "Error: selectedMapName is empty." << std::endl;
+    }
 
 	mHoveredMapName.render((kScreenWidth - mHoveredMapName.getWidth()) / 2, (kScreenHeight - mHoveredMapName.getHeight()) / 2 + 150);
 
@@ -178,7 +182,8 @@ void MapSelectState::loadAvailableMaps() {
 
 	if (availableMaps.empty()) {
 		std::cout << "No maps found in " << mapsDirectory << std::endl;
-	} else {
+	}
+	else {
 		// Set the first map as the selected one
 		selectedMapFilePath = availableMaps.begin()->first;
 		std::cout << "First map set as selected: " << availableMaps.begin()->first << std::endl;

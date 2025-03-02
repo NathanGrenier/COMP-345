@@ -42,10 +42,8 @@ GameState* gCurrentState{ nullptr };
 /** @brief The next game state to transition to. */
 GameState* gNextState{ nullptr };
 
-
-int Global::viewerWidth = 100;
-int Global::headerHeight = 20;
-
+int Global::viewerWidth = 250;
+int Global::headerHeight = 75;
 Map* Global::currentMap = nullptr;
 
 SDL_FRect Global::mapViewRect = { 0.0f, Global::headerHeight, static_cast<float>(Global::kScreenWidth - Global::viewerWidth), static_cast<float>(Global::kScreenHeight - Global::headerHeight) };

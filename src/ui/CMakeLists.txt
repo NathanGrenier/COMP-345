@@ -1,7 +1,6 @@
 add_library(ui STATIC
     LButton.cpp
     LTexture.cpp
-    
     )
 
 target_include_directories(ui PUBLIC ${CMAKE_SOURCE_DIR}/src/include)

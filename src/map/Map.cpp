@@ -14,10 +14,10 @@
 
 void Map::calculatePixelsPerCell() {
 	// Perform the calculation based on Global's static parameters
-	PIXELS_PER_CELL = Global::mapViewRect.w / Global::cellWidth;
+	PIXELS_PER_CELL = (Global::kScreenWidth - Global::viewerWidth) / cellCountX;
 
 	// You may want to handle edge cases, like division by zero, or unexpected values.
-	if (Global::cellWidth == 0) {
+	if (cellCountX == 0) {
 		// Handle error (e.g., set PIXELS_PER_CELL to a default value or throw an exception)
 		PIXELS_PER_CELL = 0; // Or some default fallback value
 	}

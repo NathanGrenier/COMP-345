@@ -9,6 +9,8 @@
 #include "../GameState.h"
 #include <ui/LTexture.h>
 #include <map/Map.h>
+#include <ui/LButton.h>
+#include <ui/LButton.h>
 
 class MapEditorState : public GameState {
 public:
@@ -36,6 +38,25 @@ private:
 
 	//Intro message
 	LTexture mMessageTexture;
+
+	LTexture noOfColumnsLabel;
+	LTexture noOfColumnsText;
+	LButton addColumn;
+	LButton removeColumn;
+
+	LTexture noOfRowsLabel;
+	LTexture noOfRowsText;
+	LButton addRow;
+	LButton removeRow;
+
+	LButton selectStartPos;
+	LButton selectEndPos;
+	LButton selectWallCell;
+	LButton eraser;
+
+	LButton saveMapButton;
+	LButton renameButton;
+	LTexture textField;
 
 	/** @brief Pointer to the map being edited
 	 *  @details nullptr if no map is currently loaded

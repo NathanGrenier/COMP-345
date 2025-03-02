@@ -38,9 +38,6 @@ private:
 	//Static instance
 	static MainGameState sMainGameState;
 
-	//Private constructor
-	MainGameState();
-
 	//Intro background
 	LTexture mBackgroundTexture;
 
