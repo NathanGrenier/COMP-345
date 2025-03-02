@@ -9,7 +9,8 @@ add_library(ui STATIC
     DetailLabel.cpp
     DetailButton.cpp
     DetailAttribute.cpp
-    TowerObserver.cpp)
+    TowerObserver.cpp
+)
 
 target_include_directories(ui PUBLIC ${CMAKE_SOURCE_DIR}/src/include)
 

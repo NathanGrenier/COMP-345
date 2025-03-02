@@ -8,28 +8,39 @@
 #include <queue>
 #include <SDL3/SDL_log.h>
 #include <iostream>
+#include <fstream>
+#include <Global.h>
+#include <nlohmann/json.hpp>
 
+void Map::calculatePixelsPerCell() {
+	// Perform the calculation based on Global's static parameters
+	PIXELS_PER_CELL = (Global::kScreenWidth - Global::viewerWidth) / Global::cellWidth;
 
- /**
-  * @brief Constructs a new Map object.
-  *
-  * @param renderer The SDL renderer used for loading textures.
-  * @param setCellCountX The number of cells along the X-axis.
-  * @param setCellCountY The number of cells along the Y-axis.
-  * @details Initializes cell textures, creates a grid of cells, sets the default target at the center,
-  *          and calculates the initial flow field.
-  */
-Map::Map(SDL_Renderer* renderer, int setCellCountX, int setCellCountY) :
-	cellCountX(setCellCountX), cellCountY(setCellCountY) {
-	textureCellWall = TextureLoader::loadTexture(renderer, "map/cell-wall.bmp");
-	textureCellTarget = TextureLoader::loadTexture(renderer, "map/cell-target.bmp");
-	textureCellSpawner = TextureLoader::loadTexture(renderer, "map/cell-spawner.bmp");
+	// You may want to handle edge cases, like division by zero, or unexpected values.
+	if (Global::cellWidth == 0) {
+		// Handle error (e.g., set PIXELS_PER_CELL to a default value or throw an exception)
+		PIXELS_PER_CELL = 0; // Or some default fallback value
+	}
 
-	textureCellEmpty = TextureLoader::loadTexture(renderer, "map/cell-empty.bmp");
-	textureCellArrowUp = TextureLoader::loadTexture(renderer, "map/cell-arrow-up.bmp");
-	textureCellArrowDown = TextureLoader::loadTexture(renderer, "map/cell-arrow-down.bmp");
-	textureCellArrowLeft = TextureLoader::loadTexture(renderer, "map/cell-arrow-left.bmp");
-	textureCellArrowRight = TextureLoader::loadTexture(renderer, "map/cell-arrow-right.bmp");
+	textureCellWall = TextureLoader::loadTexture(gRenderer, "map/cell-wall.bmp");
+	textureCellTarget = TextureLoader::loadTexture(gRenderer, "map/cell-target.bmp");
+	textureCellSpawner = TextureLoader::loadTexture(gRenderer, "map/cell-spawner.bmp");
+
+	textureCellEmpty = TextureLoader::loadTexture(gRenderer, "map/cell-empty.bmp");
+	textureCellArrowUp = TextureLoader::loadTexture(gRenderer, "map/cell-arrow-up.bmp");
+	textureCellArrowDown = TextureLoader::loadTexture(gRenderer, "map/cell-arrow-down.bmp");
+	textureCellArrowLeft = TextureLoader::loadTexture(gRenderer, "map/cell-arrow-left.bmp");
+	textureCellArrowRight = TextureLoader::loadTexture(gRenderer, "map/cell-arrow-right.bmp");
+}
+
+/**
+ * @brief Default Map constructor.
+ */
+Map::Map() {
+	cellCountX = 15;
+	cellCountY = 15;
+
+	calculatePixelsPerCell();
 
 	cells.clear();
 	cells.reserve(cellCountX * cellCountY);
@@ -51,16 +62,35 @@ Map::Map(SDL_Renderer* renderer, int setCellCountX, int setCellCountY) :
 }
 
 /**
- * @brief Draws all cells in the map.
+ * @brief Constructs a new Map object.
  *
- * @param renderer The SDL renderer used for drawing.
- * @details Iterates through all cells and draws them using their respective textures based on type and flow direction.
+ * @param renderer The SDL renderer used for loading textures.
+ * @param setCellCountX The number of cells along the X-axis.
+ * @param setCellCountY The number of cells along the Y-axis.
+ * @details Initializes cell textures, creates a grid of cells, sets the default target at the center,
+ *          and calculates the initial flow field.
  */
-void Map::draw(SDL_Renderer* renderer) {
-	// Draw the arrow and empty cells.
-	for (const auto& cell : cells) {
-		drawCell(renderer, cell);
+Map::Map(int setCellCountX, int setCellCountY, std::string name) :
+	cellCountX(setCellCountX), cellCountY(setCellCountY), name(name) {
+	calculatePixelsPerCell();
+
+	cells.clear();
+	cells.reserve(cellCountX * cellCountY);
+	for (int y = 0; y < cellCountY; y++) {
+		for (int x = 0; x < cellCountX; x++) {
+			Cell cell;
+			cell.x = x;
+			cell.y = y;
+			cells.push_back(cell);
+		}
 	}
+
+	// Set default target at the center
+	int centerX = cellCountX / 2;
+	int centerY = cellCountY / 2;
+	setTarget(centerX, centerY);
+
+	calculateFlowField();
 }
 
 /**
@@ -70,29 +100,47 @@ void Map::draw(SDL_Renderer* renderer) {
  * @param cell The cell to be drawn.
  * @details Selects the appropriate texture based on cell properties.
  */
-void Map::drawCell(SDL_Renderer* renderer, const Cell& cell) {
+ /**
+  * @brief Draws an individual cell.
+  *
+  * @param renderer The SDL renderer used for drawing.
+  * @param cell The cell to be drawn.
+  * @param rect The rectangle where the cell should be rendered.
+  * @details Selects the appropriate texture based on cell properties and draws it within the specified rectangle.
+  */
+void Map::drawCell(SDL_Renderer* renderer, const Cell& cell, const SDL_FRect& rect) {
 	// Default texture is the empty cell.
 	SDL_Texture* textureSelected = textureCellEmpty;
 
-	// Choose arrow texture based on the cell’s flow direction.
-	if (cell.isSpawner) {	// Spawner still has a flow direction, but is drawn as a different texture.
+	// Choose texture based on the cell’s properties.
+	if (cell.isSpawner) {
+		// Spawner cell
 		textureSelected = textureCellSpawner;
-	} else if (cell.flowDirectionX == 0 && cell.flowDirectionY == -1) { // Up
-		textureSelected = textureCellArrowUp;
-	} else if (cell.flowDirectionX == 1 && cell.flowDirectionY == 0) { // Right
-		textureSelected = textureCellArrowRight;
-	} else if (cell.flowDirectionX == 0 && cell.flowDirectionY == 1) { // Down
-		textureSelected = textureCellArrowDown;
-	} else if (cell.flowDirectionX == -1 && cell.flowDirectionY == 0) { // Left
-		textureSelected = textureCellArrowLeft;
 	} else if (cell.isTarget) {
+		// Target cell
 		textureSelected = textureCellTarget;
 	} else if (cell.isWall) {
+		// Wall cell
 		textureSelected = textureCellWall;
+	} else if (cell.flowDirectionX != 0 || cell.flowDirectionY != 0) {
+		// Cell with a flow direction (arrow)
+		if (cell.flowDirectionX == 0 && cell.flowDirectionY == -1) {
+			// Up
+			textureSelected = textureCellArrowUp;
+		} else if (cell.flowDirectionX == 1 && cell.flowDirectionY == 0) {
+			// Right
+			textureSelected = textureCellArrowRight;
+		} else if (cell.flowDirectionX == 0 && cell.flowDirectionY == 1) {
+			// Down
+			textureSelected = textureCellArrowDown;
+		} else if (cell.flowDirectionX == -1 && cell.flowDirectionY == 0) {
+			// Left
+			textureSelected = textureCellArrowLeft;
+		}
 	}
 
+	// Draw the selected texture within the specified rectangle
 	if (textureSelected != nullptr) {
-		SDL_FRect rect = { cell.x * PIXELS_PER_CELL, cell.y * PIXELS_PER_CELL, PIXELS_PER_CELL, PIXELS_PER_CELL };
 		SDL_RenderTexture(renderer, textureSelected, nullptr, &rect);
 	}
 }
@@ -226,19 +274,43 @@ void Map::setSpawner(int x, int y) {
 /**
  * @brief Gets the position of the first target cell found.
  *
- * @return Vector2D Position of the target in cell coordinates.
+ * @param targetRect The rectangle where the map is being rendered.
+ * @return SDL_FRect Position of the target in scaled coordinates.
  * @details Falls back to center coordinates if no target found and sets one there.
  */
-Vector2D Map::getTargetPos() {
-	// Return the first target cell found (default is center)
+SDL_FRect Map::getTargetPos(const SDL_FRect& targetRect) {
 	for (const auto& cell : cells) {
 		if (cell.isTarget) {
-			return Vector2D(static_cast<float>(cell.x), static_cast<float>(cell.y));
+			return scaleCellRect(cell, targetRect);
 		}
 	}
+
 	// Fallback if no target found (shouldn't occur with default setup)
 	setTarget(cellCountX / 2, cellCountY / 2);
-	return Vector2D(static_cast<float>(cellCountX / 2), static_cast<float>(cellCountY / 2));
+	return scaleCellRect(cells[cellCountX / 2 + cellCountY / 2 * cellCountX], targetRect);
+}
+
+/**
+ * @brief Gets the position of the first spawner cell found.
+ *
+ * @param targetRect The rectangle where the map is being rendered.
+ * @return SDL_FRect Position of the spawner in scaled coordinates.
+ * @details Returns a default position if no spawner found.
+ */
+SDL_FRect Map::getSpawnerPos(const SDL_FRect& targetRect) {
+	for (const auto& cell : cells) {
+		if (cell.isSpawner) {
+			return scaleCellRect(cell, targetRect);
+		}
+	}
+
+	// Default if no spawner
+	return SDL_FRect{
+		targetRect.x + (targetRect.w - cellCountX * PIXELS_PER_CELL * std::min(targetRect.w / (cellCountX * PIXELS_PER_CELL), targetRect.h / (cellCountY * PIXELS_PER_CELL))) / 2.0f,
+		targetRect.y + (targetRect.h - cellCountY * PIXELS_PER_CELL * std::min(targetRect.w / (cellCountX * PIXELS_PER_CELL), targetRect.h / (cellCountY * PIXELS_PER_CELL))) / 2.0f,
+		static_cast<float>(PIXELS_PER_CELL) * std::min(targetRect.w / (cellCountX * PIXELS_PER_CELL), targetRect.h / (cellCountY * PIXELS_PER_CELL)),
+		static_cast<float>(PIXELS_PER_CELL) * std::min(targetRect.w / (cellCountX * PIXELS_PER_CELL), targetRect.h / (cellCountY * PIXELS_PER_CELL))
+	};
 }
 
 /**
@@ -256,6 +328,7 @@ void Map::calculateFlowField() {
 	}
 	calculateDistances();
 	calculateFlowDirections();
+	notifyObservers();
 }
 
 /**
@@ -364,4 +437,205 @@ bool Map::isValidPath() {
 		return false;
 
 	return true;
+}
+
+nlohmann::json loadMapData(const std::string& filePath) {
+	// Open the file
+	std::ifstream file(filePath);
+	if (!file.is_open()) {
+		std::cerr << "Error: Could not open file " << filePath << std::endl;
+		return {};  // Return an empty json object on failure
+	}
+
+	std::cout << "File path: " << filePath << std::endl;
+
+
+	// Attempt to parse the file into a json object
+	try {
+		nlohmann::json mapData;
+		file >> mapData;
+
+		// Ensure the file content is valid JSON
+		if (file.fail()) {
+			std::cerr << "Error: Failed to parse the JSON from file " << filePath << std::endl;
+			return {};  // Return an empty json object if parsing fails
+		}
+
+		return mapData;
+	} catch (const nlohmann::json::parse_error& e) {
+		std::cerr << "Error: Parsing failed. Exception: " << e.what() << std::endl;
+		return {};  // Return an empty json object if an exception occurs
+	}
+}
+
+
+/**
+ * @brief Loads and initializes the map from a JSON file.
+ *
+ * @param filePath The path to the JSON file.
+ * @return true If the map was successfully loaded and initialized.
+ * @return false If the file could not be opened or parsed.
+ */
+bool Map::loadFromJson(const std::string& filePath) {
+	// Load the JSON file
+	nlohmann::json mapData = loadMapData(filePath);
+	if (mapData.empty()) {
+		return false; // Failed to load or parse the JSON file
+	}
+
+	// Set map metadata
+	this->name = mapData["name"];
+	this->filePath = filePath;
+
+	// Set map dimensions
+	cellCountX = mapData["width"];
+	cellCountY = mapData["height"];
+
+	// Clear existing cells and reserve space for new ones
+	cells.clear();
+	cells.reserve(cellCountX * cellCountY);
+
+	// Initialize the grid of cells
+	for (int y = 0; y < cellCountY; y++) {
+		for (int x = 0; x < cellCountX; x++) {
+			Cell cell;
+			cell.x = x;
+			cell.y = y;
+			cell.isWall = false;
+			cell.isSpawner = false;
+			cell.isTarget = false;
+			cells.push_back(cell);
+		}
+	}
+
+	// Set the spawner (start position)
+	int spawnX = mapData["start"]["x"];
+	int spawnY = mapData["start"]["y"];
+	setSpawner(spawnX, spawnY);
+
+	// Set the target (end position)
+	int targetX = mapData["end"]["x"];
+	int targetY = mapData["end"]["y"];
+	setTarget(targetX, targetY);
+
+	// Set walls
+	for (const auto& wall : mapData["walls"]) {
+		int wallX = wall["x"];
+		int wallY = wall["y"];
+		setCellWall(wallX, wallY, true);
+	}
+
+	// Recalculate the flow field
+	calculateFlowField();
+
+	return true;
+}
+
+SDL_FRect Map::getCurrentRenderRect() {
+	return currentRenderRect;
+}
+
+void Map::setCurrentRenderRect(SDL_FRect newTargetRect) {
+	currentRenderRect = newTargetRect;
+}
+
+/**
+ * @brief Draws the map scaled to fit within a target rectangle.
+ *
+ * @param renderer The SDL renderer used for drawing.
+ * @param targetRect The rectangle where the map should be rendered.
+ * @details Scales the map to fit within the target rectangle while maintaining aspect ratio.
+ */
+void Map::drawOnTargetRect(SDL_Renderer* renderer, const SDL_FRect& targetRect) {
+	// Calculate the scaling factor to fit the map within the target rectangle
+	float mapWidth = cellCountX * PIXELS_PER_CELL;
+	float mapHeight = cellCountY * PIXELS_PER_CELL;
+
+	float scaleX = targetRect.w / mapWidth;
+	float scaleY = targetRect.h / mapHeight;
+	float scale = std::min(scaleX, scaleY); // Maintain aspect ratio
+
+	// Calculate the offset to center the map within the target rectangle
+	float offsetX = targetRect.x + (targetRect.w - mapWidth * scale) / 2.0f;
+	float offsetY = targetRect.y + (targetRect.h - mapHeight * scale) / 2.0f;
+
+	// Update the currentRenderRect to track where the map is being drawn
+	currentRenderRect = {
+		offsetX,
+		offsetY,
+		mapWidth * scale,
+		mapHeight * scale
+	};
+
+	// Draw each cell, scaled to fit the target rectangle
+	for (const auto& cell : cells) {
+		SDL_FRect cellRect = {
+			offsetX + cell.x * PIXELS_PER_CELL * scale,
+			offsetY + cell.y * PIXELS_PER_CELL * scale,
+			PIXELS_PER_CELL * scale,
+			PIXELS_PER_CELL * scale
+		};
+
+		// Draw the cell using the existing drawCell method
+		drawCell(renderer, cell, cellRect);
+	}
+}
+
+/**
+ * @brief Scales the cell rectangle based on the target rendering rectangle.
+ *
+ * @param cell The cell to be scaled.
+ * @param targetRect The rectangle where the map is being rendered.
+ * @return SDL_FRect Scaled rectangle of the cell.
+ */
+SDL_FRect Map::scaleCellRect(const Cell& cell, const SDL_FRect& targetRect) const {
+	float mapWidth = cellCountX * PIXELS_PER_CELL;
+	float mapHeight = cellCountY * PIXELS_PER_CELL;
+
+	float scaleX = targetRect.w / mapWidth;
+	float scaleY = targetRect.h / mapHeight;
+	float scale = std::min(scaleX, scaleY); // Maintain aspect ratio
+
+	float offsetX = targetRect.x + (targetRect.w - mapWidth * scale) / 2.0f;
+	float offsetY = targetRect.y + (targetRect.h - mapHeight * scale) / 2.0f;
+
+	return SDL_FRect{
+		offsetX + static_cast<float>(cell.x) * PIXELS_PER_CELL * scale,
+		offsetY + static_cast<float>(cell.y) * PIXELS_PER_CELL * scale,
+		static_cast<float>(PIXELS_PER_CELL) * scale,
+		static_cast<float>(PIXELS_PER_CELL) * scale
+	};
+}
+
+void Map::subscribe(FlowFieldObserver* observer) {
+	observers.push_back(observer);
+}
+
+void Map::unsubscribe(FlowFieldObserver* observer) {
+	auto it = std::find(observers.begin(), observers.end(), observer);
+	if (it != observers.end()) {
+		observers.erase(it);
+	}
+}
+
+void Map::notifyObservers() {
+	for (auto observer : observers) {
+		observer->onFlowFieldChanged();
+	}
+}
+
+void Map::setName(std::string newName) {
+	name = newName;
+}
+
+std::string Map::getName() {
+	return name;
+}
+
+void Map::setPath(std::string newPath) {
+	filePath = newPath;
+}
+
+std::string Map::getPath() {
+	return filePath;
 }

@@ -1,4 +1,7 @@
 #include <states/parts/MainGameState.h>
+#include <critter/CritterGroup.h>
+#include <Global.h>
+#include <util/TextureLoader.h>
 
 /** @class MainGameState
  *  @brief Implementation of the main game state.
@@ -12,12 +15,33 @@
 MainGameState MainGameState::sMainGameState;
 
 /**
+ * @brief Player's current gold amount.
+ */
+int playerGold;
+
+/**
+ * @brief Current wave level in the game.
+ */
+int waveLevel;
+
+/**
+ * @brief Warning message that can be displayed on the screen.
+ */
+std::string warningMessage = "";
+
+/**
+ * @brief Time duration for which the warning message will be displayed.
+ */
+float warningTime = 0.0f;
+
+
+/**
  * @brief Retrieves the singleton instance of the MainGameState.
  *
  * @return Pointer to the MainGameState instance.
  */
 MainGameState* MainGameState::get() {
-    return &sMainGameState;
+	return &sMainGameState;
 }
 
 /**
@@ -28,7 +52,23 @@ MainGameState* MainGameState::get() {
  * @return Always returns true.
  */
 bool MainGameState::enter() {
-    return true;
+	if (Global::currentMap == nullptr || Global::currentMap->getName().empty()) {
+		std::cerr << "Global::currentMap was null" << std::endl;
+		return false;
+	}
+
+	playerGold = 100;
+	waveLevel = 1;
+
+	std::cout << "Global::currentMap name: " + Global::currentMap->name << std::endl;
+
+	map = new Map(*Global::currentMap);
+	SDL_FRect targetRect{ 0.0f, Global::headerHeight, static_cast<float>(Global::kScreenWidth - Global::viewerWidth), static_cast<float>(Global::kScreenHeight - Global::headerHeight) };
+	map->setCurrentRenderRect(targetRect);
+
+	critterGroup = new CritterGroup(waveLevel, playerGold, map->getSpawnerPos(targetRect), map->getTargetPos(targetRect), map);
+
+	return true;
 }
 
 /**
@@ -39,7 +79,19 @@ bool MainGameState::enter() {
  * @return Always returns true.
  */
 bool MainGameState::exit() {
-    return true;
+	TextureLoader::deallocateTextures();
+
+	if (critterGroup != nullptr) {
+		delete critterGroup;
+		critterGroup = nullptr;
+	}
+
+	if (map != nullptr) {
+		delete map;
+		map = nullptr;
+	}
+
+	return true;
 }
 
 /**
@@ -48,7 +100,7 @@ bool MainGameState::exit() {
  * @param e The SDL_Event object containing input data.
  */
 void MainGameState::handleEvent(SDL_Event& e) {
-    // Event handling logic will be added here in the future
+	// Event handling logic will be added here in the future
 }
 
 /**
@@ -57,7 +109,8 @@ void MainGameState::handleEvent(SDL_Event& e) {
  * This function is called every frame to update the game's logic.
  */
 void MainGameState::update() {
-    // Game update logic will be added here in the future
+	critterGroup->generateCritters(0.16f);
+	critterGroup->update(0.016f);
 }
 
 /**
@@ -66,7 +119,28 @@ void MainGameState::update() {
  * This function is called every frame to render the game's visuals.
  */
 void MainGameState::render() {
-    // Rendering logic will be added here in the future
+	map->drawOnTargetRect(gRenderer, map->getCurrentRenderRect());
+
+	critterGroup->render(gRenderer);
+
+	//for (auto& tower : towers) {
+	//	tower.render(gRenderer);
+	//}
+
+	// Render player gold
+	renderText("Gold: " + std::to_string(playerGold), 10.0f, 10.0f);
+
+	// Render wave level
+	std::string waveText = "Wave: " + std::to_string(waveLevel);
+	float waveX = (Global::kScreenWidth - (waveText.length() * 10.0f)) / 2.0f;
+	renderText(waveText, waveX, 10.0f);
+
+	// Render warning message if any
+	if (!warningMessage.empty()) {
+		float warningX = (Global::kScreenWidth - (warningMessage.length() * 10.0f)) / 2.0f;
+		float warningY = Global::kScreenHeight - 40.0f;
+		renderText(warningMessage, warningX, warningY);
+	}
 }
 
 /**
@@ -75,3 +149,17 @@ void MainGameState::render() {
  * The MainGameState follows the singleton pattern.
  */
 MainGameState::MainGameState() {}
+
+/**
+ * @brief Helper function to render text at a specific position on the screen.
+ *
+ * @param text The text to be rendered.
+ * @param x The x-coordinate of the text.
+ * @param y The y-coordinate of the text.
+ */
+void MainGameState::renderText(const std::string& text, float x, float y) {
+	SDL_Color textColor = { 0, 0, 0, 255 };
+	LTexture textTexture;
+	textTexture.loadFromRenderedText(text, textColor);
+	textTexture.render(x, y);
+}

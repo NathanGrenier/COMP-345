@@ -37,5 +37,9 @@ private:
 
     //Intro message
     LTexture mMessageTexture;
+    
+    LTexture mCursorPromptTexture;
+
+    float oscillationOffset;
 };
 #endif

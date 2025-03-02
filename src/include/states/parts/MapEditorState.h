@@ -9,13 +9,11 @@
 #include "../GameState.h"
 #include <ui/LTexture.h>
 #include <map/Map.h>
-#include <string>
-#include <critter/CritterGroup.h>
 
-class MainGameState : public GameState {
+class MapEditorState : public GameState {
 public:
 	//Static accessor
-	static MainGameState* get();
+	static MapEditorState* get();
 
 	//Transitions
 	bool enter() override;
@@ -26,15 +24,12 @@ public:
 	void update() override;
 	void render() override;
 
-	// Helper functions
-	void renderText(const std::string& text, float x, float y);
-
 private:
 	//Static instance
-	static MainGameState sMainGameState;
+	static MapEditorState sMapEditorState;
 
 	//Private constructor
-	MainGameState();
+	MapEditorState();
 
 	//Intro background
 	LTexture mBackgroundTexture;
@@ -46,6 +41,4 @@ private:
 	 *  @details nullptr if no map is currently loaded
 	 */
 	Map* map = nullptr;
-
-	CritterGroup* critterGroup = nullptr;
 };

@@ -44,7 +44,7 @@ Part1State* Part1State::get() {
  * @return true if initialization was successful
  */
 bool Part1State::enter() {
-	map = new Map(gRenderer, Global::kScreenWidth / Map::PIXELS_PER_CELL, Global::kScreenHeight / Map::PIXELS_PER_CELL);
+	map = new Map(15, 15, "Default");
 	return true;
 }
 
@@ -100,11 +100,24 @@ void Part1State::handleEvent(SDL_Event& e) {
 			break;
 	}
 
-	// Handle mouse input
-	float mouseX = 0, mouseY = 0;
+	SDL_FRect currentRenderRect = map->getCurrentRenderRect();
+
+	float mouseX, mouseY;
 	SDL_GetMouseState(&mouseX, &mouseY);
 
-	Vector2D mousePosition((float)mouseX / Map::PIXELS_PER_CELL, (float)mouseY / Map::PIXELS_PER_CELL);
+	// Calculate the scaling factor used when drawing the map
+	float mapWidth = map->cellCountX * map->PIXELS_PER_CELL;
+	float mapHeight = map->cellCountY * map->PIXELS_PER_CELL;
+	float scaleX = currentRenderRect.w / mapWidth;
+	float scaleY = currentRenderRect.h / mapHeight;
+	float scale = std::min(scaleX, scaleY);
+
+	// Adjust the mouse position to account for the offset and scaling
+	Vector2D mousePosition(
+		(float)(mouseX - currentRenderRect.x) / scale / map->PIXELS_PER_CELL,
+		(float)(mouseY - currentRenderRect.y) / scale / map->PIXELS_PER_CELL
+	);
+
 
 	if (mouseDownStatus > 0) {
 		switch (mouseDownStatus) {
@@ -162,7 +175,8 @@ void Part1State::update() {
  */
 void Part1State::render() {
 	if (map != nullptr) {
-		map->draw(gRenderer);
+		SDL_FRect targetRect{ 0.0f, 0.0f, static_cast<float>(Global::kScreenWidth), static_cast<float>(Global::kScreenHeight) };
+		map->drawOnTargetRect(gRenderer, targetRect);
 	}
 
 	// Render the validity of the path

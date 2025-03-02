@@ -40,7 +40,11 @@ bool IntroState::enter() {
 
     // Load intro text
     SDL_Color textColor{ 0x00, 0x00, 0x00, 0xFF };
-    if (success &= mMessageTexture.loadFromRenderedText("The NullTerminators Presents...", textColor); !success) {
+    if (success &= mMessageTexture.loadFromFile("assets/ui/IntroMessage.png"); !success) {
+        SDL_Log("Failed to render intro text!\n");
+        success = false;
+    }
+    if (success &= mCursorPromptTexture.loadFromFile("assets/ui/cursor-prompt.jpg"); !success) {
         SDL_Log("Failed to render intro text!\n");
         success = false;
     }
@@ -58,6 +62,7 @@ bool IntroState::enter() {
 bool IntroState::exit() {
     mBackgroundTexture.destroy();
     mMessageTexture.destroy();
+    mCursorPromptTexture.destroy();
     return true;
 }
 
@@ -81,7 +86,11 @@ void IntroState::handleEvent(SDL_Event& e) {
  * Currently, no updates are required for this state.
  */
 void IntroState::update() {
-    // No update logic needed for this state
+    // Update oscillation time
+    mOscillationTime += 0.05f;  // Adjust speed of oscillation
+
+    // Calculate the vertical oscillation offset (range of -5 to 5 pixels)
+    oscillationOffset = std::sin(mOscillationTime) * 5.0f;
 }
 
 /**
@@ -90,20 +99,18 @@ void IntroState::update() {
  * The message text moves up and down slightly using a sine wave oscillation effect.
  */
 void IntroState::render() {
-    // Update oscillation time
-    mOscillationTime += 0.05f;  // Adjust speed of oscillation
-
-    // Calculate the vertical oscillation offset (range of -5 to 5 pixels)
-    float oscillationOffset = std::sin(mOscillationTime) * 5.0f;
 
     // Render background
     mBackgroundTexture.render(0, 0);
 
     // Render message text with oscillation effect
     mMessageTexture.render(
-        (Global::kScreenWidth - mMessageTexture.getWidth()) / 2.f,
-        (Global::kScreenHeight - mMessageTexture.getHeight()) / 2.f + oscillationOffset
-    );
+        (Global::kScreenWidth - Global::kScreenWidth * 0.9) / 2.f,
+        ((Global::kScreenHeight - mMessageTexture.getHeight()) / 2.f + oscillationOffset), nullptr, Global::kScreenWidth * 0.9, -1);
+
+    mCursorPromptTexture.render(
+        Global::kScreenWidth - Global::kScreenWidth * 0.1,
+        Global::kScreenHeight - Global::kScreenWidth * 0.1, nullptr, Global::kScreenWidth * 0.1, -1);
 }
 
 /**

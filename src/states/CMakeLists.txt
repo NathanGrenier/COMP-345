@@ -2,9 +2,11 @@ add_library(states STATIC
     ExitState.cpp
     IntroState.cpp
     TitleState.cpp
-    parts/MainGameState.cpp
     parts/Part1State.cpp
     parts/Part2State.cpp
+    parts/MainGameState.cpp
+    parts/MapSelectState.cpp 
+    parts/MapEditorState.cpp
     parts/Part3State.cpp
     parts/UITestState.cpp)
 

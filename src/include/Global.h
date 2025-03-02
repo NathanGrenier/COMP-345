@@ -16,34 +16,28 @@
   * @author Nirav Patel
   * @date 2025-02-16
   */
-#ifndef GLOBAL_H
-#define GLOBAL_H
 
 #include <states/GameState.h>
 #include <SDL3_ttf/SDL_ttf.h>
 #include <map/Map.h>
+#include <string>
 
- // External SDL variables
+  // External SDL variables
 extern SDL_Renderer* gRenderer; ///< Global pointer to the SDL renderer.
 extern TTF_Font* gFont; ///< Global pointer to the font used for rendering text.
 
 class Global {
 public:
-    /**
-     * @brief Screen width in pixels.
-     *
-     * This constant defines the width of the game screen based on the number of pixels per cell
-     * and the number of cells across the screen.
-     */
-    static const int kScreenWidth{ Map::PIXELS_PER_CELL * 15 };
+	static int viewerWidth;
+	static int headerHeight;
 
-    /**
-     * @brief Screen height in pixels.
-     *
-     * This constant defines the height of the game screen based on the number of pixels per cell
-     * and the number of cells vertically on the screen.
-     */
-    static const int kScreenHeight{ Map::PIXELS_PER_CELL * 11 };
+	static int cellWidth;
+	static int cellHeight;
+
+	static constexpr int kScreenWidth{ 800 };
+	static constexpr int kScreenHeight{ 600 };
+
+	static Map* currentMap;
 };
 
 /**
@@ -90,5 +84,3 @@ void setNextState(GameState* nextState);
  * to the next state is executed properly.
  */
 void changeState();
-
-#endif
