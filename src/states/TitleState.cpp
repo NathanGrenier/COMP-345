@@ -114,7 +114,7 @@ void TitleState::handleEvent(SDL_Event& e) {
                     break;
                 case 2:
                     //setNextState(Part2State::get());  // Load Part 2
-                    setNextState(UITestState::get());  // Load Part 2
+                    setNextState(UITestState::get());  // Load UI test
                     break;
                 case 3:
                     setNextState(Part3State::get());  // Load Part 3
