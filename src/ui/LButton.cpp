@@ -1,7 +1,5 @@
 #include <ui/LButton.h>
 
-
-
 /**
  * @class LButton
  * @brief Represents an interactive button in the UI.
@@ -13,8 +11,7 @@
  */
 LButton::LButton() :
 	mPosition{ 0.f, 0.f },
-	mCurrentSprite{ eButtonSpriteMouseOut }, kButtonHeight{ 0 }, kButtonWidth{ 0 } {
-}
+	mCurrentSprite{ eButtonSpriteMouseOut }, kButtonHeight{ 0 }, kButtonWidth{ 0 } {}
 
 /**
  * @brief Sets the button's position.
@@ -71,18 +68,17 @@ void LButton::handleEvent(SDL_Event* e) {
 		if (!inside) {
 			mCurrentSprite = eButtonSpriteMouseOut;
 			gButtonSpriteTexture.setAlpha(255);
-		}
-		else {
+		} else {
 			switch (e->type) {
-			case SDL_EVENT_MOUSE_MOTION:
-				mCurrentSprite = eButtonSpriteMouseOverMotion;
-				break;
-			case SDL_EVENT_MOUSE_BUTTON_DOWN:
-				mCurrentSprite = eButtonSpriteMouseDown;
-				break;
-			case SDL_EVENT_MOUSE_BUTTON_UP:
-				mCurrentSprite = eButtonSpriteMouseUp;
-				break;
+				case SDL_EVENT_MOUSE_MOTION:
+					mCurrentSprite = eButtonSpriteMouseOverMotion;
+					break;
+				case SDL_EVENT_MOUSE_BUTTON_DOWN:
+					mCurrentSprite = eButtonSpriteMouseDown;
+					break;
+				case SDL_EVENT_MOUSE_BUTTON_UP:
+					mCurrentSprite = eButtonSpriteMouseUp;
+					break;
 			}
 		}
 	}
@@ -147,8 +143,8 @@ bool LButton::isClicked() {
 	SDL_GetMouseState(&x, &y);
 
 	// Check if the mouse position is inside the button's area
-	return (x >= mPosition.x && x <= mPosition.x + gButtonSpriteTexture.getWidth() &&
-		y >= mPosition.y && y <= mPosition.y + gButtonSpriteTexture.getHeight());
+	return (x >= mPosition.x && x <= mPosition.x + kButtonWidth &&
+			y >= mPosition.y && y <= mPosition.y + kButtonHeight);
 }
 
 void LButton::setSizeWithAspectRatio(int newWidth, int newHeight) {
@@ -164,19 +160,16 @@ void LButton::setSizeWithAspectRatio(int newWidth, int newHeight) {
 
 	if (newWidth == 0) {
 		adjustedWidth = static_cast<int>(newHeight * aspectRatio);
-	}
-	else if (newHeight == 0) {
+	} else if (newHeight == 0) {
 		adjustedHeight = static_cast<int>(newWidth / aspectRatio);
-	}
-	else {
+	} else {
 		// Maintain aspect ratio based on the closest fit
 		float widthRatio = static_cast<float>(newWidth) / kButtonWidth;
 		float heightRatio = static_cast<float>(newHeight) / kButtonHeight;
 
 		if (widthRatio < heightRatio) {
 			adjustedHeight = static_cast<int>(kButtonHeight * widthRatio);
-		}
-		else {
+		} else {
 			adjustedWidth = static_cast<int>(kButtonWidth * heightRatio);
 		}
 	}
