@@ -1,10 +1,10 @@
 /**
  * @file Observable.h
- * @brief 
+ * @brief
  * @author Denmar Ermitano
  * @date 2025-02-28
  *
- * @details 
+ * @details
  */
 
 #pragma once
@@ -23,6 +23,6 @@ protected:
     Observable();
 
 private:
-    std::vector<Observer*> *observers;
+    std::vector<Observer*>* observers;
 };
 
