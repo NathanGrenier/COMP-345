@@ -129,13 +129,6 @@ void MainGameState::render() {
 }
 
 /**
- * @brief Private constructor to prevent direct instantiation.
- *
- * The MainGameState follows the singleton pattern.
- */
-MainGameState::MainGameState() : playerGold(0), waveLevel(0) {}
-
-/**
  * @brief Helper function to render text at a specific position on the screen.
  *
  * @param text The text to be rendered.

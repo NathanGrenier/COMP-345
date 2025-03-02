@@ -55,6 +55,7 @@ Map::Map(int setCellCountX, int setCellCountY, std::string name) :
 
 	cells.clear();
 	cells.reserve(cellCountX * cellCountY);
+
 	for (int y = 0; y < cellCountY; y++) {
 		for (int x = 0; x < cellCountX; x++) {
 			Cell cell;
@@ -486,6 +487,50 @@ nlohmann::json loadMapData(const std::string& filePath) {
 	}
 }
 
+bool Map::saveToJson(const std::string& filePath) {
+	// Create a JSON object to store map data
+	nlohmann::json mapData;
+
+	// Set map metadata
+	mapData["name"] = this->name;
+	mapData["width"] = this->cellCountX;
+	mapData["height"] = this->cellCountY;
+
+	// Set walls
+	for (const auto& cell : cells) {
+		if (cell.isWall) {
+			nlohmann::json wall;
+			wall["x"] = cell.x;
+			wall["y"] = cell.y;
+			mapData["walls"].push_back(wall);
+		} else if (cell.isSpawner) {
+			mapData["start"]["x"] = cell.x;
+			mapData["start"]["y"] = cell.y;
+		} else if (cell.isTarget) {
+			mapData["end"]["x"] = cell.x;
+			mapData["end"]["y"] = cell.y;
+		}
+	}
+
+	// Open the file for writing
+	std::ofstream file(filePath);
+	if (!file.is_open()) {
+		std::cerr << "Error: Could not open file " << filePath << std::endl;
+		return false; // Return false if the file could not be opened
+	}
+
+	// Write the JSON object to the file
+	try {
+		file << mapData.dump(4);  // Indented with 4 spaces for readability
+	} catch (const std::exception& e) {
+		std::cerr << "Error: Failed to write to file " << filePath << ". Exception: " << e.what() << std::endl;
+		return false; // Return false if an error occurs during writing
+	}
+
+	// Successfully saved the map
+	return true;
+}
+
 
 /**
  * @brief Loads and initializes the map from a JSON file.
@@ -564,13 +609,7 @@ SDL_FRect Map::getPixelPerCell() {
 
 void Map::calculatePixelsPerCell() {
 	// Perform the calculation based on Global's static parameters
-	PIXELS_PER_CELL = Global::mapViewRect.w / Global::cellWidth;
-
-	// You may want to handle edge cases, like division by zero, or unexpected values.
-	if (Global::cellWidth == 0) {
-		// Handle error (e.g., set PIXELS_PER_CELL to a default value or throw an exception)
-		PIXELS_PER_CELL = 0; // Or some default fallback value
-	}
+	PIXELS_PER_CELL = (Global::kScreenWidth - Global::viewerWidth) / cellCountX;
 
 	textureCellWall = TextureLoader::loadTexture(gRenderer, "map/cell-wall.bmp");
 	textureCellTarget = TextureLoader::loadTexture(gRenderer, "map/cell-target.bmp");
@@ -591,6 +630,8 @@ void Map::calculatePixelsPerCell() {
  * @details Scales the map to fit within the target rectangle while maintaining aspect ratio.
  */
 void Map::drawOnTargetRect(SDL_Renderer* renderer, const SDL_FRect& targetRect) {
+	calculatePixelsPerCell();
+
 	// Calculate the scaling factor to fit the map within the target rectangle
 	float mapWidth = cellCountX * PIXELS_PER_CELL;
 	float mapHeight = cellCountY * PIXELS_PER_CELL;
@@ -624,6 +665,59 @@ void Map::drawOnTargetRect(SDL_Renderer* renderer, const SDL_FRect& targetRect) 
 		drawCell(renderer, cell, cellRect);
 	}
 }
+
+/**
+ * @brief Updates the map dimensions and adjusts the cells accordingly.
+ *
+ * @param newCellCountX The new number of cells along the X-axis.
+ * @param newCellCountY The new number of cells along the Y-axis.
+ * @details Updates the `cells` member by resizing it to the new dimensions and adjusting the positions of existing cells.
+ */
+void Map::updateMapDimensions(int newCellCountX, int newCellCountY) {
+	// Keep the current dimensions until we finish modifying cells
+	int oldCellCountX = cellCountX;
+	int oldCellCountY = cellCountY;
+
+	// Update the new dimensions
+	cellCountX = newCellCountX;
+	cellCountY = newCellCountY;
+
+	PIXELS_PER_CELL = (Global::kScreenWidth - Global::viewerWidth) / cellCountX;
+
+	// Create a new vector for the cells with the new size
+	std::vector<Cell> newCells(cellCountX * cellCountY);
+
+	// Copy data from the old cells to the new cells within the valid bounds
+	for (int y = 0; y < std::min(oldCellCountY, newCellCountY); ++y) {
+		for (int x = 0; x < std::min(oldCellCountX, newCellCountX); ++x) {
+			int oldIndex = x + y * oldCellCountX;
+			int newIndex = x + y * cellCountX;
+			newCells[newIndex] = cells[oldIndex];
+		}
+	}
+
+	// Initialize any new cells in the newly added area (bottom and right)
+	for (int y = 0; y < newCellCountY; ++y) {
+		for (int x = 0; x < newCellCountX; ++x) {
+			int index = x + y * cellCountX;
+			// Ensure that we initialize only newly added cells (outside old bounds)
+			if (x >= oldCellCountX || y >= oldCellCountY) {
+				newCells[index].x = x;
+				newCells[index].y = y;
+				newCells[index].isWall = false;
+				newCells[index].isSpawner = false;
+				newCells[index].isTarget = false;
+			}
+		}
+	}
+
+	// Replace the old cells vector with the newly created one
+	cells = std::move(newCells);
+
+	// Recalculate flow field based on the new grid dimensions
+	calculateFlowField();
+}
+
 
 /**
  * @brief Scales the cell rectangle based on the target rendering rectangle.

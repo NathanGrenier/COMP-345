@@ -13,19 +13,19 @@
 #pragma once
 #include "Tower.h"
 
-const int STANDARD_RANGE = 100; /** @brief default range for StandardTower */
-const int STANDARD_POWER = 3; /** @brief default projectile damage for StandardTower */
-const int STANDARD_RATE_OF_FIRE = 4; /** @brief default rate of fire for StandardTower */
-static const int STANDARD_MAX_LEVEL = 5; /** @brief default max level for StandardTower */
-
 class StandardTower : public Tower
 {
 public:
+    static const int STANDARD_RANGE = 100; /** @brief default range for StandardTower */
+    static const int STANDARD_POWER = 3; /** @brief default projectile damage for StandardTower */
+    static const int STANDARD_RATE_OF_FIRE = 4; /** @brief default rate of fire for StandardTower */
+    static const int STANDARD_MAX_LEVEL = 5; /** @brief default max level for StandardTower */
+
     StandardTower();
     StandardTower(float x, float y, int buyingCost);
     StandardTower(float x, float y, int buyingCost, int refundValue);
 
-    bool upgrade(); /** upgrades range, power, and rate of fire */
+    int getMaxLevel();
     void shootProjectile(DummyCritter* critter);
 
     void generateTower();

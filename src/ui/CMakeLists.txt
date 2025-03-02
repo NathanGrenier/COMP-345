@@ -1,8 +1,14 @@
 add_library(ui STATIC
     LButton.cpp
     LTexture.cpp
-    
-    )
+    DetailDisplay.cpp
+    DetailAttributeDisplay.cpp
+    DetailDisplayComponent.cpp
+    DetailLabel.cpp
+    DetailButton.cpp
+    DetailAttribute.cpp
+    TowerObserver.cpp
+)
 
 target_include_directories(ui PUBLIC ${CMAKE_SOURCE_DIR}/src/include)
 

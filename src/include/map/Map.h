@@ -49,12 +49,14 @@ public:
 	void toggleFlowFieldVisibility();
 
 	bool loadFromJson(const std::string& filePath);
+	bool saveToJson(const std::string& filePath);
 	void calculatePixelsPerCell();
 	void drawOnTargetRect(SDL_Renderer* renderer, const SDL_FRect& targetRect);
 	SDL_FRect getCurrentRenderRect();
 	void setCurrentRenderRect(SDL_FRect newTargetRect);
 
 	SDL_FRect getPixelPerCell();
+	void updateMapDimensions(int newCellCountX, int newCellCountY);
 
 	std::pair<int, int> getCellFromPosition(float x, float y, const SDL_FRect& targetRect) const;
 	SDL_FPoint getCellCenter(int x, int y, const SDL_FRect& targetRect) const;

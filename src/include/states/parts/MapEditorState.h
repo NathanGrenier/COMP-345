@@ -9,6 +9,7 @@
 #include "../GameState.h"
 #include <ui/LTexture.h>
 #include <map/Map.h>
+#include <ui/LButton.h>
 
 class MapEditorState : public GameState {
 public:
@@ -28,14 +29,40 @@ private:
 	//Static instance
 	static MapEditorState sMapEditorState;
 
-	//Private constructor
-	MapEditorState();
-
+	std::string currentSelection = "Start";
+	std::string originalName;
+	
 	//Intro background
 	LTexture mBackgroundTexture;
 
 	//Intro message
 	LTexture mMessageTexture;
+
+	LTexture noOfColumnsLabel;
+	LTexture noOfColumnsText;
+	LButton addColumn;
+	LButton removeColumn;
+
+	LTexture noOfRowsLabel;
+	LTexture noOfRowsText;
+	LButton addRow;
+	LButton removeRow;
+
+	LButton selectStartPos;
+	LButton selectEndPos;
+	LButton selectWallCell;
+	LButton eraser;
+
+	LButton saveMapButton;
+	LButton renameButton;
+	LTexture textField;
+
+	LTexture currentMessage;
+
+	int mouseDownStatus = 0;
+	int keyDownStatus = 0;
+
+	SDL_FRect mapView;
 
 	/** @brief Pointer to the map being edited
 	 *  @details nullptr if no map is currently loaded
