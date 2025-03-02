@@ -51,6 +51,11 @@ public:
 	SDL_FRect getCurrentRenderRect();
 	void setCurrentRenderRect(SDL_FRect newTargetRect);
 
+	SDL_FRect getPixelPerCell();
+
+	std::pair<int, int> getCellFromPosition(float x, float y, const SDL_FRect& targetRect) const;
+	SDL_FPoint getCellCenter(int x, int y, const SDL_FRect& targetRect) const;
+
 	void subscribe(FlowFieldObserver* observer);
 	void unsubscribe(FlowFieldObserver* observer);
 	void notifyObservers();
@@ -87,7 +92,6 @@ private:
 	void calculateDistances();
 	void calculateFlowDirections();
 
-	std::vector<Cell> cells;              /**< Grid cells storage */
 	std::vector<FlowFieldObserver*> observers; /**< List of subscribers */
 
 	SDL_Texture* textureCellWall;         /**< Texture for wall cells */
@@ -100,5 +104,7 @@ private:
 	SDL_Texture* textureCellArrowLeft;    /**< Texture for leftward flow */
 
 public:
+	std::vector<Cell> cells;              /**< Grid cells storage */
+
 	SDL_FRect scaleCellRect(const Cell& cell, const SDL_FRect& targetRect) const;
 };

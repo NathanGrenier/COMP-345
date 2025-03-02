@@ -109,7 +109,6 @@ void MapSelectState::update() {
 	}
 
 	if (!selectedMapFilePath.empty() && availableMaps.find(selectedMapFilePath) != availableMaps.end()) {
-		//std::string displayedMap = formatMapName(selectedMapFilePath);
 		mHoveredMapName.loadFromRenderedText(">  " + availableMaps[selectedMapFilePath].name + "  <", { 0, 0, 0 });  // Render map name at center
 	}
 }

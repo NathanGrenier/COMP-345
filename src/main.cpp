@@ -48,6 +48,8 @@ int Global::headerHeight = 20;
 
 Map* Global::currentMap = nullptr;
 
+SDL_FRect Global::mapViewRect = { 0.0f, Global::headerHeight, static_cast<float>(Global::kScreenWidth - Global::viewerWidth), static_cast<float>(Global::kScreenHeight - Global::headerHeight) };
+
 /**
  * @brief Sets the next game state.
  *
