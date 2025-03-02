@@ -13,35 +13,38 @@
  /// Static instance of the ExitState
 MapEditorState MapEditorState::sMapEditorState;
 
-int Global::cellWidth = 11;
-int Global::cellHeight = 11;
+int Global::cellWidth = 15;
+int Global::cellHeight = 15;
 
 MapEditorState* MapEditorState::get() {
-    return &sMapEditorState;
+	return &sMapEditorState;
 }
 
 bool MapEditorState::enter() {
-    if (currentMap == "") {
-    }
+	if (Global::currentMap == nullptr || Global::currentMap->getName().empty()) {
+		std::cerr << "Global::currentMap was null" << std::endl;
+		return false;
+	}
 
-    return true;
+	map = new Map(*Global::currentMap);
+
+	return true;
 }
 
 bool MapEditorState::exit() {
-    delete map;
-    map = nullptr;
-    return true;
+	delete map;
+	map = nullptr;
+	return true;
 }
 
 void MapEditorState::handleEvent(SDL_Event& e) {
-    // No event handling required
+	// No event handling required
 }
 
 void MapEditorState::update() {
-    // No update logic needed
+	// No update logic needed
 }
 
-void MapEditorState::render() {
-}
+void MapEditorState::render() {}
 
 MapEditorState::MapEditorState() {}

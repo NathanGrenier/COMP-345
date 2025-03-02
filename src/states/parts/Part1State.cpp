@@ -44,7 +44,7 @@ Part1State* Part1State::get() {
  * @return true if initialization was successful
  */
 bool Part1State::enter() {
-	map = new Map(11, 11);
+	map = new Map(15, 15, "Default");
 	return true;
 }
 

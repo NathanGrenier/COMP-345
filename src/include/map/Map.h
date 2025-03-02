@@ -15,12 +15,21 @@
 #include <util/Vector2D.h>
 #include <vector>
 #include <iostream>
+#include <string>
+
+class FlowFieldObserver {
+public:
+	virtual void onFlowFieldChanged() = 0;
+};
 
 class Map {
 public:
-	Map(int cellCountX, int cellCountY);
+	Map(int cellCountX, int cellCountY, std::string name);
 	Map();
-	
+
+	std::string name;               /**< Name of the map */
+	std::string filePath;               /**< Name of the map */
+
 	/** @brief Number of pixels each cell occupies on screen */
 	int PIXELS_PER_CELL;
 	int cellCountX, cellCountY;     /**< Grid dimensions */
@@ -32,13 +41,24 @@ public:
 	bool isSpawner(int x, int y);
 	void setSpawner(int x, int y);
 	bool isValidPath();
-	Vector2D getTargetPos();
+	SDL_FRect getTargetPos(const SDL_FRect& targetRect);
+	SDL_FRect getSpawnerPos(const SDL_FRect& targetRect);
 	Vector2D getFlowNormal(int x, int y);
 
 	bool loadFromJson(const std::string& filePath);
 	void calculatePixelsPerCell();
 	void drawOnTargetRect(SDL_Renderer* renderer, const SDL_FRect& targetRect);
 	SDL_FRect getCurrentRenderRect();
+	void setCurrentRenderRect(SDL_FRect newTargetRect);
+
+	void subscribe(FlowFieldObserver* observer);
+	void unsubscribe(FlowFieldObserver* observer);
+	void notifyObservers();
+
+	void setName(std::string newName);
+	std::string getName();
+	void setPath(std::string newPath);
+	std::string getPath();
 
 private:
 	static const unsigned char flowDistanceMax = 255;
@@ -68,6 +88,7 @@ private:
 	void calculateFlowDirections();
 
 	std::vector<Cell> cells;              /**< Grid cells storage */
+	std::vector<FlowFieldObserver*> observers; /**< List of subscribers */
 
 	SDL_Texture* textureCellWall;         /**< Texture for wall cells */
 	SDL_Texture* textureCellTarget;       /**< Texture for target cells */
@@ -77,4 +98,7 @@ private:
 	SDL_Texture* textureCellArrowRight;   /**< Texture for rightward flow */
 	SDL_Texture* textureCellArrowDown;    /**< Texture for downward flow */
 	SDL_Texture* textureCellArrowLeft;    /**< Texture for leftward flow */
+
+public:
+	SDL_FRect scaleCellRect(const Cell& cell, const SDL_FRect& targetRect) const;
 };
