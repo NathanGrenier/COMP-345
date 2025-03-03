@@ -10,36 +10,36 @@
 #include <ui/DetailLabel.h>
 #include <ui/DetailButton.h>
 #include <ui/DetailAttribute.h>
+#include <critter/CritterObserver.h>
 #include <Global.h>
 
 /**
  * @brief Default constructor.
  */
 DetailAttributeDisplay::DetailAttributeDisplay()
-    : DetailDisplay::DetailDisplay(ATTRIBUTE_DISPLAY_WIDTH, Global::kScreenHeight)
+    : DetailDisplay(ATTRIBUTE_DISPLAY_WIDTH, Global::kScreenHeight)
 {
     setPosition(Global::kScreenWidth - getWidth(), 0);
 
     int componentWidth = ATTRIBUTE_DISPLAY_WIDTH - 2 * DetailDisplayComponent::DETAIL_COMPONENT_PADDING;
 
-    // label to buy Towers
+    // Existing components for Towers
     components.push_back(new DetailLabel(componentWidth, "assets/ui/BuyTower.png"));
-    
-    // buttons to buy Towers
     components.push_back(new DetailButton(componentWidth, "assets/ui/StandardTower.png"));
     components.push_back(new DetailButton(componentWidth, "assets/ui/RapidFireTower.png"));
     components.push_back(new DetailButton(componentWidth, "assets/ui/CannonTower.png"));
 
     int currentY = DetailDisplayComponent::DETAIL_COMPONENT_PADDING;
-    
+
+    // Initialize Tower buttons
     for (int i = 0; i < components.size(); i++) {
         components[i]->setComponentPosition(mPosition.x + DetailDisplayComponent::DETAIL_COMPONENT_PADDING, currentY);
-
         currentY += DetailDisplayComponent::DETAIL_COMPONENT_SPACING;
     }
 
     towerObserver = new TowerObserver(mPosition.x + DetailDisplayComponent::DETAIL_COMPONENT_PADDING, currentY + DetailDisplayComponent::DETAIL_COMPONENT_SPACING);
-    
+
+    critterObserver = new CritterObserver(mPosition.x + DetailDisplayComponent::DETAIL_COMPONENT_PADDING, currentY + DetailDisplayComponent::DETAIL_COMPONENT_SPACING);
 }
 
 /**
@@ -119,6 +119,31 @@ void DetailAttributeDisplay::handleButtonEvents(SDL_Event* e)
     
     // handles buttons from TowerObserver
     towerObserver->handleButtonEvents(e);
+}
+
+std::vector<DetailDisplayComponent*> DetailAttributeDisplay::getCritterComponents() {
+    return critterComponents; // Return the components related to critters
+}
+
+CritterObserver* DetailAttributeDisplay::getCritterObserver() {
+    return critterObserver;
+}
+
+void DetailAttributeDisplay::selectCritter(Critter* critter) {
+    // When a critter is selected, you could set its details to the display components or perform additional logic
+    if (critter != nullptr) {
+        // Clear current components first
+        critterComponents.clear();
+
+        // Set the critter observer or handle the critter-related display logic
+        if (critterObserver != nullptr) {
+            critterObserver->setCurrentCritter(critter);
+        }
+    }
+}
+
+bool DetailAttributeDisplay::isDisplayingCritter() {
+    return !critterComponents.empty(); // Check if there are any components related to a critter
 }
 
 /**

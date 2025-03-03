@@ -3,7 +3,7 @@
  * @brief The header file for the DetailAttributeDisplay class.
  * @author Denmar Ermitano
  * @date 2025-03-02
- * 
+ *
  * @details Renders the UI on the right side
  * Displays buttons for buying Towers
  * Displays attributes of a selected Tower
@@ -11,11 +11,14 @@
  */
 #pragma once
 
+
 #include <Global.h>
 #include <ui/DetailDisplayComponent.h>
 #include <ui/DetailDisplay.h>
 #include <ui/TowerObserver.h>
 #include <vector>
+
+class CritterObserver;
 
 class DetailAttributeDisplay : public DetailDisplay {
 
@@ -31,7 +34,7 @@ public:
 	void selectTower(Tower* tower);
 	bool isDisplayingTower();		// also needs function for displaying critter
 	//bool isDisplayingCritter();
-	
+
 	// for button hovers, clicks
 	void handleButtonEvents(SDL_Event* e);
 
@@ -40,11 +43,19 @@ public:
 	std::vector<DetailDisplayComponent*> getComponents();
 	std::vector<DetailDisplayComponent*> getTowerComponents();
 
+	// Critter related methods
+	std::vector<DetailDisplayComponent*> getCritterComponents();
+	CritterObserver* getCritterObserver();
+	void selectCritter(Critter* critter);
+	bool isDisplayingCritter();
+
 	void render();
 
 protected:
 	std::vector<DetailDisplayComponent*> components; /** @brief vector of all components */
 
-	TowerObserver* towerObserver; /** @brief contains details for Towers */
-};
+	CritterObserver* critterObserver;
+	TowerObserver* towerObserver;
 
+	std::vector<DetailDisplayComponent*> critterComponents;
+};

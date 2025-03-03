@@ -120,76 +120,6 @@ void MainGameState::handleEvent(SDL_Event& e) {
 	// handles hovering, clicking of buttons
 	detailDisplay.handleButtonEvents(&e);
 
-	// if click happens
-	if (e.type == SDL_EVENT_MOUSE_BUTTON_DOWN && e.button.button == SDL_BUTTON_LEFT)
-	{
-		// checking if buying tower
-		std::vector<DetailDisplayComponent*> components = detailDisplay.getComponents();
-		for (int i = 0; i < components.size(); i++)
-		{
-			if (dynamic_cast<DetailButton*>(components[i]) != NULL)
-			{
-				if (dynamic_cast<DetailButton*>(components[i])->isClicked())
-				{
-					towerBuySelect = i - 1;
-					buttonClick = true;
-
-					// displays different values from dummy Towers
-					switch (i)
-					{
-					case 1:
-						detailDisplay.selectTower(dummyStandardTower);
-						dummyStandardTower->notify();
-						break;
-					case 2:
-						detailDisplay.selectTower(dummyRapidFireTower);
-						dummyRapidFireTower->notify();
-						break;
-					case 3:
-						detailDisplay.selectTower(dummyCannonTower);
-						dummyCannonTower->notify();
-						break;
-					}
-				}
-			}
-		}
-
-		// checking if upgrading tower
-		if ((dynamic_cast<DetailButton*>(detailDisplay.getTowerComponents()[7]))->isClicked())
-		{
-			buttonClick = true;
-			int upgradeCost = detailDisplay.getTowerObserver()->getCurrentTower()->getUpgradeCost();
-
-			// checks if enough coins for upgrade
-			if (playerGold >= upgradeCost) {
-
-				// checks if tower is already max level
-				if (detailDisplay.getTowerObserver()->getCurrentTower()->upgrade())
-				{
-					playerGold -= upgradeCost;
-				}
-			}
-		}
-
-		// checking if selling tower
-		if ((dynamic_cast<DetailButton*>(detailDisplay.getTowerComponents()[8]))->isClicked())
-		{
-			buttonClick = true;
-			playerGold += detailDisplay.getTowerObserver()->getCurrentTower()->getRefundValue();
-
-			// find tower to erase 
-			for (int i = 0; i < towers.size(); i++)
-			{
-				if (towers[i] == detailDisplay.getTowerObserver()->getCurrentTower())
-				{
-					towers.erase(towers.begin() + i);
-				}
-			}
-
-			detailDisplay.selectTower(nullptr);
-		}
-	}
-
 	SDL_FRect currentRenderRect = map->getCurrentRenderRect();
 
 	float mouseX, mouseY;
@@ -212,22 +142,91 @@ void MainGameState::handleEvent(SDL_Event& e) {
 	int cellX = static_cast<int>(mousePosition.x);
 	int cellY = static_cast<int>(mousePosition.y);
 
+	bool correctCell = false;
+
 	// Ensure valid index range
 	if (cellX < 0 || cellX >= map->cellCountX || cellY < 0 || cellY >= map->cellCountY) {
-		return; // Out of bounds
+		correctCell = false;
 	}
-
-	// Compute the index for accessing the cell
-	int index = cellX + cellY * map->cellCountX;
-	Map::Cell targetCell = map->cells[index];
+	else {
+		// Compute the index for accessing the cell
+		int index = cellX + cellY * map->cellCountX;
+		targetCell = map->cells[index];
+	}
 
 	float cellSize = map->PIXELS_PER_CELL;
 	float targetX = (cellX * cellSize + currentRenderRect.x);
 	float targetY = (cellY * cellSize + currentRenderRect.y);
 
-	// Check if clicking
+	// if click happens
+	if (e.type == SDL_EVENT_MOUSE_BUTTON_DOWN && e.button.button == SDL_BUTTON_LEFT) {
+		// checking if buying tower
+		std::vector<DetailDisplayComponent*> components = detailDisplay.getComponents();
+		for (int i = 0; i < components.size(); i++) {
+			if (dynamic_cast<DetailButton*>(components[i]) != nullptr) {
+				if (dynamic_cast<DetailButton*>(components[i])->isClicked()) {
+					towerBuySelect = i - 1;
+					buttonClick = true;
+
+					// displays different values from dummy Towers
+					switch (i) {
+					case 1:
+						detailDisplay.selectTower(dummyStandardTower);
+						dummyStandardTower->notify();
+						break;
+					case 2:
+						detailDisplay.selectTower(dummyRapidFireTower);
+						dummyRapidFireTower->notify();
+						break;
+					case 3:
+						detailDisplay.selectTower(dummyCannonTower);
+						dummyCannonTower->notify();
+						break;
+					}
+				}
+			}
+		}
+
+		// checking if upgrading tower
+		if ((dynamic_cast<DetailButton*>(detailDisplay.getTowerComponents()[7]))->isClicked()) {
+			buttonClick = true;
+			int upgradeCost = detailDisplay.getTowerObserver()->getCurrentTower()->getUpgradeCost();
+
+			// checks if enough coins for upgrade
+			if (playerGold >= upgradeCost) {
+
+				// checks if tower is already max level
+				if (detailDisplay.getTowerObserver()->getCurrentTower()->upgrade()) {
+					playerGold -= upgradeCost;
+				}
+
+				wallCellDict[targetCell] = false;
+			}
+		}
+
+		// checking if selling tower
+		if ((dynamic_cast<DetailButton*>(detailDisplay.getTowerComponents()[8]))->isClicked()) {
+			buttonClick = true;
+			playerGold += detailDisplay.getTowerObserver()->getCurrentTower()->getRefundValue();
+
+			// find tower to erase 
+			for (int i = 0; i < towers.size(); i++) {
+				if (towers[i] == detailDisplay.getTowerObserver()->getCurrentTower()) {
+					towers.erase(towers.begin() + i);
+				}
+			}
+
+			if (correctCell) {
+				wallCellDict[targetCell] = false;
+			}
+			detailDisplay.selectTower(nullptr);
+		}
+	}
+
+	// Check if clicking on towers or critters
 	if (!buttonClick && e.type == SDL_EVENT_MOUSE_BUTTON_DOWN && e.button.button == SDL_BUTTON_LEFT) {
 		bool towerClick = false;
+		bool critterClick = false;
 
 		// If clicking on the current tower
 		for (int i = 0; i < towers.size(); i++) {
@@ -238,8 +237,21 @@ void MainGameState::handleEvent(SDL_Event& e) {
 			}
 		}
 
-		// If not clicking on a tower
+		// If not clicking on a tower, check for critters
 		if (!towerClick) {
+			for (int i = 0; i < critterGroup->getCritters().size(); i++) {
+				Critter& critter = critterGroup->getCritters()[i];
+				if (critter.isClicked()) {
+					detailDisplay.selectCritter(&critter);
+					critter.notify();
+					critterClick = true;
+					break;
+				}
+			}
+		}
+
+		// If not clicking on a tower or critter, proceed with placing a tower
+		if (!towerClick && !critterClick) {
 			// If placing down a tower on a valid, unoccupied wall cell
 			if (towerBuySelect >= 0 && wallCellDict.find(targetCell) != wallCellDict.end() && !wallCellDict[targetCell]) {
 				Tower* newTower = nullptr;
@@ -291,7 +303,6 @@ void MainGameState::handleEvent(SDL_Event& e) {
 			}
 		}
 	}
-
 }
 
 /**

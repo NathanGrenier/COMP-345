@@ -68,4 +68,6 @@ private:
 	const int RAPID_FIRE_TOWER_COST = 50; /** @brief gold cost for rapid fire tower */
 
 	std::unordered_map<Map::Cell, bool> wallCellDict;
+
+	Map::Cell targetCell;
 };

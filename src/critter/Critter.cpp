@@ -160,6 +160,32 @@ void Critter::setHitPoints(int hitPoints) {
 }
 
 /**
+* @brief Checks if the critter is clicked based on mouse position.
+*
+* @param mouseX The x-coordinate of the mouse.
+* @param mouseY The y-coordinate of the mouse.
+* @return true if the critter was clicked; false otherwise.
+*/
+bool Critter::isClicked() const {
+	// Get the current mouse position
+	float mouseXPos, mouseYPos;
+	SDL_GetMouseState(&mouseXPos, &mouseYPos);
+
+	SDL_FRect critterRect = getPosition();
+
+	// Adjust the bounding box based on the scaling factor
+	float scaledWidth = critterRect.w * CRITTER_WIDTH_SCALE;
+	float scaledHeight = critterRect.h * CRITTER_HEIGHT_SCALE;
+
+	// Checking if the mouse position is inside the critter's rectangle
+	if (mouseXPos >= critterRect.x && mouseXPos <= critterRect.x + scaledWidth &&
+		mouseYPos >= critterRect.y && mouseYPos <= critterRect.y + scaledHeight) {
+		return true;
+	}
+	return false;
+}
+
+/**
  * @brief Sets the critter's exit status.
  *
  * Marks the critter as having reached the exit and reduces its hit points to 0.
@@ -169,6 +195,14 @@ void Critter::setHitPoints(int hitPoints) {
 void Critter::setAtExit(bool con) {
 	hitPoints = 0;
 	isAtExit = con;
+}
+
+int Critter::getSpeed() {
+	return speed;
+}
+
+void Critter::setSpeed(int newSpeed) {
+	speed = newSpeed;
 }
 
 /**

@@ -9,8 +9,9 @@
 #include <SDL3/SDL.h>
 #include <vector>
 #include <map/Map.h>
+#include <util/Observable.h>
 
-class Critter : public FlowFieldObserver {
+class Critter : public Observable, public FlowFieldObserver {
 public:
 	Critter(int level, float speed, int hitPoints, int strength, int reward, SDL_FRect start, Map* map);
 	~Critter();
@@ -30,11 +31,16 @@ public:
 
 	void render(SDL_Renderer* renderer);  // Render critter (could be a simple shape or sprite)
 
+	int getSpeed();
+	void setSpeed(int speed);
+
 	int getReward() const { return reward; }
 	int getStrength() const { return strength; }
 
 	int getHitPoints() const { return hitPoints; }
 	void setHitPoints(int hitPoints);
+
+	bool isClicked() const;
 
 	SDL_FRect getPosition() const;
 

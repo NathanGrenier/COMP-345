@@ -73,10 +73,12 @@ void CritterGroup::generateCritters(float deltaTime) {
 			}
 		}
 
-
 		// Only spawn if there's no overlap
 		if (canSpawn) {
+			// Create the new critter
 			critters.emplace_back(level, speed, hitPoints, strength, reward, spawnCenter, map);
+			Critter& newCritter = critters.back();  // Get reference to the newly created critter
+
 			critterIndex++;
 			timeElapsed = 0.0f;
 		}
