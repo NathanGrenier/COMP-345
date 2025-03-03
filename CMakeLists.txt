@@ -19,7 +19,6 @@ endif()
 add_subdirectory(vendor)
 add_subdirectory(src)
 
-# Install
 # Install the executable
 install(TARGETS ${PROJECT_NAME} DESTINATION bin)
 
