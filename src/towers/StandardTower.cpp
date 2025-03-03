@@ -7,7 +7,6 @@
 
 #include <Global.h>
 #include <towers/StandardTower.h>
-#include <towers/DummyCritter.h>
 #include <towers/Projectile.h>
 
 /**
@@ -15,6 +14,7 @@
  */
 StandardTower::StandardTower() : Tower()
 {
+    towerTexture.loadFromFile("assets/tower/StandardTower.png");
     upgradeValues.rangeIncrease = 20;
     upgradeValues.powerIncrease = 1;
     upgradeValues.rateOfFireIncrease = 1;
@@ -33,6 +33,7 @@ StandardTower::StandardTower() : Tower()
 StandardTower::StandardTower(float x, float y, int buyingCost)
     : Tower(x, y, buyingCost, STANDARD_RANGE, STANDARD_POWER, STANDARD_RATE_OF_FIRE)
 {
+    towerTexture.loadFromFile("assets/tower/StandardTower.png");
     upgradeValues.rangeIncrease = 20;
     upgradeValues.powerIncrease = 1;
     upgradeValues.rateOfFireIncrease = 1;
@@ -51,6 +52,7 @@ StandardTower::StandardTower(float x, float y, int buyingCost)
 StandardTower::StandardTower(float x, float y, int buyingCost, int refundValue)
     : Tower(x, y, buyingCost, refundValue, STANDARD_RANGE, STANDARD_POWER, STANDARD_RATE_OF_FIRE)
 {
+    towerTexture.loadFromFile("assets/tower/StandardTower.png");
     upgradeValues.rangeIncrease = 20;
     upgradeValues.powerIncrease = 1;
     upgradeValues.rateOfFireIncrease = 1;
@@ -76,7 +78,7 @@ int StandardTower::getMaxLevel()
  * Applies damage to targetted Critter if the Projectile is in collision
  * Gets rid of Projectiles when needed, either if out of bounds, Critter is already dead, or when collision is made with Critter
  */
-void StandardTower::shootProjectile(DummyCritter* critter)
+void StandardTower::shootProjectile(Critter* critter)
 {
     // check if critter still exists
     if (!critter)
@@ -87,12 +89,12 @@ void StandardTower::shootProjectile(DummyCritter* critter)
     }
 
     // tower position with offset
-    float posX = x + static_cast<float>(TOWER_SIZE) / 2;
-    float posY = y + static_cast<float>(TOWER_SIZE) / 2;
+    float posX = x + currentRenderedRect.w / 2;
+    float posY = y + currentRenderedRect.w / 2;
 
     // critter position with offset
-    float critterPosX = critter->getX() + static_cast<float>(DummyCritter::CRITTER_SIZE) / 2;
-    float critterPosY = critter->getY() + static_cast<float>(DummyCritter::CRITTER_SIZE) / 2;
+    float critterPosX = critter->getPosition().x;
+    float critterPosY = critter->getPosition().y;
 
     // differences in position from tower to cannon
     float differenceX = posX - critterPosX;
@@ -121,14 +123,14 @@ void StandardTower::shootProjectile(DummyCritter* critter)
         projectiles[i]->move(10 * speedX, 10 * speedY);
 
         // check if projectile hits critter
-        if (projectiles[i]->checkCollision(critterPosX, critterPosY))
+        if (projectiles[i]->checkCollision(critter))
         {
-            critter->damageCritter(power);
+            critter->takeDamage(power);
             
             projectiles.erase(projectiles.begin() + i);
             
             // clear projectiles if critter has no hp, no target
-            if (critter->getHealth() <= 0) {
+            if (critter->getHitPoints() <= 0) {
                 projectiles.clear();
             }
         }
@@ -138,17 +140,4 @@ void StandardTower::shootProjectile(DummyCritter* critter)
             projectiles.erase(projectiles.begin() + i);
         }
     }
-}
-
-/**
- * @brief Generates StandardTower
- * 
- * @details Represents a StandardTower with a red square
- * Draws the square using SDL 
- */
-void StandardTower::generateTower() 
-{
-    SDL_FRect fillRect = { x, y, Tower::TOWER_SIZE, Tower::TOWER_SIZE };
-    SDL_SetRenderDrawColor(gRenderer, 0xFF, 0x00, 0x00, 0xFF);
-    SDL_RenderFillRect(gRenderer, &fillRect);
 }

@@ -93,7 +93,7 @@ void Critter::move(float deltaTime, const std::vector<Critter>& critters, float 
 		bool collisionDetected = false;
 		for (const Critter& other : critters) {
 			if (&other == this) continue;
-			if (rectanglesIntersect(nextPosition, other.getPosition())) {
+			if (rectanglesIntersect(nextPosition, other.getPosition())) { // Use . to access methods
 				collisionDetected = true;
 				break;
 			}

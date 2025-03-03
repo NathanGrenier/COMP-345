@@ -14,6 +14,7 @@
  */
 
 #pragma once
+#include <critter/Critter.h>
 #include "Tower.h"
 
 class CannonTower : public Tower
@@ -29,7 +30,5 @@ public:
     CannonTower(float x, float y, int buyingCost, int refundValue);
 
     int getMaxLevel();
-    void shootProjectile(DummyCritter* critter);
-
-    void generateTower();
+    void shootProjectile(Critter* critter);
 };

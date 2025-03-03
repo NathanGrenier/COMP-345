@@ -47,7 +47,7 @@ void CritterGroup::generateCritters(float deltaTime) {
 	if (timeElapsed >= generationDelay && critterIndex < waveLevel * 10) {
 		int level = waveLevel;
 		float speed = 50.0f;
-		int hitPoints = 100 + level * 20;
+		int hitPoints = 10 + level * 2;
 		int strength = level * 5;
 		int reward = level * 10;
 
@@ -63,7 +63,7 @@ void CritterGroup::generateCritters(float deltaTime) {
 		// Check if the start position is clear (no existing critters overlap)
 		bool canSpawn = true;
 		for (Critter& critter : critters) {
-			SDL_FRect critterPos = critter.getPosition();
+			SDL_FRect critterPos = critter.getPosition(); // Use -> to access methods
 			float distanceX = std::abs(spawnCenter.x - critterPos.x);
 			float distanceY = std::abs(spawnCenter.y - critterPos.y);
 
@@ -72,6 +72,7 @@ void CritterGroup::generateCritters(float deltaTime) {
 				break;  // Stop checking further since overlap is found
 			}
 		}
+
 
 		// Only spawn if there's no overlap
 		if (canSpawn) {
@@ -105,17 +106,20 @@ void CritterGroup::update(float deltaTime) {
 	int aliveCritters = 0;
 
 	for (auto it = critters.begin(); it != critters.end(); ) {
-		if (!it->isAlive()) {
-			if (!it->atExit()) {
-				playerGold += it->getReward();
-			} else {
-				it->stealGold(playerGold);
+		Critter& critter = *it; // Use a reference to const as critters is const
+		if (!critter.isAlive()) {
+			if (!critter.atExit()) {
+				playerGold += critter.getReward();
 			}
-			it = critters.erase(it);
+			else {
+				critter.stealGold(playerGold);
+			}
+			it = critters.erase(it); // erase() returns the next valid iterator
 			++crittersSpawned;
-		} else {
+		}
+		else {
 			++aliveCritters;
-			it->move(deltaTime, critters, 5.0f);
+			critter.move(deltaTime, critters, 5.0f);
 			++it;
 		}
 	}
@@ -162,18 +166,5 @@ void CritterGroup::render(SDL_Renderer* renderer) {
 	// Render critters
 	for (auto& critter : critters) {
 		critter.render(renderer);
-	}
-}
-
-/**
- * @brief Attacks all critters in the group with the specified damage.
- *
- * This function reduces the hit points of all critters in the group by the specified damage amount.
- *
- * @param damage The amount of damage to deal to each critter.
- */
-void CritterGroup::attackTowers(int damage) {
-	for (auto& critter : critters) {
-		critter.takeDamage(damage);
 	}
 }

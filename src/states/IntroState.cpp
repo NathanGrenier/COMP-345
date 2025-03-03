@@ -112,10 +112,3 @@ void IntroState::render() {
         Global::kScreenWidth - Global::kScreenWidth * 0.1,
         Global::kScreenHeight - Global::kScreenWidth * 0.1, nullptr, Global::kScreenWidth * 0.1, -1);
 }
-
-/**
- * @brief Private constructor to prevent direct instantiation.
- *
- * The IntroState follows the singleton pattern.
- */
-IntroState::IntroState() {}

@@ -8,7 +8,7 @@
 #include <Global.h>
 #include <towers/Projectile.h>
 #include <iostream>
-#include <towers/DummyCritter.h>
+#include <critter/Critter.h>
 
 /**
  * @brief Constructor with position, damage, and if projectile damages an area
@@ -108,17 +108,20 @@ bool Projectile::isOutside()
  * @return true if the Projectile is colliding with a critter 
  * @return false if the Projectile has not collided with critter
  */
-bool Projectile::checkCollision(float critterX, float critterY) {
+bool Projectile::checkCollision(Critter* critter) {
     //float tolerance = -4.0f;
     float tolerance = 0.0f;
-    
+    int critterX = critter->getPosition().x;
+    int critterY = critter->getPosition().y;
+    int critterSize = critter->getPosition().w;
+
     return 
         // checks both horizontal sides of the projectile
-        x < critterX + DummyCritter::CRITTER_SIZE + tolerance &&
+        x < critterX + critterSize + tolerance &&
         x + projectileSize > critterX - tolerance &&
         
         // checks both vertical sides of the projectile
-        y < critterY + DummyCritter::CRITTER_SIZE + tolerance &&
+        y < critterY + critterSize + tolerance &&
         y + projectileSize > critterY - tolerance;
 }
 

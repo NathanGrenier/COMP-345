@@ -134,9 +134,9 @@ void TitleState::handleEvent(SDL_Event& e) {
                     //setNextState(Part2State::get());  // Load Part 2
                     setNextState(UITestState::get());  // Load UI test
                     break;
-                case 3:
-					setNextState(Part3State::get());  // Load Part 3
-					break;
+                //case 3:
+				//	setNextState(Part3State::get());  // Load Part 3
+				//	break;
                 }
             }
         }
@@ -171,13 +171,4 @@ void TitleState::render() {
 	for (int i = 0; i < kButtonCount; ++i) {
 		buttons[i].render();
 	}
-}
-
-/**
- * @brief Private constructor to prevent direct instantiation.
- *
- * The TitleState follows the singleton pattern.
- */
-TitleState::TitleState() {
-	// No public instantiation allowed
 }

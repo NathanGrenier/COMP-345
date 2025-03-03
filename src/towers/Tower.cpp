@@ -7,7 +7,6 @@
 
 #include <Global.h>
 #include <towers/Tower.h>
-#include <towers/DummyCritter.h>
 #include <towers/Projectile.h>
 #include <iostream>
 
@@ -63,25 +62,24 @@ Tower::Tower(float x, float y, int buyingCost, int refundValue, int range, int p
  * 
  * @param critters Vector of currently existing DummyCritter within the map
  * @details Iterates through all DummyCritter in the map
- * Checks if each DummyCritter is in range of the Tower
+ * Checks if each Critter is in range of the Tower
  * Stops after the first DummyCritter that is in range of the Tower is found
  * @return DummyCritter pointer for first DummyCritter that is in range of the Tower
  * @return nullptr if no DummyCritter is in range
  */
-DummyCritter * Tower::findCritter(std::vector<DummyCritter*> critters)
-{
+Critter* Tower::findCritter(std::vector<Critter>& critters) {
     // checks all critters in map
-    for (int i = 0; i < critters.size(); i++)
-    {
-        if (isCritterInRange(*critters[i])) 
-        {
-            return critters[i];
+    for (int i = 0; i < critters.size(); i++) {
+        if (isCritterInRange(critters[i])) { // Directly use critter[i] as it is an object
+            return &critters[i]; // Return a pointer to the critter
         }
     }
 
-    // no critter can be targeted by Tower
+    // No critter can be targeted by the Tower
     return nullptr;
 }
+
+
 
 /**
  * @brief Clears projectiles previously fired from the Tower
@@ -101,7 +99,7 @@ void Tower::clearProjectiles()
  */
 void Tower::generateTower()
 {
-    SDL_FRect fillRect = {x, y, TOWER_SIZE, TOWER_SIZE};
+    SDL_FRect fillRect = {x, y, currentRenderedRect.w, currentRenderedRect.w };
     SDL_SetRenderDrawColor(gRenderer, 0x00, 0x00, 0x00, 0xFF);
     SDL_RenderFillRect(gRenderer, &fillRect);
 }
@@ -199,8 +197,8 @@ bool Tower::isClicked() const
     SDL_GetMouseState(&mouseXPos, &mouseYPos);
 
     // Check if the mouse position is inside the button's area
-    if (mouseXPos >= x && mouseXPos <= x + Tower::TOWER_SIZE &&
-        mouseYPos >= y && mouseYPos <= y + Tower::TOWER_SIZE)
+    if (mouseXPos >= x && mouseXPos <= x + currentRenderedRect.w &&
+        mouseYPos >= y && mouseYPos <= y + currentRenderedRect.w)
     {
         return true;
     }
@@ -215,7 +213,7 @@ bool Tower::isClicked() const
  * @return true if the DummyCritter is in range of the Tower and can be fired a Projectile at 
  * @return false if the DummyCritter is out of range of the Tower and cannot be damaged 
  */
-bool Tower::isCritterInRange(DummyCritter critter) 
+bool Tower::isCritterInRange(Critter critter) 
 {
     return range >= calcDistance(critter);
 }
@@ -230,15 +228,15 @@ bool Tower::isCritterInRange(DummyCritter critter)
  * Takes Tower and DummyCritter size in account for distance
  * @return the absolute distance between the Tower and the DummyCritter
  */
-float Tower::calcDistance(DummyCritter critter) 
+float Tower::calcDistance(Critter critter) 
 {
     // considers Tower size
-    float posX = x + static_cast<float>(TOWER_SIZE) / 2;
-    float posY = y + static_cast<float>(TOWER_SIZE) / 2;
+    float posX = x + currentRenderedRect.w / 2;
+    float posY = y + currentRenderedRect.w / 2;
 
     // considers Critter size
-    float critterPosX = critter.getX() + static_cast<float>(DummyCritter::CRITTER_SIZE) / 2;
-    float critterPosY = critter.getY() + static_cast<float>(DummyCritter::CRITTER_SIZE) / 2;
+    float critterPosX = critter.getPosition().x;
+    float critterPosY = critter.getPosition().y;
 
     // distance in each direction
     float differenceX = posX - critterPosX;
@@ -246,4 +244,16 @@ float Tower::calcDistance(DummyCritter critter)
 
     // distance formula
     return sqrt(pow(differenceX, 2) + pow(differenceY, 2));
+}
+
+void Tower::setCurrentRenderedRect(SDL_FRect targetRect) {
+    currentRenderedRect = targetRect;
+}
+
+void Tower::setRotation(float angle) {
+    rotationAngle = angle;
+}
+
+void Tower::render() {
+    towerTexture.render(currentRenderedRect.x, currentRenderedRect.y, nullptr, currentRenderedRect.w, currentRenderedRect.h, rotationAngle);
 }

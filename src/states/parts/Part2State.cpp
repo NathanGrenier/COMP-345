@@ -17,18 +17,10 @@
 #include <ui/LButton.h>
 #include <vector>
 
-//#include <towers/Tower.h>
-//#include <towers/CannonTower.h>
-//#include <towers/RapidFireTower.h>
-//#include <towers/StandardTower.h>
-//#include <towers/Projectile.h>
-//#include <towers/DummyCritter.h>
-
 #include "../towers/Tower.cpp"
 #include "../towers/CannonTower.cpp"
 #include "../towers/RapidFireTower.cpp"
 #include "../towers/StandardTower.cpp"
-#include "../towers/DummyCritter.cpp"
 #include "../towers/Projectile.cpp"
 #include <iostream>
 
@@ -40,7 +32,7 @@ using namespace std;
 Part2State Part2State::sPart2State;
 
 vector<Tower *> towers; /** @brief vector containing towers */
-vector<DummyCritter *> critters; /** @brief vector containing testing critters */
+vector<Critter *> critters; /** @brief vector containing testing critters */
 
 const int TOWER_BUTTON_COUNT = 5; /** @brief number of buttons for testing tower behaviors */
 const int X_TOWER_BUTTON_SPACING = 50; /** @brief horizontal spacing for buttons */
@@ -101,12 +93,6 @@ bool Part2State::enter() {
 			success = false;
 		}
 	}
-
-	// creates critters 
-	critters.push_back(new DummyCritter(100, 100, 40));
-	critters.push_back(new DummyCritter(300, 100, 40));
-	critters.push_back(new DummyCritter(100, 300, 40));
-	critters.push_back(new DummyCritter(300, 300, 40));
 
 	return success;
 }
@@ -230,9 +216,6 @@ void Part2State::handleEvent(SDL_Event& e) {
 			float x = -1.f, y = -1.f;
 			SDL_GetMouseState(&x, &y);
 
-			x -= Tower::TOWER_SIZE / 2;
-			y -= Tower::TOWER_SIZE / 2;
-
 			// checks for currently selected tower
 			switch (currentTowerSelection)
 			{
@@ -286,7 +269,7 @@ void Part2State::update()
 		if (critters.size()) 
 		{
 			// finds a target critter
-			DummyCritter* targettedCritter = towers[i]->findCritter(critters);
+			Critter* targettedCritter = nullptr;
 
 			// shoot if there is a critter in tower range
 			if (targettedCritter)
@@ -311,7 +294,7 @@ void Part2State::update()
 	for (int i = 0; i < critters.size(); i++) {
 
 		// deletes critter if health is depleted
-		if (critters[i]->getHealth() <= 0) 
+		if (critters[i]->getHitPoints() <= 0) 
 		{
 			critters.erase(critters.begin() + i);
 		}
@@ -344,12 +327,6 @@ void Part2State::render()
 	for (int i = 0; i < TOWER_BUTTON_COUNT; i++)
 	{
 		towerButtons[i].render();
-	}
-
-	// generates critters
-	for (int i = 0; i < critters.size(); i++)
-	{
-		critters[i]->generateCritter();
 	}
 }
 /**

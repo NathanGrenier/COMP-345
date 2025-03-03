@@ -26,7 +26,5 @@ public:
     StandardTower(float x, float y, int buyingCost, int refundValue);
 
     int getMaxLevel();
-    void shootProjectile(DummyCritter* critter);
-
-    void generateTower();
+    void shootProjectile(Critter* critter);
 };

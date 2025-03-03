@@ -29,9 +29,6 @@ private:
     //Static instance
     static TitleState sTitleState;
 
-    //Private constructor
-    TitleState();
-
     //Intro background
     LTexture mBackgroundTexture;
 

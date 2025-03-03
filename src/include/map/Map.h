@@ -70,10 +70,6 @@ public:
 	void setPath(std::string newPath);
 	std::string getPath();
 
-private:
-	static const unsigned char flowDistanceMax = 255;
-	SDL_FRect currentRenderRect;
-
 	/**
 	 * @struct Cell
 	 * @brief Represents a single cell in the map grid
@@ -90,7 +86,14 @@ private:
 		int flowDirectionX = 0; /**< X component of flow direction */
 		int flowDirectionY = 0; /**< Y component of flow direction */
 		unsigned char flowDistance = flowDistanceMax; /**< Distance to target in flow field */
+
+		bool operator==(const Cell& other) const {
+			return x == other.x && y == other.y;
+		}
 	};
+private:
+	static const unsigned char flowDistanceMax = 255;
+	SDL_FRect currentRenderRect;
 
 	bool isInbounds(int x, int y);
 	void drawCell(SDL_Renderer* renderer, const Cell& cell, const SDL_FRect& rect);
@@ -115,3 +118,13 @@ public:
 
 	SDL_FRect scaleCellRect(const Cell& cell, const SDL_FRect& targetRect) const;
 };
+
+namespace std {
+	template <>
+	struct hash<Map::Cell> {
+		size_t operator()(const Map::Cell& c) const {
+			// Combine the hashes of x and y (a simple example)
+			return std::hash<int>()(c.x) ^ (std::hash<int>()(c.y) << 1);
+		}
+	};
+}

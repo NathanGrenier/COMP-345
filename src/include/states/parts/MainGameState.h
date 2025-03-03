@@ -11,6 +11,10 @@
 #include <map/Map.h>
 #include <string>
 #include <critter/CritterGroup.h>
+#include <towers/Tower.h>
+#include <vector>
+#include <ui/DetailAttributeDisplay.h>
+#include <unordered_map>
 
 class MainGameState : public GameState {
 public:
@@ -26,8 +30,8 @@ public:
 	void update() override;
 	void render() override;
 
-	int playerGold;
-	int waveLevel;
+	int playerGold = 1000;
+	int waveLevel = 0;
 	std::string warningMessage = "";
 	float warningTime = 0.0f;
 
@@ -50,4 +54,18 @@ private:
 	Map* map = nullptr;
 
 	CritterGroup* critterGroup = nullptr;
+	std::vector<Tower*> towers; /** @brief vector containing towers */
+
+	DetailAttributeDisplay detailDisplay; /** @brief ui display for details */
+	int towerBuySelect; /** @brief selected Tower as index */
+
+	Tower* dummyStandardTower; /** @brief dummy StandardTower for details before buying Tower */
+	Tower* dummyRapidFireTower; /** @brief dummy RapidFireTower for details before buying Tower */
+	Tower* dummyCannonTower; /** @brief dummy CannonTower for details before buying Tower */
+
+	const int STANDARD_TOWER_COST = 25; /** @brief gold cost for standard tower */
+	const int CANNON_TOWER_COST = 100; /** @brief gold cost for cannon tower */
+	const int RAPID_FIRE_TOWER_COST = 50; /** @brief gold cost for rapid fire tower */
+
+	std::unordered_map<Map::Cell, bool> wallCellDict;
 };

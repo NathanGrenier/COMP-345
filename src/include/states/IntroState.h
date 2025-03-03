@@ -29,9 +29,6 @@ private:
     //Static instance
     static IntroState sIntroState;
 
-    //Private constructor
-    IntroState();
-
     //Intro background
     LTexture mBackgroundTexture;
 

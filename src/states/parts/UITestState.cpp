@@ -22,7 +22,6 @@
 #include "../towers/CannonTower.cpp"
 #include "../towers/RapidFireTower.cpp"
 #include "../towers/StandardTower.cpp"
-#include "../towers/DummyCritter.cpp"
 #include "../towers/Projectile.cpp"
 #include "../ui/DetailButton.cpp"
 #include <iostream>
@@ -37,7 +36,7 @@ using namespace std;
 UITestState UITestState::sUITestState;
 
 vector<Tower*> towers; /** @brief vector containing towers */
-vector<DummyCritter*> critters; /** @brief vector containing testing critters */
+vector<Critter*> critters; /** @brief vector containing testing critters */
 
 const int STANDARD_TOWER_COST = 25; /** @brief gold cost for standard tower */
 const int CANNON_TOWER_COST = 100; /** @brief gold cost for cannon tower */
@@ -46,7 +45,6 @@ const int RAPID_FIRE_TOWER_COST = 50; /** @brief gold cost for rapid fire tower 
 const int DUMMY_CRITTER_COUNT = 4; /** @brief number of testing critters */
 
 int coins = 7000; /** @brief coins for testing buying, upgrading, and selling */
-
 
 DetailAttributeDisplay detailDisplay; /** @brief ui display for details */
 int towerBuySelect; /** @brief selected Tower as index */
@@ -81,16 +79,10 @@ bool UITestState::enter() {
 	detailDisplay = DetailAttributeDisplay::DetailAttributeDisplay();
 	bool success = detailDisplay.initializeComponents();
 
-	// creates critters 
-	critters.push_back(new DummyCritter(100, 100, 40));
-	critters.push_back(new DummyCritter(300, 100, 40));
-	critters.push_back(new DummyCritter(100, 300, 40));
-	critters.push_back(new DummyCritter(300, 300, 40));
-
 	// creating dummy Towers
 	dummyStandardTower = new StandardTower(0, 0, 0, 12);
 	dummyRapidFireTower = new RapidFireTower(0, 0, 0, 25);
-	dummyCannonTower = new CannonTower(0, 0, 0, 50);
+	dummyCannonTower = new CannonTower(0, 0, 50);
 
 	TowerObserver* towerObserver = detailDisplay.getTowerObserver();
 
@@ -124,7 +116,7 @@ bool UITestState::exit() {
 	towers.clear();
 
 	// deallocates DummyCritter objects
-	for (DummyCritter* critter : critters) 
+	for (Critter* critter : critters) 
 	{
 		delete critter;
 	}
@@ -249,9 +241,6 @@ void UITestState::handleEvent(SDL_Event& e)
 				float x = -1.f, y = -1.f;
 				SDL_GetMouseState(&x, &y);
 
-				x -= Tower::TOWER_SIZE / 2;
-				y -= Tower::TOWER_SIZE / 2;
-
 				Tower* newTower = nullptr;
 
 				// checks for currently selected tower
@@ -317,7 +306,7 @@ void UITestState::update()
 		if (critters.size())
 		{
 			// finds a target critter
-			DummyCritter* targettedCritter = towers[i]->findCritter(critters);
+			Critter* targettedCritter = nullptr;
 
 			// shoot if there is a critter in tower range
 			if (targettedCritter)
@@ -342,7 +331,7 @@ void UITestState::update()
 	for (int i = 0; i < critters.size(); i++) {
 
 		// deletes critter if health is depleted
-		if (critters[i]->getHealth() <= 0)
+		if (critters[i]->getHitPoints() <= 0)
 		{
 			critters.erase(critters.begin() + i);
 		}
@@ -365,12 +354,6 @@ void UITestState::render()
 	for (int i = 0; i < towers.size(); i++) {
 		towers[i]->generateTower();
 		towers[i]->generateAllProjectiles();
-	}
-
-	// generates critters
-	for (int i = 0; i < critters.size(); i++)
-	{
-		critters[i]->generateCritter();
 	}
 }
 /**
