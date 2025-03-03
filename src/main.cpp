@@ -1,59 +1,266 @@
-﻿#define SDL_MAIN_USE_CALLBACKS 1  /* use the callbacks instead of main() */
 #include <SDL3/SDL.h>
 #include <SDL3/SDL_main.h>
+#include <SDL3_image/SDL_image.h>
+#include <SDL3_ttf/SDL_ttf.h>
+#include <string>
+#include <sstream>
 
-/* We will use this renderer to draw into this window every frame. */
-static SDL_Window* window = NULL;
-static SDL_Renderer* renderer = NULL;
+#include "States/TitleState.cpp"
+#include "States/IntroState.cpp"
+#include "States/ExitState.cpp"
+#include "ui/LTexture.cpp"
+#include <LTimer.h>
+#include <iostream>
 
-/* This function runs once at startup. */
-SDL_AppResult SDL_AppInit(void** appstate, int argc, char* argv[])
-{
-    SDL_SetAppMetadata("Example Renderer Clear", "1.0", "com.example.renderer-clear");
+/** @file main.cpp
+ *  @brief Entry point for the Tower Defense game.
+ *
+ *  This file initializes SDL, manages game states, handles events, and controls rendering.
+ *  The game operates at a fixed frame rate of 60 FPS.
+ *
+ *  @author Nirav Patel
+ */
 
-    if (!SDL_Init(SDL_INIT_VIDEO)) {
-        SDL_Log("Couldn't initialize SDL: %s", SDL_GetError());
-        return SDL_APP_FAILURE;
-    }
+ /** @brief The target frames per second. */
+constexpr int kScreenFps{ 60 };
 
-    if (!SDL_CreateWindowAndRenderer("examples/renderer/clear", 640, 480, 0, &window, &renderer)) {
-        SDL_Log("Couldn't create window/renderer: %s", SDL_GetError());
-        return SDL_APP_FAILURE;
-    }
+/** @brief The main application window. */
+SDL_Window* gWindow{ nullptr };
 
-    return SDL_APP_CONTINUE;  /* carry on with the program! */
+/** @brief The renderer for drawing to the window. */
+SDL_Renderer* gRenderer = nullptr;
+
+/** @brief The global font for rendering text. */
+TTF_Font* gFont = nullptr;
+
+/** @brief Texture for rendering FPS information. */
+LTexture gFpsTexture;
+
+/** @brief The current game state. */
+GameState* gCurrentState{ nullptr };
+
+/** @brief The next game state to transition to. */
+GameState* gNextState{ nullptr };
+
+int Global::viewerWidth = 250;
+int Global::headerHeight = 75;
+Map* Global::currentMap = nullptr;
+
+SDL_FRect Global::mapViewRect = { 0.0f, Global::headerHeight, static_cast<float>(Global::kScreenWidth - Global::viewerWidth), static_cast<float>(Global::kScreenHeight - Global::headerHeight) };
+
+/**
+ * @brief Sets the next game state.
+ *
+ * If the requested state is not the ExitState, it will be set as the next state.
+ *
+ * @param newState The new state to transition to.
+ */
+void setNextState(GameState* newState) {
+	if (gNextState != ExitState::get()) {
+		gNextState = newState;
+	}
 }
 
-/* This function runs when a new event (mouse input, keypresses, etc) occurs. */
-SDL_AppResult SDL_AppEvent(void* appstate, SDL_Event* event)
-{
-    if (event->type == SDL_EVENT_QUIT) {
-        return SDL_APP_SUCCESS;  /* end the program, reporting success to the OS. */
-    }
-    return SDL_APP_CONTINUE;  /* carry on with the program! */
+/**
+ * @brief Changes the game state if a transition is needed.
+ *
+ * Exits the current state, enters the new state, and updates the game state pointer.
+ */
+void changeState() {
+	if (gNextState != nullptr) {
+		gCurrentState->exit();
+		gNextState->enter();
+		gCurrentState = gNextState;
+		gNextState = nullptr;
+	}
 }
 
-/* This function runs once per frame, and is the heart of the program. */
-SDL_AppResult SDL_AppIterate(void* appstate)
-{
-    const double now = ((double)SDL_GetTicks()) / 1000.0;  /* convert from milliseconds to seconds. */
-    /* choose the color for the frame we will draw. The sine wave trick makes it fade between colors smoothly. */
-    const float red = (float)(0.5 + 0.5 * SDL_sin(now));
-    const float green = (float)(0.5 + 0.5 * SDL_sin(now + SDL_PI_D * 2 / 3));
-    const float blue = (float)(0.5 + 0.5 * SDL_sin(now + SDL_PI_D * 4 / 3));
-    SDL_SetRenderDrawColorFloat(renderer, red, green, blue, SDL_ALPHA_OPAQUE_FLOAT);  /* new color, full alpha. */
+/**
+ * @brief Initializes SDL, creates a window and renderer, and sets up SDL_ttf.
+ *
+ * @return True if initialization was successful, false otherwise.
+ */
+bool init() {
+	bool success{ true };
+	if (!SDL_Init(SDL_INIT_VIDEO)) {
+		SDL_Log("SDL could not initialize! SDL error: %s\n", SDL_GetError());
+		success = false;
+	} else {
+		// Create window and renderer
+		if (!SDL_CreateWindowAndRenderer("Tower Defense - NullTerminators", Global::kScreenWidth, Global::kScreenHeight, 0, &gWindow, &gRenderer)) {
+			SDL_Log("Window could not be created! SDL error: %s\n", SDL_GetError());
+			success = false;
+		} else {
+			// Enable VSync
+			if (!SDL_SetRenderVSync(gRenderer, 1)) {
+				SDL_Log("Could not enable VSync! SDL error: %s\n", SDL_GetError());
+				success = false;
+			}
 
-    /* clear the window to the draw color. */
-    SDL_RenderClear(renderer);
+			// Set blending mode
+			if (!SDL_SetRenderDrawBlendMode(gRenderer, SDL_BLENDMODE_BLEND)) {
+				SDL_Log("Could not set blend mode! SDL error: %s\n", SDL_GetError());
+				success = false;
+			}
 
-    /* put the newly-cleared rendering on the screen. */
-    SDL_RenderPresent(renderer);
+			// Initialize SDL_ttf
+			if (!TTF_Init()) {
+				SDL_Log("SDL_ttf could not initialize! SDL_ttf error: %s\n", SDL_GetError());
+				success = false;
+			}
+		}
+	}
 
-    return SDL_APP_CONTINUE;  /* carry on with the program! */
+	return success;
 }
 
-/* This function runs once at shutdown. */
-void SDL_AppQuit(void* appstate, SDL_AppResult result)
-{
-    /* SDL will clean up the window/renderer for us. */
+/**
+ * @brief Loads media resources such as fonts and textures.
+ *
+ * @return True if all media loaded successfully, false otherwise.
+ */
+bool loadMedia() {
+	bool success{ true };
+
+	// Load font
+	std::string fontPath = "./assets/fonts/lazy.ttf";
+	if (gFont = TTF_OpenFont(fontPath.c_str(), 28); gFont == nullptr) {
+		SDL_Log("Could not load %s! SDL_ttf Error: %s\n", fontPath.c_str(), SDL_GetError());
+		success = false;
+	} else {
+		// Load text
+		SDL_Color textColor = { 0x00, 0x00, 0x00, 0xFF };
+		if (!gFpsTexture.loadFromRenderedText("Enter to start/stop or space to pause/unpause", textColor)) {
+			SDL_Log("Could not load text texture %s! SDL_ttf Error: %s\n", fontPath.c_str(), SDL_GetError());
+			success = false;
+		}
+	}
+
+	return success;
+}
+
+/**
+ * @brief Cleans up SDL resources and quits SDL subsystems.
+ */
+void close() {
+	gFpsTexture.destroy();
+
+	// Free font
+	TTF_CloseFont(gFont);
+	gFont = nullptr;
+
+	// Destroy window and renderer
+	SDL_DestroyRenderer(gRenderer);
+	gRenderer = nullptr;
+	SDL_DestroyWindow(gWindow);
+	gWindow = nullptr;
+
+	// Quit SDL subsystems
+	TTF_Quit();
+	SDL_Quit();
+}
+
+/**
+ * @brief The main function of the game.
+ *
+ * Initializes SDL, manages the game loop, processes events, updates and renders states,
+ * and enforces a 60 FPS cap.
+ *
+ * @param argc Argument count (unused).
+ * @param args Argument values (unused).
+ * @return Exit code (0 if successful).
+ */
+int main(int argc, char* args[]) {
+	int exitCode{ 0 };
+
+	// Initialize SDL
+	if (!init()) {
+		SDL_Log("Unable to initialize program!\n");
+		exitCode = 1;
+	} else {
+		// Load media
+		if (!loadMedia()) {
+			SDL_Log("Unable to load media!\n");
+			exitCode = 2;
+		} else {
+			// Quit flag
+			bool quit{ false };
+
+			// SDL event storage
+			SDL_Event e;
+
+			// FPS timer
+			LTimer fpsTimer;
+
+			// Frame rate cap timer
+			LTimer capTimer;
+
+			// Frame counter
+			Uint64 renderedFrames = 0;
+			Uint64 renderingNS = 0;
+
+			// Flag for resetting FPS calculation
+			bool resetFps = true;
+
+			// Start game state machine
+			gCurrentState = IntroState::get();
+			gCurrentState->enter();
+			SDL_SetRenderVSync(gRenderer, 1);
+
+			// Main game loop
+			while (!quit) {
+				// Reset FPS calculations if needed
+				if (resetFps) {
+					fpsTimer.start();
+					renderedFrames = 0;
+					renderingNS = 0;
+					resetFps = false;
+				}
+
+				// Start frame timer
+				capTimer.start();
+
+				// Process events
+				while (SDL_PollEvent(&e)) {
+					// Handle events in the current state
+					gCurrentState->handleEvent(e);
+
+					// Handle quit event
+					if (e.type == SDL_EVENT_QUIT) {
+						setNextState(ExitState::get());
+						quit = true;
+					} else if (e.type == SDL_EVENT_KEY_DOWN && e.key.key == SDLK_ESCAPE) {
+						setNextState(TitleState::get());
+					}
+				}
+
+				// Update the current state
+				gCurrentState->update();
+
+				// Change state if needed
+				changeState();
+
+				// Clear the screen
+				SDL_SetRenderDrawColor(gRenderer, 0xFF, 0xFF, 0xFF, 0xFF);
+				SDL_RenderClear(gRenderer);
+
+				// Render the current state
+				gCurrentState->render();
+
+				// Present the updated frame
+				SDL_RenderPresent(gRenderer);
+
+				// Cap frame rate to maintain 60 FPS
+				constexpr Uint64 nsPerFrame = 1000000000 / kScreenFps;
+				Uint64 frameNs = capTimer.getTicksNS();
+				if (frameNs < nsPerFrame) {
+					SDL_DelayNS(nsPerFrame - frameNs);
+				}
+			}
+		}
+	}
+
+	// Cleanup and exit
+	close();
+	return exitCode;
 }
