@@ -30,7 +30,7 @@ public:
 	void update() override;
 	void render() override;
 
-	int playerGold = 1000;
+	int playerGold = 200;
 	int waveLevel = 0;
 
 	// Helper functions
