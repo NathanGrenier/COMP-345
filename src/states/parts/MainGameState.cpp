@@ -120,6 +120,8 @@ void MainGameState::handleEvent(SDL_Event& e) {
 	// handles hovering, clicking of buttons
 	detailDisplay.handleButtonEvents(&e);
 
+	SDL_FRect currentRenderRect = map->getCurrentRenderRect();
+
 	// if click happens
 	if (e.type == SDL_EVENT_MOUSE_BUTTON_DOWN && e.button.button == SDL_BUTTON_LEFT)
 	{
@@ -182,15 +184,22 @@ void MainGameState::handleEvent(SDL_Event& e) {
 			{
 				if (towers[i] == detailDisplay.getTowerObserver()->getCurrentTower())
 				{
+
+					int towerCellX = (towers[i]->x - currentRenderRect.x) / map->getPixelPerCell().w;
+					int towerCellY = (towers[i]->y - currentRenderRect.y) / map->getPixelPerCell().h;
+
+					int index = towerCellX + towerCellY * map->cellCountX;
+
 					towers.erase(towers.begin() + i);
+					Map::Cell targetCell = map->cells[index];
+
+					wallCellDict[targetCell] = false;
 				}
 			}
 
 			detailDisplay.selectTower(nullptr);
 		}
 	}
-
-	SDL_FRect currentRenderRect = map->getCurrentRenderRect();
 
 	float mouseX, mouseY;
 	SDL_GetMouseState(&mouseX, &mouseY);
