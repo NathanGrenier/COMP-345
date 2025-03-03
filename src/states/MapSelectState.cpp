@@ -2,11 +2,11 @@
 /// @brief Implementation of the MapSelectState class.
 
 #include <iostream>
-#include <states/parts/MapSelectState.h>
+#include <states/MapSelectState.h>
 #include <Global.h>
 #include <filesystem>
-#include <states/parts/MapEditorState.h>
-#include <states/parts/MainGameState.h>
+#include <states/MapEditorState.h>
+#include <states/MainGameState.h>
 #include <ui/LButton.h>
 #include <ui/LTexture.h>
 #include <map/Map.h>

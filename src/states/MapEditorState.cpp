@@ -1,8 +1,8 @@
 #include <SDL3/SDL_events.h>
 #include <SDL3/SDL_init.h>
-#include <states/parts/MapEditorState.h>
+#include <states/MapEditorState.h>
 #include <Global.h>
-#include <states/parts/MapSelectState.h>
+#include <states/MapSelectState.h>
 
 /** @class MapEditorState
  *  @brief Implementation of the MapEditorState.

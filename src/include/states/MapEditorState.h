@@ -6,7 +6,7 @@
  */
 #pragma once
 
-#include "../GameState.h"
+#include "GameState.h"
 #include <ui/LTexture.h>
 #include <map/Map.h>
 #include <ui/LButton.h>
