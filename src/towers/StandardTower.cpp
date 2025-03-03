@@ -1,5 +1,5 @@
 /**
- * @file StandardTower.cpp
+ * @class StandardTower
  * @brief Implementation of StandardTower class
  * @author Denmar Ermitano
  * @date 2025-02-22
