@@ -32,6 +32,8 @@ private:
 	std::string currentSelection = "Start";
 	std::string originalName;
 	
+	LButton backButton;
+
 	//Intro background
 	LTexture mBackgroundTexture;
 
@@ -51,7 +53,7 @@ private:
 	LButton selectStartPos;
 	LButton selectEndPos;
 	LButton selectWallCell;
-	LButton eraser;
+	LButton toggleFlowFieldVisibility;
 
 	LButton saveMapButton;
 	LButton renameButton;

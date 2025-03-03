@@ -12,24 +12,9 @@
 #include <Global.h>
 #include <nlohmann/json.hpp>
 
-void Map::calculatePixelsPerCell() {
-	// Perform the calculation based on Global's static parameters
-	PIXELS_PER_CELL = (Global::kScreenWidth - Global::viewerWidth) / cellCountX;
-
-	textureCellWall = TextureLoader::loadTexture(gRenderer, "map/cell-wall.bmp");
-	textureCellTarget = TextureLoader::loadTexture(gRenderer, "map/cell-target.bmp");
-	textureCellSpawner = TextureLoader::loadTexture(gRenderer, "map/cell-spawner.bmp");
-
-	textureCellEmpty = TextureLoader::loadTexture(gRenderer, "map/cell-empty.bmp");
-	textureCellArrowUp = TextureLoader::loadTexture(gRenderer, "map/cell-arrow-up.bmp");
-	textureCellArrowDown = TextureLoader::loadTexture(gRenderer, "map/cell-arrow-down.bmp");
-	textureCellArrowLeft = TextureLoader::loadTexture(gRenderer, "map/cell-arrow-left.bmp");
-	textureCellArrowRight = TextureLoader::loadTexture(gRenderer, "map/cell-arrow-right.bmp");
-}
-
-/**
- * @brief Default Map constructor.
- */
+ /**
+  * @brief Default Map constructor.
+  */
 Map::Map() {
 	cellCountX = 15;
 	cellCountY = 15;
@@ -118,19 +103,36 @@ void Map::drawCell(SDL_Renderer* renderer, const Cell& cell, const SDL_FRect& re
 		// Wall cell
 		textureSelected = textureCellWall;
 	} else if (cell.flowDirectionX != 0 || cell.flowDirectionY != 0) {
-		// Cell with a flow direction (arrow)
-		if (cell.flowDirectionX == 0 && cell.flowDirectionY == -1) {
-			// Up
-			textureSelected = textureCellArrowUp;
-		} else if (cell.flowDirectionX == 1 && cell.flowDirectionY == 0) {
-			// Right
-			textureSelected = textureCellArrowRight;
-		} else if (cell.flowDirectionX == 0 && cell.flowDirectionY == 1) {
-			// Down
-			textureSelected = textureCellArrowDown;
-		} else if (cell.flowDirectionX == -1 && cell.flowDirectionY == 0) {
-			// Left
-			textureSelected = textureCellArrowLeft;
+		if (isFlowFieldVisible) {
+			// Cell with a flow direction (arrow)
+			if (cell.flowDirectionX == 0 && cell.flowDirectionY == -1) {
+				// Up
+				textureSelected = textureCellArrowUp;
+			} else if (cell.flowDirectionX == 1 && cell.flowDirectionY == 0) {
+				// Right
+				textureSelected = textureCellArrowRight;
+			} else if (cell.flowDirectionX == 0 && cell.flowDirectionY == 1) {
+				// Down
+				textureSelected = textureCellArrowDown;
+			} else if (cell.flowDirectionX == -1 && cell.flowDirectionY == 0) {
+				// Left
+				textureSelected = textureCellArrowLeft;
+			}
+		} else if (cell.isOnPath) {
+			// Cell with a flow direction (arrow)
+			if (cell.flowDirectionX == 0 && cell.flowDirectionY == -1) {
+				// Up
+				textureSelected = textureCellArrowUp;
+			} else if (cell.flowDirectionX == 1 && cell.flowDirectionY == 0) {
+				// Right
+				textureSelected = textureCellArrowRight;
+			} else if (cell.flowDirectionX == 0 && cell.flowDirectionY == 1) {
+				// Down
+				textureSelected = textureCellArrowDown;
+			} else if (cell.flowDirectionX == -1 && cell.flowDirectionY == 0) {
+				// Left
+				textureSelected = textureCellArrowLeft;
+			}
 		}
 	}
 
@@ -339,7 +341,16 @@ void Map::calculateFlowField() {
 	}
 	calculateDistances();
 	calculateFlowDirections();
+	walkPath();
 	notifyObservers();
+}
+
+void Map::toggleFlowFieldVisibility() {
+	isFlowFieldVisible = !isFlowFieldVisible;
+}
+
+void Map::setFlowFieldVisibility(bool value) {
+	isFlowFieldVisible = value;
 }
 
 /**
@@ -492,12 +503,10 @@ bool Map::saveToJson(const std::string& filePath) {
 			wall["x"] = cell.x;
 			wall["y"] = cell.y;
 			mapData["walls"].push_back(wall);
-		}
-		else if (cell.isSpawner) {
+		} else if (cell.isSpawner) {
 			mapData["start"]["x"] = cell.x;
 			mapData["start"]["y"] = cell.y;
-		}
-		else if (cell.isTarget) {
+		} else if (cell.isTarget) {
 			mapData["end"]["x"] = cell.x;
 			mapData["end"]["y"] = cell.y;
 		}
@@ -513,8 +522,7 @@ bool Map::saveToJson(const std::string& filePath) {
 	// Write the JSON object to the file
 	try {
 		file << mapData.dump(4);  // Indented with 4 spaces for readability
-	}
-	catch (const std::exception& e) {
+	} catch (const std::exception& e) {
 		std::cerr << "Error: Failed to write to file " << filePath << ". Exception: " << e.what() << std::endl;
 		return false; // Return false if an error occurs during writing
 	}
@@ -597,6 +605,21 @@ void Map::setCurrentRenderRect(SDL_FRect newTargetRect) {
 SDL_FRect Map::getPixelPerCell() {
 	SDL_FRect currentMapRect = getCurrentRenderRect();
 	return SDL_FRect{ 0, 0, currentMapRect.w / cellCountX, currentMapRect.h / cellCountY };
+}
+
+void Map::calculatePixelsPerCell() {
+	// Perform the calculation based on Global's static parameters
+	PIXELS_PER_CELL = (Global::kScreenWidth - Global::viewerWidth) / cellCountX;
+
+	textureCellWall = TextureLoader::loadTexture(gRenderer, "map/cell-wall.bmp");
+	textureCellTarget = TextureLoader::loadTexture(gRenderer, "map/cell-target.bmp");
+	textureCellSpawner = TextureLoader::loadTexture(gRenderer, "map/cell-spawner.bmp");
+
+	textureCellEmpty = TextureLoader::loadTexture(gRenderer, "map/cell-empty.bmp");
+	textureCellArrowUp = TextureLoader::loadTexture(gRenderer, "map/cell-arrow-up.bmp");
+	textureCellArrowDown = TextureLoader::loadTexture(gRenderer, "map/cell-arrow-down.bmp");
+	textureCellArrowLeft = TextureLoader::loadTexture(gRenderer, "map/cell-arrow-left.bmp");
+	textureCellArrowRight = TextureLoader::loadTexture(gRenderer, "map/cell-arrow-right.bmp");
 }
 
 /**
@@ -720,6 +743,55 @@ SDL_FRect Map::scaleCellRect(const Cell& cell, const SDL_FRect& targetRect) cons
 		static_cast<float>(PIXELS_PER_CELL) * scale,
 		static_cast<float>(PIXELS_PER_CELL) * scale
 	};
+}
+
+std::vector<Map::Cell> Map::walkPath() {
+	// Reset all cells
+	for (auto& cell : cells) {
+		cell.isOnPath = false;
+	}
+
+	std::vector<Cell> path;
+
+	// Find the spawner cell
+	int spawnerIndex = -1;
+	for (int i = 0; i < static_cast<int>(cells.size()); ++i) {
+		if (cells[i].isSpawner) {
+			spawnerIndex = i;
+			break;
+		}
+	}
+
+	if (spawnerIndex == -1) {
+		//std::cerr << "Error: No spawner cell found." << std::endl;
+		return path;
+	}
+
+	int currentIndex = spawnerIndex;
+	while (true) {
+		Cell& currentCell = cells[currentIndex];
+
+		currentCell.isOnPath = true;
+		path.push_back(currentCell);
+
+		if (currentCell.isTarget) {
+			break;
+		}
+
+		// Move to the next cell in the flow direction
+		int nextX = currentCell.x + currentCell.flowDirectionX;
+		int nextY = currentCell.y + currentCell.flowDirectionY;
+		int nextIndex = nextX + nextY * cellCountX;
+
+		if (!isInbounds(nextX, nextY) || cells[nextIndex].flowDistance == flowDistanceMax) {
+			//std::cerr << "Error: Path is broken or leads out of bounds." << std::endl;
+			break;
+		}
+
+		currentIndex = nextIndex;
+	}
+
+	return path;
 }
 
 void Map::subscribe(FlowFieldObserver* observer) {
