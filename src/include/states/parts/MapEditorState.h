@@ -31,6 +31,8 @@ private:
 
 	std::string currentSelection = "Start";
 	std::string originalName;
+	
+	LButton backButton;
 
 	//Intro background
 	LTexture mBackgroundTexture;

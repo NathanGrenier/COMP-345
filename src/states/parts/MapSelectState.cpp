@@ -10,6 +10,7 @@
 #include <ui/LButton.h>
 #include <ui/LTexture.h>
 #include <map/Map.h>
+#include <states/TitleState.h>
 
 namespace fs = std::filesystem;
 
@@ -33,7 +34,10 @@ MapSelectState* MapSelectState::get() {
 bool MapSelectState::enter() {
 	loadAvailableMaps();
 
+	mTitle.loadFromFile("assets/ui/MapSelectionMessage.png");
+
 	// Load button textures
+	backButton.loadFromFile("assets/ui/LeftArrow.png");
 	createButton.loadFromFile("assets/ui/CreateMap.png");
 	editButton.loadFromFile("assets/ui/EditMap.png");
 	selectButton.loadFromFile("assets/ui/SelectMap.png");
@@ -45,6 +49,7 @@ bool MapSelectState::enter() {
 	const int buttonSpacing = 20;
 	const int maxButtonWidth = (Global::kScreenWidth - (buttonSpacing * (buttonCount + 1))) / buttonCount;
 
+	backButton.setSizeWithAspectRatio(mTitle.getHeight() * 0.75, 0);
 	createButton.setSizeWithAspectRatio(maxButtonWidth, 0);
 	editButton.setSizeWithAspectRatio(maxButtonWidth, 0);
 	selectButton.setSizeWithAspectRatio(maxButtonWidth, 0);
@@ -60,6 +65,10 @@ bool MapSelectState::enter() {
 	int startY = Global::kScreenHeight - maxButtonHeight - buttonSpacing;
 
 	// Set positions dynamically
+	float renderedWidth = Global::kScreenWidth * 0.5f;
+	float renderedHeight = (static_cast<float>(mTitle.getHeight()) / mTitle.getWidth()) * renderedWidth;
+	float backButtonY = titleDistanceFromTop + (renderedHeight - backButton.kButtonHeight) / 2.0f;
+	backButton.setPosition(backButtonDistanceFromLeft, backButtonY);
 	createButton.setPosition(startX, startY);
 	editButton.setPosition(startX + (maxButtonWidth + buttonSpacing), startY);
 	selectButton.setPosition(startX + (2 * (maxButtonWidth + buttonSpacing)), startY);
@@ -77,13 +86,11 @@ bool MapSelectState::enter() {
 	leftArrow.setPosition(centerX, (Global::kScreenHeight - mHoveredMapName.getHeight()) / 2 - 75);
 	rightArrow.setPosition(centerX + leftArrow.kButtonWidth + distanceBetweenArrows, (Global::kScreenHeight - mHoveredMapName.getHeight()) / 2 - 75);
 
-
-	mTitle.loadFromFile("assets/ui/MapSelectionMessage.png");
-
 	return true;
 }
 
 bool MapSelectState::exit() {
+	backButton.destroy();
 	createButton.destroy();
 	editButton.destroy();
 	selectButton.destroy();
@@ -93,6 +100,7 @@ bool MapSelectState::exit() {
 }
 
 void MapSelectState::handleEvent(SDL_Event& e) {
+	backButton.handleEvent(&e);
 	createButton.handleEvent(&e);
 	editButton.handleEvent(&e);
 	selectButton.handleEvent(&e);
@@ -132,6 +140,8 @@ void MapSelectState::handleEvent(SDL_Event& e) {
 			// Select the map to start the game
 			Global::currentMap = &availableMaps[selectedMapFilePath];
 			setNextState(MainGameState::get());
+		} else if (backButton.isClicked()) {
+			setNextState(TitleState::get());
 		}
 	}
 }
@@ -152,7 +162,7 @@ void MapSelectState::render() {
 	int kScreenWidth = Global::kScreenWidth;
 	int kScreenHeight = Global::kScreenHeight;
 
-	mTitle.render((kScreenWidth - kScreenWidth * 0.5) / 2, 20, nullptr, kScreenWidth * 0.5, -1);
+	mTitle.render((kScreenWidth - kScreenWidth * 0.5) / 2, titleDistanceFromTop, nullptr, kScreenWidth * 0.5, -1);
 
 	if (!selectedMapFilePath.empty()) {
 		auto mapIter = availableMaps.find(selectedMapFilePath);
@@ -172,6 +182,7 @@ void MapSelectState::render() {
 
 	mHoveredMapName.render((kScreenWidth - mHoveredMapName.getWidth()) / 2, (kScreenHeight - mHoveredMapName.getHeight()) / 2 + 125);
 
+	backButton.render();
 	createButton.render();
 	editButton.render();
 	selectButton.render();

@@ -2,6 +2,7 @@
 #include <SDL3/SDL_init.h>
 #include <states/parts/MapEditorState.h>
 #include <Global.h>
+#include <states/parts/MapSelectState.h>
 
 /** @class MapEditorState
  *  @brief Implementation of the MapEditorState.
@@ -27,6 +28,8 @@ bool MapEditorState::enter() {
 	map = Global::currentMap;
 	originalName = map->getName();
 	map->setFlowFieldVisibility(true);
+
+	backButton.loadFromFile("assets/ui/LeftArrow.png");
 
 	noOfColumnsLabel.loadFromFile("assets/ui/Columns.png");
 	noOfRowsLabel.loadFromFile("assets/ui/Rows.png");
@@ -70,6 +73,7 @@ bool MapEditorState::enter() {
 	float buttonStartY = Global::headerHeight;
 
 	// Apply aspect ratio scaling
+	backButton.setSizeWithAspectRatio(mMessageTexture.getHeight() * 0.75, 0);
 	removeColumn.setSizeWithAspectRatio(squareButtonWidth, 0);
 	addColumn.setSizeWithAspectRatio(squareButtonWidth, 0);
 	removeRow.setSizeWithAspectRatio(squareButtonWidth, 0);
@@ -84,6 +88,11 @@ bool MapEditorState::enter() {
 	renameButton.setSizeWithAspectRatio(Global::viewerWidth / 2 - 5, 0);
 
 	// Set button positions first, then apply size
+	float renderedWidth = Global::kScreenWidth * 0.5f;
+	float renderedHeight = (static_cast<float>(mMessageTexture.getHeight()) / mMessageTexture.getWidth()) * renderedWidth;
+	float backButtonY = titleDistanceFromTop + (renderedHeight - backButton.kButtonHeight) / 2.0f;
+	backButton.setPosition(backButtonDistanceFromLeft, backButtonY);
+
 	removeColumn.setPosition(startX, buttonStartY + noOfColumnsLabel.getHeight());
 	addColumn.setPosition(removeColumn.getPosition().x + removeColumn.kButtonWidth + textWidth + buttonSpacing * 9, removeColumn.getPosition().y);
 
@@ -108,6 +117,8 @@ bool MapEditorState::exit() {
 	Global::currentMap = nullptr;
 	map = nullptr;
 
+	backButton.destroy();
+
 	noOfColumnsLabel.destroy();
 	noOfRowsLabel.destroy();
 
@@ -131,6 +142,8 @@ bool MapEditorState::exit() {
 }
 
 void MapEditorState::handleEvent(SDL_Event& e) {
+	backButton.handleEvent(&e);
+
 	addColumn.handleEvent(&e);
 	removeColumn.handleEvent(&e);
 	addRow.handleEvent(&e);
@@ -146,7 +159,9 @@ void MapEditorState::handleEvent(SDL_Event& e) {
 
 	// Process selection buttons
 	if (e.type == SDL_EVENT_MOUSE_BUTTON_DOWN && e.button.button == SDL_BUTTON_LEFT) {
-		if (selectStartPos.isClicked()) {
+		if (backButton.isClicked()) {
+			setNextState(MapSelectState::get());
+		} else if (selectStartPos.isClicked()) {
 			currentSelection = "Start";
 			currentMessage.loadFromRenderedText("Selected: Start", { 0, 0, 0, 255 });
 		} else if (selectEndPos.isClicked()) {
@@ -271,7 +286,12 @@ void MapEditorState::handleEvent(SDL_Event& e) {
 			else if (e.key.key >= SDLK_SPACE && e.key.key <= SDLK_Z) {
 				// Only append if the name is less than 16 characters
 				if (map->getName().size() < 16) {
-					map->setName(map->getName() + static_cast<char>(e.key.key));
+					char keyChar = static_cast<char>(e.key.key);
+					// Check if Shift key is pressed
+					if (e.key.mod & (SDL_KMOD_SHIFT)) {
+						keyChar = std::toupper(keyChar);
+					}
+					map->setName(map->getName() + keyChar);
 				}
 			}
 		}
@@ -300,7 +320,7 @@ void MapEditorState::render() {
 
 	map->drawOnTargetRect(gRenderer, mapView);
 
-	mMessageTexture.render((Global::kScreenWidth - Global::kScreenWidth * 0.5) / 2, 20, nullptr, Global::kScreenWidth * 0.5, -1);
+	mMessageTexture.render((Global::kScreenWidth - Global::kScreenWidth * 0.5) / 2, titleDistanceFromTop, nullptr, Global::kScreenWidth * 0.5, -1);
 
 	noOfColumnsLabel.render(buttonStartX + 45, buttonStartY, nullptr, -1, buttonHeight);
 	noOfRowsText.render(buttonStartX + 100, buttonStartY + 50, nullptr, -1, buttonHeight + 10);
@@ -313,6 +333,8 @@ void MapEditorState::render() {
 	removeRow.render();
 
 	currentMessage.render(selectStartPos.getPosition().x, addRow.getPosition().y + addRow.kButtonHeight + buttonSpacing - 15, nullptr, buttonWidth, buttonHeight);
+
+	backButton.render();
 
 	selectStartPos.render();
 	selectEndPos.render();

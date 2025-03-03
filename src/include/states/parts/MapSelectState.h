@@ -46,6 +46,8 @@ private:
     LTexture mTitle;
     LTexture mHoveredMapName;
 
+    LButton backButton;
+    
     LButton leftArrow;
     LButton rightArrow;
 

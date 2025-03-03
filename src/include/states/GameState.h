@@ -25,6 +25,16 @@
 class GameState {
 public:
     /**
+     * @brief Distance of the title from the top of the window in pixels.
+     */
+    int titleDistanceFromTop = 20;
+
+    /**
+     * @brief Distance of the back button from the left of the window in pixels.
+     */
+    int backButtonDistanceFromLeft = 30;
+    
+    /**
      * @brief Called when entering the state.
      *
      * This function is executed when transitioning into the current state.
