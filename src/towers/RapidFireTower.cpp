@@ -1,5 +1,5 @@
 /**
- * @file RapidFireTower.cpp
+ * @class RapidFireTower
  * @brief Implementation of RapidFireTower class
  * @author Denmar Ermitano
  * @date 2025-02-22

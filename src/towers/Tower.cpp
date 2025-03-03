@@ -79,8 +79,6 @@ Critter* Tower::findCritter(std::vector<Critter>& critters) {
     return nullptr;
 }
 
-
-
 /**
  * @brief Clears projectiles previously fired from the Tower
  * 
@@ -116,21 +114,37 @@ void Tower::generateAllProjectiles()
     }
 }
 
+/**
+ * @brief Accessor for range
+ * @return the range for the Tower
+ */
 int Tower::getRange()
 {
     return range;
 }
 
+/**
+ * @brief Accessor for power
+ * @return the power for the Tower
+ */
 int Tower::getPower()
 {
     return power;
 }
 
+/**
+ * @brief Accessor for rate of fire
+ * @return the rate of fire for the Tower
+ */
 int Tower::getRateOfFire()
 {
     return rateOfFire;
 }
 
+/**
+ * @brief Accessor for level
+ * @return the level for the Tower
+ */
 int Tower::getLevel()
 {
     return level;
@@ -160,11 +174,23 @@ int Tower::getUpgradeCost()
     return 100 + level * 50;
 }
 
+/**
+ * @brief Accessor for the Tower upgrade values
+ * @return a struct containing the Tower upgrade values
+ */
 Tower::UpgradeValues Tower::getUpgradeValues()
 {
     return upgradeValues;
 }
 
+/**
+ * @brief Upgrades a Tower
+ * @details Increases the Tower by 1 level
+ * Increases range, power, and rate of fire
+ * Performs checks for if the Tower is already maximum level
+ * @return true if the Tower has been upgraded
+ * @return false if the Tower could not have been upgraded
+ */
 bool Tower::upgrade()
 {
     // check if not yet max level
@@ -251,14 +277,25 @@ float Tower::calcDistance(Critter critter)
     return sqrt(pow(differenceX, 2) + pow(differenceY, 2));
 }
 
+/**
+ * @brief Mutator to sets the rectangle to render the Tower
+ * @param targetRect new Rect to render the Tower through
+ */
 void Tower::setCurrentRenderedRect(SDL_FRect targetRect) {
     currentRenderedRect = targetRect;
 }
 
+/**
+ * @brief Mutator for rotation
+ * @param angle new angle to set the Tower to 
+ */
 void Tower::setRotation(float angle) {
     rotationAngle = angle;
 }
 
+/**
+ * @brief Renders the Towers as an image
+ */
 void Tower::render() {
     towerTexture.render(currentRenderedRect.x, currentRenderedRect.y, nullptr, currentRenderedRect.w, currentRenderedRect.h, rotationAngle);
     generateAllProjectiles();
