@@ -32,8 +32,6 @@ public:
 
 	int playerGold = 1000;
 	int waveLevel = 0;
-	std::string warningMessage = "";
-	float warningTime = 0.0f;
 
 	// Helper functions
 	void renderText(const std::string& text, float x, float y);

@@ -233,7 +233,13 @@ void MainGameState::handleEvent(SDL_Event &e)
 			{
 				if (towers[i] == detailDisplay.getTowerObserver()->getCurrentTower())
 				{
+					int towerCellX = (towers[i]->x - currentRenderRect.x) / map->getPixelPerCell().w;
+					int towerCellY = (towers[i]->y - currentRenderRect.y) / map->getPixelPerCell().h;
+
+					int towerIndex = towerCellX + towerCellY * map->cellCountX;
+
 					towers.erase(towers.begin() + i);
+					Map::Cell targetCell = map->cells[towerIndex];
 
 					wallCellDict[targetCell] = false;
 				}
@@ -381,15 +387,6 @@ void MainGameState::update()
 			towers[i]->clearProjectiles();
 		}
 	}
-
-	if (playerGold < 0)
-	{
-		warningMessage = "You are out of gold!";
-	}
-	else
-	{
-		warningMessage = "";
-	}
 }
 
 /**
@@ -419,14 +416,6 @@ void MainGameState::render()
 	std::string waveText = "Wave: " + std::to_string(waveLevel);
 	float waveX = (Global::kScreenWidth - (waveText.length() * 10.0f)) / 2.0f;
 	renderText(waveText, waveX, 10.0f);
-
-	// Render warning message if any
-	if (!warningMessage.empty())
-	{
-		float warningX = (Global::kScreenWidth - (warningMessage.length() * 10.0f)) / 2.0f;
-		float warningY = Global::kScreenHeight - 40.0f;
-		renderText(warningMessage, warningX, warningY);
-	}
 }
 
 /**

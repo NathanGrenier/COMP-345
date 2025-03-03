@@ -21,7 +21,7 @@
 TitleState TitleState::sTitleState;
 
 /// @brief Number of buttons in the main menu.
-constexpr int kButtonCount = 4;
+constexpr int kButtonCount = 1;
 
 /// @brief Array of main menu buttons.
 LButton buttons[kButtonCount];
@@ -52,10 +52,7 @@ bool TitleState::enter() {
 
 	// Button labels
 	const char* buttonLabels[kButtonCount] = {
-		"Load Main Game",
-		"Load Part 1",
-		"Load Part 2",
-		"Load Part 3"
+		"Load Main Game"
 	};
 
 	// Initialize buttons
@@ -127,14 +124,14 @@ void TitleState::handleEvent(SDL_Event& e) {
                 case 0:
                     setNextState(MapSelectState::get());  // Load main game
                     break;
-                case 1:
-                    setNextState(Part1State::get());  // Load Part 1
-                    break;
-                case 2:
-                    //setNextState(Part2State::get());  // Load Part 2
-                    setNextState(UITestState::get());  // Load UI test
-                    break;
-                //case 3:
+    //            case 1:
+    //                setNextState(Part1State::get());  // Load Part 1
+    //                break;
+    //            case 2:
+    //                //setNextState(Part2State::get());  // Load Part 2
+    //                setNextState(UITestState::get());  // Load UI test
+    //                break;
+    //            //case 3:
 				//	setNextState(Part3State::get());  // Load Part 3
 				//	break;
                 }
