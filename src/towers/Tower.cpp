@@ -256,4 +256,5 @@ void Tower::setRotation(float angle) {
 
 void Tower::render() {
     towerTexture.render(currentRenderedRect.x, currentRenderedRect.y, nullptr, currentRenderedRect.w, currentRenderedRect.h, rotationAngle);
+    generateAllProjectiles();
 }
