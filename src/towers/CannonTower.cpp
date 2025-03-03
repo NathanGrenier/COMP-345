@@ -92,9 +92,11 @@ void CannonTower::shootProjectile(Critter* critter)
     float posX = x + currentRenderedRect.w / 2;
     float posY = y + currentRenderedRect.w / 2;
 
+    SDL_FRect currentCellSize = Global::currentMap->getPixelPerCell();
+    
     // critter position with offset
-    float critterPosX = critter->getPosition().x;
-    float critterPosY = critter->getPosition().y;
+    float critterPosX = critter->getPosition().x + Critter::CRITTER_WIDTH_SCALE * currentCellSize.w / 2;
+    float critterPosY = critter->getPosition().y + Critter::CRITTER_HEIGHT_SCALE * currentCellSize.h / 2;
 
     // differences in position from tower to cannon
     float differenceX = posX - critterPosX;
