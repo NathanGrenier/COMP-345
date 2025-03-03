@@ -15,9 +15,19 @@
  *
  * @author Nirav Patel
  */
+
+ /**
+  * @brief Constructs a new CritterGroup object.
+  *
+  * @param waveLevel Reference to the current wave level.
+  * @param playerGold Reference to the player's current gold amount.
+  * @param startPosition The starting position of the critters.
+  * @param endPosition The end (exit) position for the critters.
+  * @param map Pointer to the game map.
+  * @param detailDisplay Reference to the DetailAttributeDisplay for critter details.
+  */
 CritterGroup::CritterGroup(int& waveLevel, int& playerGold, SDL_FRect startPosition, SDL_FRect endPosition, Map* map, DetailAttributeDisplay& detailDisplay)
-	: waveLevel(waveLevel), playerGold(playerGold), startPosition(startPosition), endPosition(endPosition), map(map), detailDisplay(detailDisplay) {
-}
+	: waveLevel(waveLevel), playerGold(playerGold), startPosition(startPosition), endPosition(endPosition), map(map), detailDisplay(detailDisplay) {}
 
 
 /**
@@ -35,10 +45,7 @@ CritterGroup::~CritterGroup() {
  * Critters are generated sequentially at the start position. The function checks if
  * the start position is clear before spawning new critters, ensuring no overlap.
  *
- * @param startPosition The starting position of the critters.
- * @param endPosition The end (exit) position for the critters.
  * @param deltaTime Time elapsed since the last frame.
- *
  */
 void CritterGroup::generateCritters(float deltaTime) {
 	const float spacing = 100.0f;  // Minimum distance between critters
@@ -98,8 +105,6 @@ void CritterGroup::generateCritters(float deltaTime) {
  * it updates the critters, checking for their death, movement, and gold rewards.
  *
  * @param deltaTime Time elapsed since the last frame.
- * @param newEndPosition The updated end position (exit) for critters.
- *
  */
 void CritterGroup::update(float deltaTime) {
 	if (!waveInProgress) {
@@ -118,15 +123,13 @@ void CritterGroup::update(float deltaTime) {
 		if (!critter.isAlive()) {
 			if (!critter.atExit()) {
 				playerGold += critter.getReward();
-			}
-			else {
+			} else {
 				critter.stealGold(playerGold);
 			}
 			critter.detach(detailDisplay.getCritterObserver());
 			it = critters.erase(it); // erase() returns the next valid iterator
 			++crittersSpawned;
-		}
-		else {
+		} else {
 			++aliveCritters;
 			critter.move(deltaTime, critters, 5.0f);
 			++it;
