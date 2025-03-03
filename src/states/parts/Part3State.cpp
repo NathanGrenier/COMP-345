@@ -73,7 +73,8 @@ bool Part3State::enter() {
 	endSquare = { Global::kScreenWidth - 50.0f, 300.0f, 50.0f, 50.0f };
 	playerGold = 100;
 	waveLevel = 1;
-	critterGroup = new CritterGroup(waveLevel, playerGold, startSquare, endSquare, Global::currentMap);
+	DetailAttributeDisplay detailDisplay = DetailAttributeDisplay();
+	critterGroup = new CritterGroup(waveLevel, playerGold, startSquare, endSquare, Global::currentMap, detailDisplay);
 	return true;
 }
 

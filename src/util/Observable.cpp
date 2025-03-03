@@ -55,16 +55,3 @@ void Observable::notify()
 	}
 }
 
-/**
- * @brief Destructor for Observable, deleting attached Observers
- */
-Observable::~Observable()
-{
-	for (int i = 0; i < observers->size(); i++)
-	{
-		delete(&observers[i]);
-	}
-
-	observers->clear();
-	observers = NULL;
-}

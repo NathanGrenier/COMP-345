@@ -15,8 +15,6 @@
 class Observable
 {
 public:
-    // destructor
-    virtual ~Observable();
 
     // Observer methods
     virtual void attach(Observer* observer);

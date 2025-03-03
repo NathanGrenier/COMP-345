@@ -126,7 +126,7 @@ void StandardTower::shootProjectile(Critter* critter)
         if (projectiles[i]->checkCollision(critter))
         {
             critter->takeDamage(power);
-            
+            critter->notify();
             projectiles.erase(projectiles.begin() + i);
             
             // clear projectiles if critter has no hp, no target

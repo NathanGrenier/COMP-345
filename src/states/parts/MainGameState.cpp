@@ -46,10 +46,11 @@ bool MainGameState::enter() {
 	map->setFlowFieldVisibility(false);
 	map->setCurrentRenderRect(Global::mapViewRect);
 
-	critterGroup = new CritterGroup(waveLevel, playerGold, map->getSpawnerPos(Global::mapViewRect), map->getTargetPos(Global::mapViewRect), map);
-
-	detailDisplay = DetailAttributeDisplay::DetailAttributeDisplay();
+	detailDisplay = DetailAttributeDisplay();
 	bool success = detailDisplay.initializeComponents();
+
+	critterGroup = new CritterGroup(waveLevel, playerGold, map->getSpawnerPos(Global::mapViewRect), map->getTargetPos(Global::mapViewRect), map, detailDisplay);
+
 
 	// creating dummy Towers
 	dummyStandardTower = new StandardTower(0, 0, 0, 12);

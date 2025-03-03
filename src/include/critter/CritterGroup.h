@@ -8,11 +8,12 @@
 
 #include <vector>
 #include "Critter.h"
+#include <ui/DetailAttributeDisplay.h>
 
 class CritterGroup {
 public:
 	// Constructor with parameters
-	CritterGroup(int& waveLevel, int& playerGold, SDL_FRect startPosition, SDL_FRect endPosition, Map* map);
+	CritterGroup(int& waveLevel, int& playerGold, SDL_FRect startPosition, SDL_FRect endPosition, Map* map, DetailAttributeDisplay& detailDisplay);
 	~CritterGroup();
 
 	void generateCritters(float deltaTime);
@@ -30,6 +31,7 @@ private:
 	SDL_FRect startPosition;
 	SDL_FRect endPosition;
 
+	DetailAttributeDisplay& detailDisplay;
 	float spawnTimer = 0.0f;
 	const float spawnInterval = 1.0f;
 	int crittersSpawned = 0;

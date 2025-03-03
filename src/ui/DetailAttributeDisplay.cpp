@@ -38,7 +38,6 @@ DetailAttributeDisplay::DetailAttributeDisplay()
     }
 
     towerObserver = new TowerObserver(mPosition.x + DetailDisplayComponent::DETAIL_COMPONENT_PADDING, currentY + DetailDisplayComponent::DETAIL_COMPONENT_SPACING);
-
     critterObserver = new CritterObserver(mPosition.x + DetailDisplayComponent::DETAIL_COMPONENT_PADDING, currentY + DetailDisplayComponent::DETAIL_COMPONENT_SPACING);
 }
 
@@ -78,7 +77,7 @@ TowerObserver* DetailAttributeDisplay::getTowerObserver()
  */
 bool DetailAttributeDisplay::initializeComponents()
 {
-    return towerObserver->initializeTowerComponents();
+    return towerObserver->initializeTowerComponents() && critterObserver->initializeCritterComponents();
 }
 
 /**
@@ -88,9 +87,7 @@ bool DetailAttributeDisplay::initializeComponents()
 void DetailAttributeDisplay::selectTower(Tower* tower)
 {
     towerObserver->setCurrentTower(tower);
-
-    // needs to unselect Critter
-    // likewise, Critter needs to unselect Tower
+    critterObserver->setCurrentCritter(nullptr);
 }
 
 /**
@@ -122,7 +119,7 @@ void DetailAttributeDisplay::handleButtonEvents(SDL_Event* e)
 }
 
 std::vector<DetailDisplayComponent*> DetailAttributeDisplay::getCritterComponents() {
-    return critterComponents; // Return the components related to critters
+    return critterComponents;
 }
 
 CritterObserver* DetailAttributeDisplay::getCritterObserver() {
@@ -140,10 +137,11 @@ void DetailAttributeDisplay::selectCritter(Critter* critter) {
             critterObserver->setCurrentCritter(critter);
         }
     }
+    towerObserver->setCurrentTower(nullptr);
 }
 
 bool DetailAttributeDisplay::isDisplayingCritter() {
-    return !critterComponents.empty(); // Check if there are any components related to a critter
+    return critterObserver->getCurrentCritter() != nullptr;
 }
 
 /**
@@ -162,6 +160,12 @@ void DetailAttributeDisplay::render()
     if (isDisplayingTower())
     {
         towerObserver->render();
+    }
+
+    // displays Tower details through TowerObserver if needed
+    if (isDisplayingCritter())
+    {
+        critterObserver->render();
     }
 }
 

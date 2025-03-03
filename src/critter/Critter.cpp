@@ -36,12 +36,6 @@ Critter::Critter(int level, float speed, int hitPoints, int strength, int reward
 	}
 }
 
-Critter::~Critter() {
-	if (map) {
-		map->unsubscribe(this);
-	}
-}
-
 void Critter::onFlowFieldChanged() {
 	// Currently empty; critters poll the map each move, so no immediate action needed
 }

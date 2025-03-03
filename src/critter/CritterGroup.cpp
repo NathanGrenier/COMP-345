@@ -5,6 +5,7 @@
 #include <ui/LTexture.h>
 #include <iostream>
 #include <Global.h>
+#include <critter/CritterObserver.h>
 
 /**
  * @class CritterGroup
@@ -14,8 +15,10 @@
  *
  * @author Nirav Patel
  */
-CritterGroup::CritterGroup(int& waveLevel, int& playerGold, SDL_FRect startPosition, SDL_FRect endPosition, Map* map)
-	: waveLevel(waveLevel), playerGold(playerGold), startPosition(startPosition), endPosition(endPosition), map(map) {}
+CritterGroup::CritterGroup(int& waveLevel, int& playerGold, SDL_FRect startPosition, SDL_FRect endPosition, Map* map, DetailAttributeDisplay& detailDisplay)
+	: waveLevel(waveLevel), playerGold(playerGold), startPosition(startPosition), endPosition(endPosition), map(map), detailDisplay(detailDisplay) {
+}
+
 
 /**
  * @brief Destructor for CritterGroup.
@@ -75,9 +78,12 @@ void CritterGroup::generateCritters(float deltaTime) {
 
 		// Only spawn if there's no overlap
 		if (canSpawn) {
-			// Create the new critter
+			// Create the new critter and attach it to the detailDisplay observer
 			critters.emplace_back(level, speed, hitPoints, strength, reward, spawnCenter, map);
-			Critter& newCritter = critters.back();  // Get reference to the newly created critter
+			Critter& newCritter = critters.back();
+
+			// Attach new critter to the DetailAttributeDisplay observer
+			newCritter.attach(detailDisplay.getCritterObserver());
 
 			critterIndex++;
 			timeElapsed = 0.0f;
@@ -116,6 +122,7 @@ void CritterGroup::update(float deltaTime) {
 			else {
 				critter.stealGold(playerGold);
 			}
+			critter.detach(detailDisplay.getCritterObserver());
 			it = critters.erase(it); // erase() returns the next valid iterator
 			++crittersSpawned;
 		}

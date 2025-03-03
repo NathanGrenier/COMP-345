@@ -14,7 +14,6 @@
 class Critter : public Observable, public FlowFieldObserver {
 public:
 	Critter(int level, float speed, int hitPoints, int strength, int reward, SDL_FRect start, Map* map);
-	~Critter();
 
 	static constexpr float CRITTER_WIDTH_SCALE = 0.65f;
 	static constexpr float CRITTER_HEIGHT_SCALE = 0.65f;
