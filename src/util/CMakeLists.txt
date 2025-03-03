@@ -1,6 +1,9 @@
 add_library(util STATIC
     TextureLoader.cpp 
-    Vector2D.cpp)
+    Vector2D.cpp
+    Observable.cpp
+    Observer.cpp
+)
 
 target_include_directories(util PUBLIC ${CMAKE_SOURCE_DIR}/src/include)
 

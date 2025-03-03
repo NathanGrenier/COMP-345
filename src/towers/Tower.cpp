@@ -7,7 +7,6 @@
 
 #include <Global.h>
 #include <towers/Tower.h>
-#include <towers/DummyCritter.h>
 #include <towers/Projectile.h>
 #include <iostream>
 
@@ -15,7 +14,7 @@
  * @brief Default Constructor, setting all values to 0
  */
 Tower::Tower() 
-    : x(0), y(0), buyingCost(0), refundValue(0), range(0), power(0), rateOfFire(0), level(0), shootingTimer(0)
+    : x(0), y(0), buyingCost(0), refundValue(0), range(0), power(0), rateOfFire(0), level(0), shootingTimer(0), upgradeValues{ 0, 0, 0}
 {
 
 }
@@ -34,7 +33,7 @@ Tower::Tower()
  * Uses default refund value ratio in Tower class 
  */
 Tower::Tower(float x, float y, int buyingCost, int range, int power, int rateOfFire)
-    : x(x), y(y), buyingCost(buyingCost), range(range), power(power), rateOfFire(rateOfFire), level(1), shootingTimer(0)
+    : x(x), y(y), buyingCost(buyingCost), range(range), power(power), rateOfFire(rateOfFire), level(1), shootingTimer(0), upgradeValues{ 0, 0, 0 }
 {
     refundValue = static_cast<int>(REFUND_RATIO * buyingCost);
 }
@@ -53,7 +52,7 @@ Tower::Tower(float x, float y, int buyingCost, int range, int power, int rateOfF
  * Sets Tower level to 1 and shootingTimer to 0 to immediately start firing once placed
  */
 Tower::Tower(float x, float y, int buyingCost, int refundValue, int range, int power, int rateOfFire)
-    : x(x), y(y), buyingCost(buyingCost), refundValue(refundValue), range(range), power(power), rateOfFire(rateOfFire), level(1), shootingTimer(0)
+    : x(x), y(y), buyingCost(buyingCost), refundValue(refundValue), range(range), power(power), rateOfFire(rateOfFire), level(1), shootingTimer(0), upgradeValues{ 0, 0, 0 }
 {
     
 }
@@ -63,23 +62,20 @@ Tower::Tower(float x, float y, int buyingCost, int refundValue, int range, int p
  * 
  * @param critters Vector of currently existing DummyCritter within the map
  * @details Iterates through all DummyCritter in the map
- * Checks if each DummyCritter is in range of the Tower
+ * Checks if each Critter is in range of the Tower
  * Stops after the first DummyCritter that is in range of the Tower is found
  * @return DummyCritter pointer for first DummyCritter that is in range of the Tower
  * @return nullptr if no DummyCritter is in range
  */
-DummyCritter * Tower::findCritter(std::vector<DummyCritter*> critters)
-{
+Critter* Tower::findCritter(std::vector<Critter>& critters) {
     // checks all critters in map
-    for (int i = 0; i < critters.size(); i++)
-    {
-        if (isCritterInRange(*critters[i])) 
-        {
-            return critters[i];
+    for (int i = 0; i < critters.size(); i++) {
+        if (isCritterInRange(critters[i])) { // Directly use critter[i] as it is an object
+            return &critters[i]; // Return a pointer to the critter
         }
     }
 
-    // no critter can be targeted by Tower
+    // No critter can be targeted by the Tower
     return nullptr;
 }
 
@@ -94,16 +90,6 @@ void Tower::clearProjectiles()
 }
 
 /**
- * @brief Shoots projectile from Tower, to be overridden by sub classes 
- * 
- * @param critter The DummyCritter targeted by the Tower
- */
-void Tower::shootProjectile(DummyCritter* critter) 
-{
-
-}
-
-/**
  * @brief Generates Tower
  * 
  * @details Represents a Tower with a black square
@@ -111,7 +97,7 @@ void Tower::shootProjectile(DummyCritter* critter)
  */
 void Tower::generateTower()
 {
-    SDL_FRect fillRect = {x, y, TOWER_SIZE, TOWER_SIZE};
+    SDL_FRect fillRect = {x, y, currentRenderedRect.w, currentRenderedRect.w };
     SDL_SetRenderDrawColor(gRenderer, 0x00, 0x00, 0x00, 0xFF);
     SDL_RenderFillRect(gRenderer, &fillRect);
 }
@@ -129,13 +115,39 @@ void Tower::generateAllProjectiles()
 }
 
 /**
- * @brief Upgrades Tower, to be overridden by sub classes. Cannot be used for Tower class 
- * 
- * @return false if Tower cannot be upgraded
+ * @brief Accessor for range
+ * @return the range for the Tower
  */
-bool Tower::upgrade()
+int Tower::getRange()
 {
-    return false;
+    return range;
+}
+
+/**
+ * @brief Accessor for power
+ * @return the power for the Tower
+ */
+int Tower::getPower()
+{
+    return power;
+}
+
+/**
+ * @brief Accessor for rate of fire
+ * @return the rate of fire for the Tower
+ */
+int Tower::getRateOfFire()
+{
+    return rateOfFire;
+}
+
+/**
+ * @brief Accessor for level
+ * @return the level for the Tower
+ */
+int Tower::getLevel()
+{
+    return level;
 }
 
 /**
@@ -163,26 +175,66 @@ int Tower::getUpgradeCost()
 }
 
 /**
+ * @brief Accessor for the Tower upgrade values
+ * @return a struct containing the Tower upgrade values
+ */
+Tower::UpgradeValues Tower::getUpgradeValues()
+{
+    return upgradeValues;
+}
+
+/**
+ * @brief Upgrades a Tower
+ * @details Increases the Tower by 1 level
+ * Increases range, power, and rate of fire
+ * Performs checks for if the Tower is already maximum level
+ * @return true if the Tower has been upgraded
+ * @return false if the Tower could not have been upgraded
+ */
+bool Tower::upgrade()
+{
+    // check if not yet max level
+    if (level < getMaxLevel())
+    {
+        range += upgradeValues.rangeIncrease;
+        power += upgradeValues.powerIncrease;
+        rateOfFire += upgradeValues.rateOfFireIncrease;
+
+        level++;
+
+        notify();
+        return true;
+    }
+
+    return false;
+}
+
+/**
  * @brief Checks if a Tower has been clicked
  * 
  * @details If click event happens, checks if cursor is on the same position as the Tower's square
  * @return true if Tower has been clicked
  * @return false if Tower has not been clicked
  */
-bool Tower::isClicked() const 
+bool Tower::isClicked(float scaleFactor) const
 {
     // Get the current mouse position
     float mouseXPos, mouseYPos;
     SDL_GetMouseState(&mouseXPos, &mouseYPos);
 
-    // Check if the mouse position is inside the button's area
-    if (mouseXPos >= x && mouseXPos <= x + Tower::TOWER_SIZE &&
-        mouseYPos >= y && mouseYPos <= y + Tower::TOWER_SIZE)
+    // Adjust width and height based on the scale factor
+    float scaledWidth = currentRenderedRect.w / scaleFactor;
+    float scaledHeight = currentRenderedRect.h / scaleFactor;
+
+    // Check if the mouse position is inside the scaled area of the tower
+    if (mouseXPos >= x && mouseXPos <= x + scaledWidth &&
+        mouseYPos >= y && mouseYPos <= y + scaledHeight)
     {
         return true;
     }
     return false;
 }
+
 
 /**
  * @brief Checks if a DummyCritter is in range of the Tower
@@ -192,7 +244,7 @@ bool Tower::isClicked() const
  * @return true if the DummyCritter is in range of the Tower and can be fired a Projectile at 
  * @return false if the DummyCritter is out of range of the Tower and cannot be damaged 
  */
-bool Tower::isCritterInRange(DummyCritter critter) 
+bool Tower::isCritterInRange(Critter critter) 
 {
     return range >= calcDistance(critter);
 }
@@ -207,15 +259,15 @@ bool Tower::isCritterInRange(DummyCritter critter)
  * Takes Tower and DummyCritter size in account for distance
  * @return the absolute distance between the Tower and the DummyCritter
  */
-float Tower::calcDistance(DummyCritter critter) 
+float Tower::calcDistance(Critter critter) 
 {
     // considers Tower size
-    float posX = x + static_cast<float>(TOWER_SIZE) / 2;
-    float posY = y + static_cast<float>(TOWER_SIZE) / 2;
+    float posX = x + currentRenderedRect.w / 2;
+    float posY = y + currentRenderedRect.w / 2;
 
     // considers Critter size
-    float critterPosX = critter.getX() + static_cast<float>(DummyCritter::CRITTER_SIZE) / 2;
-    float critterPosY = critter.getY() + static_cast<float>(DummyCritter::CRITTER_SIZE) / 2;
+    float critterPosX = critter.getPosition().x;
+    float critterPosY = critter.getPosition().y;
 
     // distance in each direction
     float differenceX = posX - critterPosX;
@@ -223,4 +275,28 @@ float Tower::calcDistance(DummyCritter critter)
 
     // distance formula
     return sqrt(pow(differenceX, 2) + pow(differenceY, 2));
+}
+
+/**
+ * @brief Mutator to sets the rectangle to render the Tower
+ * @param targetRect new Rect to render the Tower through
+ */
+void Tower::setCurrentRenderedRect(SDL_FRect targetRect) {
+    currentRenderedRect = targetRect;
+}
+
+/**
+ * @brief Mutator for rotation
+ * @param angle new angle to set the Tower to 
+ */
+void Tower::setRotation(float angle) {
+    rotationAngle = angle;
+}
+
+/**
+ * @brief Renders the Towers as an image
+ */
+void Tower::render() {
+    towerTexture.render(currentRenderedRect.x, currentRenderedRect.y, nullptr, currentRenderedRect.w, currentRenderedRect.h, rotationAngle);
+    generateAllProjectiles();
 }

@@ -1,10 +1,12 @@
 #include <states/TitleState.h>
-#include <ui/MainMenuButton.h>
 #include <states/parts/MainGameState.h>
 #include <states/parts/Part1State.h>
+#include <states/parts/MapSelectState.h>
 #include <states/parts/Part2State.h>
 #include <states/parts/Part3State.h>
+#include <states/parts/UITestState.h>
 #include <Global.h>
+#include <ui/LButton.h>
 
 /** @class TitleState
  *  @brief Implementation of the title screen state.
@@ -19,10 +21,10 @@
 TitleState TitleState::sTitleState;
 
 /// @brief Number of buttons in the main menu.
-constexpr int kButtonCount = 4;
+constexpr int kButtonCount = 1;
 
 /// @brief Array of main menu buttons.
-MainMenuButton buttons[kButtonCount];  // Use MainMenuButton instead of LButton
+LButton buttons[kButtonCount];
 
 /**
  * @brief Gets the singleton instance of TitleState.
@@ -30,7 +32,7 @@ MainMenuButton buttons[kButtonCount];  // Use MainMenuButton instead of LButton
  * @return Pointer to the TitleState instance.
  */
 TitleState* TitleState::get() {
-    return &sTitleState;
+	return &sTitleState;
 }
 
 /**
@@ -41,40 +43,51 @@ TitleState* TitleState::get() {
  * @return True if successful, false otherwise.
  */
 bool TitleState::enter() {
-    bool success = true;
-    SDL_Color textColor{ 0x00, 0x00, 0x00, 0xFF };
+	bool success = true;
+	SDL_Color textColor{ 0x00, 0x00, 0x00, 0xFF };
 
-    if (!(success &= mMessageTexture.loadFromRenderedText("Tower Defense - The Game", textColor))) {
-        printf("Failed to render title text!\n");
-    }
+	if (!(success &= mMessageTexture.loadFromFile("assets/ui/TitleMessage.png"))) {
+		printf("Failed to render title text!\n");
+	}
 
-    // Button labels
-    const char* buttonLabels[kButtonCount] = {
-        "Load Main Game",
-        "Load Part 1",
-        "Load Part 2",
-        "Load Part 3"
-    };
+	// Button labels
+	const char* buttonLabels[kButtonCount] = {
+		"Load Main Game"
+	};
 
-    // Initialize buttons
-    for (int i = 0; i < kButtonCount; ++i) {
-        if (!buttons[i].setText(buttonLabels[i], textColor)) {
-            printf("Failed to set button text: %s\n", buttonLabels[i]);
-            success = false;
-        }
-    }
+	// Initialize buttons
+	buttons[0].loadFromFile("assets/ui/Start.png");
 
-    // Define vertical spacing for buttons
-    constexpr int buttonSpacing = 20;
-    constexpr int startY = (Global::kScreenHeight - ((MainMenuButton::kButtonHeight * kButtonCount) + (buttonSpacing * (kButtonCount - 1)))) / 2;
+	for (int i = 1; i < kButtonCount; ++i) {
+		if (!buttons[i].loadFromFile("assets/ui/LoadPart" + std::to_string(i) + ".png")) {
+			printf("Failed to set button text: %s\n", buttonLabels[i]);
+			success = false;
+		} else {
+			buttons[i].setSizeWithAspectRatio(400, 0);
+		}
+	}
 
-    // Set button positions centered on the screen
-    for (int i = 0; i < kButtonCount; ++i) {
-        buttons[i].setPosition((Global::kScreenWidth - MainMenuButton::kButtonWidth) / 2, startY + i * (MainMenuButton::kButtonHeight + buttonSpacing));
-    }
+	buttons[0].setSizeWithAspectRatio(400, 0);
 
-    return success;
+	// Define vertical spacing for buttons
+	constexpr int buttonSpacing = 20;
+	int totalHeight = 0;
+	for (int i = 0; i < kButtonCount; ++i) {
+		totalHeight += buttons[i].kButtonHeight + buttonSpacing;
+	}
+	totalHeight -= buttonSpacing; // Remove extra spacing after the last button
+
+	int startY = (Global::kScreenHeight - totalHeight) / 2;
+
+	// Set button positions centered on the screen
+	for (int i = 0; i < kButtonCount; ++i) {
+		buttons[i].setPosition((Global::kScreenWidth - buttons[i].kButtonWidth) / 2, startY);
+		startY += buttons[i].kButtonHeight + buttonSpacing;
+	}
+
+	return success;
 }
+
 
 /**
  * @brief Exits the title state and frees resources.
@@ -84,9 +97,12 @@ bool TitleState::enter() {
  * @return Always returns true.
  */
 bool TitleState::exit() {
-    mBackgroundTexture.destroy();
-    mMessageTexture.destroy();
-    return true;
+	mBackgroundTexture.destroy();
+	mMessageTexture.destroy();
+	for (int i = 0; i < kButtonCount; ++i) {
+		buttons[i].destroy();
+	}
+	return true;
 }
 
 /**
@@ -106,17 +122,18 @@ void TitleState::handleEvent(SDL_Event& e) {
                 // Transition to the corresponding game state
                 switch (i) {
                 case 0:
-                    setNextState(MainGameState::get());  // Load main game
+                    setNextState(MapSelectState::get());  // Load main game
                     break;
-                case 1:
-                    setNextState(Part1State::get());  // Load Part 1
-                    break;
-                case 2:
-                    setNextState(Part2State::get());  // Load Part 2
-                    break;
-                case 3:
-                    setNextState(Part3State::get());  // Load Part 3
-                    break;
+    //            case 1:
+    //                setNextState(Part1State::get());  // Load Part 1
+    //                break;
+    //            case 2:
+    //                //setNextState(Part2State::get());  // Load Part 2
+    //                setNextState(UITestState::get());  // Load UI test
+    //                break;
+    //            //case 3:
+				//	setNextState(Part3State::get());  // Load Part 3
+				//	break;
                 }
             }
         }
@@ -129,7 +146,7 @@ void TitleState::handleEvent(SDL_Event& e) {
  * Currently, this function does not perform any updates.
  */
 void TitleState::update() {
-    // No updates needed for title state
+	// No updates needed for title state
 }
 
 /**
@@ -138,27 +155,17 @@ void TitleState::update() {
  * Clears the screen, renders the background, title text, and menu buttons.
  */
 void TitleState::render() {
-    // Clear screen
-    SDL_SetRenderDrawColor(gRenderer, 0xFF, 0xFF, 0xFF, 0xFF);
-    SDL_RenderClear(gRenderer);
+	// Clear screen
+	SDL_SetRenderDrawColor(gRenderer, 0xFF, 0xFF, 0xFF, 0xFF);
+	SDL_RenderClear(gRenderer);
 
-    // Render background
-    mBackgroundTexture.render(0, 0);
+	// Render background
+	mBackgroundTexture.render(0, 0);
 
-    // Render title text centered at the top
-    mMessageTexture.render((Global::kScreenWidth - mMessageTexture.getWidth()) / 2.f, 20);
+	// Render title text centered at the top
+	mMessageTexture.render((Global::kScreenWidth - Global::kScreenWidth * 0.9) / 2.f, 40, nullptr, Global::kScreenWidth * 0.9, -1);
 
-    // Render menu buttons
-    for (int i = 0; i < kButtonCount; ++i) {
-        buttons[i].render();
-    }
-}
-
-/**
- * @brief Private constructor to prevent direct instantiation.
- *
- * The TitleState follows the singleton pattern.
- */
-TitleState::TitleState() {
-    // No public instantiation allowed
+	for (int i = 0; i < kButtonCount; ++i) {
+		buttons[i].render();
+	}
 }

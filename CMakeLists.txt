@@ -19,7 +19,6 @@ endif()
 add_subdirectory(vendor)
 add_subdirectory(src)
 
-# Install
 # Install the executable
 install(TARGETS ${PROJECT_NAME} DESTINATION bin)
 
@@ -29,3 +28,12 @@ install(
     DESTINATION assets
     FILES_MATCHING PATTERN "*.*"  # Copy all files
 )
+
+# Always copy assets folder to build directory
+add_custom_target(copy_assets ALL
+    COMMAND ${CMAKE_COMMAND} -E copy_directory
+    ${CMAKE_SOURCE_DIR}/src/assets ${CMAKE_RUNTIME_OUTPUT_DIRECTORY}/assets
+    DEPENDS ${CMAKE_SOURCE_DIR}/src/assets
+)
+
+add_dependencies(${PROJECT_NAME} copy_assets)

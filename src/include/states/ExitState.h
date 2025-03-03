@@ -8,8 +8,6 @@
 
 #include "GameState.h"
 
-#ifndef EXITSTATE_H
-#define EXITSTATE_H
 class ExitState : public GameState {
 public:
     //Static accessor
@@ -27,8 +25,4 @@ public:
 private:
     //Static instance
     static ExitState sExitState;
-
-    //Private constructor
-    ExitState();
 };
-#endif

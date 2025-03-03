@@ -36,6 +36,8 @@ public:
 	//Sets blend mode
 	void setBlending(SDL_BlendMode blendMode);
 
+	void setTextureSize(int newWidth, int newHeight);
+
 	//Draws texture
 	void render(float x, float y, SDL_FRect* clip = nullptr, float width = kOriginalSize, float height = kOriginalSize, double degrees = 0.0, SDL_FPoint* center = nullptr, SDL_FlipMode flipMode = SDL_FLIP_NONE);
 

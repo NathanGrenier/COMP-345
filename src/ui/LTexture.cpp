@@ -49,6 +49,7 @@ bool LTexture::loadFromFile(std::string path) {
 		else {
 			// Create texture from surface
 			if (mTexture = SDL_CreateTextureFromSurface(gRenderer, loadedSurface); mTexture == nullptr) {
+				std::cout << path << " ";
 				SDL_Log("Unable to create texture from loaded pixels! SDL error: %s\n", SDL_GetError());
 			}
 			else {
@@ -139,6 +140,13 @@ void LTexture::setBlending(SDL_BlendMode blendMode) {
 	SDL_SetTextureBlendMode(mTexture, blendMode);
 }
 
+void LTexture::setTextureSize(int newWidth, int newHeight) {
+	if (newWidth > 0 && newHeight > 0) {
+		mWidth = newWidth;
+		mHeight = newHeight;
+	}
+}
+
 /**
  * @brief Renders the texture with optional clipping, scaling, rotation, and flipping.
  *
@@ -155,14 +163,14 @@ void LTexture::render(float x, float y, SDL_FRect* clip, float width, float heig
 	// Set texture position
 	SDL_FRect dstRect = { x, y, static_cast<float>(mWidth), static_cast<float>(mHeight) };
 
+	// Calculate the aspect ratio of the texture
+	float aspectRatio = static_cast<float>(mWidth) / static_cast<float>(mHeight);
+
 	// Default to clip dimensions if clip is given
 	if (clip != nullptr) {
 		dstRect.w = clip->w;
 		dstRect.h = clip->h;
 	}
-
-	// Calculate the aspect ratio of the texture
-	float aspectRatio = static_cast<float>(mWidth) / static_cast<float>(mHeight);
 
 	// Resize while maintaining aspect ratio if necessary
 	if (width > 0 && height <= 0) {

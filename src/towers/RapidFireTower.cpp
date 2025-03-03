@@ -1,5 +1,5 @@
 /**
- * @file RapidFireTower.cpp
+ * @class RapidFireTower
  * @brief Implementation of RapidFireTower class
  * @author Denmar Ermitano
  * @date 2025-02-22
@@ -7,15 +7,16 @@
 
 #include <Global.h>
 #include <towers/RapidFireTower.h>
-#include <towers/DummyCritter.h>
 #include <towers/Projectile.h>
 
 /**
  * @brief Default Constructor
  */
-RapidFireTower::RapidFireTower() : Tower()
+RapidFireTower::RapidFireTower() : Tower(), fireBreak(0), fireBreakRate(0), burstSize(0), burstCount(0)
 {
-
+    towerTexture.loadFromFile("assets/tower/RapidFireTower.png");
+    upgradeValues.rangeIncrease = 10;
+    upgradeValues.rateOfFireIncrease = 3;
 }
 
 /**
@@ -33,7 +34,9 @@ RapidFireTower::RapidFireTower() : Tower()
 RapidFireTower::RapidFireTower(float x, float y, int buyingCost)
     : fireBreak(0), fireBreakRate(5), burstSize(50), burstCount(0), Tower(x, y, buyingCost, RAPID_RANGE, RAPID_POWER, RAPID_RATE_OF_FIRE)
 {
-    
+    towerTexture.loadFromFile("assets/tower/RapidFireTower.png");
+    upgradeValues.rangeIncrease = 10;
+    upgradeValues.rateOfFireIncrease = 3;
 }
 
 /**
@@ -52,7 +55,9 @@ RapidFireTower::RapidFireTower(float x, float y, int buyingCost)
 RapidFireTower::RapidFireTower(float x, float y, int buyingCost, int refundValue)
     : fireBreak(0), fireBreakRate(5), burstSize(50), burstCount(0), Tower(x, y, buyingCost, refundValue, RAPID_RANGE, RAPID_POWER, RAPID_RATE_OF_FIRE)
 {
-
+    towerTexture.loadFromFile("assets/tower/RapidFireTower.png");
+    upgradeValues.rangeIncrease = 10;
+    upgradeValues.rateOfFireIncrease = 3;
 }
 
 /**
@@ -69,18 +74,23 @@ RapidFireTower::RapidFireTower(float x, float y, int buyingCost, int refundValue
 bool RapidFireTower::upgrade()
 {
     // check if not yet max level
-    if (level < RAPID_MAX_LEVEL)
+    if (Tower::upgrade())
     {
-        range += 10;
-        rateOfFire += 3;
         burstSize += 20;
-
-        level++;
-
         return true;
     }
 
     return false;
+}
+
+/**
+ * @brief Accessor for maximum level
+ *
+ * @return The maximum level for RapidFireTower upgrades
+ */
+int RapidFireTower::getMaxLevel()
+{
+    return RAPID_MAX_LEVEL;
 }
 
 /**
@@ -94,7 +104,7 @@ bool RapidFireTower::upgrade()
  * Applies damage to targetted Critter if the Projectile is in collision
  * Gets rid of Projectiles when needed, either if out of bounds, Critter is already dead, or when collision is made with Critter
  */
-void RapidFireTower::shootProjectile(DummyCritter* critter)
+void RapidFireTower::shootProjectile(Critter* critter)
 {
     // check if critter still exists
     if (!critter)
@@ -105,12 +115,14 @@ void RapidFireTower::shootProjectile(DummyCritter* critter)
     }
 
     // tower position with offset
-    float posX = x + static_cast<float>(TOWER_SIZE) / 2;
-    float posY = y + static_cast<float>(TOWER_SIZE) / 2;
+    float posX = x + currentRenderedRect.w / 2;
+    float posY = y + currentRenderedRect.w / 2;
+
+    SDL_FRect currentCellSize = Global::currentMap->getPixelPerCell();
 
     // critter position with offset
-    float critterPosX = critter->getX() + static_cast<float>(DummyCritter::CRITTER_SIZE) / 2;
-    float critterPosY = critter->getY() + static_cast<float>(DummyCritter::CRITTER_SIZE) / 2;
+    float critterPosX = critter->getPosition().x + Critter::CRITTER_WIDTH_SCALE * currentCellSize.w / 2;
+    float critterPosY = critter->getPosition().y + Critter::CRITTER_HEIGHT_SCALE * currentCellSize.h / 2;
 
     // differences in position from tower to cannon
     float differenceX = posX - critterPosX;
@@ -156,14 +168,14 @@ void RapidFireTower::shootProjectile(DummyCritter* critter)
         projectiles[i]->move(5 * speedX, 5 * speedY);
 
         // check if projectile hits critter
-        if (projectiles[i]->checkCollision(critterPosX, critterPosY))
+        if (projectiles[i]->checkCollision(critter))
         {
-            critter->damageCritter(power);
-
+            critter->takeDamage(power);
+            critter->notify();
             projectiles.erase(projectiles.begin() + i);
             
             // clear projectiles if critter has no hp, no target
-            if (critter->getHealth() <= 0) {
+            if (critter->getHitPoints() <= 0) {
                 projectiles.clear();
             }
 
@@ -174,17 +186,4 @@ void RapidFireTower::shootProjectile(DummyCritter* critter)
             projectiles.erase(projectiles.begin() + i);
         }
     }
-}
-
-/**
- * @brief Generates RapidFireTower
- * 
- * @details Represents a RapidFireTower with a blue square
- * Draws the square using SDL 
- */
-void RapidFireTower::generateTower()
-{
-    SDL_FRect fillRect = { x, y, Tower::TOWER_SIZE, Tower::TOWER_SIZE };
-    SDL_SetRenderDrawColor(gRenderer, 0x00, 0x00, 0xFF, 0xFF);
-    SDL_RenderFillRect(gRenderer, &fillRect);
 }

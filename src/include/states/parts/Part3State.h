@@ -6,13 +6,8 @@
  */
 #pragma once
 
-#ifndef PART3STATE_H
-#define PART3STATE_H
-
 #include <states/GameState.h>
 #include <ui/LTexture.h>
-#include <critter/CritterGroup.h>
-#include <towers/CritterTower.h>
 
 class Part3State : public GameState {
 public:
@@ -29,9 +24,6 @@ public:
 	void render() override;
 
 	void renderText(const std::string& text, float x, float y);
-	void placeTower(int x, int y);
-	void sellTower(int x, int y);
-	void updateGoldTween(float deltaTime);
 private:
 	//Static instance
 	static Part3State sPart3State;
@@ -41,8 +33,6 @@ private:
 
 	LTexture mBackgroundTexture;
 
-	std::vector<CritterTower> towers;
 	LTexture mMessageTexture;
 	int playerCoins = 100;
 };
-#endif

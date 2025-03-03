@@ -1,25 +1,76 @@
 #include <critter/Critter.h>
 #include <cmath>
 #include <critter/CritterGroup.h>
+#include <util/Vector2D.h>
+#include <Global.h>
 
 /**
- * @class Critter
- * @brief Represents a critter that moves within the game world and interacts with other critters.
- * 
- * @author Nirav Patel
+ * @brief Constructs a new Critter object with specified attributes and initializes its position and target.
+ *
+ * @param level The level of the critter.
+ * @param speed The speed at which the critter moves.
+ * @param hitPoints The initial hit points of the critter.
+ * @param strength The strength of the critter, used for stealing gold.
+ * @param reward The reward given when the critter is defeated.
+ * @param start The starting position of the critter.
+ * @param map Pointer to the game map.
+ *
+ * @details Initializes the critter's position, target, and subscribes to the map's flow field.
+ *          If the map is null, it sets safe default values for the target position.
  */
-Critter::Critter(int level, float speed, int hitPoints, int strength, int reward, SDL_FRect start, SDL_FRect end)
-    : level(level), speed(speed), hitPoints(hitPoints), strength(strength), reward(reward),
-    startPosition(start), exitPosition(end), isAtExit(false), healthBarWidth(0.0f), healthBarVisible(false), maxHitPoints(hitPoints) {
-    position = start;
+Critter::Critter(int level, float speed, int hitPoints, int strength, int reward, SDL_FRect start, Map* map)
+	: level(level), speed(speed), hitPoints(hitPoints), strength(strength), reward(reward),
+	position(start), isAtExit(false), maxHitPoints(hitPoints), map(map) {
+
+	if (map != nullptr) {
+		map->subscribe(this);
+
+		// Initialize target
+		SDL_FRect renderRect = map->getCurrentRenderRect();
+		float centerX = position.x + position.w / 2.0f;
+		float centerY = position.y + position.h / 2.0f;
+		auto [initialCellX, initialCellY] = map->getCellFromPosition(centerX, centerY, renderRect);
+		Vector2D flowDir = map->getFlowNormal(initialCellX, initialCellY);
+		int flowX = static_cast<int>(flowDir.x);
+		int flowY = static_cast<int>(flowDir.y);
+		targetCellX = initialCellX + flowX;
+		targetCellY = initialCellY + flowY;
+		targetPos = map->getCellCenter(targetCellX, targetCellY, renderRect);
+	} else {
+		// Handle null map case with safe defaults
+		targetCellX = -1;
+		targetCellY = -1;
+		targetPos = { 0.0f, 0.0f };
+	}
+}
+
+/**
+ * @brief Callback function for when the flow field changes.
+ *
+ * This function is currently empty as critters poll the map each move,
+ * so no immediate action is needed.
+ */
+void Critter::onFlowFieldChanged() {
+	// Currently empty; critters poll the map each move, so no immediate action needed
 }
 
 /**
  * @brief Gets the current position of the critter.
  * @return SDL_FRect representing the critter's current position.
  */
-SDL_FRect Critter::getPosition() {
-    return position;
+SDL_FRect Critter::getPosition() const {
+	return position;
+}
+
+/**
+ * @brief Checks if two rectangles intersect.
+ *
+ * @param a The first rectangle.
+ * @param b The second rectangle.
+ * @return True if the rectangles intersect, false otherwise.
+ */
+bool rectanglesIntersect(const SDL_FRect& a, const SDL_FRect& b) {
+	return (a.x < b.x + b.w && a.x + a.w > b.x && a.y < b.y + b.h && a.y + a.h > b.y);
 }
 
 /**
@@ -33,52 +84,58 @@ SDL_FRect Critter::getPosition() {
  * @param spacing The minimum spacing between critters to avoid collision.
  */
 void Critter::move(float deltaTime, const std::vector<Critter>& critters, float spacing) {
-    float directionX = 0.0f;
-    float directionY = 0.0f;
+	if (isAtExit) return;
 
-    // Determine movement direction (strictly horizontal or vertical)
-    bool moveX = std::abs(position.x - exitPosition.x) > 1.0f;
-    bool moveY = std::abs(position.y - exitPosition.y) > 1.0f;
+	if (map == nullptr) return;
 
-    if (moveX && !moveY) {
-        directionX = (exitPosition.x > position.x) ? 1.0f : -1.0f;
-    }
-    else if (moveY) {
-        directionY = (exitPosition.y > position.y) ? 1.0f : -1.0f;
-    }
+	SDL_FRect renderRect = map->getCurrentRenderRect();
 
-    // Predict next position
-    float nextX = position.x + directionX * speed * deltaTime;
-    float nextY = position.y + directionY * speed * deltaTime;
+	// Calculate critter's center as Vector2D
+	Vector2D critterCenter(position.x + position.w / 2.0f, position.y + position.h / 2.0f);
+	// Convert targetPos (SDL_FPoint) to Vector2D
+	Vector2D targetVec(targetPos.x, targetPos.y);
 
-    // Check if the next position would cause an overlap
-    bool collisionDetected = false;
-    for (const Critter& other : critters) {
-        if (&other == this) continue; // Skip self
+	// Calculate direction
+	Vector2D direction = targetVec - critterCenter;
+	float distanceToTarget = direction.magnitude();
+	if (distanceToTarget > 0) {
+		direction = direction.normalize();
+		float deltaX = direction.x * speed * deltaTime;
+		float deltaY = direction.y * speed * deltaTime;
+		SDL_FRect nextPosition = { position.x + deltaX, position.y + deltaY, position.w, position.h };
 
-        float distanceX = std::abs(nextX - other.position.x);
-        float distanceY = std::abs(nextY - other.position.y);
+		// Collision check
+		bool collisionDetected = false;
+		for (const Critter& other : critters) {
+			if (&other == this) continue;
+			if (rectanglesIntersect(nextPosition, other.getPosition())) { // Use . to access methods
+				collisionDetected = true;
+				break;
+			}
+		}
 
-        // If another critter is within the spacing range, mark as collision
-        if (distanceX < spacing && distanceY < spacing) {
-            collisionDetected = true;
-            break;
-        }
-    }
+		if (!collisionDetected) {
+			position = nextPosition;
+		}
+	}
 
-    // If there is a collision, try an alternate movement (first priority Y, then X)
-    if (collisionDetected) {
-        if (directionY != 0.0f) {
-            nextY = position.y; // Cancel Y movement
-        }
-        else if (directionX != 0.0f) {
-            nextX = position.x; // Cancel X movement
-        }
-    }
-
-    // Apply the movement if it's valid (no collision detected)
-    position.x = nextX;
-    position.y = nextY;
+	// Check if target is reached
+	distanceToTarget = (targetVec - critterCenter).magnitude();
+	if (distanceToTarget < 1.0f) { // Tolerance of 1 pixel
+		// Update to next target
+		int currentCellX = targetCellX;
+		int currentCellY = targetCellY;
+		Vector2D flowDir = map->getFlowNormal(currentCellX, currentCellY);
+		if (flowDir.x == 0 && flowDir.y == 0) {
+			setAtExit(true);
+		} else {
+			int flowX = static_cast<int>(flowDir.x);
+			int flowY = static_cast<int>(flowDir.y);
+			targetCellX = currentCellX + flowX;
+			targetCellY = currentCellY + flowY;
+			targetPos = map->getCellCenter(targetCellX, targetCellY, renderRect);
+		}
+	}
 }
 
 /**
@@ -89,12 +146,7 @@ void Critter::move(float deltaTime, const std::vector<Critter>& critters, float 
  * @param damage The amount of damage to apply.
  */
 void Critter::takeDamage(int damage) {
-    hitPoints -= damage;
-
-    // Make the health bar visible for a short time after taking damage
-    healthBarVisible = true;
-    healthBarWidth = 50.0f;
-    healthBarTime = 0.5f;
+	hitPoints -= damage;
 }
 
 /**
@@ -102,7 +154,7 @@ void Critter::takeDamage(int damage) {
  * @return True if the critter's hit points are greater than 0, false otherwise.
  */
 bool Critter::isAlive() const {
-    return hitPoints > 0;
+	return hitPoints > 0;
 }
 
 /**
@@ -110,7 +162,7 @@ bool Critter::isAlive() const {
  * @return True if the critter has reached the exit, false otherwise.
  */
 bool Critter::atExit() {
-    return isAtExit;
+	return isAtExit;
 }
 
 /**
@@ -119,7 +171,33 @@ bool Critter::atExit() {
  * @param hitPoints The new hit points value.
  */
 void Critter::setHitPoints(int hitPoints) {
-    hitPoints = hitPoints;
+	hitPoints = hitPoints;
+}
+
+/**
+* @brief Checks if the critter is clicked based on mouse position.
+*
+* @param mouseX The x-coordinate of the mouse.
+* @param mouseY The y-coordinate of the mouse.
+* @return true if the critter was clicked; false otherwise.
+*/
+bool Critter::isClicked() const {
+	// Get the current mouse position
+	float mouseXPos, mouseYPos;
+	SDL_GetMouseState(&mouseXPos, &mouseYPos);
+
+	SDL_FRect critterRect = getPosition();
+
+	// Adjust the bounding box based on the scaling factor
+	float scaledWidth = critterRect.w * CRITTER_WIDTH_SCALE;
+	float scaledHeight = critterRect.h * CRITTER_HEIGHT_SCALE;
+
+	// Checking if the mouse position is inside the critter's rectangle
+	if (mouseXPos >= critterRect.x && mouseXPos <= critterRect.x + scaledWidth &&
+		mouseYPos >= critterRect.y && mouseYPos <= critterRect.y + scaledHeight) {
+		return true;
+	}
+	return false;
 }
 
 /**
@@ -130,8 +208,24 @@ void Critter::setHitPoints(int hitPoints) {
  * @param con Boolean indicating if the critter is at the exit.
  */
 void Critter::setAtExit(bool con) {
-    hitPoints = 0;
-    isAtExit = con;
+	hitPoints = 0;
+	isAtExit = con;
+}
+
+/**
+ * @brief Gets the speed of the critter.
+ * @return The speed of the critter.
+ */
+int Critter::getSpeed() {
+	return speed;
+}
+
+/**
+ * @brief Sets the speed of the critter.
+ * @param newSpeed The new speed value.
+ */
+void Critter::setSpeed(int newSpeed) {
+	speed = newSpeed;
 }
 
 /**
@@ -142,52 +236,35 @@ void Critter::setAtExit(bool con) {
  * @param renderer The SDL_Renderer used to draw the critter.
  */
 void Critter::render(SDL_Renderer* renderer) {
-    // Render critter as a red rectangle
-    SDL_FRect critterRect = { position.x, position.y, 20.0f, 20.0f };  // 20x20 size
-    SDL_SetRenderDrawColor(renderer, 255, 0, 0, 255);  // Red color
-    SDL_RenderFillRect(renderer, &critterRect);
+	SDL_FRect currentCellSize = Global::currentMap->getPixelPerCell();
 
-    // Health bar positioning and size (above the critter)
-    SDL_FRect healthBarRect = { position.x, position.y - 10.0f, 20.0f, 5.0f };  // Just above the critter
-    SDL_FRect greenBar = healthBarRect;  // For the green part (current health)
-    SDL_FRect redBar = healthBarRect;  // For the red part (remaining health)
+	// Render critter as a red rectangle
+	SDL_FRect critterRect = { position.x, position.y, CRITTER_WIDTH_SCALE * currentCellSize.w, CRITTER_HEIGHT_SCALE * currentCellSize.h };
+	SDL_SetRenderDrawColor(renderer, 255, 0, 0, 255);  // Red color
+	SDL_RenderFillRect(renderer, &critterRect);
 
-    // Calculate the width based on health percentage
-    float healthPercentage = static_cast<float>(hitPoints) / maxHitPoints;
+	// Health bar positioning and size (above the critter)
+	SDL_FRect healthBarRect = { position.x, position.y - (currentCellSize.h * CRITTER_HEALTHBAR_PADDING),  currentCellSize.w * CRITTER_WIDTH_SCALE, currentCellSize.h * CRITTER_HEALTHBAR_HEIGHT };  // Just above the critter
+	SDL_FRect greenBar = healthBarRect;  // For the green part (current health)
+	SDL_FRect redBar = healthBarRect;  // For the red part (remaining health)
 
-    // Green bar width (representing current health)
-    greenBar.w = healthBarRect.w * healthPercentage;
+	// Calculate the width based on health percentage
+	float healthPercentage = static_cast<float>(hitPoints) / maxHitPoints;
 
-    // Red bar width (representing the remaining health)
-    redBar.x = greenBar.x + greenBar.w;  // Start where the green bar ends
-    redBar.w = healthBarRect.w - greenBar.w;
+	// Green bar width (representing current health)
+	greenBar.w = healthBarRect.w * healthPercentage;
 
-    // Set color for the green part (current health)
-    SDL_SetRenderDrawColor(renderer, 0, 255, 0, 255);  // Green
-    SDL_RenderFillRect(renderer, &greenBar);
+	// Red bar width (representing the remaining health)
+	redBar.x = greenBar.x + greenBar.w;  // Start where the green bar ends
+	redBar.w = healthBarRect.w - greenBar.w;
 
-    // Set color for the red part (remaining health)
-    SDL_SetRenderDrawColor(renderer, 255, 0, 0, 255);  // Red
-    SDL_RenderFillRect(renderer, &redBar);
-}
+	// Set color for the green part (current health)
+	SDL_SetRenderDrawColor(renderer, 0, 255, 0, 255);  // Green
+	SDL_RenderFillRect(renderer, &greenBar);
 
-/**
- * @brief Updates the critter's exit position.
- *
- * This function allows dynamic updating of the critter's target exit position.
- *
- * @param newEndPosition The new exit position for the critter.
- */
-void Critter::setEndPosition(SDL_FRect newEndPosition) {
-    exitPosition = newEndPosition;  // Update the exit (end) position
-}
-
-/**
- * @brief Gets the critter's current exit position.
- * @return SDL_FRect representing the critter's exit position.
- */
-SDL_FRect Critter::getEndPosition() {
-    return exitPosition;
+	// Set color for the red part (remaining health)
+	SDL_SetRenderDrawColor(renderer, 255, 0, 0, 255);  // Red
+	SDL_RenderFillRect(renderer, &redBar);
 }
 
 /**
@@ -198,5 +275,5 @@ SDL_FRect Critter::getEndPosition() {
  * @param playerGold The player's current gold amount, which will be reduced by the critter's strength.
  */
 void Critter::stealGold(int& playerGold) {
-    playerGold -= strength;
+	playerGold -= strength;
 }

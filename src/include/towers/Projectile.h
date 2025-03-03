@@ -12,6 +12,8 @@
 
 #pragma once
 
+#include <critter/Critter.h>
+
 class Projectile
 {
     public:
@@ -24,7 +26,7 @@ class Projectile
         void generateProjectile();
         bool isOutside();
 
-        bool checkCollision(float critterX, float critterY);
+        bool checkCollision(Critter* critter);
 
     private:
         float x; /** @brief x position for projectile */

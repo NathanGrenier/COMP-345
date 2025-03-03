@@ -1,5 +1,5 @@
 /**
- * @file CannonTower.cpp
+ * @class CannonTower
  * @brief Implementation of CannonTower class
  * @author Denmar Ermitano
  * @date 2025-02-22
@@ -7,7 +7,6 @@
 
 #include <Global.h>
 #include <towers/CannonTower.h>
-#include <towers/DummyCritter.h>
 #include <towers/Projectile.h>
 
 /**
@@ -15,7 +14,10 @@
  */
 CannonTower::CannonTower() : Tower()
 {
-
+    towerTexture.loadFromFile("assets/tower/CannonTower.png");
+    upgradeValues.rangeIncrease = 50;
+    upgradeValues.powerIncrease = 5;
+    upgradeValues.rateOfFireIncrease = 1;
 }
 
 /**
@@ -31,7 +33,10 @@ CannonTower::CannonTower() : Tower()
 CannonTower::CannonTower(float x, float y, int buyingCost)
     : Tower(x, y, buyingCost, CANNON_RANGE, CANNON_POWER, CANNON_RATE_OF_FIRE)
 {
-    
+    towerTexture.loadFromFile("assets/tower/CannonTower.png");
+    upgradeValues.rangeIncrease = 50;
+    upgradeValues.powerIncrease = 5;
+    upgradeValues.rateOfFireIncrease = 1;
 }
 
 /**
@@ -47,34 +52,20 @@ CannonTower::CannonTower(float x, float y, int buyingCost)
 CannonTower::CannonTower(float x, float y, int buyingCost, int refundValue)
     : Tower(x, y, buyingCost, refundValue, CANNON_RANGE, CANNON_POWER, CANNON_RATE_OF_FIRE)
 {
-
+    towerTexture.loadFromFile("assets/tower/CannonTower.png");
+    upgradeValues.rangeIncrease = 50;
+    upgradeValues.powerIncrease = 5;
+    upgradeValues.rateOfFireIncrease = 1;
 }
 
 /**
- * @brief Upgrades a TowerCannon
- * 
- * @details Greatly increases the range
- * Slightly increases rate of fire
- * Moderately increaes the power of projectiles
- * Performs check for level, if not already max level
- * @return true if CannonTower is upgraded successfully
- * @return false if CannonTower could not be upgraded because it has already reached maximum level
+ * @brief Accessor for maximum level
+ *
+ * @return The maximum level for CannonTower upgrades
  */
-bool CannonTower::upgrade()
+int CannonTower::getMaxLevel()
 {
-    // check if not yet max level
-    if (level < CANNON_MAX_LEVEL)
-    {
-        range += 50;
-        rateOfFire += 1;
-        power += 5;
-
-        level++;
-
-        return true;
-    }
-
-    return false;
+    return CANNON_MAX_LEVEL;
 }
 
 /**
@@ -87,7 +78,7 @@ bool CannonTower::upgrade()
  * Applies damage to targetted Critter if the Projectile is in collision
  * Gets rid of Projectiles when needed, either if out of bounds, Critter is already dead, or when collision is made with Critter
  */
-void CannonTower::shootProjectile(DummyCritter* critter)
+void CannonTower::shootProjectile(Critter* critter)
 {
     // check if critter still exists
     if (!critter)
@@ -98,12 +89,14 @@ void CannonTower::shootProjectile(DummyCritter* critter)
     }
 
     // tower position with offset
-    float posX = x + static_cast<float>(TOWER_SIZE) / 2;
-    float posY = y + static_cast<float>(TOWER_SIZE) / 2;
+    float posX = x + currentRenderedRect.w / 2;
+    float posY = y + currentRenderedRect.w / 2;
 
+    SDL_FRect currentCellSize = Global::currentMap->getPixelPerCell();
+    
     // critter position with offset
-    float critterPosX = critter->getX() + static_cast<float>(DummyCritter::CRITTER_SIZE) / 2;
-    float critterPosY = critter->getY() + static_cast<float>(DummyCritter::CRITTER_SIZE) / 2;
+    float critterPosX = critter->getPosition().x + Critter::CRITTER_WIDTH_SCALE * currentCellSize.w / 2;
+    float critterPosY = critter->getPosition().y + Critter::CRITTER_HEIGHT_SCALE * currentCellSize.h / 2;
 
     // differences in position from tower to cannon
     float differenceX = posX - critterPosX;
@@ -132,14 +125,14 @@ void CannonTower::shootProjectile(DummyCritter* critter)
         projectiles[i]->move(3 * speedX, 3 * speedY);
 
         // check if projectile hits critter
-        if (projectiles[i]->checkCollision(critterPosX, critterPosY))
+        if (projectiles[i]->checkCollision(critter))
         {
-            critter->damageCritter(power);
-            
+            critter->takeDamage(power);
+            critter->notify();
             projectiles.erase(projectiles.begin() + i);
 
             // clear projectiles if critter has no hp, no target
-            if (critter->getHealth() <= 0) {
+            if (critter->getHitPoints() <= 0) {
                 projectiles.clear();
             }
         }
@@ -149,17 +142,4 @@ void CannonTower::shootProjectile(DummyCritter* critter)
             projectiles.erase(projectiles.begin() + i);
         }
     }
-}
-
-/**
- * @brief Generates CannonTower
- * 
- * @details Represents a CannonTower with a yellow square
- * Draws the square using SDL 
- */
-void CannonTower::generateTower()
-{
-    SDL_FRect fillRect = { x, y, Tower::TOWER_SIZE, Tower::TOWER_SIZE };
-    SDL_SetRenderDrawColor(gRenderer, 0x00, 0xFF, 0x00, 0xFF);
-    SDL_RenderFillRect(gRenderer, &fillRect);
 }

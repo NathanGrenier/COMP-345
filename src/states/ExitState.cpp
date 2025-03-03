@@ -74,10 +74,3 @@ void ExitState::update() {
 void ExitState::render() {
     // No rendering needed
 }
-
-/**
- * @brief Private constructor to prevent direct instantiation.
- *
- * The ExitState follows the singleton pattern.
- */
-ExitState::ExitState() {}

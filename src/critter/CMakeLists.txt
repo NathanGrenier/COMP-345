@@ -1,7 +1,7 @@
 add_library(critter STATIC
 Critter.cpp
 CritterGroup.cpp
-)
+CritterObserver.cpp)
 
 target_include_directories(critter PUBLIC ${CMAKE_SOURCE_DIR}/src/include)
 

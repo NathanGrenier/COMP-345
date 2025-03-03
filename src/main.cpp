@@ -42,6 +42,12 @@ GameState* gCurrentState{ nullptr };
 /** @brief The next game state to transition to. */
 GameState* gNextState{ nullptr };
 
+int Global::viewerWidth = 250;
+int Global::headerHeight = 75;
+Map* Global::currentMap = nullptr;
+
+SDL_FRect Global::mapViewRect = { 0.0f, Global::headerHeight, static_cast<float>(Global::kScreenWidth - Global::viewerWidth), static_cast<float>(Global::kScreenHeight - Global::headerHeight) };
+
 /**
  * @brief Sets the next game state.
  *
@@ -76,19 +82,15 @@ void changeState() {
  */
 bool init() {
 	bool success{ true };
-
-	// Initialize SDL
 	if (!SDL_Init(SDL_INIT_VIDEO)) {
 		SDL_Log("SDL could not initialize! SDL error: %s\n", SDL_GetError());
 		success = false;
-	}
-	else {
+	} else {
 		// Create window and renderer
 		if (!SDL_CreateWindowAndRenderer("Tower Defense - NullTerminators", Global::kScreenWidth, Global::kScreenHeight, 0, &gWindow, &gRenderer)) {
 			SDL_Log("Window could not be created! SDL error: %s\n", SDL_GetError());
 			success = false;
-		}
-		else {
+		} else {
 			// Enable VSync
 			if (!SDL_SetRenderVSync(gRenderer, 1)) {
 				SDL_Log("Could not enable VSync! SDL error: %s\n", SDL_GetError());
@@ -125,8 +127,7 @@ bool loadMedia() {
 	if (gFont = TTF_OpenFont(fontPath.c_str(), 28); gFont == nullptr) {
 		SDL_Log("Could not load %s! SDL_ttf Error: %s\n", fontPath.c_str(), SDL_GetError());
 		success = false;
-	}
-	else {
+	} else {
 		// Load text
 		SDL_Color textColor = { 0x00, 0x00, 0x00, 0xFF };
 		if (!gFpsTexture.loadFromRenderedText("Enter to start/stop or space to pause/unpause", textColor)) {
@@ -176,14 +177,12 @@ int main(int argc, char* args[]) {
 	if (!init()) {
 		SDL_Log("Unable to initialize program!\n");
 		exitCode = 1;
-	}
-	else {
+	} else {
 		// Load media
 		if (!loadMedia()) {
 			SDL_Log("Unable to load media!\n");
 			exitCode = 2;
-		}
-		else {
+		} else {
 			// Quit flag
 			bool quit{ false };
 
@@ -230,8 +229,7 @@ int main(int argc, char* args[]) {
 					if (e.type == SDL_EVENT_QUIT) {
 						setNextState(ExitState::get());
 						quit = true;
-					}
-					else if (e.type == SDL_EVENT_KEY_DOWN && e.key.key == SDLK_ESCAPE) {
+					} else if (e.type == SDL_EVENT_KEY_DOWN && e.key.key == SDLK_ESCAPE) {
 						setNextState(TitleState::get());
 					}
 				}
