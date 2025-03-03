@@ -162,6 +162,7 @@ void MainGameState::handleEvent(SDL_Event &e)
 		// Compute the index for accessing the cell
 		int index = cellX + cellY * map->cellCountX;
 		targetCell = map->cells[index];
+		correctCell = true;
 	}
 
 	float cellSize = map->PIXELS_PER_CELL;
@@ -257,7 +258,7 @@ void MainGameState::handleEvent(SDL_Event &e)
 		// If clicking on the current tower
 		for (int i = 0; i < towers.size(); i++)
 		{
-			if (towers[i]->isClicked())
+			if (towers[i]->isClicked(1.5f))
 			{
 				detailDisplay.selectTower(towers[i]);
 				towers[i]->notify();
@@ -285,7 +286,7 @@ void MainGameState::handleEvent(SDL_Event &e)
 		if (!towerClick && !critterClick)
 		{
 			// If placing down a tower on a valid, unoccupied wall cell
-			if (towerBuySelect >= 0 && wallCellDict.find(targetCell) != wallCellDict.end() && !wallCellDict[targetCell])
+			if (correctCell && towerBuySelect >= 0 && wallCellDict.find(targetCell) != wallCellDict.end() && !wallCellDict[targetCell])
 			{
 				Tower *newTower = nullptr;
 

@@ -190,20 +190,25 @@ bool Tower::upgrade()
  * @return true if Tower has been clicked
  * @return false if Tower has not been clicked
  */
-bool Tower::isClicked() const 
+bool Tower::isClicked(float scaleFactor) const
 {
     // Get the current mouse position
     float mouseXPos, mouseYPos;
     SDL_GetMouseState(&mouseXPos, &mouseYPos);
 
-    // Check if the mouse position is inside the button's area
-    if (mouseXPos >= x && mouseXPos <= x + currentRenderedRect.w &&
-        mouseYPos >= y && mouseYPos <= y + currentRenderedRect.w)
+    // Adjust width and height based on the scale factor
+    float scaledWidth = currentRenderedRect.w / scaleFactor;
+    float scaledHeight = currentRenderedRect.h / scaleFactor;
+
+    // Check if the mouse position is inside the scaled area of the tower
+    if (mouseXPos >= x && mouseXPos <= x + scaledWidth &&
+        mouseYPos >= y && mouseYPos <= y + scaledHeight)
     {
         return true;
     }
     return false;
 }
+
 
 /**
  * @brief Checks if a DummyCritter is in range of the Tower

@@ -225,7 +225,7 @@ void UITestState::handleEvent(SDL_Event& e)
 		// if clicking on current tower
 		for (int i = 0; i < towers.size(); i++) {
 			//towers[i]->handleEvent(&e);
-			if (towers[i]->isClicked())
+			if (towers[i]->isClicked(1.5f))
 			{
 				detailDisplay.selectTower(towers[i]);
 				towers[i]->notify();

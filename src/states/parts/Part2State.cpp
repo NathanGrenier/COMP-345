@@ -171,7 +171,7 @@ void Part2State::handleEvent(SDL_Event& e) {
 		// Check if any of the buttons were clicked and set the next state accordingly
 		if (e.type == SDL_EVENT_MOUSE_BUTTON_DOWN && e.button.button == SDL_BUTTON_LEFT)
 		{
-			if (towers[i]->isClicked())
+			if (towers[i]->isClicked(1.5f))
 			{
 				// sells tower
 				if (sellTower)

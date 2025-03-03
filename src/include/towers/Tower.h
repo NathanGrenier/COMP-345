@@ -45,7 +45,7 @@ public:
 
     Critter* findCritter(std::vector<Critter>& critters); /** finds critter in range of tower */
     void clearProjectiles();
-    bool isClicked() const;
+    bool isClicked(float scaleFactor) const;
     bool isCritterInRange(Critter critter);
 
     struct UpgradeValues {
