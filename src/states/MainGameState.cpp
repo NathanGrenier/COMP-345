@@ -1,4 +1,4 @@
-#include <states/parts/MainGameState.h>
+#include <states/MainGameState.h>
 #include <critter/CritterGroup.h>
 #include <Global.h>
 #include <util/TextureLoader.h>

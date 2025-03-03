@@ -1,10 +1,6 @@
 #include <states/TitleState.h>
-#include <states/parts/MainGameState.h>
-#include <states/parts/Part1State.h>
-#include <states/parts/MapSelectState.h>
-#include <states/parts/Part2State.h>
-#include <states/parts/Part3State.h>
-#include <states/parts/UITestState.h>
+#include <states/MainGameState.h>
+#include <states/MapSelectState.h>
 #include <Global.h>
 #include <ui/LButton.h>
 
