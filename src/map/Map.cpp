@@ -14,6 +14,10 @@
 
  /**
   * @brief Default Map constructor.
+  *
+  * Initializes a Map object with default dimensions of 15x15 cells.
+  * Each cell is initialized with default values, and the target cell
+  * is set to the center of the map. The flow field is then calculated.
   */
 Map::Map() {
 	cellCountX = 15;
@@ -43,9 +47,9 @@ Map::Map() {
 /**
  * @brief Constructs a new Map object.
  *
- * @param renderer The SDL renderer used for loading textures.
  * @param setCellCountX The number of cells along the X-axis.
  * @param setCellCountY The number of cells along the Y-axis.
+ * @param name The name of the map.
  * @details Initializes cell textures, creates a grid of cells, sets the default target at the center,
  *          and calculates the initial flow field.
  */
@@ -78,16 +82,9 @@ Map::Map(int setCellCountX, int setCellCountY, std::string name) :
  *
  * @param renderer The SDL renderer used for drawing.
  * @param cell The cell to be drawn.
- * @details Selects the appropriate texture based on cell properties.
+ * @param rect The rectangle where the cell should be rendered.
+ * @details Selects the appropriate texture based on cell properties and draws it within the specified rectangle.
  */
- /**
-  * @brief Draws an individual cell.
-  *
-  * @param renderer The SDL renderer used for drawing.
-  * @param cell The cell to be drawn.
-  * @param rect The rectangle where the cell should be rendered.
-  * @details Selects the appropriate texture based on cell properties and draws it within the specified rectangle.
-  */
 void Map::drawCell(SDL_Renderer* renderer, const Cell& cell, const SDL_FRect& rect) {
 	// Default texture is the empty cell.
 	SDL_Texture* textureSelected = textureCellEmpty;
@@ -142,6 +139,15 @@ void Map::drawCell(SDL_Renderer* renderer, const Cell& cell, const SDL_FRect& re
 	}
 }
 
+/**
+ * @brief Gets the cell coordinates from a given position.
+ *
+ * @param x The X-coordinate of the position.
+ * @param y The Y-coordinate of the position.
+ * @param targetRect The rectangle where the map is being rendered.
+ * @return A pair of integers representing the cell coordinates.
+ * @details Returns {-1, -1} if the position is out of bounds.
+ */
 std::pair<int, int> Map::getCellFromPosition(float x, float y, const SDL_FRect& targetRect) const {
 	float cellW = targetRect.w / cellCountX;
 	float cellH = targetRect.h / cellCountY;
@@ -153,6 +159,14 @@ std::pair<int, int> Map::getCellFromPosition(float x, float y, const SDL_FRect& 
 	return { -1, -1 }; // Out of bounds
 }
 
+/**
+ * @brief Gets the center point of a cell.
+ *
+ * @param x The X-coordinate of the cell.
+ * @param y The Y-coordinate of the cell.
+ * @param targetRect The rectangle where the map is being rendered.
+ * @return SDL_FPoint The center point of the cell.
+ */
 SDL_FPoint Map::getCellCenter(int x, int y, const SDL_FRect& targetRect) const {
 	SDL_FRect cellRect = scaleCellRect(cells[x + y * cellCountX], targetRect);
 	return { cellRect.x + cellRect.w / 2.0f, cellRect.y + cellRect.h / 2.0f };
@@ -345,10 +359,18 @@ void Map::calculateFlowField() {
 	notifyObservers();
 }
 
+/**
+ * @brief Toggles the visibility of the flow field.
+ */
 void Map::toggleFlowFieldVisibility() {
 	isFlowFieldVisible = !isFlowFieldVisible;
 }
 
+/**
+ * @brief Sets the visibility of the flow field.
+ *
+ * @param value true to make the flow field visible, false to hide it.
+ */
 void Map::setFlowFieldVisibility(bool value) {
 	isFlowFieldVisible = value;
 }
@@ -461,6 +483,15 @@ bool Map::isValidPath() {
 	return true;
 }
 
+/**
+ * @brief Loads map data from a JSON file.
+ *
+ * @param filePath The path to the JSON file.
+ * @return nlohmann::json The loaded JSON data. Returns an empty JSON object on failure.
+ * @details Opens the specified file, reads its content, and attempts to parse it as JSON.
+ *          If the file cannot be opened or the content is not valid JSON, an error message
+ *          is printed to the standard error stream and an empty JSON object is returned.
+ */
 nlohmann::json loadMapData(const std::string& filePath) {
 	// Open the file
 	std::ifstream file(filePath);
@@ -487,6 +518,17 @@ nlohmann::json loadMapData(const std::string& filePath) {
 	}
 }
 
+/**
+ * @brief Saves the current map data to a JSON file.
+ *
+ * @param filePath The path to the JSON file.
+ * @return true If the map data was successfully saved.
+ * @return false If the file could not be opened or an error occurred during writing.
+ * @details Creates a JSON object representing the current map state, including metadata,
+ *          walls, spawner, and target cells. Writes this JSON object to the specified file.
+ *          If the file cannot be opened or an error occurs during writing, an error message
+ *          is printed to the standard error stream and false is returned.
+ */
 bool Map::saveToJson(const std::string& filePath) {
 	// Create a JSON object to store map data
 	nlohmann::json mapData;
@@ -538,6 +580,10 @@ bool Map::saveToJson(const std::string& filePath) {
  * @param filePath The path to the JSON file.
  * @return true If the map was successfully loaded and initialized.
  * @return false If the file could not be opened or parsed.
+ * @details Reads the JSON file specified by the file path, parses it, and initializes
+ *          the map's metadata, dimensions, and cells based on the parsed data. If the
+ *          file cannot be opened or the content is not valid JSON, an error message is
+ *          printed to the standard error stream and false is returned.
  */
 bool Map::loadFromJson(const std::string& filePath) {
 	// Load the JSON file
@@ -594,19 +640,41 @@ bool Map::loadFromJson(const std::string& filePath) {
 	return true;
 }
 
+/**
+ * @brief Gets the current rendering rectangle of the map.
+ *
+ * @return SDL_FRect The current rendering rectangle.
+ */
 SDL_FRect Map::getCurrentRenderRect() {
 	return currentRenderRect;
 }
 
+/**
+ * @brief Sets the current rendering rectangle of the map.
+ *
+ * @param newTargetRect The new rendering rectangle to set.
+ */
 void Map::setCurrentRenderRect(SDL_FRect newTargetRect) {
 	currentRenderRect = newTargetRect;
 }
 
+/**
+ * @brief Gets the size of each cell in pixels.
+ *
+ * @return SDL_FRect The size of each cell in pixels.
+ */
 SDL_FRect Map::getPixelPerCell() {
 	SDL_FRect currentMapRect = getCurrentRenderRect();
 	return SDL_FRect{ 0, 0, currentMapRect.w / cellCountX, currentMapRect.h / cellCountY };
 }
 
+/**
+ * @brief Calculates the number of pixels per cell and loads cell textures.
+ *
+ * @details This function calculates the number of pixels each cell occupies
+ *          based on the screen width and the number of cells along the X-axis.
+ *          It also loads the textures for different cell types.
+ */
 void Map::calculatePixelsPerCell() {
 	// Perform the calculation based on Global's static parameters
 	PIXELS_PER_CELL = (Global::kScreenWidth - Global::viewerWidth) / cellCountX;
@@ -628,6 +696,8 @@ void Map::calculatePixelsPerCell() {
  * @param renderer The SDL renderer used for drawing.
  * @param targetRect The rectangle where the map should be rendered.
  * @details Scales the map to fit within the target rectangle while maintaining aspect ratio.
+ *          Calculates the scaling factor and offset to center the map within the target rectangle.
+ *          Updates the current rendering rectangle and draws each cell scaled to fit the target rectangle.
  */
 void Map::drawOnTargetRect(SDL_Renderer* renderer, const SDL_FRect& targetRect) {
 	calculatePixelsPerCell();
@@ -672,6 +742,7 @@ void Map::drawOnTargetRect(SDL_Renderer* renderer, const SDL_FRect& targetRect) 
  * @param newCellCountX The new number of cells along the X-axis.
  * @param newCellCountY The new number of cells along the Y-axis.
  * @details Updates the `cells` member by resizing it to the new dimensions and adjusting the positions of existing cells.
+ *          Initializes any new cells in the newly added area and recalculates the flow field based on the new grid dimensions.
  */
 void Map::updateMapDimensions(int newCellCountX, int newCellCountY) {
 	// Keep the current dimensions until we finish modifying cells
@@ -725,6 +796,7 @@ void Map::updateMapDimensions(int newCellCountX, int newCellCountY) {
  * @param cell The cell to be scaled.
  * @param targetRect The rectangle where the map is being rendered.
  * @return SDL_FRect Scaled rectangle of the cell.
+ * @details Calculates the scaling factor and offset to fit the cell within the target rectangle while maintaining aspect ratio.
  */
 SDL_FRect Map::scaleCellRect(const Cell& cell, const SDL_FRect& targetRect) const {
 	float mapWidth = cellCountX * PIXELS_PER_CELL;
@@ -745,6 +817,13 @@ SDL_FRect Map::scaleCellRect(const Cell& cell, const SDL_FRect& targetRect) cons
 	};
 }
 
+/**
+ * @brief Walks the path from the spawner to the target.
+ *
+ * @return std::vector<Map::Cell> A vector containing the cells on the path.
+ * @details Resets all cells, finds the spawner cell, and follows the flow directions to the target cell.
+ *          Marks the cells on the path and returns the path as a vector of cells.
+ */
 std::vector<Map::Cell> Map::walkPath() {
 	// Reset all cells
 	for (auto& cell : cells) {
@@ -794,10 +873,22 @@ std::vector<Map::Cell> Map::walkPath() {
 	return path;
 }
 
+/**
+ * @brief Subscribes an observer to the flow field changes.
+ *
+ * @param observer The observer to be subscribed.
+ * @details Adds the observer to the list of observers to be notified when the flow field changes.
+ */
 void Map::subscribe(FlowFieldObserver* observer) {
 	observers.push_back(observer);
 }
 
+/**
+ * @brief Unsubscribes an observer from the flow field changes.
+ *
+ * @param observer The observer to be unsubscribed.
+ * @details Removes the observer from the list of observers.
+ */
 void Map::unsubscribe(FlowFieldObserver* observer) {
 	auto it = std::find(observers.begin(), observers.end(), observer);
 	if (it != observers.end()) {
@@ -805,24 +896,47 @@ void Map::unsubscribe(FlowFieldObserver* observer) {
 	}
 }
 
+/**
+ * @brief Notifies all subscribed observers of flow field changes.
+ */
 void Map::notifyObservers() {
 	for (auto observer : observers) {
 		observer->onFlowFieldChanged();
 	}
 }
 
+/**
+ * @brief Sets the name of the map.
+ *
+ * @param newName The new name of the map.
+ */
 void Map::setName(std::string newName) {
 	name = newName;
 }
 
+/**
+ * @brief Gets the name of the map.
+ *
+ * @return std::string The name of the map.
+ */
 std::string Map::getName() {
 	return name;
 }
 
+/**
+ * @brief Sets the file path of the map.
+ *
+ * @param newPath The new file path of the map.
+ */
 void Map::setPath(std::string newPath) {
 	filePath = newPath;
 }
 
+/**
+ * @brief Gets the file path of the map.
+ *
+ * @return std::string The file path of the map.
+ */
 std::string Map::getPath() {
 	return filePath;
 }

@@ -10,22 +10,21 @@
  */
 #pragma once
 
- /**
-  * @class Global
-  * @brief The header file for the Global class.
-  * @author Nirav Patel
-  * @date 2025-02-16
-  */
-
 #include <states/GameState.h>
 #include <SDL3_ttf/SDL_ttf.h>
 #include <map/Map.h>
 #include <string>
 
-  // External SDL variables
+ // External SDL variables
 extern SDL_Renderer* gRenderer; ///< Global pointer to the SDL renderer.
 extern TTF_Font* gFont; ///< Global pointer to the font used for rendering text.
 
+/**
+ * @class Global
+ * @brief The header file for the Global class.
+ * @author Nirav Patel
+ * @date 2025-02-16
+ */
 class Global {
 public:
 	static int viewerWidth;

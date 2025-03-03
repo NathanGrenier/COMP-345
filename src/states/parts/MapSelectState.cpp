@@ -191,7 +191,17 @@ void MapSelectState::render() {
 	rightArrow.render();
 }
 
-
+/**
+ * @brief Loads the available maps from the specified directory.
+ *
+ * This function scans the "assets/mapPresets" directory for JSON files,
+ * attempts to load each map, and stores the successfully loaded maps
+ * in the `availableMaps` dictionary. It also sets the flow field visibility
+ * to false for each loaded map. If no maps are found, it logs a message.
+ * If the directory does not exist or is not a directory, it logs an error.
+ *
+ * @note The first map found is set as the selected map.
+ */
 void MapSelectState::loadAvailableMaps() {
 	availableMaps.clear();  // Clear existing list
 
@@ -234,7 +244,16 @@ void MapSelectState::loadAvailableMaps() {
 	}
 }
 
-
+/**
+ * @brief Formats the map file name by removing the extension and converting it to sentence case.
+ *
+ * This function takes a file name, removes its extension, and converts it to
+ * sentence case. It capitalizes the first letter and any letter following an
+ * underscore, while converting all other letters to lowercase.
+ *
+ * @param fileName The name of the file to format.
+ * @return std::string The formatted map name.
+ */
 std::string MapSelectState::formatMapName(const std::string& fileName) {
 	std::string formattedName = fileName;
 	// Remove extension and convert to sentence case

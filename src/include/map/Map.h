@@ -119,9 +119,28 @@ public:
 	SDL_FRect scaleCellRect(const Cell& cell, const SDL_FRect& targetRect) const;
 };
 
+/**
+ * @namespace std
+ * @brief Specialization of the std namespace for hashing Map::Cell.
+ *
+ * Provides a custom hash function for the Map::Cell struct to be used in hash-based containers.
+ */
 namespace std {
+	/**
+	 * @struct hash<Map::Cell>
+	 * @brief Custom hash function for Map::Cell.
+	 *
+	 * Specializes the std::hash template for Map::Cell to enable its use in unordered containers.
+	 */
 	template <>
 	struct hash<Map::Cell> {
+		/**
+		 * @brief Computes the hash value for a Map::Cell.
+		 *
+		 * @param c The Map::Cell to hash.
+		 * @return size_t The computed hash value.
+		 * @details Combines the hashes of the x and y coordinates of the cell.
+		 */
 		size_t operator()(const Map::Cell& c) const {
 			// Combine the hashes of x and y (a simple example)
 			return std::hash<int>()(c.x) ^ (std::hash<int>()(c.y) << 1);

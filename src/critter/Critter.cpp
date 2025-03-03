@@ -5,10 +5,18 @@
 #include <Global.h>
 
 /**
- * @class Critter
- * @brief Represents a critter that moves within the game world and interacts with other critters.
+ * @brief Constructs a new Critter object with specified attributes and initializes its position and target.
  *
- * @author Nirav Patel
+ * @param level The level of the critter.
+ * @param speed The speed at which the critter moves.
+ * @param hitPoints The initial hit points of the critter.
+ * @param strength The strength of the critter, used for stealing gold.
+ * @param reward The reward given when the critter is defeated.
+ * @param start The starting position of the critter.
+ * @param map Pointer to the game map.
+ *
+ * @details Initializes the critter's position, target, and subscribes to the map's flow field.
+ *          If the map is null, it sets safe default values for the target position.
  */
 Critter::Critter(int level, float speed, int hitPoints, int strength, int reward, SDL_FRect start, Map* map)
 	: level(level), speed(speed), hitPoints(hitPoints), strength(strength), reward(reward),
@@ -36,6 +44,12 @@ Critter::Critter(int level, float speed, int hitPoints, int strength, int reward
 	}
 }
 
+/**
+ * @brief Callback function for when the flow field changes.
+ *
+ * This function is currently empty as critters poll the map each move,
+ * so no immediate action is needed.
+ */
 void Critter::onFlowFieldChanged() {
 	// Currently empty; critters poll the map each move, so no immediate action needed
 }
@@ -48,6 +62,13 @@ SDL_FRect Critter::getPosition() const {
 	return position;
 }
 
+/**
+ * @brief Checks if two rectangles intersect.
+ *
+ * @param a The first rectangle.
+ * @param b The second rectangle.
+ * @return True if the rectangles intersect, false otherwise.
+ */
 bool rectanglesIntersect(const SDL_FRect& a, const SDL_FRect& b) {
 	return (a.x < b.x + b.w && a.x + a.w > b.x && a.y < b.y + b.h && a.y + a.h > b.y);
 }
@@ -191,10 +212,18 @@ void Critter::setAtExit(bool con) {
 	isAtExit = con;
 }
 
+/**
+ * @brief Gets the speed of the critter.
+ * @return The speed of the critter.
+ */
 int Critter::getSpeed() {
 	return speed;
 }
 
+/**
+ * @brief Sets the speed of the critter.
+ * @param newSpeed The new speed value.
+ */
 void Critter::setSpeed(int newSpeed) {
 	speed = newSpeed;
 }

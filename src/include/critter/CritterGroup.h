@@ -19,8 +19,6 @@ public:
 	void generateCritters(float deltaTime);
 	void update(float deltaTime);  // Update all critters in the group
 	void render(SDL_Renderer* renderer);  // Render all critters in the group
-	void attackTowers(int damage);  // Apply damage to critters from towers
-	//void handleExit();  // Handle critters that reach the exit
 
 	std::vector<Critter>& getCritters() { return critters; }
 private:
