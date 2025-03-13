@@ -60,6 +60,7 @@ public:
     void setRotation(float angle);
     float getRotation() const { return rotationAngle; }
     void setCurrentRenderedRect(SDL_FRect targetRect);
+    SDL_FRect getCurrentRenderedRect();
 
     float x; /** @brief x position for projectile */
     float y; /** @brief y position for projectile */

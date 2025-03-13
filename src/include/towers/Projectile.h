@@ -13,25 +13,36 @@
 #pragma once
 
 #include <critter/Critter.h>
+#include <ui/LTexture.h>
 
 class Projectile
 {
     public:
-        Projectile(float x, float y, int damage, bool isArea);
-        Projectile(float x, float y, int damage, bool isArea, int projectileSize);
+        Projectile(float x, float y, int damage, bool isArea, std::string texturePath);
+        Projectile(float x, float y, int damage, bool isArea, int projectileSize, std::string texturePath);
         int getDamage();
         int getIsArea();
 
         void move(float xSpeed, float ySpeed);
-        void generateProjectile();
+        void generateProjectile(float rotationAngle);
         bool isOutside();
 
         bool checkCollision(Critter* critter);
+        void updateAnimation(float deltaTime);
 
+        void destroy();
     private:
         float x; /** @brief x position for projectile */
         float y; /** @brief y position for projectile */
         int damage;
         int projectileSize;
         bool isArea; /** @brief if projectile has area of effect, to be implemented */
+
+        LTexture projectileTexture; 
+
+        int currentFrame = 0;   // Current frame index
+        int frameCount = 4;     // Total number of frames in sprite sheet
+
+        float frameTimer = 0.0f;    // Timer to track when to switch frame
+        float frameDuration = 0.1f; // Duration of each frame (0.1s -> 10 fps)
 };

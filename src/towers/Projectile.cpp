@@ -22,10 +22,10 @@
  * Area damage is not yet implemented
  * Uses a default ProjectileSize of 3
  */
-Projectile::Projectile(float x, float y, int damage, bool isArea)
+Projectile::Projectile(float x, float y, int damage, bool isArea, std::string texturePath)
     : x(x), y(y), damage(damage), isArea(isArea), projectileSize(3)
 {
-
+    projectileTexture.loadFromFile(texturePath);
 }
 
 /**
@@ -40,10 +40,10 @@ Projectile::Projectile(float x, float y, int damage, bool isArea)
  * Damage is to be applied to critters, removing the same number of health from it
  * Area damage is not yet implemented
  */
-Projectile::Projectile(float x, float y, int damage, bool isArea, int projectileSize) 
+Projectile::Projectile(float x, float y, int damage, bool isArea, int projectileSize, std::string texturePath) 
     : x(x), y(y), damage(damage), isArea(isArea), projectileSize(projectileSize)
 {
-    
+    projectileTexture.loadFromFile(texturePath);
 }
 
 /**
@@ -75,12 +75,47 @@ void Projectile::move(float xSpeed, float ySpeed)
  * @details Represents a Projectile with a black square
  * Draws the square using SDL 
  */
-void Projectile::generateProjectile() 
+void Projectile::generateProjectile(float rotationAngle)
 {
-    SDL_FRect fillRect = { x, y, projectileSize, projectileSize };
-    SDL_SetRenderDrawColor(gRenderer, 0x00, 0x00, 0x00, 0xFF);
-    SDL_RenderFillRect(gRenderer, &fillRect);
+    // Define the sprite clips for each frame (horizontal sprite sheet)
+    float frameWidth = projectileTexture.getWidth() / 4; // Assuming 4 frames horizontally
+    float frameHeight = projectileTexture.getHeight();
+
+    SDL_FRect spriteClips[] = {
+        { 0.f * frameWidth, 0.f, frameWidth, frameHeight },
+        { 1.f * frameWidth, 0.f, frameWidth, frameHeight },
+        { 2.f * frameWidth, 0.f, frameWidth, frameHeight },
+        { 3.f * frameWidth, 0.f, frameWidth, frameHeight }
+    };
+
+    // Calculate target height as 50% of cell size
+    float targetHeight = Global::currentMap->PIXELS_PER_CELL * 0.5f;
+
+    // Maintain aspect ratio for width
+    float aspectRatio = frameWidth / frameHeight;
+    float targetWidth = targetHeight * aspectRatio;
+
+    // Render the projectile with correct scaling and rotation
+    projectileTexture.render(x, y, &spriteClips[currentFrame], targetWidth, targetHeight, rotationAngle - 90);
 }
+
+
+
+void Projectile::updateAnimation(float deltaTime)
+{
+    frameTimer += deltaTime;
+    if (frameTimer >= frameDuration)
+    {
+        frameTimer = 0.0f;
+        currentFrame = (currentFrame + 1) % frameCount;
+    }
+}
+
+void Projectile::destroy()
+{
+    projectileTexture.destroy();
+}
+
 
 /**
  * @brief Checks if projectile is outside the map area

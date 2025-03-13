@@ -110,7 +110,8 @@ void Tower::generateTower()
 void Tower::generateAllProjectiles() 
 {
     for (int i = 0; i < projectiles.size(); i++) {
-        projectiles[i]->generateProjectile();
+        projectiles[i]->updateAnimation(0.016f);
+        projectiles[i]->generateProjectile(rotationAngle);
     }
 }
 
@@ -283,6 +284,10 @@ float Tower::calcDistance(Critter critter)
  */
 void Tower::setCurrentRenderedRect(SDL_FRect targetRect) {
     currentRenderedRect = targetRect;
+}
+
+SDL_FRect Tower::getCurrentRenderedRect() {
+    return currentRenderedRect;
 }
 
 /**

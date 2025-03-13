@@ -7,6 +7,10 @@
 #include <towers/StandardTower.h>
 #include <ui/DetailButton.h>
 
+#ifndef M_PI
+#define M_PI 3.14159265358979323846
+#endif
+
 /** @class MainGameState
  *  @brief Implementation of the main game state.
  *
@@ -355,34 +359,58 @@ void MainGameState::update()
 	critterGroup->generateCritters(0.16f);
 	critterGroup->update(0.016f);
 
-	// checks tower ranges
 	for (int i = 0; i < towers.size(); i++)
 	{
-		// checks if critters exist
 		if (critterGroup->getCritters().size())
 		{
-			// finds a target critter
-			Critter *targettedCritter = towers[i]->findCritter(critterGroup->getCritters());
+			Critter* targettedCritter = towers[i]->findCritter(critterGroup->getCritters());
 
-			// shoot if there is a critter in tower range
 			if (targettedCritter)
 			{
-				float deltaX = targettedCritter->getPosition().x - towers[i]->x;
-				float deltaY = targettedCritter->getPosition().y - towers[i]->y;
-				float angleRad = atan2(deltaY, deltaX) + 90;
-				float angleDeg = angleRad * (180.0f / 3.1416);
+				// Ensure we're using the center of the tower
+				float towerCenterX = towers[i]->x + towers[i]->getCurrentRenderedRect().w / 2.0f;
+				float towerCenterY = towers[i]->y + towers[i]->getCurrentRenderedRect().h / 2.0f;
 
-				towers[i]->setRotation(angleDeg);
-				towers[i]->shootProjectile(targettedCritter);
+				// Target the center of the critter
+				Vector2D dirToTarget;
+				dirToTarget.x = (targettedCritter->getPosition().x + targettedCritter->getPosition().w / 2.0f) - towerCenterX;
+				dirToTarget.y = (targettedCritter->getPosition().y + targettedCritter->getPosition().h / 2.0f) - towerCenterY;
+
+				// Calculate the raw angle
+				float angleRad = atan2(dirToTarget.y, dirToTarget.x);
+				float angleDeg = angleRad * (180.0f / M_PI);
+
+				// Adjust for sprite orientation (assuming "top" is default forward)
+				angleDeg += 90.0f;
+
+				// Smooth rotation logic
+				float currentRotation = towers[i]->getRotation();
+				float deltaAngle = angleDeg - currentRotation;
+
+				// Normalize delta to [-180, 180] for shortest path
+				while (deltaAngle > 180.0f) deltaAngle -= 360.0f;
+				while (deltaAngle < -180.0f) deltaAngle += 360.0f;
+
+				// Calculate max rotation step this frame
+				float maxRotationStep = 180.0f * 0.016f;
+
+				// Clamp rotation delta to avoid sudden jumps
+				if (deltaAngle > maxRotationStep) deltaAngle = maxRotationStep;
+				if (deltaAngle < -maxRotationStep) deltaAngle = -maxRotationStep;
+
+				// Apply smooth rotation
+				float newRotation = currentRotation + deltaAngle;
+				towers[i]->setRotation(newRotation);
+
+				// Shoot if aligned close enough (optional threshold)
+				if (fabs(deltaAngle) < 15.0f) // Optional: only shoot if facing roughly toward target
+					towers[i]->shootProjectile(targettedCritter);
 			}
-			// deletes already fired projectiles if there is no critter in range
 			else
 			{
 				towers[i]->clearProjectiles();
 			}
 		}
-
-		// deletes already fired projectiles if no critters
 		else
 		{
 			towers[i]->clearProjectiles();

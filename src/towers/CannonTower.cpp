@@ -112,7 +112,7 @@ void CannonTower::shootProjectile(Critter* critter)
     if (shootingTimer <= 0)
     {
         // fires a big sized projectile, resets shooting timer
-        projectiles.push_back(new Projectile(posX, posY, power, false, 6));
+        projectiles.push_back(new Projectile(posX, posY, power, false, 6, "assets/tower/CannonProjectile.png"));
         shootingTimer = MAX_SHOOTING_TIMER;
     }
     else // decreases shooting timer

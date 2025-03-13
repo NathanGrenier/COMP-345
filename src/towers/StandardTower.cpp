@@ -112,7 +112,7 @@ void StandardTower::shootProjectile(Critter* critter)
     if (shootingTimer <= 0)
     {
         // fires a projectile with the default size, resets shooting timer
-        projectiles.push_back(new Projectile(posX, posY, power, false));
+        projectiles.push_back(new Projectile(posX, posY, power, false, "assets/tower/StandardProjectile.png"));
         shootingTimer = MAX_SHOOTING_TIMER;
     }
     else // decreases shooting timer

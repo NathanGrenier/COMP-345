@@ -109,10 +109,17 @@ void RapidFireTower::shootProjectile(Critter* critter)
     // check if critter still exists
     if (!critter)
     {
-        // get rid of currently shot projectiles if no target
+        // call destroy on each projectile before clearing
+        for (auto& projectile : projectiles)
+        {
+            projectile->destroy(); // assuming destroy() is a method of Projectile
+        }
+
+        // clear the projectile list after destroying them
         projectiles.clear();
         return;
     }
+
 
     // tower position with offset
     float posX = x + currentRenderedRect.w / 2;
@@ -141,7 +148,7 @@ void RapidFireTower::shootProjectile(Critter* critter)
         if (shootingTimer <= 0)
         {
             // fires a projectile, resets shooting timer
-            projectiles.push_back(new Projectile(posX, posY, power, false, 3));
+            projectiles.push_back(new Projectile(posX, posY, power, false, 3, "assets/tower/RapidFireProjectile.png"));
             shootingTimer = MAX_SHOOTING_TIMER;
         }
         else
