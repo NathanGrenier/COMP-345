@@ -148,28 +148,34 @@ bool Projectile::isOutside()
  * @return true if the Projectile is colliding with a critter 
  * @return false if the Projectile has not collided with critter
  */
-bool Projectile::checkCollision(Critter& critter) {
+bool Projectile::checkCollision(Critter* critter) {
+    // Midpoint collision tolerance (you can adjust this if you want a small margin of error)
     float tolerance = 0.0f;
 
-    int critterX = critter.getPosition().x;
-    int critterY = critter.getPosition().y;
-    int critterSize = critter.getPosition().w;
+    // Get critter's position and size
+    int critterX = critter->getPosition().x;
+    int critterY = critter->getPosition().y;
+    int critterSize = critter->getPosition().w; // Assuming square critter, w == h
 
+    // Calculate critter's midpoint
+    float critterMidX = critterX + critterSize / 2.0f;
+    float critterMidY = critterY + critterSize / 2.0f;
+
+    // Projectile's bounding box
     float projectileLeft = currentRenderRect.x;
     float projectileTop = currentRenderRect.y;
     float projectileRight = currentRenderRect.x + currentRenderRect.w;
     float projectileBottom = currentRenderRect.y + currentRenderRect.h;
 
-    // Check collision using the current render rect of the projectile
-    if (projectileLeft < critterX + critterSize + tolerance &&
-        projectileRight > critterX - tolerance &&
-        projectileTop < critterY + critterSize + tolerance &&
-        projectileBottom > critterY - tolerance) {
-        critter.takeDamage();
-        critter.notify();
+    // Check if critter's midpoint is inside projectile's bounding box (with optional tolerance)
+    if (critterMidX >= projectileLeft - tolerance &&
+        critterMidX <= projectileRight + tolerance &&
+        critterMidY >= projectileTop - tolerance &&
+        critterMidY <= projectileBottom + tolerance) {
+        critter->takeDamage();
+        critter->notify();
         return true; // Collision detected
     }
 
     return false; // No collision
 }
-

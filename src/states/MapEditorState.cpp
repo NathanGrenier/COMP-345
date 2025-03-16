@@ -198,20 +198,15 @@ void MapEditorState::handleEvent(SDL_Event& e) {
 			// Attempt to delete the original map file
 			if (std::remove(originalMapPath.c_str()) != 0) {
 				std::cerr << "Error: Failed to delete the original map file: " << originalMapPath << std::endl;
-			} else {
-				std::cout << "Original map file deleted successfully: " << originalMapPath << std::endl;
 			}
 
 			// Attempt to delete the current map file (if it exists)
 			if (originalMapPath != newMapPath && std::remove(newMapPath.c_str()) != 0) {
 				std::cerr << "Error: Failed to delete the current map file: " << newMapPath << std::endl;
-			} else {
-				std::cout << "Current map file deleted successfully: " << newMapPath << std::endl;
 			}
 
 			// Save the map as a new JSON file
 			if (map->saveToJson(newMapPath)) {
-				std::cout << "Map saved successfully to: " << newMapPath << std::endl;
 				currentMessage.loadFromRenderedText("Save Success!", { 0, 0, 0, 255 });
 			} else {
 				std::cerr << "Failed to save the map." << std::endl;
@@ -318,7 +313,7 @@ void MapEditorState::render() {
 	float buttonStartX = Global::kScreenWidth - Global::viewerWidth - (Global::viewerWidth - buttonWidth) / 2.0f;
 	float buttonStartY = Global::headerHeight + 20;
 
-	map->drawOnTargetRect(gRenderer, mapView);
+	map->drawOnTargetRect(mapView);
 
 	mMessageTexture.render((Global::kScreenWidth - Global::kScreenWidth * 0.5) / 2, titleDistanceFromTop, nullptr, Global::kScreenWidth * 0.5, -1);
 

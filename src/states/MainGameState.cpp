@@ -45,8 +45,6 @@ bool MainGameState::enter()
 		return false;
 	}
 
-	std::cout << "Global::currentMap name: " + Global::currentMap->name << std::endl;
-
 	map = new Map(*Global::currentMap);
 	map->setFlowFieldVisibility(false);
 	map->setCurrentRenderRect(Global::mapViewRect);
@@ -56,6 +54,11 @@ bool MainGameState::enter()
 		if (cell.isWall)
 		{
 			map->wallCellDict[cell] = false;
+		}
+
+		else if (cell.isOnPath)
+		{
+			map->wallCellDict[cell] = true;
 		}
 	}
 
@@ -109,32 +112,8 @@ void MainGameState::handleEvent(SDL_Event &e)
 {
 	// handles hovering, clicking of buttons
 	towerGroup->handleEvent(e);
+	critterGroup->handleEvent(e);
 	detailDisplay.handleButtonEvents(e);
-
-	bool buttonClick = false;
-
-	// Check if clicking on towers or critters
-	if (!buttonClick && e.type == SDL_EVENT_MOUSE_BUTTON_DOWN && e.button.button == SDL_BUTTON_LEFT)
-	{
-		bool critterClick = false;
-		bool towerClick = false;
-
-		// If not clicking on a tower, check for critters
-		if (!towerClick)
-		{
-			for (int i = 0; i < critterGroup->getCritters().size(); i++)
-			{
-				Critter &critter = critterGroup->getCritters()[i];
-				if (critter.isClicked())
-				{
-					detailDisplay.selectCritter(&critter);
-					critter.notify();
-					critterClick = true;
-					break;
-				}
-			}
-		}
-	}
 }
 
 /**
@@ -156,11 +135,11 @@ void MainGameState::update()
  */
 void MainGameState::render()
 {
-	map->drawOnTargetRect(gRenderer, map->getCurrentRenderRect());
+	map->drawOnTargetRect(map->getCurrentRenderRect());
 
 	detailDisplay.render();
 
-	critterGroup->render(gRenderer);
+	critterGroup->render();
 
 	towerGroup->render();
 

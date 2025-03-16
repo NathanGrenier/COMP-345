@@ -50,7 +50,7 @@ void TowerGroup::removeTower(Tower* tower) {
 }
 
 // Update all towers (e.g., shooting critters)
-void TowerGroup::update(float deltaTime, std::vector<Critter>& critters) {
+void TowerGroup::update(float deltaTime, std::vector<Critter*> critters) {
 	for (int i = 0; i < towers.size(); i++) {
 		// Find the target critter for the current tower
 		Critter* targettedCritter = towers[i]->findCritter(critters);
@@ -63,8 +63,8 @@ void TowerGroup::update(float deltaTime, std::vector<Critter>& critters) {
 			for (auto* projectile : towers[i]->getProjectiles()) {
 				for (auto critter : critters) {
 					if (projectile->checkCollision(critter)) {
-						critter.takeDamage();
-						critter.notify();
+						critter->takeDamage();
+						critter->notify();
 						projectile->destroy(); // Destroy the projectile on collision
 					}
 				}
@@ -223,7 +223,6 @@ void TowerGroup::handleEvent(SDL_Event& e) {
 	// Check if clicking on towers
 	if (!buttonClick && e.type == SDL_EVENT_MOUSE_BUTTON_DOWN && e.button.button == SDL_BUTTON_LEFT)
 	{
-		std::cout << "[DEBUG] Left mouse button clicked." << std::endl;
 		bool towerClick = false;
 
 		// If clicking on the current tower
@@ -231,7 +230,6 @@ void TowerGroup::handleEvent(SDL_Event& e) {
 		{
 			if (towers[i]->isClicked(1.5f))
 			{
-				std::cout << "[DEBUG] Clicked on tower index: " << i << std::endl;
 				detailDisplay.selectTower(towers[i]);
 				towers[i]->notify();
 				towerClick = true;
@@ -241,45 +239,6 @@ void TowerGroup::handleEvent(SDL_Event& e) {
 		// If not clicking on a tower or critter, proceed with placing a tower
 		if (!towerClick)
 		{
-			std::cout << "[DEBUG] No tower clicked. Attempting to place a new tower..." << std::endl;
-
-			// Check if placing down a tower on a valid, unoccupied wall cell
-			if (correctCell)
-			{
-				std::cout << "[DEBUG] Correct cell selected." << std::endl;
-			}
-			else
-			{
-				std::cout << "[DEBUG] Invalid cell selected." << std::endl;
-			}
-
-			if (towerBuySelect >= 0)
-			{
-				std::cout << "[DEBUG] Tower type selected for purchase: " << towerBuySelect << std::endl;
-			}
-			else
-			{
-				std::cout << "[DEBUG] No tower type selected." << std::endl;
-			}
-
-			if (map->wallCellDict.find(targetCell) != map->wallCellDict.end())
-			{
-				std::cout << "[DEBUG] Target cell exists in wallCellDict." << std::endl;
-			}
-			else
-			{
-				std::cout << "[DEBUG] Target cell does NOT exist in wallCellDict." << std::endl;
-			}
-
-			if (map->wallCellDict[targetCell])
-			{
-				std::cout << "[DEBUG] Target cell is already occupied." << std::endl;
-			}
-			else
-			{
-				std::cout << "[DEBUG] Target cell is NOT occupied." << std::endl;
-			}
-
 			if (correctCell && towerBuySelect >= 0 && map->wallCellDict.find(targetCell) != map->wallCellDict.end() && !map->wallCellDict[targetCell])
 			{
 				Tower* newTower = nullptr;
@@ -288,46 +247,28 @@ void TowerGroup::handleEvent(SDL_Event& e) {
 				switch (towerBuySelect)
 				{
 				case 0: // Buy standard tower
-					std::cout << "[DEBUG] Attempting to buy Standard Tower. Player gold: " << playerGold << std::endl;
 					if (playerGold >= STANDARD_TOWER_COST)
 					{
 						playerGold -= STANDARD_TOWER_COST;
 						newTower = new StandardTower(targetX, targetY, STANDARD_TOWER_COST);
-						std::cout << "[DEBUG] Standard Tower purchased successfully." << std::endl;
-					}
-					else
-					{
-						std::cout << "[DEBUG] Not enough gold for Standard Tower." << std::endl;
 					}
 					towerBuySelect = -1;
 					break;
 
 				case 1: // Buy rapid fire tower
-					std::cout << "[DEBUG] Attempting to buy Rapid Fire Tower. Player gold: " << playerGold << std::endl;
 					if (playerGold >= RAPID_FIRE_TOWER_COST)
 					{
 						playerGold -= RAPID_FIRE_TOWER_COST;
 						newTower = new RapidFireTower(targetX, targetY, RAPID_FIRE_TOWER_COST);
-						std::cout << "[DEBUG] Rapid Fire Tower purchased successfully." << std::endl;
-					}
-					else
-					{
-						std::cout << "[DEBUG] Not enough gold for Rapid Fire Tower." << std::endl;
 					}
 					towerBuySelect = -1;
 					break;
 
 				case 2: // Buy cannon tower
-					std::cout << "[DEBUG] Attempting to buy Cannon Tower. Player gold: " << playerGold << std::endl;
 					if (playerGold >= CANNON_TOWER_COST)
 					{
 						playerGold -= CANNON_TOWER_COST;
 						newTower = new CannonTower(targetX, targetY, CANNON_TOWER_COST);
-						std::cout << "[DEBUG] Cannon Tower purchased successfully." << std::endl;
-					}
-					else
-					{
-						std::cout << "[DEBUG] Not enough gold for Cannon Tower." << std::endl;
 					}
 					towerBuySelect = -1;
 					break;
@@ -336,31 +277,23 @@ void TowerGroup::handleEvent(SDL_Event& e) {
 				// If a new tower was successfully created, place it in the towers list
 				if (newTower != nullptr)
 				{
-					std::cout << "[DEBUG] New tower created and added to tower list." << std::endl;
 					towers.push_back(newTower);
 					detailDisplay.selectTower(newTower);
 
 					float scaleFactor = 1.5f;
 					float newSize = map->PIXELS_PER_CELL * scaleFactor;
 					float offset = (newSize - map->PIXELS_PER_CELL) / 2.0f;
-					newTower->setCurrentRenderedRect({ targetX - offset, targetY - offset, newSize, newSize });
+					newTower->setCurrentRenderRect({ targetX - offset, targetY - offset, newSize, newSize });
 
 					newTower->attach(detailDisplay.getTowerObserver());
 					newTower->notify();
 
 					// Mark the wall cell as occupied
-					std::cout << targetCell.x << " and " << targetCell.y << std::endl;
 					map->wallCellDict[targetCell] = true;
-					std::cout << "[DEBUG] Target cell marked as occupied." << std::endl;
-				}
-				else
-				{
-					std::cout << "[DEBUG] Tower creation failed (possibly due to insufficient funds)." << std::endl;
 				}
 			}
 			else
 			{
-				std::cout << "[DEBUG] Failed to place tower: Invalid conditions." << std::endl;
 				detailDisplay.selectTower(nullptr);
 			}
 

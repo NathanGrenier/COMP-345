@@ -67,11 +67,11 @@ Tower::Tower(float x, float y, int buyingCost, int refundValue, int range, int p
  * @return DummyCritter pointer for first DummyCritter that is in range of the Tower
  * @return nullptr if no DummyCritter is in range
  */
-Critter* Tower::findCritter(std::vector<Critter>& critters) {
+Critter* Tower::findCritter(std::vector<Critter*> critters) {
     // checks all critters in map
     for (int i = 0; i < critters.size(); i++) {
         if (isCritterInRange(critters[i])) { // Directly use critter[i] as it is an object
-            return &critters[i]; // Return a pointer to the critter
+            return critters[i]; // Return a pointer to the critter
         }
     }
 
@@ -87,19 +87,6 @@ Critter* Tower::findCritter(std::vector<Critter>& critters) {
 void Tower::clearProjectiles() 
 {
     projectiles.clear();
-}
-
-/**
- * @brief Generates Tower
- * 
- * @details Represents a Tower with a black square
- * Draws the square using SDL 
- */
-void Tower::generateTower()
-{
-    SDL_FRect fillRect = {x, y, currentRenderedRect.w, currentRenderedRect.w };
-    SDL_SetRenderDrawColor(gRenderer, 0x00, 0x00, 0x00, 0xFF);
-    SDL_RenderFillRect(gRenderer, &fillRect);
 }
 
 /**
@@ -224,8 +211,8 @@ bool Tower::isClicked(float scaleFactor) const
     SDL_GetMouseState(&mouseXPos, &mouseYPos);
 
     // Adjust width and height based on the scale factor
-    float scaledWidth = currentRenderedRect.w / scaleFactor;
-    float scaledHeight = currentRenderedRect.h / scaleFactor;
+    float scaledWidth = currentRenderRect.w / scaleFactor;
+    float scaledHeight = currentRenderRect.h / scaleFactor;
 
     // Check if the mouse position is inside the scaled area of the tower
     if (mouseXPos >= x && mouseXPos <= x + scaledWidth &&
@@ -245,7 +232,7 @@ bool Tower::isClicked(float scaleFactor) const
  * @return true if the DummyCritter is in range of the Tower and can be fired a Projectile at 
  * @return false if the DummyCritter is out of range of the Tower and cannot be damaged 
  */
-bool Tower::isCritterInRange(Critter critter) 
+bool Tower::isCritterInRange(Critter* critter) 
 {
     return range >= calcDistance(critter);
 }
@@ -260,15 +247,15 @@ bool Tower::isCritterInRange(Critter critter)
  * Takes Tower and DummyCritter size in account for distance
  * @return the absolute distance between the Tower and the DummyCritter
  */
-float Tower::calcDistance(Critter critter) 
+float Tower::calcDistance(Critter* critter) 
 {
     // considers Tower size
-    float posX = x + currentRenderedRect.w / 2;
-    float posY = y + currentRenderedRect.w / 2;
+    float posX = x + currentRenderRect.w / 2;
+    float posY = y + currentRenderRect.w / 2;
 
     // considers Critter size
-    float critterPosX = critter.getPosition().x;
-    float critterPosY = critter.getPosition().y;
+    float critterPosX = critter->getPosition().x;
+    float critterPosY = critter->getPosition().y;
 
     // distance in each direction
     float differenceX = posX - critterPosX;
@@ -282,12 +269,12 @@ float Tower::calcDistance(Critter critter)
  * @brief Mutator to sets the rectangle to render the Tower
  * @param targetRect new Rect to render the Tower through
  */
-void Tower::setCurrentRenderedRect(SDL_FRect targetRect) {
-    currentRenderedRect = targetRect;
+void Tower::setCurrentRenderRect(SDL_FRect targetRect) {
+    currentRenderRect = targetRect;
 }
 
-SDL_FRect Tower::getCurrentRenderedRect() {
-    return currentRenderedRect;
+SDL_FRect Tower::getCurrentRenderRect() {
+    return currentRenderRect;
 }
 
 /**
@@ -303,5 +290,5 @@ void Tower::setRotation(float angle) {
  */
 void Tower::render() {
     generateAllProjectiles();
-    towerTexture.render(currentRenderedRect.x, currentRenderedRect.y, nullptr, currentRenderedRect.w, currentRenderedRect.h, rotationAngle);
+    towerTexture.render(currentRenderRect.x, currentRenderRect.y, nullptr, currentRenderRect.w, currentRenderRect.h, rotationAngle);
 }

@@ -92,7 +92,7 @@ public:
     bool loadFromJson(const std::string& filePath);
     bool saveToJson(const std::string& filePath);
     void calculatePixelsPerCell();
-    void drawOnTargetRect(SDL_Renderer* renderer, const SDL_FRect& targetRect);
+    void drawOnTargetRect(const SDL_FRect& targetRect);
     SDL_FRect getCurrentRenderRect();
     void setCurrentRenderRect(SDL_FRect newTargetRect);
 
@@ -120,7 +120,7 @@ private:
     SDL_FRect currentRenderRect;
 
     bool isInbounds(int x, int y);
-    void drawCell(SDL_Renderer* renderer, const Cell& cell, const SDL_FRect& rect);
+    void drawCell(const Cell& cell, const SDL_FRect& rect);
     void calculateFlowField();
     void calculateDistances();
     void calculateFlowDirections();

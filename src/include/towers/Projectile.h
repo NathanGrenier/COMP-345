@@ -27,7 +27,7 @@ class Projectile
         void generateProjectile();
         bool isOutside();
 
-        bool checkCollision(Critter& critter);
+        bool checkCollision(Critter* critter);
         void updateAnimation(float deltaTime);
 
         void destroy();

@@ -85,7 +85,7 @@ Map::Map(int setCellCountX, int setCellCountY, std::string name) :
  * @param rect The rectangle where the cell should be rendered.
  * @details Selects the appropriate texture based on cell properties and draws it within the specified rectangle.
  */
-void Map::drawCell(SDL_Renderer* renderer, const Cell& cell, const SDL_FRect& rect) {
+void Map::drawCell(const Cell& cell, const SDL_FRect& rect) {
 	// Default texture is the empty cell.
 	SDL_Texture* textureSelected = textureCellEmpty;
 
@@ -135,7 +135,7 @@ void Map::drawCell(SDL_Renderer* renderer, const Cell& cell, const SDL_FRect& re
 
 	// Draw the selected texture within the specified rectangle
 	if (textureSelected != nullptr) {
-		SDL_RenderTexture(renderer, textureSelected, nullptr, &rect);
+		SDL_RenderTexture(gRenderer, textureSelected, nullptr, &rect);
 	}
 }
 
@@ -699,7 +699,7 @@ void Map::calculatePixelsPerCell() {
  *          Calculates the scaling factor and offset to center the map within the target rectangle.
  *          Updates the current rendering rectangle and draws each cell scaled to fit the target rectangle.
  */
-void Map::drawOnTargetRect(SDL_Renderer* renderer, const SDL_FRect& targetRect) {
+void Map::drawOnTargetRect(const SDL_FRect& targetRect) {
 	calculatePixelsPerCell();
 
 	// Calculate the scaling factor to fit the map within the target rectangle
@@ -732,7 +732,7 @@ void Map::drawOnTargetRect(SDL_Renderer* renderer, const SDL_FRect& targetRect) 
 		};
 
 		// Draw the cell using the existing drawCell method
-		drawCell(renderer, cell, cellRect);
+		drawCell(cell, cellRect);
 	}
 }
 

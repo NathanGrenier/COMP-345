@@ -171,7 +171,7 @@ void MapSelectState::render() {
 			SDL_FRect targetRect = { (kScreenWidth - 300) / 2.0f, (kScreenHeight - 300) / 2.0f - 50, 300, 300 };
 
 			// Ensure that the map can be drawn
-			mapIter->second.drawOnTargetRect(gRenderer, targetRect);
+			mapIter->second.drawOnTargetRect(targetRect);
 		} else {
 			// Map not found
 			std::cerr << "Error: Map '" << selectedMapFilePath << "' not found in available maps." << std::endl;
@@ -235,12 +235,8 @@ void MapSelectState::loadAvailableMaps() {
 		std::cerr << "Error loading maps: " << e.what() << std::endl;
 	}
 
-	if (availableMaps.empty()) {
-		std::cout << "No maps found in " << mapsDirectory << std::endl;
-	} else {
-		// Set the first map as the selected one
+	if (!availableMaps.empty()) {
 		selectedMapFilePath = availableMaps.begin()->first;
-		std::cout << "First map set as selected: " << availableMaps.begin()->first << std::endl;
 	}
 }
 

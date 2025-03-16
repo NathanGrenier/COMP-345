@@ -23,7 +23,7 @@ public:
 
     void addTower(Tower* tower);                    // Add a new tower to the group
     void removeTower(Tower* tower);                 // Remove a tower from the group
-    void update(float deltaTime, std::vector<Critter>& critters);  // Update towers to attack critters
+    void update(float deltaTime, std::vector<Critter*> critters);  // Update towers to attack critters
     void render();            // Render all towers
 
     std::vector<Tower*>& getTowers();               // Access all towers (modifiable)

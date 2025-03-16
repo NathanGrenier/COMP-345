@@ -107,8 +107,8 @@ int RapidFireTower::getMaxLevel()
 void RapidFireTower::shootProjectile(Critter* critter)
 {
     // Ensure we're using the center of the tower
-    float towerCenterX = x + currentRenderedRect.w / 2.0f;
-    float towerCenterY = y + currentRenderedRect.h / 2.0f;
+    float towerCenterX = x + currentRenderRect.w / 2.0f;
+    float towerCenterY = y + currentRenderRect.h / 2.0f;
 
     // Target the center of the critter
     Vector2D dirToTarget;
@@ -147,8 +147,8 @@ void RapidFireTower::shootProjectile(Critter* critter)
         if (shootingTimer <= 0)
         {
             // tower position with offset
-            float posX = currentRenderedRect.x + currentRenderedRect.w / 2;
-            float posY = currentRenderedRect.y + currentRenderedRect.w / 2;
+            float posX = currentRenderRect.x + currentRenderRect.w / 2;
+            float posY = currentRenderRect.y + currentRenderRect.w / 2;
 
             SDL_FRect currentCellSize = Global::currentMap->getPixelPerCell();
 
@@ -194,7 +194,7 @@ void RapidFireTower::shootProjectile(Critter* critter)
         projectiles[i]->move(5);
 
         // check if projectile hits critter
-        if (critter != nullptr && projectiles[i]->checkCollision(*critter))
+        if (critter != nullptr && projectiles[i]->checkCollision(critter))
         {
             projectiles.erase(projectiles.begin() + i);
             
