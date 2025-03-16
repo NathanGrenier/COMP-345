@@ -120,10 +120,9 @@ void RapidFireTower::shootProjectile(Critter* critter)
         return;
     }
 
-
     // tower position with offset
-    float posX = x + currentRenderedRect.w / 2;
-    float posY = y + currentRenderedRect.w / 2;
+    float posX = currentRenderedRect.x + currentRenderedRect.w / 2;
+    float posY = currentRenderedRect.y + currentRenderedRect.w / 2;
 
     SDL_FRect currentCellSize = Global::currentMap->getPixelPerCell();
 

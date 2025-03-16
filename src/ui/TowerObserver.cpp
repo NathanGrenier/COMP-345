@@ -154,10 +154,10 @@ Tower* TowerObserver::getCurrentTower()
  * @brief Handles button events for the buy and sell DetailButtons
  * @param e the SDL event to handle
  */
-void TowerObserver::handleButtonEvents(SDL_Event* e)
+void TowerObserver::handleButtonEvents(SDL_Event& e)
 {
-    (dynamic_cast<DetailButton*>(towerComponents[7]))->handleEvent(e);
-    (dynamic_cast<DetailButton*>(towerComponents[8]))->handleEvent(e);
+    (dynamic_cast<DetailButton*>(towerComponents[7]))->handleEvent(&e);
+    (dynamic_cast<DetailButton*>(towerComponents[8]))->handleEvent(&e);
 }
 
 /**

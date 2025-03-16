@@ -83,14 +83,20 @@ void CannonTower::shootProjectile(Critter* critter)
     // check if critter still exists
     if (!critter)
     {
-        // get rid of currently shot projectiles if no target
+        // call destroy on each projectile before clearing
+        for (auto& projectile : projectiles)
+        {
+            projectile->destroy(); // assuming destroy() is a method of Projectile
+        }
+
+        // clear the projectile list after destroying them
         projectiles.clear();
         return;
     }
 
     // tower position with offset
-    float posX = x + currentRenderedRect.w / 2;
-    float posY = y + currentRenderedRect.w / 2;
+    float posX = currentRenderedRect.x + currentRenderedRect.w / 2;
+    float posY = currentRenderedRect.y + currentRenderedRect.w / 2;
 
     SDL_FRect currentCellSize = Global::currentMap->getPixelPerCell();
     

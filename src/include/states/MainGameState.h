@@ -15,6 +15,7 @@
 #include <vector>
 #include <ui/DetailAttributeDisplay.h>
 #include <unordered_map>
+#include <towers/TowerGroup.h>
 
 class MainGameState : public GameState {
 public:
@@ -52,20 +53,8 @@ private:
 	Map* map = nullptr;
 
 	CritterGroup* critterGroup = nullptr;
-	std::vector<Tower*> towers; /** @brief vector containing towers */
+	TowerGroup* towerGroup = nullptr;
 
 	DetailAttributeDisplay detailDisplay; /** @brief ui display for details */
 	int towerBuySelect; /** @brief selected Tower as index */
-
-	Tower* dummyStandardTower; /** @brief dummy StandardTower for details before buying Tower */
-	Tower* dummyRapidFireTower; /** @brief dummy RapidFireTower for details before buying Tower */
-	Tower* dummyCannonTower; /** @brief dummy CannonTower for details before buying Tower */
-
-	const int STANDARD_TOWER_COST = 25; /** @brief gold cost for standard tower */
-	const int CANNON_TOWER_COST = 100; /** @brief gold cost for cannon tower */
-	const int RAPID_FIRE_TOWER_COST = 50; /** @brief gold cost for rapid fire tower */
-
-	std::unordered_map<Map::Cell, bool> wallCellDict;
-
-	Map::Cell targetCell;
 };

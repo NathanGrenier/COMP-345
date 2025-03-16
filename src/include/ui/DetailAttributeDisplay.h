@@ -36,7 +36,7 @@ public:
 	//bool isDisplayingCritter();
 
 	// for button hovers, clicks
-	void handleButtonEvents(SDL_Event* e);
+	void handleButtonEvents(SDL_Event& e);
 
 	// accessors
 	TowerObserver* getTowerObserver();

@@ -824,7 +824,7 @@ SDL_FRect Map::scaleCellRect(const Cell& cell, const SDL_FRect& targetRect) cons
  * @details Resets all cells, finds the spawner cell, and follows the flow directions to the target cell.
  *          Marks the cells on the path and returns the path as a vector of cells.
  */
-std::vector<Map::Cell> Map::walkPath() {
+std::vector<Cell> Map::walkPath() {
 	// Reset all cells
 	for (auto& cell : cells) {
 		cell.isOnPath = false;
@@ -940,3 +940,4 @@ void Map::setPath(std::string newPath) {
 std::string Map::getPath() {
 	return filePath;
 }
+

@@ -107,6 +107,8 @@ void CritterGroup::generateCritters(float deltaTime) {
  * @param deltaTime Time elapsed since the last frame.
  */
 void CritterGroup::update(float deltaTime) {
+	generateCritters(0.16f);
+
 	if (!waveInProgress) {
 		waveCountdown -= deltaTime;
 		if (waveCountdown <= 0.0f) {

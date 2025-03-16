@@ -107,12 +107,12 @@ bool DetailAttributeDisplay::isDisplayingTower()
  * Also calls the TowerObserver object's buttons' handleEvent(e) methods
  * @param e the event to be handled for the DetailButton
  */
-void DetailAttributeDisplay::handleButtonEvents(SDL_Event* e)
+void DetailAttributeDisplay::handleButtonEvents(SDL_Event& e)
 {
     // handles buy Tower buttons
-    (dynamic_cast<DetailButton*>(components[1]))->handleEvent(e);
-    (dynamic_cast<DetailButton*>(components[2]))->handleEvent(e);
-    (dynamic_cast<DetailButton*>(components[3]))->handleEvent(e);
+    (dynamic_cast<DetailButton*>(components[1]))->handleEvent(&e);
+    (dynamic_cast<DetailButton*>(components[2]))->handleEvent(&e);
+    (dynamic_cast<DetailButton*>(components[3]))->handleEvent(&e);
     
     // handles buttons from TowerObserver
     towerObserver->handleButtonEvents(e);

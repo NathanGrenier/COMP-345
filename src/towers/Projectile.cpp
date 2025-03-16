@@ -78,7 +78,7 @@ void Projectile::move(float xSpeed, float ySpeed)
 void Projectile::generateProjectile(float rotationAngle)
 {
     // Define the sprite clips for each frame (horizontal sprite sheet)
-    float frameWidth = projectileTexture.getWidth() / 4; // Assuming 4 frames horizontally
+    float frameWidth = projectileTexture.getWidth() / 4;
     float frameHeight = projectileTexture.getHeight();
 
     SDL_FRect spriteClips[] = {
@@ -99,8 +99,6 @@ void Projectile::generateProjectile(float rotationAngle)
     projectileTexture.render(x, y, &spriteClips[currentFrame], targetWidth, targetHeight, rotationAngle - 90);
 }
 
-
-
 void Projectile::updateAnimation(float deltaTime)
 {
     frameTimer += deltaTime;
@@ -115,7 +113,6 @@ void Projectile::destroy()
 {
     projectileTexture.destroy();
 }
-
 
 /**
  * @brief Checks if projectile is outside the map area
