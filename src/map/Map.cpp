@@ -736,6 +736,7 @@ void Map::drawOnTargetRect(SDL_Renderer* renderer, const SDL_FRect& targetRect) 
 	}
 }
 
+
 /**
  * @brief Updates the map dimensions and adjusts the cells accordingly.
  *

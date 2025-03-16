@@ -45,4 +45,6 @@ private:
     const int STANDARD_TOWER_COST = 25; /** @brief gold cost for standard tower */
     const int CANNON_TOWER_COST = 100; /** @brief gold cost for cannon tower */
     const int RAPID_FIRE_TOWER_COST = 50; /** @brief gold cost for rapid fire tower */
+
+    Cell targetCell;
 };

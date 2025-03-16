@@ -24,7 +24,7 @@ public:
 	void onFlowFieldChanged() override;
 
 	void move(float deltaTime, const std::vector<Critter>& critters, float spacing);  // Move critter towards exit
-	void takeDamage(int damage); // Apply damage from towers
+	void takeDamage(); // Apply damage from towers
 	bool isAlive() const;        // Check if critter is still alive
 	void stealGold(int& playerGold);  // Steal gold if critter reaches the exit
 

@@ -15,6 +15,10 @@
 #include <critter/Critter.h>
 #include <ui/LTexture.h>
 
+#ifndef M_PI
+#define M_PI 3.14159265358979323846
+#endif
+
  /** @brief ratio between original tower cost and refund value */
 const double REFUND_RATIO = 0.5;
 
@@ -35,6 +39,7 @@ public:
     int getPower();
     int getRateOfFire();
     int getLevel();
+    std::vector<Projectile *>& getProjectiles() { return projectiles; }
 
     virtual int getRefundValue();
     virtual int getUpgradeCost();

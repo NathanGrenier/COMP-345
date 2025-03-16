@@ -145,8 +145,8 @@ void Critter::move(float deltaTime, const std::vector<Critter>& critters, float 
  *
  * @param damage The amount of damage to apply.
  */
-void Critter::takeDamage(int damage) {
-	hitPoints -= damage;
+void Critter::takeDamage() {
+	hitPoints -= strength;
 }
 
 /**

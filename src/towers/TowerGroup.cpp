@@ -9,9 +9,6 @@
 #include <towers/CannonTower.h>
 #include <map/Map.h>
 
-#ifndef M_PI
-#define M_PI 3.14159265358979323846
-#endif
 #include <ui/DetailButton.h>
 
  // Constructor
@@ -54,64 +51,28 @@ void TowerGroup::removeTower(Tower* tower) {
 
 // Update all towers (e.g., shooting critters)
 void TowerGroup::update(float deltaTime, std::vector<Critter>& critters) {
-	for (int i = 0; i < towers.size(); i++)
-	{
-		if (critters.size())
-		{
-			Critter* targettedCritter = towers[i]->findCritter(critters);
+	for (int i = 0; i < towers.size(); i++) {
+		// Find the target critter for the current tower
+		Critter* targettedCritter = towers[i]->findCritter(critters);
 
-			if (targettedCritter)
-			{
-				// Ensure we're using the center of the tower
-				float towerCenterX = towers[i]->x + towers[i]->getCurrentRenderedRect().w / 2.0f;
-				float towerCenterY = towers[i]->y + towers[i]->getCurrentRenderedRect().h / 2.0f;
+		// Have the tower shoot a projectile at the targeted critter
+		towers[i]->shootProjectile(targettedCritter);
 
-				// Target the center of the critter
-				Vector2D dirToTarget;
-				dirToTarget.x = (targettedCritter->getPosition().x + targettedCritter->getPosition().w / 2.0f) - towerCenterX;
-				dirToTarget.y = (targettedCritter->getPosition().y + targettedCritter->getPosition().h / 2.0f) - towerCenterY;
-
-				// Calculate the raw angle
-				float angleRad = atan2(dirToTarget.y, dirToTarget.x);
-				float angleDeg = angleRad * (180.0f / M_PI);
-
-				// Adjust for sprite orientation (assuming "top" is default forward)
-				angleDeg += 90.0f;
-
-				// Smooth rotation logic
-				float currentRotation = towers[i]->getRotation();
-				float deltaAngle = angleDeg - currentRotation;
-
-				// Normalize delta to [-180, 180] for shortest path
-				while (deltaAngle > 180.0f) deltaAngle -= 360.0f;
-				while (deltaAngle < -180.0f) deltaAngle += 360.0f;
-
-				// Calculate max rotation step this frame
-				float maxRotationStep = 180.0f * 0.016f;
-
-				// Clamp rotation delta to avoid sudden jumps
-				if (deltaAngle > maxRotationStep) deltaAngle = maxRotationStep;
-				if (deltaAngle < -maxRotationStep) deltaAngle = -maxRotationStep;
-
-				// Apply smooth rotation
-				float newRotation = currentRotation + deltaAngle;
-				towers[i]->setRotation(newRotation);
-
-				// Shoot if aligned close enough (optional threshold)
-				if (fabs(deltaAngle) < 2.0f) // Optional: only shoot if facing roughly toward target
-					towers[i]->shootProjectile(targettedCritter);
+		if (critters.size()) {
+			// Now, check the projectiles fired by this tower for collisions
+			for (auto* projectile : towers[i]->getProjectiles()) {
+				for (auto critter : critters) {
+					if (projectile->checkCollision(critter)) {
+						critter.takeDamage();
+						critter.notify();
+						projectile->destroy(); // Destroy the projectile on collision
+					}
+				}
 			}
-			else
-			{
-				towers[i]->clearProjectiles();
-			}
-		}
-		else
-		{
-			towers[i]->clearProjectiles();
 		}
 	}
 }
+
 
 // Render all towers
 void TowerGroup::render() {
@@ -136,8 +97,6 @@ void TowerGroup::upgradeTower(Tower* tower) {
 }
 
 void TowerGroup::handleEvent(SDL_Event& e) {
-	Cell targetCell;
-
 	// resets tower buy selection
 	bool buttonClick = false;
 
@@ -168,22 +127,23 @@ void TowerGroup::handleEvent(SDL_Event& e) {
 	float targetX = (cellX * cellSize + currentRenderRect.x);
 	float targetY = (cellY * cellSize + currentRenderRect.y);
 
-	// Ensure valid index range
-	if (cellX < 0 || cellX >= map->cellCountX || cellY < 0 || cellY >= map->cellCountY)
-	{
-		correctCell = false;
-	}
-	else
-	{
-		// Compute the index for accessing the cell
-		int index = cellX + cellY * map->cellCountX;
-		targetCell = map->cells[index];
-		correctCell = true;
-	}
-
 	// if click happens
 	if (e.type == SDL_EVENT_MOUSE_BUTTON_DOWN && e.button.button == SDL_BUTTON_LEFT)
 	{
+		// Ensure valid index range
+		if (cellX < 0 || cellX >= map->cellCountX || cellY < 0 || cellY >= map->cellCountY)
+		{
+			correctCell = false;
+		}
+		else
+		{
+			// Compute the index for accessing the cell
+			int index = cellX + cellY * map->cellCountX;
+			targetCell = map->cells[index];
+			correctCell = true;
+
+		}
+
 		// checking if buying tower
 		std::vector<DetailDisplayComponent*> components = detailDisplay.getComponents();
 
@@ -202,15 +162,15 @@ void TowerGroup::handleEvent(SDL_Event& e) {
 					case 1:
 						detailDisplay.selectTower(dummyStandardTower);
 						dummyStandardTower->notify();
-						break;
+						return;
 					case 2:
 						detailDisplay.selectTower(dummyRapidFireTower);
 						dummyRapidFireTower->notify();
-						break;
+						return;
 					case 3:
 						detailDisplay.selectTower(dummyCannonTower);
 						dummyCannonTower->notify();
-						break;
+						return;
 					}
 				}
 			}
@@ -225,7 +185,6 @@ void TowerGroup::handleEvent(SDL_Event& e) {
 			// checks if enough coins for upgrade
 			if (playerGold >= upgradeCost)
 			{
-
 				// checks if tower is already max level
 				if (detailDisplay.getTowerObserver()->getCurrentTower()->upgrade())
 				{
@@ -233,6 +192,8 @@ void TowerGroup::handleEvent(SDL_Event& e) {
 				}
 
 				map->wallCellDict[targetCell] = false;
+
+				return;
 			}
 		}
 
@@ -247,23 +208,22 @@ void TowerGroup::handleEvent(SDL_Event& e) {
 			{
 				if (towers[i] == detailDisplay.getTowerObserver()->getCurrentTower())
 				{
-					int towerCellX = (towers[i]->x - currentRenderRect.x) / map->getPixelPerCell().w;
-					int towerCellY = (towers[i]->y - currentRenderRect.y) / map->getPixelPerCell().h;
-
-					int towerIndex = towerCellX + towerCellY * map->cellCountX;
-
 					towers.erase(towers.begin() + i);
+
 
 					map->wallCellDict[targetCell] = false;
 				}
 			}
 			detailDisplay.selectTower(nullptr);
+
+			return;
 		}
 	}
 
 	// Check if clicking on towers
 	if (!buttonClick && e.type == SDL_EVENT_MOUSE_BUTTON_DOWN && e.button.button == SDL_BUTTON_LEFT)
 	{
+		std::cout << "[DEBUG] Left mouse button clicked." << std::endl;
 		bool towerClick = false;
 
 		// If clicking on the current tower
@@ -271,6 +231,7 @@ void TowerGroup::handleEvent(SDL_Event& e) {
 		{
 			if (towers[i]->isClicked(1.5f))
 			{
+				std::cout << "[DEBUG] Clicked on tower index: " << i << std::endl;
 				detailDisplay.selectTower(towers[i]);
 				towers[i]->notify();
 				towerClick = true;
@@ -280,7 +241,45 @@ void TowerGroup::handleEvent(SDL_Event& e) {
 		// If not clicking on a tower or critter, proceed with placing a tower
 		if (!towerClick)
 		{
-			// If placing down a tower on a valid, unoccupied wall cell
+			std::cout << "[DEBUG] No tower clicked. Attempting to place a new tower..." << std::endl;
+
+			// Check if placing down a tower on a valid, unoccupied wall cell
+			if (correctCell)
+			{
+				std::cout << "[DEBUG] Correct cell selected." << std::endl;
+			}
+			else
+			{
+				std::cout << "[DEBUG] Invalid cell selected." << std::endl;
+			}
+
+			if (towerBuySelect >= 0)
+			{
+				std::cout << "[DEBUG] Tower type selected for purchase: " << towerBuySelect << std::endl;
+			}
+			else
+			{
+				std::cout << "[DEBUG] No tower type selected." << std::endl;
+			}
+
+			if (map->wallCellDict.find(targetCell) != map->wallCellDict.end())
+			{
+				std::cout << "[DEBUG] Target cell exists in wallCellDict." << std::endl;
+			}
+			else
+			{
+				std::cout << "[DEBUG] Target cell does NOT exist in wallCellDict." << std::endl;
+			}
+
+			if (map->wallCellDict[targetCell])
+			{
+				std::cout << "[DEBUG] Target cell is already occupied." << std::endl;
+			}
+			else
+			{
+				std::cout << "[DEBUG] Target cell is NOT occupied." << std::endl;
+			}
+
 			if (correctCell && towerBuySelect >= 0 && map->wallCellDict.find(targetCell) != map->wallCellDict.end() && !map->wallCellDict[targetCell])
 			{
 				Tower* newTower = nullptr;
@@ -289,26 +288,46 @@ void TowerGroup::handleEvent(SDL_Event& e) {
 				switch (towerBuySelect)
 				{
 				case 0: // Buy standard tower
+					std::cout << "[DEBUG] Attempting to buy Standard Tower. Player gold: " << playerGold << std::endl;
 					if (playerGold >= STANDARD_TOWER_COST)
 					{
 						playerGold -= STANDARD_TOWER_COST;
 						newTower = new StandardTower(targetX, targetY, STANDARD_TOWER_COST);
+						std::cout << "[DEBUG] Standard Tower purchased successfully." << std::endl;
+					}
+					else
+					{
+						std::cout << "[DEBUG] Not enough gold for Standard Tower." << std::endl;
 					}
 					towerBuySelect = -1;
 					break;
+
 				case 1: // Buy rapid fire tower
+					std::cout << "[DEBUG] Attempting to buy Rapid Fire Tower. Player gold: " << playerGold << std::endl;
 					if (playerGold >= RAPID_FIRE_TOWER_COST)
 					{
 						playerGold -= RAPID_FIRE_TOWER_COST;
 						newTower = new RapidFireTower(targetX, targetY, RAPID_FIRE_TOWER_COST);
+						std::cout << "[DEBUG] Rapid Fire Tower purchased successfully." << std::endl;
+					}
+					else
+					{
+						std::cout << "[DEBUG] Not enough gold for Rapid Fire Tower." << std::endl;
 					}
 					towerBuySelect = -1;
 					break;
+
 				case 2: // Buy cannon tower
+					std::cout << "[DEBUG] Attempting to buy Cannon Tower. Player gold: " << playerGold << std::endl;
 					if (playerGold >= CANNON_TOWER_COST)
 					{
 						playerGold -= CANNON_TOWER_COST;
 						newTower = new CannonTower(targetX, targetY, CANNON_TOWER_COST);
+						std::cout << "[DEBUG] Cannon Tower purchased successfully." << std::endl;
+					}
+					else
+					{
+						std::cout << "[DEBUG] Not enough gold for Cannon Tower." << std::endl;
 					}
 					towerBuySelect = -1;
 					break;
@@ -317,6 +336,7 @@ void TowerGroup::handleEvent(SDL_Event& e) {
 				// If a new tower was successfully created, place it in the towers list
 				if (newTower != nullptr)
 				{
+					std::cout << "[DEBUG] New tower created and added to tower list." << std::endl;
 					towers.push_back(newTower);
 					detailDisplay.selectTower(newTower);
 
@@ -329,13 +349,22 @@ void TowerGroup::handleEvent(SDL_Event& e) {
 					newTower->notify();
 
 					// Mark the wall cell as occupied
+					std::cout << targetCell.x << " and " << targetCell.y << std::endl;
 					map->wallCellDict[targetCell] = true;
+					std::cout << "[DEBUG] Target cell marked as occupied." << std::endl;
+				}
+				else
+				{
+					std::cout << "[DEBUG] Tower creation failed (possibly due to insufficient funds)." << std::endl;
 				}
 			}
 			else
 			{
+				std::cout << "[DEBUG] Failed to place tower: Invalid conditions." << std::endl;
 				detailDisplay.selectTower(nullptr);
 			}
+
+			return;
 		}
 	}
 }

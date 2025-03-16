@@ -58,7 +58,7 @@ void CritterGroup::generateCritters(float deltaTime) {
 		int level = waveLevel;
 		float speed = 75.0f;
 		int hitPoints = 10 + level * 2;
-		int strength = level * 5;
+		int strength = level * 2;
 		int reward = level * 10;
 
 		SDL_FRect currentCellSize = Global::currentMap->getPixelPerCell();

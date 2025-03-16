@@ -111,7 +111,7 @@ void Tower::generateAllProjectiles()
 {
     for (int i = 0; i < projectiles.size(); i++) {
         projectiles[i]->updateAnimation(0.016f);
-        projectiles[i]->generateProjectile(rotationAngle);
+        projectiles[i]->generateProjectile();
     }
 }
 
@@ -302,6 +302,6 @@ void Tower::setRotation(float angle) {
  * @brief Renders the Towers as an image
  */
 void Tower::render() {
-    towerTexture.render(currentRenderedRect.x, currentRenderedRect.y, nullptr, currentRenderedRect.w, currentRenderedRect.h, rotationAngle);
     generateAllProjectiles();
+    towerTexture.render(currentRenderedRect.x, currentRenderedRect.y, nullptr, currentRenderedRect.w, currentRenderedRect.h, rotationAngle);
 }
