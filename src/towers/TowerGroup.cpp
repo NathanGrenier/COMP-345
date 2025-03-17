@@ -15,9 +15,9 @@
 TowerGroup::TowerGroup(int& playerGold, Map* map, DetailAttributeDisplay& detailDisplay)
     : playerGold(playerGold), map(map), detailDisplay(detailDisplay) {
 	// creating dummy Towers
-	dummyStandardTower = new StandardTower(0, 0, 0, 12);
-	dummyRapidFireTower = new RapidFireTower(0, 0, 0, 25);
-	dummyCannonTower = new CannonTower(0, 0, 50);
+	dummyStandardTower = new StandardTower(0, 0, 0, 0, 12);
+	dummyRapidFireTower = new RapidFireTower(0, 0, 0, 0, 25);
+	dummyCannonTower = new CannonTower(0, 0, 0, 50);
 
 	TowerObserver* towerObserver = detailDisplay.getTowerObserver();
 
@@ -108,41 +108,52 @@ void TowerGroup::handleEvent(SDL_Event& e) {
 	SDL_FRect currentRenderRect = map->getCurrentRenderRect();
 
 	// Calculate scaling factor
-	float mapWidth = map->cellCountX * map->PIXELS_PER_CELL;
-	float mapHeight = map->cellCountY * map->PIXELS_PER_CELL;
-	float scaleX = currentRenderRect.w / mapWidth;
-	float scaleY = currentRenderRect.h / mapHeight;
-	float scale = std::min(scaleX, scaleY);
+	float mapWidth = map->cellCountX * map->getPixelPerCell();
+	float mapHeight = map->cellCountY * map->getPixelPerCell();
 
 	// Convert mouse position
 	Vector2D mousePosition(
-		(mouseX - currentRenderRect.x) / scale / map->PIXELS_PER_CELL,
-		(mouseY - currentRenderRect.y) / scale / map->PIXELS_PER_CELL);
+		(mouseX - currentRenderRect.x) / map->getPixelPerCell(),
+		(mouseY - currentRenderRect.y) / map->getPixelPerCell());
 
 	// Convert mouse position to cell coordinates (integers)
 	int cellX = static_cast<int>(mousePosition.x);
 	int cellY = static_cast<int>(mousePosition.y);
 
-	float cellSize = map->PIXELS_PER_CELL;
-	float targetX = (cellX * cellSize + currentRenderRect.x);
-	float targetY = (cellY * cellSize + currentRenderRect.y);
+	// Ensure valid index range
+	if (cellX < 0 || cellX >= map->cellCountX || cellY < 0 || cellY >= map->cellCountY)
+	{
+		correctCell = false;
+	}
+	else
+	{
+		// Compute the index for accessing the cell
+		int index = cellX + cellY * map->cellCountX;
+		targetCell = map->cells[index];
+		correctCell = true;
+	}
+
+	// Snap the target position to the grid cell
+	float cellSize = map->getPixelPerCell();
+	float targetX = cellX * cellSize + currentRenderRect.x;
+	float targetY = cellY * cellSize + currentRenderRect.y;
+
+	// Ensure valid index range
+	if (cellX < 0 || cellX >= map->cellCountX || cellY < 0 || cellY >= map->cellCountY)
+	{
+		correctCell = false;
+	}
+	else
+	{
+		// Compute the index for accessing the cell
+		int index = cellX + cellY * map->cellCountX;
+		targetCell = map->cells[index];
+		correctCell = true;
+	}
 
 	// if click happens
 	if (e.type == SDL_EVENT_MOUSE_BUTTON_DOWN && e.button.button == SDL_BUTTON_LEFT)
 	{
-		// Ensure valid index range
-		if (cellX < 0 || cellX >= map->cellCountX || cellY < 0 || cellY >= map->cellCountY)
-		{
-			correctCell = false;
-		}
-		else
-		{
-			// Compute the index for accessing the cell
-			int index = cellX + cellY * map->cellCountX;
-			targetCell = map->cells[index];
-			correctCell = true;
-
-		}
 
 		// checking if buying tower
 		std::vector<DetailDisplayComponent*> components = detailDisplay.getComponents();
@@ -250,7 +261,7 @@ void TowerGroup::handleEvent(SDL_Event& e) {
 					if (playerGold >= STANDARD_TOWER_COST)
 					{
 						playerGold -= STANDARD_TOWER_COST;
-						newTower = new StandardTower(targetX, targetY, STANDARD_TOWER_COST);
+						newTower = new StandardTower(targetX, targetY, map->getPixelPerCell(), STANDARD_TOWER_COST);
 					}
 					towerBuySelect = -1;
 					break;
@@ -259,7 +270,7 @@ void TowerGroup::handleEvent(SDL_Event& e) {
 					if (playerGold >= RAPID_FIRE_TOWER_COST)
 					{
 						playerGold -= RAPID_FIRE_TOWER_COST;
-						newTower = new RapidFireTower(targetX, targetY, RAPID_FIRE_TOWER_COST);
+						newTower = new RapidFireTower(targetX, targetY, map->getPixelPerCell(), RAPID_FIRE_TOWER_COST);
 					}
 					towerBuySelect = -1;
 					break;
@@ -268,7 +279,7 @@ void TowerGroup::handleEvent(SDL_Event& e) {
 					if (playerGold >= CANNON_TOWER_COST)
 					{
 						playerGold -= CANNON_TOWER_COST;
-						newTower = new CannonTower(targetX, targetY, CANNON_TOWER_COST);
+						newTower = new CannonTower(targetX, targetY, map->getPixelPerCell(), CANNON_TOWER_COST);
 					}
 					towerBuySelect = -1;
 					break;
@@ -281,9 +292,8 @@ void TowerGroup::handleEvent(SDL_Event& e) {
 					detailDisplay.selectTower(newTower);
 
 					float scaleFactor = 1.5f;
-					float newSize = map->PIXELS_PER_CELL * scaleFactor;
-					float offset = (newSize - map->PIXELS_PER_CELL) / 2.0f;
-					newTower->setCurrentRenderRect({ targetX - offset, targetY - offset, newSize, newSize });
+					float newSize = map->getPixelPerCell() * scaleFactor;
+					newTower->setCurrentRenderRect(targetX, targetY, newSize, newSize);
 
 					newTower->attach(detailDisplay.getTowerObserver());
 					newTower->notify();

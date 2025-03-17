@@ -25,7 +25,7 @@ bool MapEditorState::enter() {
 	} else {
 		mMessageTexture.loadFromFile("assets/ui/MapEditing.png");
 	}
-	map = Global::currentMap;
+	map = new Map(*Global::currentMap);
 	originalName = map->getName();
 	map->setFlowFieldVisibility(true);
 
@@ -114,7 +114,7 @@ bool MapEditorState::enter() {
 
 
 bool MapEditorState::exit() {
-	Global::currentMap = nullptr;
+	delete map;
 	map = nullptr;
 
 	backButton.destroy();
@@ -235,16 +235,16 @@ void MapEditorState::handleEvent(SDL_Event& e) {
 	SDL_GetMouseState(&mouseX, &mouseY);
 
 	// Calculate scaling factor
-	float mapWidth = map->cellCountX * map->PIXELS_PER_CELL;
-	float mapHeight = map->cellCountY * map->PIXELS_PER_CELL;
+	float mapWidth = map->cellCountX * map->getPixelPerCell();
+	float mapHeight = map->cellCountY * map->getPixelPerCell();
 	float scaleX = currentRenderRect.w / mapWidth;
 	float scaleY = currentRenderRect.h / mapHeight;
 	float scale = std::min(scaleX, scaleY);
 
 	// Convert mouse position
 	Vector2D mousePosition(
-		(mouseX - currentRenderRect.x) / scale / map->PIXELS_PER_CELL,
-		(mouseY - currentRenderRect.y) / scale / map->PIXELS_PER_CELL
+		(mouseX - currentRenderRect.x) / scale / map->getPixelPerCell(),
+		(mouseY - currentRenderRect.y) / scale / map->getPixelPerCell()
 	);
 
 	if (map != nullptr) {

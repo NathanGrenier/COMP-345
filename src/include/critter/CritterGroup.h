@@ -33,6 +33,7 @@ private:
 	float spawnTimer = 0.0f;
 	const float spawnInterval = 1.0f;
 	int crittersSpawned = 0;
+	int aliveCritters = 0;
 	bool waveInProgress = true;
 	float waveCountdown = 3.0f;
 	int critterIndex = 0;

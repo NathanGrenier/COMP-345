@@ -100,6 +100,9 @@ bool MainGameState::exit()
 		map = nullptr;
 	}
 
+	playerGold = 999;
+	waveLevel = 0;
+
 	return true;
 }
 
@@ -135,7 +138,19 @@ void MainGameState::update()
  */
 void MainGameState::render()
 {
-	map->drawOnTargetRect(map->getCurrentRenderRect());
+	SDL_FRect backRect = { 0, 0, static_cast<int>(Global::kScreenWidth - Global::viewerWidth), static_cast<int>(Global::headerHeight) };
+
+	// Set the renderer color for the outline
+	SDL_SetRenderDrawColor(gRenderer, 168, 168, 168, 255); // Gray color for outline
+	SDL_RenderFillRect(gRenderer, &backRect); // Draw box outline
+
+	SDL_FRect foreRect = { 4, 4, static_cast<int>(Global::kScreenWidth - Global::viewerWidth - 5), static_cast<int>(Global::headerHeight - 8) };
+
+	// Set the renderer color for the gray box
+	SDL_SetRenderDrawColor(gRenderer, 202, 202, 202, 255); // Gray color for box
+	SDL_RenderFillRect(gRenderer, &foreRect); // Draw filled box
+
+	map->drawOnTargetRect(Global::mapViewRect);
 
 	detailDisplay.render();
 
@@ -144,12 +159,12 @@ void MainGameState::render()
 	towerGroup->render();
 
 	// Render player gold
+	int displayedGold = std::min(playerGold, 9999);
 	renderText("Gold: " + std::to_string(playerGold), 10.0f, 10.0f);
 
 	// Render wave level
 	std::string waveText = "Wave: " + std::to_string(waveLevel);
-	float waveX = (Global::kScreenWidth - (waveText.length() * 10.0f)) / 2.0f;
-	renderText(waveText, waveX, 10.0f);
+	renderText(waveText, 10.0f, 50.0f);
 }
 
 /**
@@ -161,7 +176,7 @@ void MainGameState::render()
  */
 void MainGameState::renderText(const std::string &text, float x, float y)
 {
-	SDL_Color textColor = {0, 0, 0, 255};
+	SDL_Color textColor = { 255, 117, 152, 255 };
 	LTexture textTexture;
 	textTexture.loadFromRenderedText(text, textColor);
 	textTexture.render(x, y);

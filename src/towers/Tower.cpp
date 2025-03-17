@@ -14,9 +14,9 @@
  * @brief Default Constructor, setting all values to 0
  */
 Tower::Tower() 
-    : x(0), y(0), buyingCost(0), refundValue(0), range(0), power(0), rateOfFire(0), level(0), shootingTimer(0), upgradeValues{ 0, 0, 0}
+    : buyingCost(0), refundValue(0), range(0), power(0), rateOfFire(0), level(0), shootingTimer(0), upgradeValues{ 0, 0, 0}
 {
-
+    currentRenderRect = { 0, 0, 0, 0 };
 }
 
 /**
@@ -32,10 +32,11 @@ Tower::Tower()
  * Sets Tower level to 1 and shootingTimer to 0 to immediately start firing once placed
  * Uses default refund value ratio in Tower class 
  */
-Tower::Tower(float x, float y, int buyingCost, int range, int power, int rateOfFire)
-    : x(x), y(y), buyingCost(buyingCost), range(range), power(power), rateOfFire(rateOfFire), level(1), shootingTimer(0), upgradeValues{ 0, 0, 0 }
+Tower::Tower(float x, float y, float width, int buyingCost, int range, int power, int rateOfFire)
+    : buyingCost(buyingCost), range(range), power(power), rateOfFire(rateOfFire), level(1), shootingTimer(0), upgradeValues{ 0, 0, 0 }
 {
     refundValue = static_cast<int>(REFUND_RATIO * buyingCost);
+    currentRenderRect = { x, y, width, width };
 }
 
 /**
@@ -51,10 +52,10 @@ Tower::Tower(float x, float y, int buyingCost, int range, int power, int rateOfF
  * @details Constructor for Tower with x, y position, buying cost, refund value, range, power, and rate of fire 
  * Sets Tower level to 1 and shootingTimer to 0 to immediately start firing once placed
  */
-Tower::Tower(float x, float y, int buyingCost, int refundValue, int range, int power, int rateOfFire)
-    : x(x), y(y), buyingCost(buyingCost), refundValue(refundValue), range(range), power(power), rateOfFire(rateOfFire), level(1), shootingTimer(0), upgradeValues{ 0, 0, 0 }
+Tower::Tower(float x, float y, float width, int buyingCost, int refundValue, int range, int power, int rateOfFire)
+    : buyingCost(buyingCost), refundValue(refundValue), range(range), power(power), rateOfFire(rateOfFire), level(1), shootingTimer(0), upgradeValues{ 0, 0, 0 }
 {
-    
+    currentRenderRect = { x, y, width, width };
 }
 
 /**
@@ -215,8 +216,8 @@ bool Tower::isClicked(float scaleFactor) const
     float scaledHeight = currentRenderRect.h / scaleFactor;
 
     // Check if the mouse position is inside the scaled area of the tower
-    if (mouseXPos >= x && mouseXPos <= x + scaledWidth &&
-        mouseYPos >= y && mouseYPos <= y + scaledHeight)
+    if (mouseXPos >= currentRenderRect.x && mouseXPos <= currentRenderRect.x + scaledWidth &&
+        mouseYPos >= currentRenderRect.y && mouseYPos <= currentRenderRect.y + scaledHeight)
     {
         return true;
     }
@@ -250,8 +251,8 @@ bool Tower::isCritterInRange(Critter* critter)
 float Tower::calcDistance(Critter* critter) 
 {
     // considers Tower size
-    float posX = x + currentRenderRect.w / 2;
-    float posY = y + currentRenderRect.w / 2;
+    float posX = currentRenderRect.x + currentRenderRect.w / 2;
+    float posY = currentRenderRect.y + currentRenderRect.w / 2;
 
     // considers Critter size
     float critterPosX = critter->getPosition().x;
@@ -269,9 +270,20 @@ float Tower::calcDistance(Critter* critter)
  * @brief Mutator to sets the rectangle to render the Tower
  * @param targetRect new Rect to render the Tower through
  */
-void Tower::setCurrentRenderRect(SDL_FRect targetRect) {
-    currentRenderRect = targetRect;
+void Tower::setCurrentRenderRect(float originalX, float originalY, float w, float h) {
+    // Calculate the center of the original position
+    float centerX = originalX + currentRenderRect.w / 2.0f;
+    float centerY = originalY + currentRenderRect.h / 2.0f;
+
+    // Set the new width and height
+    currentRenderRect.w = w;
+    currentRenderRect.h = h;
+
+    // Recalculate x and y to keep the same center based on the original X and Y
+    currentRenderRect.x = centerX - w / 2.0f;
+    currentRenderRect.y = centerY - h / 2.0f;
 }
+
 
 SDL_FRect Tower::getCurrentRenderRect() {
     return currentRenderRect;
@@ -289,6 +301,10 @@ void Tower::setRotation(float angle) {
  * @brief Renders the Towers as an image
  */
 void Tower::render() {
+    // Generate projectiles
     generateAllProjectiles();
+
+    // Render the tower texture
     towerTexture.render(currentRenderRect.x, currentRenderRect.y, nullptr, currentRenderRect.w, currentRenderRect.h, rotationAngle);
 }
+

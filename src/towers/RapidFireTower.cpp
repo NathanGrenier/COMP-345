@@ -31,8 +31,8 @@ RapidFireTower::RapidFireTower() : Tower(), fireBreak(0), fireBreakRate(0), burs
  * Sets the fireBreak to 0 to start shooting immediately and fireBreakRate to 5
  * Sets the burstSize to 50 for the interval for shooting, and the burstCount to 0
  */
-RapidFireTower::RapidFireTower(float x, float y, int buyingCost)
-    : fireBreak(0), fireBreakRate(5), burstSize(50), burstCount(0), Tower(x, y, buyingCost, RAPID_RANGE, RAPID_POWER, RAPID_RATE_OF_FIRE)
+RapidFireTower::RapidFireTower(float x, float y, float width, int buyingCost)
+    : fireBreak(0), fireBreakRate(5), burstSize(50), burstCount(0), Tower(x, y, width, buyingCost, RAPID_RANGE, RAPID_POWER, RAPID_RATE_OF_FIRE)
 {
     towerTexture.loadFromFile("assets/tower/RapidFireTower.png");
     upgradeValues.rangeIncrease = 10;
@@ -52,8 +52,8 @@ RapidFireTower::RapidFireTower(float x, float y, int buyingCost)
  * Sets the fireBreak to 0 to start shooting immediately and fireBreakRate to 5
  * Sets the burstSize to 50 for the interval for shooting, and the burstCount to 0
  */
-RapidFireTower::RapidFireTower(float x, float y, int buyingCost, int refundValue)
-    : fireBreak(0), fireBreakRate(5), burstSize(50), burstCount(0), Tower(x, y, buyingCost, refundValue, RAPID_RANGE, RAPID_POWER, RAPID_RATE_OF_FIRE)
+RapidFireTower::RapidFireTower(float x, float y, float width, int buyingCost, int refundValue)
+    : fireBreak(0), fireBreakRate(5), burstSize(50), burstCount(0), Tower(x, y, width, buyingCost, refundValue, RAPID_RANGE, RAPID_POWER, RAPID_RATE_OF_FIRE)
 {
     towerTexture.loadFromFile("assets/tower/RapidFireTower.png");
     upgradeValues.rangeIncrease = 10;
@@ -107,8 +107,8 @@ int RapidFireTower::getMaxLevel()
 void RapidFireTower::shootProjectile(Critter* critter)
 {
     // Ensure we're using the center of the tower
-    float towerCenterX = x + currentRenderRect.w / 2.0f;
-    float towerCenterY = y + currentRenderRect.h / 2.0f;
+    float towerCenterX = currentRenderRect.x + currentRenderRect.w / 2.0f;
+    float towerCenterY = currentRenderRect.y + currentRenderRect.h / 2.0f;
 
     // Target the center of the critter
     Vector2D dirToTarget;
@@ -150,11 +150,11 @@ void RapidFireTower::shootProjectile(Critter* critter)
             float posX = currentRenderRect.x + currentRenderRect.w / 2;
             float posY = currentRenderRect.y + currentRenderRect.w / 2;
 
-            SDL_FRect currentCellSize = Global::currentMap->getPixelPerCell();
+            float currentCellSize = Global::currentMap->getPixelPerCell();
 
             // critter position with offset
-            float critterPosX = critter->getPosition().x + Critter::CRITTER_WIDTH_SCALE * currentCellSize.w / 2;
-            float critterPosY = critter->getPosition().y + Critter::CRITTER_HEIGHT_SCALE * currentCellSize.h / 2;
+            float critterPosX = critter->getPosition().x + Critter::CRITTER_WIDTH_SCALE * currentCellSize / 2;
+            float critterPosY = critter->getPosition().y + Critter::CRITTER_HEIGHT_SCALE * currentCellSize / 2;
 
             // differences in position from tower to cannon
             float differenceX = posX - critterPosX;

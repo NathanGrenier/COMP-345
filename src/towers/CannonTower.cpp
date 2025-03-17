@@ -30,8 +30,8 @@ CannonTower::CannonTower() : Tower()
  * Uses default range, power, and rate of fire for CannonTower
  * Uses default refund value ratio in Tower class 
  */
-CannonTower::CannonTower(float x, float y, int buyingCost)
-    : Tower(x, y, buyingCost, CANNON_RANGE, CANNON_POWER, CANNON_RATE_OF_FIRE)
+CannonTower::CannonTower(float x, float y, float width, int buyingCost)
+    : Tower(x, y, width, buyingCost, CANNON_RANGE, CANNON_POWER, CANNON_RATE_OF_FIRE)
 {
     towerTexture.loadFromFile("assets/tower/CannonTower.png");
     upgradeValues.rangeIncrease = 50;
@@ -49,8 +49,8 @@ CannonTower::CannonTower(float x, float y, int buyingCost)
  * @details Constructor for CannonTower with x, y position, buying cost, and refund value
  * Uses default range, power, and rate of fire for CannonTower
  */
-CannonTower::CannonTower(float x, float y, int buyingCost, int refundValue)
-    : Tower(x, y, buyingCost, refundValue, CANNON_RANGE, CANNON_POWER, CANNON_RATE_OF_FIRE)
+CannonTower::CannonTower(float x, float y, float width, int buyingCost, int refundValue)
+    : Tower(x, y, width, buyingCost, refundValue, CANNON_RANGE, CANNON_POWER, CANNON_RATE_OF_FIRE)
 {
     towerTexture.loadFromFile("assets/tower/CannonTower.png");
     upgradeValues.rangeIncrease = 50;
@@ -81,8 +81,8 @@ int CannonTower::getMaxLevel()
 void CannonTower::shootProjectile(Critter* critter)
 {
     // Ensure we're using the center of the tower
-    float towerCenterX = x + currentRenderRect.w / 2.0f;
-    float towerCenterY = y + currentRenderRect.h / 2.0f;
+    float towerCenterX = currentRenderRect.x + currentRenderRect.w / 2.0f;
+    float towerCenterY = currentRenderRect.y + currentRenderRect.h / 2.0f;
 
     // Target the center of the critter
     Vector2D dirToTarget;
@@ -121,11 +121,11 @@ void CannonTower::shootProjectile(Critter* critter)
         float posX = currentRenderRect.x + currentRenderRect.w / 2;
         float posY = currentRenderRect.y + currentRenderRect.w / 2;
 
-        SDL_FRect currentCellSize = Global::currentMap->getPixelPerCell();
+        float currentCellSize = Global::currentMap->getPixelPerCell();
 
         // critter position with offset
-        float critterPosX = critter->getPosition().x + Critter::CRITTER_WIDTH_SCALE * currentCellSize.w / 2;
-        float critterPosY = critter->getPosition().y + Critter::CRITTER_HEIGHT_SCALE * currentCellSize.h / 2;
+        float critterPosX = critter->getPosition().x + Critter::CRITTER_WIDTH_SCALE * currentCellSize / 2;
+        float critterPosY = critter->getPosition().y + Critter::CRITTER_HEIGHT_SCALE * currentCellSize / 2;
 
         // differences in position from tower to cannon
         float differenceX = posX - critterPosX;

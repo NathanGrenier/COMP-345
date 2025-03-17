@@ -29,8 +29,8 @@ public:
     static const int REFUND_PER_UPGRADE = 50; /** @brief additional gold refunded per level */
 
     Tower();
-    Tower(float x, float y, int buyingCost, int range, int power, int rateOfFire);
-    Tower(float x, float y, int buyingCost, int refundValue, int range, int power, int rateOfFire);
+    Tower(float x, float y, float width, int buyingCost, int range, int power, int rateOfFire);
+    Tower(float x, float y, float width, int buyingCost, int refundValue, int range, int power, int rateOfFire);
     
     virtual void generateAllProjectiles();
     
@@ -63,11 +63,8 @@ public:
     void render();
     void setRotation(float angle);
     float getRotation() const { return rotationAngle; }
-    void setCurrentRenderRect(SDL_FRect targetRect);
+    void setCurrentRenderRect(float originalX, float originalY, float w, float h);
     SDL_FRect getCurrentRenderRect();
-
-    float x; /** @brief x position for projectile */
-    float y; /** @brief y position for projectile */
 
 protected:
     SDL_FRect currentRenderRect;

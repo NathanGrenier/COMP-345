@@ -65,13 +65,13 @@ void CritterGroup::generateCritters(float deltaTime) {
 		int strength = level * 2;
 		int reward = level * 10;
 
-		SDL_FRect currentCellSize = Global::currentMap->getPixelPerCell();
+		float currentCellSize = Global::currentMap->getPixelPerCell();
 
 		SDL_FRect spawnCenter = {
-			startPosition.x + (startPosition.w / 2.0f) - (currentCellSize.w * Critter::CRITTER_WIDTH_SCALE / 2.0f),  // Adjust for half of critter width
-			startPosition.y + (startPosition.h / 2.0f) - (currentCellSize.h * Critter::CRITTER_HEIGHT_SCALE / 2.0f),  // Adjust for half of critter height
-			currentCellSize.w * Critter::CRITTER_WIDTH_SCALE,
-			currentCellSize.h * Critter::CRITTER_HEIGHT_SCALE
+			startPosition.x + (startPosition.w / 2.0f) - (currentCellSize * Critter::CRITTER_WIDTH_SCALE / 2.0f),  // Adjust for half of critter width
+			startPosition.y + (startPosition.h / 2.0f) - (currentCellSize * Critter::CRITTER_HEIGHT_SCALE / 2.0f),  // Adjust for half of critter height
+			currentCellSize * Critter::CRITTER_WIDTH_SCALE,
+			currentCellSize * Critter::CRITTER_HEIGHT_SCALE
 		};
 
 		// Check if the start position is clear (no existing critters overlap)
@@ -93,6 +93,7 @@ void CritterGroup::generateCritters(float deltaTime) {
 			Critter* newCritter = new Critter(level, speed, hitPoints, strength, reward, spawnCenter, map);
 			critters.push_back(newCritter);
 
+			aliveCritters++;
 			crittersSpawned++;
 
 			// Attach new critter to the DetailAttributeDisplay observer
@@ -153,13 +154,13 @@ void CritterGroup::update(float deltaTime) {
 			critter->stealGold(playerGold);  // Take gold when reaching exit
 			critter->detach(detailDisplay.getCritterObserver()); // Detach observer
 			it = critters.erase(it);  // Erase critter and advance iterator
-			--crittersSpawned;
+			--aliveCritters;
 		}
 		else if (!critter->isAlive()) {
 			playerGold += critter->getReward();  // Reward player if critter is killed before exit
 			critter->detach(detailDisplay.getCritterObserver()); // Detach observer
 			it = critters.erase(it);  // Erase critter and advance iterator
-			--crittersSpawned;
+			--aliveCritters;
 		}
 		else {
 			critter->move(deltaTime, critters, 5.0f);  // Move if alive and not at exit
@@ -168,7 +169,7 @@ void CritterGroup::update(float deltaTime) {
 	}
 
 
-	if (crittersSpawned == 0) {
+	if (aliveCritters == 0 && crittersSpawned >= waveLevel * 10) {
 		waveInProgress = false;
 		waveCountdown = 3.0f;
 	}
@@ -189,17 +190,17 @@ void CritterGroup::render() {
 	}
 
 	// Render the alive critters count at the top-left
-	SDL_Color textColor = { 0, 0, 0, 255 };
+	SDL_Color textColor = { 255, 117, 152, 255 };
 	LTexture aliveText;
-	std::string aliveMessage = "Living Critters: " + std::to_string(crittersSpawned);
+	std::string aliveMessage = "Living Critters: " + std::to_string(aliveCritters);
 	aliveText.loadFromRenderedText(aliveMessage, textColor);
-	aliveText.render(10, 50);  // Display text at the top-left
+	aliveText.render(220, 10);  // Display text at the top-left
 
 	// Render the countdown message for the next wave
 	if (!waveInProgress) {
 		LTexture countdownText;
 		std::string countdownMessage = "Next wave in: " + std::to_string((int)std::ceil(waveCountdown));
 		countdownText.loadFromRenderedText(countdownMessage, textColor);
-		countdownText.render(10, 90);  // Display text at the top-center
+		countdownText.render(220, 50);  // Display text at the top-center
 	}
 }

@@ -26,8 +26,8 @@ public:
     static const int CANNON_MAX_LEVEL = 3; /** @brief default maxmimum level for CannonTower */
 
     CannonTower();
-    CannonTower(float x, float y, int buyingCost);
-    CannonTower(float x, float y, int buyingCost, int refundValue);
+    CannonTower(float x, float y, float width, int buyingCost);
+    CannonTower(float x, float y, float width, int buyingCost, int refundValue);
 
     int getMaxLevel();
     void shootProjectile(Critter* critter);

@@ -23,8 +23,6 @@ Map::Map() {
 	cellCountX = 15;
 	cellCountY = 15;
 
-	calculatePixelsPerCell();
-
 	cells.clear();
 	cells.reserve(cellCountX * cellCountY);
 	for (int y = 0; y < cellCountY; y++) {
@@ -55,8 +53,6 @@ Map::Map() {
  */
 Map::Map(int setCellCountX, int setCellCountY, std::string name) :
 	cellCountX(setCellCountX), cellCountY(setCellCountY), name(name) {
-	calculatePixelsPerCell();
-
 	cells.clear();
 	cells.reserve(cellCountX * cellCountY);
 
@@ -148,7 +144,7 @@ void Map::drawCell(const Cell& cell, const SDL_FRect& rect) {
  * @return A pair of integers representing the cell coordinates.
  * @details Returns {-1, -1} if the position is out of bounds.
  */
-std::pair<int, int> Map::getCellFromPosition(float x, float y, const SDL_FRect& targetRect) const {
+std::pair<int, int> Map::getCellFromPosition(float x, float y, const SDL_FRect& targetRect) {
 	float cellW = targetRect.w / cellCountX;
 	float cellH = targetRect.h / cellCountY;
 	int cellX = static_cast<int>((x - targetRect.x) / cellW);
@@ -167,7 +163,7 @@ std::pair<int, int> Map::getCellFromPosition(float x, float y, const SDL_FRect& 
  * @param targetRect The rectangle where the map is being rendered.
  * @return SDL_FPoint The center point of the cell.
  */
-SDL_FPoint Map::getCellCenter(int x, int y, const SDL_FRect& targetRect) const {
+SDL_FPoint Map::getCellCenter(int x, int y, const SDL_FRect& targetRect) {
 	SDL_FRect cellRect = scaleCellRect(cells[x + y * cellCountX], targetRect);
 	return { cellRect.x + cellRect.w / 2.0f, cellRect.y + cellRect.h / 2.0f };
 }
@@ -330,6 +326,8 @@ SDL_FRect Map::getSpawnerPos(const SDL_FRect& targetRect) {
 			return scaleCellRect(cell, targetRect);
 		}
 	}
+
+	int PIXELS_PER_CELL = getPixelPerCell();
 
 	// Default if no spawner
 	return SDL_FRect{
@@ -659,16 +657,6 @@ void Map::setCurrentRenderRect(SDL_FRect newTargetRect) {
 }
 
 /**
- * @brief Gets the size of each cell in pixels.
- *
- * @return SDL_FRect The size of each cell in pixels.
- */
-SDL_FRect Map::getPixelPerCell() {
-	SDL_FRect currentMapRect = getCurrentRenderRect();
-	return SDL_FRect{ 0, 0, currentMapRect.w / cellCountX, currentMapRect.h / cellCountY };
-}
-
-/**
  * @brief Calculates the number of pixels per cell and loads cell textures.
  *
  * @details This function calculates the number of pixels each cell occupies
@@ -676,9 +664,6 @@ SDL_FRect Map::getPixelPerCell() {
  *          It also loads the textures for different cell types.
  */
 void Map::calculatePixelsPerCell() {
-	// Perform the calculation based on Global's static parameters
-	PIXELS_PER_CELL = (Global::kScreenWidth - Global::viewerWidth) / cellCountX;
-
 	textureCellWall = TextureLoader::loadTexture(gRenderer, "map/cell-wall.bmp");
 	textureCellTarget = TextureLoader::loadTexture(gRenderer, "map/cell-target.bmp");
 	textureCellSpawner = TextureLoader::loadTexture(gRenderer, "map/cell-spawner.bmp");
@@ -703,8 +688,8 @@ void Map::drawOnTargetRect(const SDL_FRect& targetRect) {
 	calculatePixelsPerCell();
 
 	// Calculate the scaling factor to fit the map within the target rectangle
-	float mapWidth = cellCountX * PIXELS_PER_CELL;
-	float mapHeight = cellCountY * PIXELS_PER_CELL;
+	float mapWidth = cellCountX * getPixelPerCell();
+	float mapHeight = cellCountY * getPixelPerCell();
 
 	float scaleX = targetRect.w / mapWidth;
 	float scaleY = targetRect.h / mapHeight;
@@ -725,15 +710,19 @@ void Map::drawOnTargetRect(const SDL_FRect& targetRect) {
 	// Draw each cell, scaled to fit the target rectangle
 	for (const auto& cell : cells) {
 		SDL_FRect cellRect = {
-			offsetX + cell.x * PIXELS_PER_CELL * scale,
-			offsetY + cell.y * PIXELS_PER_CELL * scale,
-			PIXELS_PER_CELL * scale,
-			PIXELS_PER_CELL * scale
+			offsetX + cell.x * getPixelPerCell() * scale,
+			offsetY + cell.y * getPixelPerCell() * scale,
+			getPixelPerCell()* scale,
+			getPixelPerCell()* scale
 		};
 
 		// Draw the cell using the existing drawCell method
 		drawCell(cell, cellRect);
 	}
+}
+
+float Map::getPixelPerCell() {
+	return getCurrentRenderRect().w / cellCountX;
 }
 
 
@@ -753,8 +742,6 @@ void Map::updateMapDimensions(int newCellCountX, int newCellCountY) {
 	// Update the new dimensions
 	cellCountX = newCellCountX;
 	cellCountY = newCellCountY;
-
-	PIXELS_PER_CELL = (Global::kScreenWidth - Global::viewerWidth) / cellCountX;
 
 	// Create a new vector for the cells with the new size
 	std::vector<Cell> newCells(cellCountX * cellCountY);
@@ -799,9 +786,9 @@ void Map::updateMapDimensions(int newCellCountX, int newCellCountY) {
  * @return SDL_FRect Scaled rectangle of the cell.
  * @details Calculates the scaling factor and offset to fit the cell within the target rectangle while maintaining aspect ratio.
  */
-SDL_FRect Map::scaleCellRect(const Cell& cell, const SDL_FRect& targetRect) const {
-	float mapWidth = cellCountX * PIXELS_PER_CELL;
-	float mapHeight = cellCountY * PIXELS_PER_CELL;
+SDL_FRect Map::scaleCellRect(const Cell& cell, const SDL_FRect& targetRect) {
+	float mapWidth = cellCountX * getPixelPerCell();
+	float mapHeight = cellCountY * getPixelPerCell();
 
 	float scaleX = targetRect.w / mapWidth;
 	float scaleY = targetRect.h / mapHeight;
@@ -811,10 +798,10 @@ SDL_FRect Map::scaleCellRect(const Cell& cell, const SDL_FRect& targetRect) cons
 	float offsetY = targetRect.y + (targetRect.h - mapHeight * scale) / 2.0f;
 
 	return SDL_FRect{
-		offsetX + static_cast<float>(cell.x) * PIXELS_PER_CELL * scale,
-		offsetY + static_cast<float>(cell.y) * PIXELS_PER_CELL * scale,
-		static_cast<float>(PIXELS_PER_CELL) * scale,
-		static_cast<float>(PIXELS_PER_CELL) * scale
+		offsetX + static_cast<float>(cell.x) * getPixelPerCell() * scale,
+		offsetY + static_cast<float>(cell.y) * getPixelPerCell() * scale,
+		static_cast<float>(getPixelPerCell()) * scale,
+		static_cast<float>(getPixelPerCell()) * scale
 	};
 }
 

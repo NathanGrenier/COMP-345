@@ -72,7 +72,6 @@ public:
     std::string name;               /**< Name of the map */
     std::string filePath;           /**< File path of the map */
 
-    int PIXELS_PER_CELL;            /**< Number of pixels each cell occupies on screen */
     int cellCountX, cellCountY;     /**< Grid dimensions */
     bool isFlowFieldVisible = false;
 
@@ -96,11 +95,11 @@ public:
     SDL_FRect getCurrentRenderRect();
     void setCurrentRenderRect(SDL_FRect newTargetRect);
 
-    SDL_FRect getPixelPerCell();
+    float getPixelPerCell();
     void updateMapDimensions(int newCellCountX, int newCellCountY);
 
-    std::pair<int, int> getCellFromPosition(float x, float y, const SDL_FRect& targetRect) const;
-    SDL_FPoint getCellCenter(int x, int y, const SDL_FRect& targetRect) const;
+    std::pair<int, int> getCellFromPosition(float x, float y, const SDL_FRect& targetRect);
+    SDL_FPoint getCellCenter(int x, int y, const SDL_FRect& targetRect);
 
     void subscribe(FlowFieldObserver* observer);
     void unsubscribe(FlowFieldObserver* observer);
@@ -114,7 +113,7 @@ public:
     std::unordered_map<Cell, bool> wallCellDict;
     std::vector<Cell> cells;              /**< Grid cells storage */
 
-    SDL_FRect scaleCellRect(const Cell& cell, const SDL_FRect& targetRect) const;
+    SDL_FRect scaleCellRect(const Cell& cell, const SDL_FRect& targetRect);
 private:
     static const unsigned char flowDistanceMax = 255;
     SDL_FRect currentRenderRect;

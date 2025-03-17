@@ -43,7 +43,7 @@ Critter::Critter(int level, float speed, int hitPoints, int strength, int reward
 	}
 
 	// Initialize target
-	critterTexture.loadFromFile("assets/critter/avatar/frog.png");
+	critterTexture.loadFromFile("assets/critter/avatar/rat.png");
 }
 
 Critter::~Critter() {
@@ -167,19 +167,15 @@ void Critter::update() {
 		if (elapsedTime < damageDuration) {
 			// Fade in (increase the red component)
 			redTintAlpha = maxRedAlpha * (elapsedTime / float(damageDuration));
-			// Gradually decrease green and blue components from 255 to 0
-			greenTintAlpha = 255 - (255 * (elapsedTime / float(damageDuration)));
-			blueTintAlpha = 255 - (255 * (elapsedTime / float(damageDuration)));
 		}
 		else {
-			// Fade out (decrease the red component)
 			redTintAlpha = maxRedAlpha - maxRedAlpha * ((elapsedTime - damageDuration) / float(damageDuration));
-			// Fade green and blue back to 255
-			greenTintAlpha = greenTintAlpha + (255 - greenTintAlpha) * ((elapsedTime - damageDuration) / float(damageDuration));
-			blueTintAlpha = blueTintAlpha + (255 - blueTintAlpha) * ((elapsedTime - damageDuration) / float(damageDuration));
 
 			if (redTintAlpha <= 0.0f) {
 				isDamaged = false;
+				redTintAlpha = 255;
+				greenTintAlpha = 255;
+				blueTintAlpha = 255;
 			}
 		}
 
@@ -269,14 +265,14 @@ void Critter::setSpeed(int newSpeed) {
  * @param renderer The SDL_Renderer used to draw the critter.
  */
 void Critter::render() {
-	SDL_FRect currentCellSize = Global::currentMap->getPixelPerCell();
+	float currentCellSize = Global::currentMap->getPixelPerCell();
 
-	currentRenderRect = { position.x, position.y, currentCellSize.w * CRITTER_WIDTH_SCALE, currentCellSize.h * CRITTER_WIDTH_SCALE };
+	currentRenderRect = { position.x, position.y, currentCellSize * CRITTER_WIDTH_SCALE, currentCellSize * CRITTER_WIDTH_SCALE };
 
 	critterTexture.render(currentRenderRect.x, currentRenderRect.y, nullptr, currentRenderRect.w, currentRenderRect.h);
 
 	// Health bar positioning and size (above the critter)
-	SDL_FRect healthBarRect = { position.x, position.y - (currentCellSize.h * CRITTER_HEALTHBAR_PADDING),  currentCellSize.w * CRITTER_WIDTH_SCALE, currentCellSize.h * CRITTER_HEALTHBAR_HEIGHT };  // Just above the critter
+	SDL_FRect healthBarRect = { position.x, position.y - (currentCellSize * CRITTER_HEALTHBAR_PADDING),  currentCellSize * CRITTER_WIDTH_SCALE, currentCellSize * CRITTER_HEALTHBAR_HEIGHT };  // Just above the critter
 	SDL_FRect greenBar = healthBarRect;  // For the green part (current health)
 	SDL_FRect redBar = healthBarRect;  // For the red part (remaining health)
 
