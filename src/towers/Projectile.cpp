@@ -22,10 +22,10 @@
  * Area damage is not yet implemented
  * Uses a default ProjectileSize of 3
  */
-Projectile::Projectile(float x, float y, int damage, bool isArea)
-    : x(x), y(y), damage(damage), isArea(isArea), projectileSize(3)
+Projectile::Projectile(float x, float y, int damage, bool isArea, int rotationAngle, float xSpeed, float ySpeed, std::string texturePath)
+    : x(x), y(y), damage(damage), isArea(isArea), projectileSize(3), rotationAngle(rotationAngle), xSpeed(xSpeed), ySpeed(ySpeed)
 {
-
+    projectileTexture.loadFromFile(texturePath);
 }
 
 /**
@@ -40,10 +40,10 @@ Projectile::Projectile(float x, float y, int damage, bool isArea)
  * Damage is to be applied to critters, removing the same number of health from it
  * Area damage is not yet implemented
  */
-Projectile::Projectile(float x, float y, int damage, bool isArea, int projectileSize) 
-    : x(x), y(y), damage(damage), isArea(isArea), projectileSize(projectileSize)
+Projectile::Projectile(float x, float y, int damage, bool isArea, int projectileSize, int rotationAngle, float xSpeed, float ySpeed, std::string texturePath)
+    : x(x), y(y), damage(damage), isArea(isArea), projectileSize(projectileSize), rotationAngle(rotationAngle), xSpeed(xSpeed), ySpeed(ySpeed)
 {
-    
+    projectileTexture.loadFromFile(texturePath);
 }
 
 /**
@@ -63,10 +63,10 @@ int Projectile::getDamage()
  * @param ySpeed Pixels to move the projectile vertically
  * @details adds the xSpeed and ySpeed values to their corresponding coordinates to move the Projectile along the map
  */
-void Projectile::move(float xSpeed, float ySpeed)
+void Projectile::move(float multiplier)
 {
-    x += xSpeed;
-    y += ySpeed;
+    x += xSpeed * multiplier;
+    y += ySpeed * multiplier;
 }
 
 /**
@@ -75,11 +75,50 @@ void Projectile::move(float xSpeed, float ySpeed)
  * @details Represents a Projectile with a black square
  * Draws the square using SDL 
  */
-void Projectile::generateProjectile() 
+void Projectile::generateProjectile()
 {
-    SDL_FRect fillRect = { x, y, projectileSize, projectileSize };
-    SDL_SetRenderDrawColor(gRenderer, 0x00, 0x00, 0x00, 0xFF);
-    SDL_RenderFillRect(gRenderer, &fillRect);
+    // Define the sprite clips for each frame (horizontal sprite sheet)
+    float frameWidth = projectileTexture.getWidth() / 4;
+    float frameHeight = projectileTexture.getHeight();
+
+    SDL_FRect spriteClips[] = {
+        { 0.f * frameWidth, 0.f, frameWidth, frameHeight },
+        { 1.f * frameWidth, 0.f, frameWidth, frameHeight },
+        { 2.f * frameWidth, 0.f, frameWidth, frameHeight },
+        { 3.f * frameWidth, 0.f, frameWidth, frameHeight }
+    };
+
+    float targetHeight = Global::currentMap->getPixelPerCell() * 0.8f;
+
+    // Maintain aspect ratio for width
+    float aspectRatio = frameWidth / frameHeight;
+    float targetWidth = targetHeight * aspectRatio;
+
+    // Offset x and y so that projectile is centered at its position
+    float renderX = x - targetWidth / 2.0f;
+    float renderY = y - targetHeight / 2.0f;
+
+    // Save the rect for collision detection
+    currentRenderRect = { renderX, renderY, targetWidth, targetHeight };
+
+    // Render the projectile using the saved rect
+    projectileTexture.render(currentRenderRect.x, currentRenderRect.y, &spriteClips[currentFrame], currentRenderRect.w, currentRenderRect.h, rotationAngle - 90);
+}
+
+
+void Projectile::updateAnimation(float deltaTime)
+{
+    frameTimer += deltaTime;
+    if (frameTimer >= frameDuration)
+    {
+        frameTimer = 0.0f;
+        currentFrame = (currentFrame + 1) % frameCount;
+    }
+}
+
+void Projectile::destroy()
+{
+    projectileTexture.destroy();
 }
 
 /**
@@ -94,7 +133,7 @@ void Projectile::generateProjectile()
  */
 bool Projectile::isOutside()
 {
-    return ((x < 0 || x > Global::kScreenWidth) || (y < 0 || y > Global::kScreenHeight));
+    return ((x < 0 || x > Global::mapViewRect.w - 20) || (y < Global::headerHeight || y > Global::kScreenHeight));
 }
 
 /**
@@ -109,19 +148,33 @@ bool Projectile::isOutside()
  * @return false if the Projectile has not collided with critter
  */
 bool Projectile::checkCollision(Critter* critter) {
-    //float tolerance = -4.0f;
+    // Midpoint collision tolerance (you can adjust this if you want a small margin of error)
     float tolerance = 0.0f;
+
+    // Get critter's position and size
     int critterX = critter->getPosition().x;
     int critterY = critter->getPosition().y;
-    int critterSize = critter->getPosition().w;
+    int critterSize = critter->getPosition().w; // Assuming square critter, w == h
 
-    return 
-        // checks both horizontal sides of the projectile
-        x < critterX + critterSize + tolerance &&
-        x + projectileSize > critterX - tolerance &&
-        
-        // checks both vertical sides of the projectile
-        y < critterY + critterSize + tolerance &&
-        y + projectileSize > critterY - tolerance;
+    // Calculate critter's midpoint
+    float critterMidX = critterX + critterSize / 2.0f;
+    float critterMidY = critterY + critterSize / 2.0f;
+
+    // Projectile's bounding box
+    float projectileLeft = currentRenderRect.x;
+    float projectileTop = currentRenderRect.y;
+    float projectileRight = currentRenderRect.x + currentRenderRect.w;
+    float projectileBottom = currentRenderRect.y + currentRenderRect.h;
+
+    // Check if critter's midpoint is inside projectile's bounding box (with optional tolerance)
+    if (critterMidX >= projectileLeft - tolerance &&
+        critterMidX <= projectileRight + tolerance &&
+        critterMidY >= projectileTop - tolerance &&
+        critterMidY <= projectileBottom + tolerance) {
+        critter->takeDamage();
+        critter->notify();
+        return true; // Collision detected
+    }
+
+    return false; // No collision
 }
-

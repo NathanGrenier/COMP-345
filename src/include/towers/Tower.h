@@ -15,6 +15,10 @@
 #include <critter/Critter.h>
 #include <ui/LTexture.h>
 
+#ifndef M_PI
+#define M_PI 3.14159265358979323846
+#endif
+
  /** @brief ratio between original tower cost and refund value */
 const double REFUND_RATIO = 0.5;
 
@@ -25,16 +29,16 @@ public:
     static const int REFUND_PER_UPGRADE = 50; /** @brief additional gold refunded per level */
 
     Tower();
-    Tower(float x, float y, int buyingCost, int range, int power, int rateOfFire);
-    Tower(float x, float y, int buyingCost, int refundValue, int range, int power, int rateOfFire);
+    Tower(float x, float y, float width, int buyingCost, int range, int power, int rateOfFire);
+    Tower(float x, float y, float width, int buyingCost, int refundValue, int range, int power, int rateOfFire);
     
-    virtual void generateTower();
     virtual void generateAllProjectiles();
     
     int getRange();
     int getPower();
     int getRateOfFire();
     int getLevel();
+    std::vector<Projectile *>& getProjectiles() { return projectiles; }
 
     virtual int getRefundValue();
     virtual int getUpgradeCost();
@@ -43,10 +47,10 @@ public:
     virtual bool upgrade();
     virtual void shootProjectile(Critter* critter) = 0;
 
-    Critter* findCritter(std::vector<Critter>& critters); /** finds critter in range of tower */
+    Critter* findCritter(std::vector<Critter*> critters); /** finds critter in range of tower */
     void clearProjectiles();
     bool isClicked(float scaleFactor) const;
-    bool isCritterInRange(Critter critter);
+    bool isCritterInRange(Critter* critter);
 
     struct UpgradeValues {
         int rangeIncrease;
@@ -59,13 +63,11 @@ public:
     void render();
     void setRotation(float angle);
     float getRotation() const { return rotationAngle; }
-    void setCurrentRenderedRect(SDL_FRect targetRect);
-
-    float x; /** @brief x position for projectile */
-    float y; /** @brief y position for projectile */
+    void setCurrentRenderRect(float originalX, float originalY, float w, float h);
+    SDL_FRect getCurrentRenderRect();
 
 protected:
-    SDL_FRect currentRenderedRect;
+    SDL_FRect currentRenderRect;
     int buyingCost;
     int refundValue;
     float rotationAngle = 0.0f;
@@ -74,7 +76,7 @@ protected:
     int rateOfFire; /** @brief higher rate of fire indicates faster shooting */
     int level;
     int shootingTimer; /** @brief decremented with rate of fire for shooting */
-    float calcDistance(Critter critter);
+    float calcDistance(Critter* critter);
     std::vector<Projectile *> projectiles; /** @brief vector of all projectile */
 
     UpgradeValues upgradeValues;

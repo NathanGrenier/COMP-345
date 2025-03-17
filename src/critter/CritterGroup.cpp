@@ -36,6 +36,10 @@ CritterGroup::CritterGroup(int& waveLevel, int& playerGold, SDL_FRect startPosit
  * Resets all necessary attributes to allow for a new wave of critters to be generated starting from wave 1.
  */
 CritterGroup::~CritterGroup() {
+	for (Critter* critter : critters) {
+		delete critter;
+	}
+
 	critters.clear();
 }
 
@@ -58,22 +62,22 @@ void CritterGroup::generateCritters(float deltaTime) {
 		int level = waveLevel;
 		float speed = 75.0f;
 		int hitPoints = 10 + level * 2;
-		int strength = level * 5;
+		int strength = level * 2;
 		int reward = level * 10;
 
-		SDL_FRect currentCellSize = Global::currentMap->getPixelPerCell();
+		float currentCellSize = Global::currentMap->getPixelPerCell();
 
 		SDL_FRect spawnCenter = {
-			startPosition.x + (startPosition.w / 2.0f) - (currentCellSize.w * Critter::CRITTER_WIDTH_SCALE / 2.0f),  // Adjust for half of critter width
-			startPosition.y + (startPosition.h / 2.0f) - (currentCellSize.h * Critter::CRITTER_HEIGHT_SCALE / 2.0f),  // Adjust for half of critter height
-			currentCellSize.w * Critter::CRITTER_WIDTH_SCALE,
-			currentCellSize.h * Critter::CRITTER_HEIGHT_SCALE
+			startPosition.x + (startPosition.w / 2.0f) - (currentCellSize * Critter::CRITTER_WIDTH_SCALE / 2.0f),  // Adjust for half of critter width
+			startPosition.y + (startPosition.h / 2.0f) - (currentCellSize * Critter::CRITTER_HEIGHT_SCALE / 2.0f),  // Adjust for half of critter height
+			currentCellSize * Critter::CRITTER_WIDTH_SCALE,
+			currentCellSize * Critter::CRITTER_HEIGHT_SCALE
 		};
 
 		// Check if the start position is clear (no existing critters overlap)
 		bool canSpawn = true;
-		for (Critter& critter : critters) {
-			SDL_FRect critterPos = critter.getPosition(); // Use -> to access methods
+		for (Critter* critter : critters) {
+			SDL_FRect critterPos = critter->getPosition(); // Use -> to access methods
 			float distanceX = std::abs(spawnCenter.x - critterPos.x);
 			float distanceY = std::abs(spawnCenter.y - critterPos.y);
 
@@ -85,15 +89,38 @@ void CritterGroup::generateCritters(float deltaTime) {
 
 		// Only spawn if there's no overlap
 		if (canSpawn) {
-			// Create the new critter and attach it to the detailDisplay observer
-			critters.emplace_back(level, speed, hitPoints, strength, reward, spawnCenter, map);
-			Critter& newCritter = critters.back();
+			// Dynamically allocate a new Critter and push the pointer into the list
+			Critter* newCritter = new Critter(level, speed, hitPoints, strength, reward, spawnCenter, map);
+			critters.push_back(newCritter);
+
+			aliveCritters++;
+			crittersSpawned++;
 
 			// Attach new critter to the DetailAttributeDisplay observer
-			newCritter.attach(detailDisplay.getCritterObserver());
+			newCritter->attach(detailDisplay.getCritterObserver());
 
 			critterIndex++;
 			timeElapsed = 0.0f;
+		}
+
+	}
+}
+
+void CritterGroup::handleEvent(SDL_Event& e)
+{
+	// Check if clicking on towers or critters
+	if (e.type == SDL_EVENT_MOUSE_BUTTON_DOWN && e.button.button == SDL_BUTTON_LEFT)
+	{
+
+		for (int i = 0; i < critters.size(); i++)
+		{
+			Critter* critter = critters[i];
+			if (critter->isClicked())
+			{
+				detailDisplay.selectCritter(critter);
+				critter->notify();
+				break;
+			}
 		}
 	}
 }
@@ -107,6 +134,8 @@ void CritterGroup::generateCritters(float deltaTime) {
  * @param deltaTime Time elapsed since the last frame.
  */
 void CritterGroup::update(float deltaTime) {
+	generateCritters(0.16f);
+
 	if (!waveInProgress) {
 		waveCountdown -= deltaTime;
 		if (waveCountdown <= 0.0f) {
@@ -116,25 +145,29 @@ void CritterGroup::update(float deltaTime) {
 		return;
 	}
 
-	int aliveCritters = 0;
-
 	for (auto it = critters.begin(); it != critters.end(); ) {
-		Critter& critter = *it; // Use a reference to const as critters is const
-		if (!critter.isAlive()) {
-			if (!critter.atExit()) {
-				playerGold += critter.getReward();
-			} else {
-				critter.stealGold(playerGold);
-			}
-			critter.detach(detailDisplay.getCritterObserver());
-			it = critters.erase(it); // erase() returns the next valid iterator
-			++crittersSpawned;
-		} else {
-			++aliveCritters;
-			critter.move(deltaTime, critters, 5.0f);
-			++it;
+		Critter* critter = *it;
+
+		critter->update();
+
+		if (critter->atExit()) {
+			critter->stealGold(playerGold);  // Take gold when reaching exit
+			critter->detach(detailDisplay.getCritterObserver()); // Detach observer
+			it = critters.erase(it);  // Erase critter and advance iterator
+			--aliveCritters;
+		}
+		else if (!critter->isAlive()) {
+			playerGold += critter->getReward();  // Reward player if critter is killed before exit
+			critter->detach(detailDisplay.getCritterObserver()); // Detach observer
+			it = critters.erase(it);  // Erase critter and advance iterator
+			--aliveCritters;
+		}
+		else {
+			critter->move(deltaTime, critters, 5.0f);  // Move if alive and not at exit
+			++it;  // Advance to next critter
 		}
 	}
+
 
 	if (aliveCritters == 0 && crittersSpawned >= waveLevel * 10) {
 		waveInProgress = false;
@@ -150,33 +183,24 @@ void CritterGroup::update(float deltaTime) {
  *
  * @param renderer The SDL_Renderer used to render the game elements.
  */
-void CritterGroup::render(SDL_Renderer* renderer) {
-	int aliveCrittersCount = 0;
-
-	// Count the number of alive critters
+void CritterGroup::render() {
+	// Render critters
 	for (auto& critter : critters) {
-		if (critter.isAlive()) {
-			++aliveCrittersCount;
-		}
+		critter->render();
 	}
 
-	// Render the alive critters count at the top-left or another position on the screen
-	SDL_Color textColor = { 0, 0, 0, 255 };
+	// Render the alive critters count at the top-left
+	SDL_Color textColor = { 255, 117, 152, 255 };
 	LTexture aliveText;
-	std::string aliveMessage = "Living Critters: " + std::to_string(aliveCrittersCount);
+	std::string aliveMessage = "Living Critters: " + std::to_string(aliveCritters);
 	aliveText.loadFromRenderedText(aliveMessage, textColor);
-	aliveText.render(10, 50);  // Display text at the top-left (you can adjust position)
+	aliveText.render(220, 10);  // Display text at the top-left
 
 	// Render the countdown message for the next wave
 	if (!waveInProgress) {
 		LTexture countdownText;
 		std::string countdownMessage = "Next wave in: " + std::to_string((int)std::ceil(waveCountdown));
 		countdownText.loadFromRenderedText(countdownMessage, textColor);
-		countdownText.render(10, 90);  // Display text at the top-center
-	}
-
-	// Render critters
-	for (auto& critter : critters) {
-		critter.render(renderer);
+		countdownText.render(220, 50);  // Display text at the top-center
 	}
 }

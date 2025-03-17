@@ -18,13 +18,13 @@ public:
 
 	void generateCritters(float deltaTime);
 	void update(float deltaTime);  // Update all critters in the group
-	void render(SDL_Renderer* renderer);  // Render all critters in the group
-
-	std::vector<Critter>& getCritters() { return critters; }
+	void render();  // Render all critters in the group
+	void handleEvent(SDL_Event& e);
+	std::vector<Critter*> getCritters() { return critters; }
 private:
 	int& waveLevel;
 	int& playerGold;
-	std::vector<Critter> critters;
+	std::vector<Critter*> critters;
 	Map* map;
 	SDL_FRect startPosition;
 	SDL_FRect endPosition;
@@ -33,6 +33,7 @@ private:
 	float spawnTimer = 0.0f;
 	const float spawnInterval = 1.0f;
 	int crittersSpawned = 0;
+	int aliveCritters = 0;
 	bool waveInProgress = true;
 	float waveCountdown = 3.0f;
 	int critterIndex = 0;

@@ -86,25 +86,76 @@ std::vector<DetailDisplayComponent*> TowerObserver::getTowerComponents()
  * @brief Renders the DetailDisplayComponent to describe a Tower
  * @details Renders buy and sell button depending on whether a Tower is selected or if a Tower class is selected
  */
-void TowerObserver::render()
-{
-    // omits the buy/sell button if a Tower subclass is selected
+void TowerObserver::render() {
+    // Omit the buy/sell button if a Tower subclass is selected
     int componentChangeNum = towerComponents.size();
-    for (int i = 0; i < buyTowers.size(); i++)
-    {
-        // removes the indices of the last 2 Buttons
-        if (currentTower == buyTowers[i])
-        {
+    for (int i = 0; i < buyTowers.size(); i++) {
+        if (currentTower == buyTowers[i]) {
             componentChangeNum -= 2;
             break;
         }
     }
 
-    // renders the DetailDisplayComponent
+    // Render the DetailDisplayComponent
     for (int i = 0; i < componentChangeNum; i++) {
         towerComponents[i]->render();
     }
+
+    // Check if currentTower exists
+    if (currentTower != nullptr) {
+        // Get position and dimensions of the tower
+        SDL_FRect towerRect = currentTower->getCurrentRenderRect();
+
+        // Padding around the tower
+        const float padding = 4.0f;
+
+        // Adjusted rectangle with padding
+        float x = towerRect.x - padding;
+        float y = towerRect.y - padding;
+        float w = towerRect.w + 2 * padding;
+        float h = towerRect.h + 2 * padding;
+
+        // Set color for outline (black)
+        SDL_SetRenderDrawColor(gRenderer, 0, 0, 0, 255);
+
+        // Dot properties
+        const int dotSpacing = 6;     // Space between dots
+        const int dotThickness = 2;   // Thickness of dots
+        const int speed = 100;        // Speed of animation (lower = faster)
+
+        // Animation offset based on time
+        int timeOffset = (SDL_GetTicks() / speed) % dotSpacing;
+
+        // ---- Top Edge (left to right for clockwise) ----
+        for (int i = x + timeOffset; i < x + w; i += dotSpacing) {
+            for (int t = 0; t < dotThickness; t++) {
+                SDL_RenderPoint(gRenderer, i, y + t);  // Inward thickness
+            }
+        }
+
+        // ---- Right Edge (top to bottom for clockwise) ----
+        for (int i = y + timeOffset; i < y + h; i += dotSpacing) {
+            for (int t = 0; t < dotThickness; t++) {
+                SDL_RenderPoint(gRenderer, x + w - 1 - t, i);  // Inward thickness
+            }
+        }
+
+        // ---- Bottom Edge (right to left for clockwise) ----
+        for (int i = x + w - timeOffset; i > x; i -= dotSpacing) {
+            for (int t = 0; t < dotThickness; t++) {
+                SDL_RenderPoint(gRenderer, i, y + h - 1 - t);  // Inward thickness
+            }
+        }
+
+        // ---- Left Edge (bottom to top for clockwise) ----
+        for (int i = y + h - timeOffset; i > y; i -= dotSpacing) {
+            for (int t = 0; t < dotThickness; t++) {
+                SDL_RenderPoint(gRenderer, x + t, i);  // Inward thickness
+            }
+        }
+    }
 }
+
 
 /**
  * @brief Desctructor, deleting the DetailDisplayComponents
@@ -154,10 +205,10 @@ Tower* TowerObserver::getCurrentTower()
  * @brief Handles button events for the buy and sell DetailButtons
  * @param e the SDL event to handle
  */
-void TowerObserver::handleButtonEvents(SDL_Event* e)
+void TowerObserver::handleButtonEvents(SDL_Event& e)
 {
-    (dynamic_cast<DetailButton*>(towerComponents[7]))->handleEvent(e);
-    (dynamic_cast<DetailButton*>(towerComponents[8]))->handleEvent(e);
+    (dynamic_cast<DetailButton*>(towerComponents[7]))->handleEvent(&e);
+    (dynamic_cast<DetailButton*>(towerComponents[8]))->handleEvent(&e);
 }
 
 /**

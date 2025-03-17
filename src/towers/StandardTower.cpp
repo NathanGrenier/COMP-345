@@ -30,8 +30,8 @@ StandardTower::StandardTower() : Tower()
  * Uses default range, power, and rate of fire for StandardTower
  * Uses default refund value ratio in Tower class 
  */
-StandardTower::StandardTower(float x, float y, int buyingCost)
-    : Tower(x, y, buyingCost, STANDARD_RANGE, STANDARD_POWER, STANDARD_RATE_OF_FIRE)
+StandardTower::StandardTower(float x, float y, float width, int buyingCost)
+    : Tower(x, y, width, buyingCost, STANDARD_RANGE, STANDARD_POWER, STANDARD_RATE_OF_FIRE)
 {
     towerTexture.loadFromFile("assets/tower/StandardTower.png");
     upgradeValues.rangeIncrease = 20;
@@ -49,8 +49,8 @@ StandardTower::StandardTower(float x, float y, int buyingCost)
  * @details Constructor for StandardTower with x, y position, buying cost, and refund value
  * Uses default range, power, and rate of fire for StandardTower
  */
-StandardTower::StandardTower(float x, float y, int buyingCost, int refundValue)
-    : Tower(x, y, buyingCost, refundValue, STANDARD_RANGE, STANDARD_POWER, STANDARD_RATE_OF_FIRE)
+StandardTower::StandardTower(float x, float y, float width, int buyingCost, int refundValue)
+    : Tower(x, y, width, buyingCost, refundValue, STANDARD_RANGE, STANDARD_POWER, STANDARD_RATE_OF_FIRE)
 {
     towerTexture.loadFromFile("assets/tower/StandardTower.png");
     upgradeValues.rangeIncrease = 20;
@@ -80,39 +80,65 @@ int StandardTower::getMaxLevel()
  */
 void StandardTower::shootProjectile(Critter* critter)
 {
-    // check if critter still exists
-    if (!critter)
-    {
-        // get rid of currently shot projectiles if no target
-        projectiles.clear();
-        return;
+    // Ensure we're using the center of the tower
+    float towerCenterX = currentRenderRect.x + currentRenderRect.w / 2.0f;
+    float towerCenterY = currentRenderRect.y + currentRenderRect.h / 2.0f;
+
+    // Target the center of the critter
+    Vector2D dirToTarget;
+    if (critter != nullptr) {
+        dirToTarget.x = (critter->getPosition().x + critter->getPosition().w / 2.0f) - towerCenterX;
+        dirToTarget.y = (critter->getPosition().y + critter->getPosition().h / 2.0f) - towerCenterY;
     }
 
-    // tower position with offset
-    float posX = x + currentRenderedRect.w / 2;
-    float posY = y + currentRenderedRect.w / 2;
+    // Calculate the raw angle
+    float angleRad = atan2(dirToTarget.y, dirToTarget.x);
+    float angleDeg = angleRad * (180.0f / M_PI);
 
-    SDL_FRect currentCellSize = Global::currentMap->getPixelPerCell();
+    // Adjust for sprite orientation (assuming "top" is default forward)
+    angleDeg += 90.0f;
 
-    // critter position with offset
-    float critterPosX = critter->getPosition().x + Critter::CRITTER_WIDTH_SCALE * currentCellSize.w / 2;
-    float critterPosY = critter->getPosition().y + Critter::CRITTER_HEIGHT_SCALE * currentCellSize.h / 2;
+    float deltaAngle = angleDeg - rotationAngle;
 
-    // differences in position from tower to cannon
-    float differenceX = posX - critterPosX;
-    float differenceY = posY - critterPosY;
+    // Normalize delta to [-180, 180] for shortest path
+    while (deltaAngle > 180.0f) deltaAngle -= 360.0f;
+    while (deltaAngle < -180.0f) deltaAngle += 360.0f;
 
-    float distance = sqrt(pow(differenceX, 2) + pow(differenceY, 2));
+    // Calculate max rotation step this frame
+    float maxRotationStep = 180.0f * 0.016f;
 
-    // distance for projectile as a unit vector
-    float speedX = (critterPosX - posX) / distance;
-    float speedY = (critterPosY - posY) / distance;
+    // Clamp rotation delta to avoid sudden jumps
+    if (deltaAngle > maxRotationStep) deltaAngle = maxRotationStep;
+    if (deltaAngle < -maxRotationStep) deltaAngle = -maxRotationStep;
+
+    // Apply smooth rotation
+    rotationAngle = rotationAngle + deltaAngle;
 
      // checks if it is time to shoot
-    if (shootingTimer <= 0)
+    if (critter != nullptr && shootingTimer <= 0 && fabs(deltaAngle) < 2.0f)
     {
+        // tower position with offset
+        float posX = currentRenderRect.x + currentRenderRect.w / 2;
+        float posY = currentRenderRect.y + currentRenderRect.w / 2;
+
+        float currentCellSize = Global::currentMap->getPixelPerCell();
+
+        // critter position with offset
+        float critterPosX = critter->getPosition().x + Critter::CRITTER_WIDTH_SCALE * currentCellSize / 2;
+        float critterPosY = critter->getPosition().y + Critter::CRITTER_HEIGHT_SCALE * currentCellSize / 2;
+
+        // differences in position from tower to cannon
+        float differenceX = posX - critterPosX;
+        float differenceY = posY - critterPosY;
+
+        float distance = sqrt(pow(differenceX, 2) + pow(differenceY, 2));
+
+        // distance for projectile as a unit vector
+        float speedX = (critterPosX - posX) / distance;
+        float speedY = (critterPosY - posY) / distance;
+
         // fires a projectile with the default size, resets shooting timer
-        projectiles.push_back(new Projectile(posX, posY, power, false));
+        projectiles.push_back(new Projectile(posX, posY, power, false, rotationAngle, speedX, speedY, "assets/tower/StandardProjectile.png"));
         shootingTimer = MAX_SHOOTING_TIMER;
     }
     else // decreases shooting timer
@@ -122,13 +148,11 @@ void StandardTower::shootProjectile(Critter* critter)
 
     // moves projectiles at a fast speed
     for (int i = 0; i < projectiles.size(); i++) {
-        projectiles[i]->move(10 * speedX, 10 * speedY);
+        projectiles[i]->move(10);
 
         // check if projectile hits critter
-        if (projectiles[i]->checkCollision(critter))
+        if (critter != nullptr && projectiles[i]->checkCollision(critter))
         {
-            critter->takeDamage(power);
-            critter->notify();
             projectiles.erase(projectiles.begin() + i);
             
             // clear projectiles if critter has no hp, no target

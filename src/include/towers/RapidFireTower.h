@@ -25,8 +25,8 @@ public:
     static const int MAX_RAPID_FIRE_BREAK = 200; /** @brief break maximum for no shooting intervals */
 
     RapidFireTower();
-    RapidFireTower(float x, float y, int buyingCost);
-    RapidFireTower(float x, float y, int buyingCost, int refundValue);
+    RapidFireTower(float x, float y, float width, int buyingCost);
+    RapidFireTower(float x, float y, float width, int buyingCost, int refundValue);
     
     bool upgrade();
     int getMaxLevel();

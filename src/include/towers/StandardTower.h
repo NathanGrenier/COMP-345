@@ -22,8 +22,8 @@ public:
     static const int STANDARD_MAX_LEVEL = 5; /** @brief default max level for StandardTower */
 
     StandardTower();
-    StandardTower(float x, float y, int buyingCost);
-    StandardTower(float x, float y, int buyingCost, int refundValue);
+    StandardTower(float x, float y, float width, int buyingCost);
+    StandardTower(float x, float y, float width, int buyingCost, int refundValue);
 
     int getMaxLevel();
     void shootProjectile(Critter* critter);

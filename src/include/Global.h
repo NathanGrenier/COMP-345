@@ -27,8 +27,8 @@ extern TTF_Font* gFont; ///< Global pointer to the font used for rendering text.
  */
 class Global {
 public:
-	static int viewerWidth;
-	static int headerHeight;
+	static constexpr int viewerWidth{ 250 };
+	static constexpr int headerHeight{ 90 };
 
 	static constexpr int kScreenWidth{ 800 };
 	static constexpr int kScreenHeight{ 600 };
