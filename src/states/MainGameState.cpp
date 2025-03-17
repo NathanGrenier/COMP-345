@@ -205,7 +205,7 @@ void MainGameState::render()
 	exitButton.render();
 
 	// Render player gold
-	int displayedGold = std::min(playerGold, 9999);
+	int displayedGold = std::min(playerGold, 999);
 	renderText("Gold: " + std::to_string(playerGold), 10.0f, 10.0f);
 
 	// Render wave level

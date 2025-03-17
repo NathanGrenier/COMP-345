@@ -194,13 +194,13 @@ void CritterGroup::render() {
 	LTexture aliveText;
 	std::string aliveMessage = "Living Critters: " + std::to_string(aliveCritters);
 	aliveText.loadFromRenderedText(aliveMessage, textColor);
-	aliveText.render(220, 10);  // Display text at the top-left
+	aliveText.render(210, 10);  // Display text at the top-left
 
 	// Render the countdown message for the next wave
 	if (!waveInProgress) {
 		LTexture countdownText;
 		std::string countdownMessage = "Next wave in: " + std::to_string((int)std::ceil(waveCountdown));
 		countdownText.loadFromRenderedText(countdownMessage, textColor);
-		countdownText.render(220, 50);  // Display text at the top-center
+		countdownText.render(210, 50);  // Display text at the top-center
 	}
 }
