@@ -136,7 +136,22 @@ void MainGameState::handleEvent(SDL_Event &e)
 	if (e.type == SDL_EVENT_MOUSE_BUTTON_DOWN && e.button.button == SDL_BUTTON_LEFT) {
 		if (pauseButton.isClicked())
 		{
-			isPaused = !isPaused;
+			int buttonHeight = 40;
+
+			if (isPaused) {
+				pauseButton.loadFromFile("assets/ui/PauseButton.png");
+				pauseButton.setSizeWithAspectRatio(0, buttonHeight);
+				pauseButton.setPosition(Global::kScreenWidth - Global::viewerWidth + 30, Global::kScreenHeight - buttonHeight - 20);
+				isPaused = false;
+			}
+			else {
+				pauseButton.loadFromFile("assets/ui/PlayButton.png");
+				pauseButton.setSizeWithAspectRatio(0, buttonHeight);
+				pauseButton.setPosition(Global::kScreenWidth - Global::viewerWidth + 30, Global::kScreenHeight - buttonHeight - 20);
+				isPaused = true;
+			}
+
+			
 		}
 		if (exitButton.isClicked())
 		{

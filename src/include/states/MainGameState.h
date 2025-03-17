@@ -50,6 +50,7 @@ private:
 
 	LButton pauseButton;
 	LButton exitButton;
+	LButton playButton;
 
 	bool isPaused;
 

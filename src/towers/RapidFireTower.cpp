@@ -109,36 +109,39 @@ void RapidFireTower::shootProjectile(Critter* critter)
     // Ensure we're using the center of the tower
     float towerCenterX = currentRenderRect.x + currentRenderRect.w / 2.0f;
     float towerCenterY = currentRenderRect.y + currentRenderRect.h / 2.0f;
+    float deltaAngle;
 
-    // Target the center of the critter
-    Vector2D dirToTarget;
-    if (critter != nullptr) {
+    // Check if there's a valid critter to target
+    if (critter != nullptr)
+    {
+        // Target the center of the critter
+        Vector2D dirToTarget;
         dirToTarget.x = (critter->getPosition().x + critter->getPosition().w / 2.0f) - towerCenterX;
         dirToTarget.y = (critter->getPosition().y + critter->getPosition().h / 2.0f) - towerCenterY;
+
+        // Calculate the raw angle
+        float angleRad = atan2(dirToTarget.y, dirToTarget.x);
+        float angleDeg = angleRad * (180.0f / M_PI);
+
+        // Adjust for sprite orientation (assuming "top" is default forward)
+        angleDeg += 90.0f;
+
+        deltaAngle = angleDeg - rotationAngle;
+
+        // Normalize delta to [-180, 180] for shortest path
+        while (deltaAngle > 180.0f) deltaAngle -= 360.0f;
+        while (deltaAngle < -180.0f) deltaAngle += 360.0f;
+
+        // Calculate max rotation step this frame
+        float maxRotationStep = 180.0f * 0.016f;
+
+        // Clamp rotation delta to avoid sudden jumps
+        if (deltaAngle > maxRotationStep) deltaAngle = maxRotationStep;
+        if (deltaAngle < -maxRotationStep) deltaAngle = -maxRotationStep;
+
+        // Apply smooth rotation
+        rotationAngle = rotationAngle + deltaAngle;
     }
-
-    // Calculate the raw angle
-    float angleRad = atan2(dirToTarget.y, dirToTarget.x);
-    float angleDeg = angleRad * (180.0f / M_PI);
-
-    // Adjust for sprite orientation (assuming "top" is default forward)
-    angleDeg += 90.0f;
-
-    float deltaAngle = angleDeg - rotationAngle;
-
-    // Normalize delta to [-180, 180] for shortest path
-    while (deltaAngle > 180.0f) deltaAngle -= 360.0f;
-    while (deltaAngle < -180.0f) deltaAngle += 360.0f;
-
-    // Calculate max rotation step this frame
-    float maxRotationStep = 180.0f * 0.016f;
-
-    // Clamp rotation delta to avoid sudden jumps
-    if (deltaAngle > maxRotationStep) deltaAngle = maxRotationStep;
-    if (deltaAngle < -maxRotationStep) deltaAngle = -maxRotationStep;
-
-    // Apply smooth rotation
-    rotationAngle = rotationAngle + deltaAngle;
 
     // checks if it is a shooting interval
     if (critter != nullptr && fireBreak <= 0 && fabs(deltaAngle) < 2.0f)
@@ -174,7 +177,7 @@ void RapidFireTower::shootProjectile(Critter* critter)
         {
             shootingTimer -= rateOfFire;
         }
-        
+
         // if maximum interval time is reached
         if (burstCount == burstSize)
         {
@@ -188,7 +191,7 @@ void RapidFireTower::shootProjectile(Critter* critter)
         burstCount = 0;
         fireBreak -= fireBreakRate;
     }
-    
+
     // moves projectile at a moderate speed
     for (int i = 0; i < projectiles.size(); i++) {
         projectiles[i]->move(5);
@@ -197,7 +200,7 @@ void RapidFireTower::shootProjectile(Critter* critter)
         if (critter != nullptr && projectiles[i]->checkCollision(critter))
         {
             projectiles.erase(projectiles.begin() + i);
-            
+
             // clear projectiles if critter has no hp, no target
             if (critter->getHitPoints() <= 0) {
                 projectiles.clear();
