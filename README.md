@@ -20,8 +20,6 @@ All assignment documentation can be found in the [`deliverables/`](deliverables/
 
 The project's documentation can be found online here: https://comp345.ngrenier.com/
 
-The [project's documentation](docs/html/index.html), generated using Doxygen, can be viewed in any web browser. It can also be [viewed as a PDF](docs/latex/refman.pdf).
-
 # Getting Started
 
 The repo can be cloned at https://github.com/NathanGrenier/COMP-345.
