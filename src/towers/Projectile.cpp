@@ -88,7 +88,7 @@ void Projectile::generateProjectile()
         { 3.f * frameWidth, 0.f, frameWidth, frameHeight }
     };
 
-    float targetHeight = Global::currentMap->getPixelPerCell() * 0.8f;
+    float targetHeight = Global::currentMap.getPixelPerCell() * 0.8f;
 
     // Maintain aspect ratio for width
     float aspectRatio = frameWidth / frameHeight;

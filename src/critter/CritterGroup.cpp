@@ -65,7 +65,7 @@ void CritterGroup::generateCritters(float deltaTime) {
 		int strength = level * 2;
 		int reward = level * 10;
 
-		float currentCellSize = Global::currentMap->getPixelPerCell();
+		float currentCellSize = Global::currentMap.getPixelPerCell();
 
 		SDL_FRect spawnCenter = {
 			startPosition.x + (startPosition.w / 2.0f) - (currentCellSize * Critter::CRITTER_WIDTH_SCALE / 2.0f),  // Adjust for half of critter width
@@ -190,17 +190,17 @@ void CritterGroup::render() {
 	}
 
 	// Render the alive critters count at the top-left
-	SDL_Color textColor = { 255, 117, 152, 255 };
+	SDL_Color textColor = { 0, 0, 0, 255 };
 	LTexture aliveText;
 	std::string aliveMessage = "Living Critters: " + std::to_string(aliveCritters);
 	aliveText.loadFromRenderedText(aliveMessage, textColor);
-	aliveText.render(220, 10);  // Display text at the top-left
+	aliveText.render(210, 10);  // Display text at the top-left
 
 	// Render the countdown message for the next wave
 	if (!waveInProgress) {
 		LTexture countdownText;
 		std::string countdownMessage = "Next wave in: " + std::to_string((int)std::ceil(waveCountdown));
 		countdownText.loadFromRenderedText(countdownMessage, textColor);
-		countdownText.render(220, 50);  // Display text at the top-center
+		countdownText.render(210, 50);  // Display text at the top-center
 	}
 }

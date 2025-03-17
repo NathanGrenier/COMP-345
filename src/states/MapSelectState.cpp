@@ -96,8 +96,12 @@ bool MapSelectState::exit() {
 	selectButton.destroy();
 	mTitle.destroy();
 	mHoveredMapName.destroy();
+
+	availableMaps.clear();
+
 	return true;
 }
+
 
 void MapSelectState::handleEvent(SDL_Event& e) {
 	backButton.handleEvent(&e);
@@ -131,16 +135,20 @@ void MapSelectState::handleEvent(SDL_Event& e) {
 		std::string selectedMapPath = "assets/mapPresets/" + selectedMapFilePath;
 
 		if (createButton.isClicked()) {
+			Global::currentMap = Map();  // Assign a new empty map (default constructor)
 			setNextState(MapEditorState::get());
-		} else if (editButton.isClicked()) {
-			// Edit the selected map
-			Global::currentMap = &availableMaps[selectedMapFilePath];
+		}
+		else if (editButton.isClicked()) {
+			// Copy the selected map for editing
+			Global::currentMap = availableMaps[selectedMapFilePath];
 			setNextState(MapEditorState::get());
-		} else if (selectButton.isClicked()) {
-			// Select the map to start the game
-			Global::currentMap = &availableMaps[selectedMapFilePath];
+		}
+		else if (selectButton.isClicked()) {
+			// Copy the selected map to start the game
+			Global::currentMap = availableMaps[selectedMapFilePath];
 			setNextState(MainGameState::get());
-		} else if (backButton.isClicked()) {
+		}
+		else if (backButton.isClicked()) {
 			setNextState(TitleState::get());
 		}
 	}

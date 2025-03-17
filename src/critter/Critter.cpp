@@ -265,7 +265,7 @@ void Critter::setSpeed(int newSpeed) {
  * @param renderer The SDL_Renderer used to draw the critter.
  */
 void Critter::render() {
-	float currentCellSize = Global::currentMap->getPixelPerCell();
+	float currentCellSize = Global::currentMap.getPixelPerCell();
 
 	currentRenderRect = { position.x, position.y, currentCellSize * CRITTER_WIDTH_SCALE, currentCellSize * CRITTER_WIDTH_SCALE };
 
