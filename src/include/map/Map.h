@@ -88,6 +88,8 @@ public:
     void setFlowFieldVisibility(bool value);
     void toggleFlowFieldVisibility();
 
+    bool isEmpty() const { return cellCountX == 0; };
+
     bool loadFromJson(const std::string& filePath);
     bool saveToJson(const std::string& filePath);
     void calculatePixelsPerCell();

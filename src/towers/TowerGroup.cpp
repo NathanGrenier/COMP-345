@@ -52,6 +52,8 @@ void TowerGroup::removeTower(Tower* tower) {
 // Update all towers (e.g., shooting critters)
 void TowerGroup::update(float deltaTime, std::vector<Critter*> critters) {
 	for (int i = 0; i < towers.size(); i++) {
+		towers[i]->generateAllProjectiles();
+
 		// Find the target critter for the current tower
 		Critter* targettedCritter = towers[i]->findCritter(critters);
 
@@ -154,7 +156,6 @@ void TowerGroup::handleEvent(SDL_Event& e) {
 	// if click happens
 	if (e.type == SDL_EVENT_MOUSE_BUTTON_DOWN && e.button.button == SDL_BUTTON_LEFT)
 	{
-
 		// checking if buying tower
 		std::vector<DetailDisplayComponent*> components = detailDisplay.getComponents();
 
@@ -188,7 +189,7 @@ void TowerGroup::handleEvent(SDL_Event& e) {
 		}
 
 		// checking if upgrading tower
-		if ((dynamic_cast<DetailButton*>(detailDisplay.getTowerComponents()[7]))->isClicked())
+		if (detailDisplay.getTowerObserver()->getCurrentTower() != nullptr && (dynamic_cast<DetailButton*>(detailDisplay.getTowerComponents()[7]))->isClicked())
 		{
 			buttonClick = true;
 			int upgradeCost = detailDisplay.getTowerObserver()->getCurrentTower()->getUpgradeCost();
@@ -209,7 +210,7 @@ void TowerGroup::handleEvent(SDL_Event& e) {
 		}
 
 		// checking if selling tower
-		if ((dynamic_cast<DetailButton*>(detailDisplay.getTowerComponents()[8]))->isClicked())
+		if (detailDisplay.getTowerObserver()->getCurrentTower() != nullptr && (dynamic_cast<DetailButton*>(detailDisplay.getTowerComponents()[8]))->isClicked())
 		{
 			buttonClick = true;
 			playerGold += detailDisplay.getTowerObserver()->getCurrentTower()->getRefundValue();

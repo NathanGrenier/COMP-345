@@ -19,13 +19,14 @@ MapEditorState* MapEditorState::get() {
 }
 
 bool MapEditorState::enter() {
-	if (Global::currentMap == nullptr) {
-		Global::currentMap = new Map(15, 15, "Default");
+	if (Global::currentMap.isEmpty()) {
+		map = new Map(15, 15, "Default");
 		mMessageTexture.loadFromFile("assets/ui/MapCreation.png");
-	} else {
+	}
+	else {
+		map = new Map(Global::currentMap);
 		mMessageTexture.loadFromFile("assets/ui/MapEditing.png");
 	}
-	map = new Map(*Global::currentMap);
 	originalName = map->getName();
 	map->setFlowFieldVisibility(true);
 

@@ -7,6 +7,7 @@
 #include <towers/StandardTower.h>
 #include <ui/DetailButton.h>
 #include <towers/TowerGroup.h>
+#include <states/TitleState.h>
 
 
 /** @class MainGameState
@@ -39,13 +40,24 @@ MainGameState *MainGameState::get()
  */
 bool MainGameState::enter()
 {
-	if (Global::currentMap == nullptr || Global::currentMap->getName().empty())
+	if (Global::currentMap.isEmpty())
 	{
 		std::cerr << "Global::currentMap was null" << std::endl;
 		return false;
 	}
 
-	map = new Map(*Global::currentMap);
+	int intButtonHeight = 40;
+
+	pauseButton.loadFromFile("assets/ui/PauseButton.png");
+	exitButton.loadFromFile("assets/ui/ExitButton.png");
+
+	exitButton.setSizeWithAspectRatio(0, intButtonHeight);
+	pauseButton.setSizeWithAspectRatio(0, intButtonHeight);
+
+	exitButton.setPosition(Global::kScreenWidth - Global::viewerWidth + 30 + pauseButton.kButtonWidth + 30, Global::kScreenHeight - intButtonHeight - 20);
+	pauseButton.setPosition(Global::kScreenWidth - Global::viewerWidth + 30, Global::kScreenHeight - intButtonHeight - 20);
+
+	map = new Map(Global::currentMap);
 	map->setFlowFieldVisibility(false);
 	map->setCurrentRenderRect(Global::mapViewRect);
 
@@ -68,7 +80,7 @@ bool MainGameState::enter()
 	critterGroup = new CritterGroup(waveLevel, playerGold, map->getSpawnerPos(Global::mapViewRect), map->getTargetPos(Global::mapViewRect), map, detailDisplay);
 	towerGroup = new TowerGroup(playerGold, map, detailDisplay);
 
-	return true;
+	return success;
 }
 
 /**
@@ -82,23 +94,21 @@ bool MainGameState::exit()
 {
 	TextureLoader::deallocateTextures();
 
-	if (critterGroup != nullptr)
-	{
-		delete critterGroup;
-		critterGroup = nullptr;
-	}
+	mBackgroundTexture.destroy();
 
-	if (towerGroup != nullptr)
-	{
-		delete towerGroup;
-		towerGroup = nullptr;
-	}
+	mMessageTexture.destroy();
 
-	if (map != nullptr)
-	{
-		delete map;
-		map = nullptr;
-	}
+	pauseButton.destroy();
+	exitButton.destroy();
+
+	delete critterGroup;
+	critterGroup = nullptr;
+
+	delete towerGroup;
+	towerGroup = nullptr;
+
+	delete map;
+	map = nullptr;
 
 	playerGold = 999;
 	waveLevel = 0;
@@ -114,9 +124,25 @@ bool MainGameState::exit()
 void MainGameState::handleEvent(SDL_Event &e)
 {
 	// handles hovering, clicking of buttons
-	towerGroup->handleEvent(e);
-	critterGroup->handleEvent(e);
-	detailDisplay.handleButtonEvents(e);
+	if (!isPaused) {
+		towerGroup->handleEvent(e);
+		critterGroup->handleEvent(e);
+		detailDisplay.handleButtonEvents(e);
+	}
+
+	pauseButton.handleEvent(&e);
+	exitButton.handleEvent(&e);
+
+	if (e.type == SDL_EVENT_MOUSE_BUTTON_DOWN && e.button.button == SDL_BUTTON_LEFT) {
+		if (pauseButton.isClicked())
+		{
+			isPaused = !isPaused;
+		}
+		if (exitButton.isClicked())
+		{
+			setNextState(TitleState::get());
+		}
+	}
 }
 
 /**
@@ -126,6 +152,8 @@ void MainGameState::handleEvent(SDL_Event &e)
  */
 void MainGameState::update()
 {
+	if (isPaused) return;
+
 	critterGroup->update(0.016f);
 
 	towerGroup->update(0.016f, critterGroup->getCritters());
@@ -158,6 +186,9 @@ void MainGameState::render()
 
 	towerGroup->render();
 
+	pauseButton.render();
+	exitButton.render();
+
 	// Render player gold
 	int displayedGold = std::min(playerGold, 9999);
 	renderText("Gold: " + std::to_string(playerGold), 10.0f, 10.0f);
@@ -176,7 +207,7 @@ void MainGameState::render()
  */
 void MainGameState::renderText(const std::string &text, float x, float y)
 {
-	SDL_Color textColor = { 255, 117, 152, 255 };
+	SDL_Color textColor = { 0, 0, 0, 255 };
 	LTexture textTexture;
 	textTexture.loadFromRenderedText(text, textColor);
 	textTexture.render(x, y);

@@ -7,6 +7,7 @@
 #pragma once
 
 #include "GameState.h"
+#include <ui/LButton.h>
 #include <ui/LTexture.h>
 #include <map/Map.h>
 #include <string>
@@ -46,6 +47,11 @@ private:
 
 	//Intro message
 	LTexture mMessageTexture;
+
+	LButton pauseButton;
+	LButton exitButton;
+
+	bool isPaused;
 
 	/** @brief Pointer to the map being edited
 	 *  @details nullptr if no map is currently loaded

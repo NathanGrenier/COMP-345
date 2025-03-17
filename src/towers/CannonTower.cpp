@@ -121,7 +121,7 @@ void CannonTower::shootProjectile(Critter* critter)
         float posX = currentRenderRect.x + currentRenderRect.w / 2;
         float posY = currentRenderRect.y + currentRenderRect.w / 2;
 
-        float currentCellSize = Global::currentMap->getPixelPerCell();
+        float currentCellSize = Global::currentMap.getPixelPerCell();
 
         // critter position with offset
         float critterPosX = critter->getPosition().x + Critter::CRITTER_WIDTH_SCALE * currentCellSize / 2;

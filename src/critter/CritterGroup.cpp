@@ -65,7 +65,7 @@ void CritterGroup::generateCritters(float deltaTime) {
 		int strength = level * 2;
 		int reward = level * 10;
 
-		float currentCellSize = Global::currentMap->getPixelPerCell();
+		float currentCellSize = Global::currentMap.getPixelPerCell();
 
 		SDL_FRect spawnCenter = {
 			startPosition.x + (startPosition.w / 2.0f) - (currentCellSize * Critter::CRITTER_WIDTH_SCALE / 2.0f),  // Adjust for half of critter width
@@ -190,7 +190,7 @@ void CritterGroup::render() {
 	}
 
 	// Render the alive critters count at the top-left
-	SDL_Color textColor = { 255, 117, 152, 255 };
+	SDL_Color textColor = { 0, 0, 0, 255 };
 	LTexture aliveText;
 	std::string aliveMessage = "Living Critters: " + std::to_string(aliveCritters);
 	aliveText.loadFromRenderedText(aliveMessage, textColor);
