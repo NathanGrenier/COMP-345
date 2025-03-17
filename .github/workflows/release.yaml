@@ -1,0 +1,49 @@
+name: Release
+
+on:
+  workflow_dispatch:
+  release:
+    types: [published]
+
+permissions:
+  contents: write
+
+jobs:  
+  release:
+    name: 🚀 Windows Release
+    runs-on: windows-latest
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v3
+        with:
+            submodules: true
+            fetch-depth: 0
+
+      - name: Get Gitmodules (Recursively)
+        run: git submodule update --init --recursive
+           
+      - name: Create Build Directory
+        run: mkdir -p ./build
+
+      - name: Configure CMake Project
+        working-directory: ./build
+        run: cmake -DCMAKE_BUILD_TYPE=Release -DCMAKE_C_FLAGS="/D_CRT_SECURE_NO_WARNINGS" -DBUILD_SHARED_LIBS=OFF ..
+        # run: cmake -DCMAKE_BUILD_TYPE=Release -DCMAKE_C_FLAGS="/D_CRT_SECURE_NO_WARNINGS" -DCMAKE_CXX_FLAGS="/D_CRT_SECURE_NO_WARNINGS /EHsc" -DBUILD_SHARED_LIBS=OFF ..
+
+      - name: Build the Project
+        working-directory: ./build
+        run: cmake --build . --config Release
+
+      - name: Zip the Release Directory
+        working-directory: ./build
+        run: powershell Compress-Archive -Path * -DestinationPath ../COMP-345.zip
+
+      - name: Upload Files to Release
+        uses: actions/upload-release-asset@v1
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        with:
+          upload_url: ${{ github.event.release.upload_url }}
+          asset_path: ./COMP-345.zip
+          asset_name: COMP-345.zip
+          asset_content_type: application/zip

@@ -2,9 +2,9 @@ name: CI
 
 on:
   push:
-    branches: [master]
+    branches: [master, develop]
   pull_request:
-    branches: [master]
+    branches: [master, develop]
   workflow_dispatch:
   
 jobs:
@@ -20,9 +20,14 @@ jobs:
 
       - name: Get Gitmodules (Recursively)
         run: git submodule update --init --recursive
-            
-      - name: Configure CMake
-        run: cmake -S . -B build -DCMAKE_BUILD_TYPE=Release -DCMAKE_CXX_FLAGS="/D_CRT_SECURE_NO_WARNINGS" -DBUILD_SHARED_LIBS=OFF
+           
+      - name: Create Build Directory
+        run: mkdir -p ./build
 
-      - name: Build project
-        run: cmake --build build --config Release
+      - name: Configure CMake Project
+        working-directory: ./build
+        run: cmake -DCMAKE_BUILD_TYPE=Release -DCMAKE_C_FLAGS="/D_CRT_SECURE_NO_WARNINGS" -DCMAKE_CXX_FLAGS="/D_CRT_SECURE_NO_WARNINGS /EHsc" -DBUILD_SHARED_LIBS=OFF ..
+
+      - name: Build the Project
+        working-directory: ./build
+        run: cmake --build . --config Release

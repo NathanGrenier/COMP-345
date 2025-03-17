@@ -2,6 +2,7 @@ out/
 build/
 .vs/
 .vscode/
+repomix-output.txt
 
 # Docs
 docs/**

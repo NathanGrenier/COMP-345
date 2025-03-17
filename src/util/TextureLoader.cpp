@@ -74,6 +74,7 @@ SDL_Texture* TextureLoader::loadTexture(SDL_Renderer* renderer, std::string file
 			}
 		}
 	}
+	return nullptr;
 }
 
 
