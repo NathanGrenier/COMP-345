@@ -122,40 +122,28 @@ void TowerGroup::handleEvent(SDL_Event& e) {
 	int cellX = static_cast<int>(mousePosition.x);
 	int cellY = static_cast<int>(mousePosition.y);
 
-	// Ensure valid index range
-	if (cellX < 0 || cellX >= map->cellCountX || cellY < 0 || cellY >= map->cellCountY)
-	{
-		correctCell = false;
-	}
-	else
-	{
-		// Compute the index for accessing the cell
-		int index = cellX + cellY * map->cellCountX;
-		targetCell = map->cells[index];
-		correctCell = true;
-	}
-
 	// Snap the target position to the grid cell
 	float cellSize = map->getPixelPerCell();
 	float targetX = cellX * cellSize + currentRenderRect.x;
 	float targetY = cellY * cellSize + currentRenderRect.y;
 
-	// Ensure valid index range
-	if (cellX < 0 || cellX >= map->cellCountX || cellY < 0 || cellY >= map->cellCountY)
-	{
-		correctCell = false;
-	}
-	else
-	{
-		// Compute the index for accessing the cell
-		int index = cellX + cellY * map->cellCountX;
-		targetCell = map->cells[index];
-		correctCell = true;
-	}
-
 	// if click happens
 	if (e.type == SDL_EVENT_MOUSE_BUTTON_DOWN && e.button.button == SDL_BUTTON_LEFT)
 	{
+
+		// Ensure valid index range
+		if (cellX < 0 || cellX >= map->cellCountX || cellY < 0 || cellY >= map->cellCountY)
+		{
+			correctCell = false;
+		}
+		else
+		{
+			// Compute the index for accessing the cell
+			int index = cellX + cellY * map->cellCountX;
+			targetCell = map->cells[index];
+			correctCell = true;
+		}
+
 		// checking if buying tower
 		std::vector<DetailDisplayComponent*> components = detailDisplay.getComponents();
 
@@ -203,7 +191,6 @@ void TowerGroup::handleEvent(SDL_Event& e) {
 					playerGold -= upgradeCost;
 				}
 
-				map->wallCellDict[targetCell] = false;
 
 				return;
 			}
@@ -221,7 +208,6 @@ void TowerGroup::handleEvent(SDL_Event& e) {
 				if (towers[i] == detailDisplay.getTowerObserver()->getCurrentTower())
 				{
 					towers.erase(towers.begin() + i);
-
 
 					map->wallCellDict[targetCell] = false;
 				}
@@ -300,6 +286,8 @@ void TowerGroup::handleEvent(SDL_Event& e) {
 					newTower->notify();
 
 					// Mark the wall cell as occupied
+					std::cout << targetCell.x << " and " << targetCell.y << std::endl;
+
 					map->wallCellDict[targetCell] = true;
 				}
 			}
