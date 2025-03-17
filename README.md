@@ -26,9 +26,11 @@ The [project's documentation](docs/html/index.html), generated using Doxygen, ca
 
 The repo can be cloned at https://github.com/NathanGrenier/COMP-345.
 
-> Note: The project was tested an ran on VisualStudio v17.3.6+
+> [!NOTE]
+> The project was tested an ran on VisualStudio v17.3.6+
 
-> NOTE: If you are running the project via a `.zip` file, skip to step 2.
+> [!TIP]
+>  If you are running the project via a `.zip` file, skip to step 2.
 
 1. Install the project's dependencies by running `git submodule init` followed by `git submodule update --init --recursive`.
    > If you don't have git installed. You can use the installation .exe in `vendor/`.
