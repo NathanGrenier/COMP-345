@@ -42,8 +42,8 @@ public:
 	void render(float x, float y, SDL_FRect* clip = nullptr, float width = kOriginalSize, float height = kOriginalSize, double degrees = 0.0, SDL_FPoint* center = nullptr, SDL_FlipMode flipMode = SDL_FLIP_NONE);
 
 	//Gets texture dimensions
-	int getWidth();
-	int getHeight();
+	int getWidth() const;
+	int getHeight() const;
 
 private:
 	//Contains texture data

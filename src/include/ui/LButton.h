@@ -11,8 +11,8 @@
 #include "LTexture.h"
 class LButton {
 public:
-	int kButtonWidth;
-	int kButtonHeight;
+	float kButtonWidth;
+	float kButtonHeight;
 
 	//Initializes internal variables
 	LButton();
@@ -21,7 +21,7 @@ public:
 	//Sets top left position
 	void setPosition(float x, float y);
 
-	SDL_FPoint getPosition();
+	SDL_FPoint getPosition() const;
 
 	//Handles mouse event
 	void handleEvent(SDL_Event* e);
@@ -32,9 +32,9 @@ public:
 	//Shows button sprite
 	void render();
 
-	bool isClicked();
+	bool isClicked() const;
 
-	void setSizeWithAspectRatio(int newWidth, int newHeight);
+	void setSizeWithAspectRatio(float newWidth, float newHeight);
 
 	enum eButtonSprite {
 		eButtonSpriteMouseOut = 0,
@@ -44,8 +44,8 @@ public:
 		eButtonSpriteCount
 	};
 private:
-	int originalWidth;
-	int originalHeight;
+	float originalWidth;
+	float originalHeight;
 
 	//Top left position
 	SDL_FPoint mPosition;

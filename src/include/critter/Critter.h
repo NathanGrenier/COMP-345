@@ -28,12 +28,12 @@ public:
 	void move(float deltaTime, const std::vector<Critter*> critters, float spacing);  // Move critter towards exit
 	void takeDamage(); // Apply damage from towers
 	bool isAlive() const;        // Check if critter is still alive
-	void stealGold(int& playerGold);  // Steal gold if critter reaches the exit
+	void stealGold(int& playerGold) const;  // Steal gold if critter reaches the exit
 
 	void render();  // Render critter (could be a simple shape or sprite)
 	void update();
 
-	int getSpeed();
+	int getSpeed() const;
 	void setSpeed(int speed);
 
 	int getReward() const { return reward; }
@@ -47,7 +47,7 @@ public:
 	SDL_FRect getPosition() const;
 	SDL_FRect getCurrentRenderRect() const { return currentRenderRect; };
 
-	bool atExit();
+	bool atExit() const;
 	void setAtExit(bool con);
 private:
 	int level;

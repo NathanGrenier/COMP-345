@@ -11,6 +11,8 @@
  */
 LButton::LButton() :
 	mPosition{ 0.f, 0.f },
+	originalHeight{ 0.f },
+	originalWidth{ 0.f },
 	mCurrentSprite{ eButtonSpriteMouseOut }, kButtonHeight{ 0 }, kButtonWidth{ 0 } {}
 
 /**
@@ -29,7 +31,7 @@ void LButton::setPosition(float x, float y) {
  *
  * @return The SDL_FPoint representing the button's position.
  */
-SDL_FPoint LButton::getPosition() {
+SDL_FPoint LButton::getPosition() const {
 	return mPosition;
 }
 
@@ -110,7 +112,7 @@ bool LButton::loadFromFile(std::string path) {
 	bool result = gButtonSpriteTexture.loadFromFile(path);
 	if (result) {
 		kButtonWidth = gButtonSpriteTexture.getWidth();
-		kButtonHeight = gButtonSpriteTexture.getHeight() / eButtonSpriteCount;
+		kButtonHeight = gButtonSpriteTexture.getHeight() / static_cast<float>(eButtonSpriteCount);
 		originalWidth = kButtonWidth;
 		originalHeight = kButtonHeight;
 	}
@@ -137,7 +139,7 @@ void LButton::render() {
  *
  * @return True if the button is clicked, false otherwise.
  */
-bool LButton::isClicked() {
+bool LButton::isClicked() const {
 	// Get the current mouse position
 	float x, y;
 	SDL_GetMouseState(&x, &y);
@@ -147,7 +149,7 @@ bool LButton::isClicked() {
 			y >= mPosition.y && y <= mPosition.y + kButtonHeight);
 }
 
-void LButton::setSizeWithAspectRatio(int newWidth, int newHeight) {
+void LButton::setSizeWithAspectRatio(float newWidth, float newHeight) {
 	if (kButtonWidth == 0 || kButtonHeight == 0) {
 		return; // Avoid division by zero
 	}

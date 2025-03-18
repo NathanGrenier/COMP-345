@@ -34,10 +34,10 @@ public:
     
     virtual void generateAllProjectiles();
     
-    int getRange();
-    int getPower();
-    int getRateOfFire();
-    int getLevel();
+    int getRange() const;
+    int getPower() const;
+    int getRateOfFire() const;
+    int getLevel() const;
     std::vector<Projectile *>& getProjectiles() { return projectiles; }
 
     virtual int getRefundValue();
@@ -58,13 +58,13 @@ public:
         int rateOfFireIncrease;
     };
 
-    UpgradeValues getUpgradeValues();
+    UpgradeValues getUpgradeValues() const;
 
     void render();
     void setRotation(float angle);
     float getRotation() const { return rotationAngle; }
     void setCurrentRenderRect(float originalX, float originalY, float w, float h);
-    SDL_FRect getCurrentRenderRect();
+    SDL_FRect getCurrentRenderRect() const;
 
 protected:
     SDL_FRect currentRenderRect;
@@ -76,7 +76,7 @@ protected:
     int rateOfFire; /** @brief higher rate of fire indicates faster shooting */
     int level;
     int shootingTimer; /** @brief decremented with rate of fire for shooting */
-    float calcDistance(Critter* critter);
+    float calcDistance(Critter* critter) const;
     std::vector<Projectile *> projectiles; /** @brief vector of all projectile */
 
     UpgradeValues upgradeValues;

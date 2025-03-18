@@ -19,16 +19,17 @@ MapEditorState* MapEditorState::get() {
 }
 
 bool MapEditorState::enter() {
-	if (Global::currentMap.isEmpty()) {
+	if (Global::currentMap == nullptr) {
 		map = new Map(15, 15, "Default");
 		mMessageTexture.loadFromFile("assets/ui/MapCreation.png");
 	}
 	else {
-		map = new Map(Global::currentMap);
+		map = Global::currentMap;
 		mMessageTexture.loadFromFile("assets/ui/MapEditing.png");
 	}
 	originalName = map->getName();
 	map->setFlowFieldVisibility(true);
+	map->setCurrentRenderRect(Global::mapViewRect);
 
 	backButton.loadFromFile("assets/ui/LeftArrow.png");
 
@@ -115,7 +116,6 @@ bool MapEditorState::enter() {
 
 
 bool MapEditorState::exit() {
-	delete map;
 	map = nullptr;
 
 	backButton.destroy();

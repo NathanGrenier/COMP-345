@@ -49,7 +49,9 @@ bool MapSelectState::enter() {
 	const int buttonSpacing = 20;
 	const int maxButtonWidth = (Global::kScreenWidth - (buttonSpacing * (buttonCount + 1))) / buttonCount;
 
-	backButton.setSizeWithAspectRatio(mTitle.getHeight() * 0.75, 0);
+	float reducedHeight = mTitle.getHeight() * 0.75;
+
+	backButton.setSizeWithAspectRatio(reducedHeight, 0);
 	createButton.setSizeWithAspectRatio(maxButtonWidth, 0);
 	editButton.setSizeWithAspectRatio(maxButtonWidth, 0);
 	selectButton.setSizeWithAspectRatio(maxButtonWidth, 0);
@@ -58,11 +60,11 @@ bool MapSelectState::enter() {
 	rightArrow.setSizeWithAspectRatio(50, 0);
 
 	// Get max button height (assuming they have the same aspect ratio)
-	int maxButtonHeight = std::max({ createButton.kButtonHeight, editButton.kButtonHeight, selectButton.kButtonHeight });
+	float maxButtonHeight = std::max({ createButton.kButtonHeight, editButton.kButtonHeight, selectButton.kButtonHeight });
 
 	// Calculate start positions
-	int startX = (Global::kScreenWidth - (buttonCount * maxButtonWidth + (buttonCount - 1) * buttonSpacing)) / 2;
-	int startY = Global::kScreenHeight - maxButtonHeight - buttonSpacing;
+	float startX = static_cast<float>((Global::kScreenWidth - (buttonCount * maxButtonWidth + (buttonCount - 1) * buttonSpacing))) / 2;
+	float startY = static_cast<float>(Global::kScreenHeight - maxButtonHeight - buttonSpacing);
 
 	// Set positions dynamically
 	float renderedWidth = Global::kScreenWidth * 0.5f;
@@ -83,8 +85,13 @@ bool MapSelectState::enter() {
 	int centerX = (Global::kScreenWidth - totalArrowsWidth) / 2;
 
 	// Set the positions for the arrows
-	leftArrow.setPosition(centerX, (Global::kScreenHeight - mHoveredMapName.getHeight()) / 2 - 75);
-	rightArrow.setPosition(centerX + leftArrow.kButtonWidth + distanceBetweenArrows, (Global::kScreenHeight - mHoveredMapName.getHeight()) / 2 - 75);
+	leftArrow.setPosition(centerX, (static_cast<float>(Global::kScreenHeight) - mHoveredMapName.getHeight()) / 2 - 75);
+	rightArrow.setPosition(centerX + leftArrow.kButtonWidth + distanceBetweenArrows, (static_cast<float>(Global::kScreenHeight) - mHoveredMapName.getHeight()) / 2 - 75);
+
+
+	for (auto& [mapName, map] : availableMaps) {
+		map.setCurrentRenderRect(targetRect);
+	}
 
 	return true;
 }
@@ -97,13 +104,11 @@ bool MapSelectState::exit() {
 	mTitle.destroy();
 	mHoveredMapName.destroy();
 
-	availableMaps.clear();
-
 	return true;
 }
 
 
-void MapSelectState::handleEvent(SDL_Event& e) {
+void MapSelectState::handleEvent(SDL_Event& e) { 
 	backButton.handleEvent(&e);
 	createButton.handleEvent(&e);
 	editButton.handleEvent(&e);
@@ -135,17 +140,15 @@ void MapSelectState::handleEvent(SDL_Event& e) {
 		std::string selectedMapPath = "assets/mapPresets/" + selectedMapFilePath;
 
 		if (createButton.isClicked()) {
-			Global::currentMap = Map();  // Assign a new empty map (default constructor)
+			Global::currentMap = nullptr;  // Assign a new empty map (default constructor)
 			setNextState(MapEditorState::get());
 		}
 		else if (editButton.isClicked()) {
-			// Copy the selected map for editing
-			Global::currentMap = availableMaps[selectedMapFilePath];
+			Global::currentMap = &availableMaps[selectedMapFilePath];
 			setNextState(MapEditorState::get());
 		}
 		else if (selectButton.isClicked()) {
-			// Copy the selected map to start the game
-			Global::currentMap = availableMaps[selectedMapFilePath];
+			Global::currentMap = &availableMaps[selectedMapFilePath];
 			setNextState(MainGameState::get());
 		}
 		else if (backButton.isClicked()) {
@@ -167,33 +170,48 @@ void MapSelectState::update() {
 }
 
 void MapSelectState::render() {
-	int kScreenWidth = Global::kScreenWidth;
-	int kScreenHeight = Global::kScreenHeight;
+	float kScreenWidth = Global::kScreenWidth;
+	float kScreenHeight = Global::kScreenHeight;
 
-	mTitle.render((kScreenWidth - kScreenWidth * 0.5) / 2, titleDistanceFromTop, nullptr, kScreenWidth * 0.5, -1);
+	// Render title below the map
+	mTitle.render(
+		(kScreenWidth - kScreenWidth * 0.5) / 2,
+		10.0f,
+		nullptr,
+		kScreenWidth * 0.5,
+		-1
+	);
 
+	// Render selected map
 	if (!selectedMapFilePath.empty()) {
 		auto mapIter = availableMaps.find(selectedMapFilePath);
 		if (mapIter != availableMaps.end()) {
-			// Map found, render it
-			SDL_FRect targetRect = { (kScreenWidth - 300) / 2.0f, (kScreenHeight - 300) / 2.0f - 50, 300, 300 };
-
-			// Ensure that the map can be drawn
+			mapIter->second.setCurrentRenderRect(targetRect);
 			mapIter->second.drawOnTargetRect(targetRect);
-		} else {
-			// Map not found
+		}
+		else {
 			std::cerr << "Error: Map '" << selectedMapFilePath << "' not found in available maps." << std::endl;
 		}
-	} else {
+	}
+	else {
 		std::cerr << "Error: selectedMapName is empty." << std::endl;
 	}
 
-	mHoveredMapName.render((kScreenWidth - mHoveredMapName.getWidth()) / 2, (kScreenHeight - mHoveredMapName.getHeight()) / 2 + 125);
+	// Render hovered map name
+	mHoveredMapName.render(
+		(kScreenWidth - mHoveredMapName.getWidth()) / 2,
+		targetRect.y + targetRect.h + 30
+	);
 
+	// Button rendering
 	backButton.render();
 	createButton.render();
 	editButton.render();
 	selectButton.render();
+
+	int arrowOffset = 10;
+	leftArrow.setPosition(targetRect.x - leftArrow.kButtonWidth - arrowOffset, kScreenHeight / 2 - leftArrow.kButtonHeight / 2 - 30);
+	rightArrow.setPosition(targetRect.x + targetRect.w + arrowOffset, kScreenHeight / 2 - rightArrow.kButtonHeight / 2 - 30);
 
 	leftArrow.render();
 	rightArrow.render();

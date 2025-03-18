@@ -33,7 +33,7 @@ public:
 	static inline const int viewerWidth{ static_cast<int>(kScreenWidth * 0.3f) };
 	static inline const int headerHeight{ static_cast<int>(kScreenHeight * 0.15f) };
 
-	static Map currentMap;
+	static Map* currentMap;
 	static SDL_FRect mapViewRect;
 };
 

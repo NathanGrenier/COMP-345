@@ -22,6 +22,8 @@ Critter::Critter(int level, float speed, int hitPoints, int strength, int reward
 	: level(level), speed(speed), hitPoints(hitPoints), strength(strength), reward(reward),
 	position(start), isAtExit(false), maxHitPoints(hitPoints), map(map) {
 
+	currentRenderRect = {};
+
 	if (map != nullptr) {
 		map->subscribe(this);
 
@@ -75,7 +77,7 @@ SDL_FRect Critter::getPosition() const {
  * @param b The second rectangle.
  * @return True if the rectangles intersect, false otherwise.
  */
-bool rectanglesIntersect(const SDL_FRect& a, const SDL_FRect& b) {
+static bool rectanglesIntersect(const SDL_FRect& a, const SDL_FRect& b) {
 	return (a.x < b.x + b.w && a.x + a.w > b.x && a.y < b.y + b.h && a.y + a.h > b.y);
 }
 
@@ -197,7 +199,7 @@ bool Critter::isAlive() const {
  * @brief Checks if the critter has reached the exit.
  * @return True if the critter has reached the exit, false otherwise.
  */
-bool Critter::atExit() {
+bool Critter::atExit() const {
 	return isAtExit;
 }
 
@@ -245,7 +247,7 @@ void Critter::setAtExit(bool con) {
  * @brief Gets the speed of the critter.
  * @return The speed of the critter.
  */
-int Critter::getSpeed() {
+int Critter::getSpeed() const  {
 	return speed;
 }
 
@@ -265,7 +267,7 @@ void Critter::setSpeed(int newSpeed) {
  * @param renderer The SDL_Renderer used to draw the critter.
  */
 void Critter::render() {
-	float currentCellSize = Global::currentMap.getPixelPerCell();
+	float currentCellSize = Global::currentMap->getPixelPerCell();
 
 	currentRenderRect = { position.x, position.y, currentCellSize * CRITTER_WIDTH_SCALE, currentCellSize * CRITTER_WIDTH_SCALE };
 
@@ -302,6 +304,6 @@ void Critter::render() {
  *
  * @param playerGold The player's current gold amount, which will be reduced by the critter's strength.
  */
-void Critter::stealGold(int& playerGold) {
+void Critter::stealGold(int& playerGold) const {
 	playerGold -= strength;
 }

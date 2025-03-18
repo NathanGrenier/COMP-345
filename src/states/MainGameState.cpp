@@ -40,7 +40,7 @@ MainGameState *MainGameState::get()
  */
 bool MainGameState::enter()
 {
-	if (Global::currentMap.isEmpty())
+	if (Global::currentMap == nullptr)
 	{
 		std::cerr << "Global::currentMap was null" << std::endl;
 		return false;
@@ -57,9 +57,8 @@ bool MainGameState::enter()
 	exitButton.setPosition(Global::kScreenWidth - Global::viewerWidth + 30 + pauseButton.kButtonWidth + 30, Global::kScreenHeight - intButtonHeight - 20);
 	pauseButton.setPosition(Global::kScreenWidth - Global::viewerWidth + 30, Global::kScreenHeight - intButtonHeight - 20);
 
-	map = new Map(Global::currentMap);
+	map = new Map(*Global::currentMap);
 	map->setFlowFieldVisibility(false);
-	map->setCurrentRenderRect(Global::mapViewRect);
 
 	for (auto& cell : map->cells)
 	{

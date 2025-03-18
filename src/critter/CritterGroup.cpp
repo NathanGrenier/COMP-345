@@ -65,7 +65,7 @@ void CritterGroup::generateCritters(float deltaTime) {
 		int strength = level * 2;
 		int reward = level * 10;
 
-		float currentCellSize = Global::currentMap.getPixelPerCell();
+		float currentCellSize = Global::currentMap->getPixelPerCell();
 
 		SDL_FRect spawnCenter = {
 			startPosition.x + (startPosition.w / 2.0f) - (currentCellSize * Critter::CRITTER_WIDTH_SCALE / 2.0f),  // Adjust for half of critter width

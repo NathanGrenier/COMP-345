@@ -197,7 +197,7 @@ void LTexture::render(float x, float y, SDL_FRect* clip, float width, float heig
  *
  * @return The width of the texture in pixels.
  */
-int LTexture::getWidth() {
+int LTexture::getWidth() const {
 	return mWidth;
 }
 
@@ -206,6 +206,6 @@ int LTexture::getWidth() {
  *
  * @return The height of the texture in pixels.
  */
-int LTexture::getHeight() {
+int LTexture::getHeight() const {
 	return mHeight;
 }

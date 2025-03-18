@@ -285,9 +285,6 @@ void TowerGroup::handleEvent(SDL_Event& e) {
 					newTower->attach(detailDisplay.getTowerObserver());
 					newTower->notify();
 
-					// Mark the wall cell as occupied
-					std::cout << targetCell.x << " and " << targetCell.y << std::endl;
-
 					map->wallCellDict[targetCell] = true;
 				}
 			}

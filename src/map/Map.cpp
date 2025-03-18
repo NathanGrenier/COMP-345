@@ -40,6 +40,7 @@ Map::Map() {
 	setTarget(centerX, centerY);
 
 	calculateFlowField();
+	calculatePixelsPerCell();
 }
 
 /**
@@ -71,6 +72,7 @@ Map::Map(int setCellCountX, int setCellCountY, std::string name) :
 	setTarget(centerX, centerY);
 
 	calculateFlowField();
+	calculatePixelsPerCell();
 }
 
 /**
@@ -144,7 +146,7 @@ void Map::drawCell(const Cell& cell, const SDL_FRect& rect) {
  * @return A pair of integers representing the cell coordinates.
  * @details Returns {-1, -1} if the position is out of bounds.
  */
-std::pair<int, int> Map::getCellFromPosition(float x, float y, const SDL_FRect& targetRect) {
+std::pair<int, int> Map::getCellFromPosition(float x, float y, const SDL_FRect& targetRect) const {
 	float cellW = targetRect.w / cellCountX;
 	float cellH = targetRect.h / cellCountY;
 	int cellX = static_cast<int>((x - targetRect.x) / cellW);
@@ -176,7 +178,7 @@ SDL_FPoint Map::getCellCenter(int x, int y, const SDL_FRect& targetRect) {
  * @return true If the coordinates are within valid bounds.
  * @return false If the coordinates are out of bounds.
  */
-bool Map::isInbounds(int x, int y) {
+bool Map::isInbounds(int x, int y) const {
 	int index = x + y * cellCountX;
 	return (index >= 0 && index < static_cast<int>(cells.size()) &&
 			x >= 0 && x < cellCountX &&
@@ -327,7 +329,7 @@ SDL_FRect Map::getSpawnerPos(const SDL_FRect& targetRect) {
 		}
 	}
 
-	int PIXELS_PER_CELL = getPixelPerCell();
+	float PIXELS_PER_CELL = getPixelPerCell();
 
 	// Default if no spawner
 	return SDL_FRect{
@@ -490,7 +492,7 @@ bool Map::isValidPath() {
  *          If the file cannot be opened or the content is not valid JSON, an error message
  *          is printed to the standard error stream and an empty JSON object is returned.
  */
-nlohmann::json loadMapData(const std::string& filePath) {
+static nlohmann::json loadMapData(const std::string& filePath) {
 	// Open the file
 	std::ifstream file(filePath);
 	if (!file.is_open()) {
@@ -632,9 +634,6 @@ bool Map::loadFromJson(const std::string& filePath) {
 		setCellWall(wallX, wallY, true);
 	}
 
-	// Recalculate the flow field
-	calculateFlowField();
-
 	return true;
 }
 
@@ -643,7 +642,7 @@ bool Map::loadFromJson(const std::string& filePath) {
  *
  * @return SDL_FRect The current rendering rectangle.
  */
-SDL_FRect Map::getCurrentRenderRect() {
+SDL_FRect Map::getCurrentRenderRect() const {
 	return currentRenderRect;
 }
 
@@ -653,7 +652,25 @@ SDL_FRect Map::getCurrentRenderRect() {
  * @param newTargetRect The new rendering rectangle to set.
  */
 void Map::setCurrentRenderRect(SDL_FRect newTargetRect) {
-	currentRenderRect = newTargetRect;
+	// Calculate the scaling factor to fit the map within the target rectangle
+	float mapWidth = cellCountX * getPixelPerCell();
+	float mapHeight = cellCountY * getPixelPerCell();
+
+	float scaleX = newTargetRect.w / mapWidth;
+	float scaleY = newTargetRect.h / mapHeight;
+	float scale = std::min(scaleX, scaleY); // Maintain aspect ratio
+
+	// Calculate the offset to center the map within the target rectangle
+	float offsetX = newTargetRect.x + (newTargetRect.w - mapWidth * scale) / 2.0f;
+	float offsetY = newTargetRect.y + (newTargetRect.h - mapHeight * scale) / 2.0f;
+
+	// Update the currentRenderRect to track where the map is being drawn
+	currentRenderRect = {
+		offsetX,
+		offsetY,
+		mapWidth * scale,
+		mapHeight * scale
+	};
 }
 
 /**
@@ -685,8 +702,6 @@ void Map::calculatePixelsPerCell() {
  *          Updates the current rendering rectangle and draws each cell scaled to fit the target rectangle.
  */
 void Map::drawOnTargetRect(const SDL_FRect& targetRect) {
-	calculatePixelsPerCell();
-
 	// Calculate the scaling factor to fit the map within the target rectangle
 	float mapWidth = cellCountX * getPixelPerCell();
 	float mapHeight = cellCountY * getPixelPerCell();
@@ -721,8 +736,8 @@ void Map::drawOnTargetRect(const SDL_FRect& targetRect) {
 	}
 }
 
-float Map::getPixelPerCell() {
-	return getCurrentRenderRect().w / cellCountX;
+float Map::getPixelPerCell() const {
+	return getCurrentRenderRect().w / static_cast<float>(cellCountX);
 }
 
 
@@ -907,7 +922,7 @@ void Map::setName(std::string newName) {
  *
  * @return std::string The name of the map.
  */
-std::string Map::getName() {
+std::string Map::getName() const {
 	return name;
 }
 
@@ -925,7 +940,7 @@ void Map::setPath(std::string newPath) {
  *
  * @return std::string The file path of the map.
  */
-std::string Map::getPath() {
+std::string Map::getPath() const {
 	return filePath;
 }
 

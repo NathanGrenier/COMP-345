@@ -106,7 +106,7 @@ void Tower::generateAllProjectiles()
  * @brief Accessor for range
  * @return the range for the Tower
  */
-int Tower::getRange()
+int Tower::getRange() const
 {
     return range;
 }
@@ -115,7 +115,7 @@ int Tower::getRange()
  * @brief Accessor for power
  * @return the power for the Tower
  */
-int Tower::getPower()
+int Tower::getPower() const
 {
     return power;
 }
@@ -124,7 +124,7 @@ int Tower::getPower()
  * @brief Accessor for rate of fire
  * @return the rate of fire for the Tower
  */
-int Tower::getRateOfFire()
+int Tower::getRateOfFire() const
 {
     return rateOfFire;
 }
@@ -133,7 +133,7 @@ int Tower::getRateOfFire()
  * @brief Accessor for level
  * @return the level for the Tower
  */
-int Tower::getLevel()
+int Tower::getLevel() const
 {
     return level;
 }
@@ -166,7 +166,7 @@ int Tower::getUpgradeCost()
  * @brief Accessor for the Tower upgrade values
  * @return a struct containing the Tower upgrade values
  */
-Tower::UpgradeValues Tower::getUpgradeValues()
+Tower::UpgradeValues Tower::getUpgradeValues() const
 {
     return upgradeValues;
 }
@@ -247,7 +247,7 @@ bool Tower::isCritterInRange(Critter* critter)
  * Takes Tower and DummyCritter size in account for distance
  * @return the absolute distance between the Tower and the DummyCritter
  */
-float Tower::calcDistance(Critter* critter) 
+float Tower::calcDistance(Critter* critter) const
 {
     // considers Tower size
     float posX = currentRenderRect.x + currentRenderRect.w / 2;
@@ -284,7 +284,7 @@ void Tower::setCurrentRenderRect(float originalX, float originalY, float w, floa
 }
 
 
-SDL_FRect Tower::getCurrentRenderRect() {
+SDL_FRect Tower::getCurrentRenderRect() const {
     return currentRenderRect;
 }
 

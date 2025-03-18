@@ -41,7 +41,7 @@ GameState* gCurrentState{ nullptr };
 
 /** @brief The next game state to transition to. */
 GameState* gNextState{ nullptr };
-Map Global::currentMap;
+Map* Global::currentMap;
 
 SDL_FRect Global::mapViewRect = {
 	Global::kScreenWidth * 0.02f,
