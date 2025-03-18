@@ -104,6 +104,7 @@ bool MapSelectState::exit() {
 	mTitle.destroy();
 	mHoveredMapName.destroy();
 
+
 	return true;
 }
 

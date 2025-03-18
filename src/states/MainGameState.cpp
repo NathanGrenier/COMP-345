@@ -100,6 +100,8 @@ bool MainGameState::exit()
 	pauseButton.destroy();
 	exitButton.destroy();
 
+	isPaused = false;
+
 	delete critterGroup;
 	critterGroup = nullptr;
 
