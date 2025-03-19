@@ -4,8 +4,11 @@ add_library(towers STATIC
     Projectile.cpp
     RapidFireTower.cpp
     StandardTower.cpp
-    
-)
+    TargetNearExit.cpp
+    TargetNearTower.cpp
+    TargetStrongest.cpp
+    TargetWeakest.cpp
+ "TowerStrategy.cpp")
 
 target_include_directories(towers PUBLIC ${CMAKE_SOURCE_DIR}/src/include)
 

@@ -8,15 +8,16 @@
 #include <Global.h>
 #include <towers/Tower.h>
 #include <towers/Projectile.h>
+#include <towers/TargetNearExit.h>
 #include <iostream>
 
 /**
  * @brief Default Constructor, setting all values to 0
  */
 Tower::Tower() 
-    : x(0), y(0), buyingCost(0), refundValue(0), range(0), power(0), rateOfFire(0), level(0), shootingTimer(0), upgradeValues{ 0, 0, 0}
+    : x(0), y(0), buyingCost(0), refundValue(0), range(0), power(0), rateOfFire(0), level(0), shootingTimer(0), upgradeValues{ 0, 0, 0}, critterTargettingStrategy(new TargetNearExit())
 {
-
+     
 }
 
 /**
@@ -33,7 +34,7 @@ Tower::Tower()
  * Uses default refund value ratio in Tower class 
  */
 Tower::Tower(float x, float y, int buyingCost, int range, int power, int rateOfFire)
-    : x(x), y(y), buyingCost(buyingCost), range(range), power(power), rateOfFire(rateOfFire), level(1), shootingTimer(0), upgradeValues{ 0, 0, 0 }
+    : x(x), y(y), buyingCost(buyingCost), range(range), power(power), rateOfFire(rateOfFire), level(1), shootingTimer(0), upgradeValues{ 0, 0, 0 }, critterTargettingStrategy(new TargetNearExit())
 {
     refundValue = static_cast<int>(REFUND_RATIO * buyingCost);
 }
@@ -52,31 +53,23 @@ Tower::Tower(float x, float y, int buyingCost, int range, int power, int rateOfF
  * Sets Tower level to 1 and shootingTimer to 0 to immediately start firing once placed
  */
 Tower::Tower(float x, float y, int buyingCost, int refundValue, int range, int power, int rateOfFire)
-    : x(x), y(y), buyingCost(buyingCost), refundValue(refundValue), range(range), power(power), rateOfFire(rateOfFire), level(1), shootingTimer(0), upgradeValues{ 0, 0, 0 }
+    : x(x), y(y), buyingCost(buyingCost), refundValue(refundValue), range(range), power(power), rateOfFire(rateOfFire), level(1), shootingTimer(0), upgradeValues{ 0, 0, 0 }, critterTargettingStrategy(new TargetNearExit())
 {
     
 }
 
 /**
- * @brief Finds a DummyCritter to target
+ * @brief Finds a Critter to target
  * 
- * @param critters Vector of currently existing DummyCritter within the map
- * @details Iterates through all DummyCritter in the map
+ * @param critters Vector of currently existing Critter within the map
+ * @details Iterates through all Critter in the map
  * Checks if each Critter is in range of the Tower
- * Stops after the first DummyCritter that is in range of the Tower is found
- * @return DummyCritter pointer for first DummyCritter that is in range of the Tower
- * @return nullptr if no DummyCritter is in range
+ * Stops after the first Critter that is in range of the Tower is found
+ * @return Critter pointer for first Critter that is in range of the Tower
+ * @return nullptr if no Critter is in range
  */
 Critter* Tower::findCritter(std::vector<Critter>& critters) {
-    // checks all critters in map
-    for (int i = 0; i < critters.size(); i++) {
-        if (isCritterInRange(critters[i])) { // Directly use critter[i] as it is an object
-            return &critters[i]; // Return a pointer to the critter
-        }
-    }
-
-    // No critter can be targeted by the Tower
-    return nullptr;
+    return critterTargettingStrategy->targetCritter(critters, *this);
 }
 
 /**
@@ -291,6 +284,35 @@ void Tower::setCurrentRenderedRect(SDL_FRect targetRect) {
  */
 void Tower::setRotation(float angle) {
     rotationAngle = angle;
+}
+
+/**
+ * @brief Moves Projectiles towards their targetted Critter
+ */
+void Tower::moveProjectiles()
+{
+    for (int i = 0; i < projectiles.size(); i++) {
+        projectiles[i]->move();
+
+        // check if projectile hits critter
+        if (projectiles[i]->checkCollision())
+        {
+            Critter* critter = projectiles[i]->getTargettedCritter();
+            critter->takeDamage(power);
+            critter->notify();
+            projectiles.erase(projectiles.begin() + i);
+
+            // clear projectiles if critter has no hp, no target
+            if (!critter->isAlive()) {
+                projectiles.clear();
+            }
+        }
+        // check if projectile is outside of map
+        else if (projectiles[i]->isOutside())
+        {
+            projectiles.erase(projectiles.begin() + i);
+        }
+    }
 }
 
 /**

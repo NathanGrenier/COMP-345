@@ -30,7 +30,7 @@ public:
     
     bool upgrade();
     int getMaxLevel();
-    void shootProjectile(Critter* critter);
+    void shootProjectile(Critter* targettedCritter);
 
 private:
     int fireBreak; /** @brief decremented for no shooting interval */

@@ -14,6 +14,7 @@
 #include <util/Observable.h>
 #include <critter/Critter.h>
 #include <ui/LTexture.h>
+#include <towers/TowerStrategy.h>
 
  /** @brief ratio between original tower cost and refund value */
 const double REFUND_RATIO = 0.5;
@@ -41,7 +42,7 @@ public:
     virtual int getMaxLevel() = 0;
 
     virtual bool upgrade();
-    virtual void shootProjectile(Critter* critter) = 0;
+    virtual void shootProjectile(Critter* targettedCritter) = 0;
 
     Critter* findCritter(std::vector<Critter>& critters); /** finds critter in range of tower */
     void clearProjectiles();
@@ -58,8 +59,10 @@ public:
 
     void render();
     void setRotation(float angle);
+    void moveProjectiles();
     float getRotation() const { return rotationAngle; }
     void setCurrentRenderedRect(SDL_FRect targetRect);
+    float calcDistance(Critter critter);
 
     float x; /** @brief x position for projectile */
     float y; /** @brief y position for projectile */
@@ -74,10 +77,10 @@ protected:
     int rateOfFire; /** @brief higher rate of fire indicates faster shooting */
     int level;
     int shootingTimer; /** @brief decremented with rate of fire for shooting */
-    float calcDistance(Critter critter);
     std::vector<Projectile *> projectiles; /** @brief vector of all projectile */
-
     UpgradeValues upgradeValues;
-
+    TowerStrategy* critterTargettingStrategy;
+    
     LTexture towerTexture;
+
 };

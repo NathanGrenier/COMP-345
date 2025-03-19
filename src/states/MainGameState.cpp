@@ -364,6 +364,7 @@ void MainGameState::update()
 			// finds a target critter
 			Critter *targettedCritter = towers[i]->findCritter(critterGroup->getCritters());
 
+			towers[i]->shootProjectile(targettedCritter);
 			// shoot if there is a critter in tower range
 			if (targettedCritter)
 			{
@@ -373,7 +374,6 @@ void MainGameState::update()
 				float angleDeg = angleRad * (180.0f / 3.1416);
 
 				towers[i]->setRotation(angleDeg);
-				towers[i]->shootProjectile(targettedCritter);
 			}
 			// deletes already fired projectiles if there is no critter in range
 			else

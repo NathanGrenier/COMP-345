@@ -17,16 +17,20 @@
 class Projectile
 {
     public:
-        Projectile(float x, float y, int damage, bool isArea);
-        Projectile(float x, float y, int damage, bool isArea, int projectileSize);
+        Projectile(float x, float y, int damage, bool isArea, int speed);
+        Projectile(float x, float y, int damage, bool isArea, int speed, int projectileSize);
+        Projectile(float x, float y, int damage, bool isArea, int speed, const Critter* targettedCritter);
+        Projectile(float x, float y, int damage, bool isArea, int speed, int projectileSize, const Critter* targettedCritter);
         int getDamage();
         int getIsArea();
 
-        void move(float xSpeed, float ySpeed);
+        void move();
         void generateProjectile();
         bool isOutside();
 
-        bool checkCollision(Critter* critter);
+        bool checkCollision();
+
+        Critter* getTargettedCritter();
 
     private:
         float x; /** @brief x position for projectile */
@@ -34,4 +38,6 @@ class Projectile
         int damage;
         int projectileSize;
         bool isArea; /** @brief if projectile has area of effect, to be implemented */
+        int speed;
+        const Critter* targettedCritter;
 };

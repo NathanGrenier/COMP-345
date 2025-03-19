@@ -104,35 +104,28 @@ int RapidFireTower::getMaxLevel()
  * Applies damage to targetted Critter if the Projectile is in collision
  * Gets rid of Projectiles when needed, either if out of bounds, Critter is already dead, or when collision is made with Critter
  */
-void RapidFireTower::shootProjectile(Critter* critter)
+void RapidFireTower::shootProjectile(Critter* targettedCritter)
 {
-    // check if critter still exists
-    if (!critter)
-    {
-        // get rid of currently shot projectiles if no target
-        projectiles.clear();
-        return;
-    }
-
     // tower position with offset
     float posX = x + currentRenderedRect.w / 2;
     float posY = y + currentRenderedRect.w / 2;
 
     SDL_FRect currentCellSize = Global::currentMap->getPixelPerCell();
 
-    // critter position with offset
-    float critterPosX = critter->getPosition().x + Critter::CRITTER_WIDTH_SCALE * currentCellSize.w / 2;
-    float critterPosY = critter->getPosition().y + Critter::CRITTER_HEIGHT_SCALE * currentCellSize.h / 2;
 
-    // differences in position from tower to cannon
-    float differenceX = posX - critterPosX;
-    float differenceY = posY - critterPosY;
+    // todo: add ratio multiplier
 
-    float distance = sqrt(pow(differenceX, 2) + pow(differenceY, 2));
 
-    // distance for projectile as a unit vector
-    float speedX = (critterPosX - posX) / distance;
-    float speedY = (critterPosY - posY) / distance;
+
+
+
+
+
+
+
+
+
+
 
     // checks if it is a shooting interval
     if (fireBreak <= 0)
@@ -140,9 +133,12 @@ void RapidFireTower::shootProjectile(Critter* critter)
         // checks if it is time to shoot within the interval
         if (shootingTimer <= 0)
         {
-            // fires a projectile, resets shooting timer
-            projectiles.push_back(new Projectile(posX, posY, power, false, 3));
-            shootingTimer = MAX_SHOOTING_TIMER;
+            if (targettedCritter != nullptr)
+            {
+                // fires a projectile, resets shooting timer
+                projectiles.push_back(new Projectile(posX, posY, power, false, 5, 3, targettedCritter));
+                shootingTimer = MAX_SHOOTING_TIMER;
+            }
         }
         else
         {
@@ -164,26 +160,5 @@ void RapidFireTower::shootProjectile(Critter* critter)
     }
     
     // moves projectile at a moderate speed
-    for (int i = 0; i < projectiles.size(); i++) {
-        projectiles[i]->move(5 * speedX, 5 * speedY);
-
-        // check if projectile hits critter
-        if (projectiles[i]->checkCollision(critter))
-        {
-            critter->takeDamage(power);
-            critter->notify();
-            projectiles.erase(projectiles.begin() + i);
-            
-            // clear projectiles if critter has no hp, no target
-            if (critter->getHitPoints() <= 0) {
-                projectiles.clear();
-            }
-
-        }
-        // check if projectile is outside of map
-        else if (projectiles[i]->isOutside())
-        {
-            projectiles.erase(projectiles.begin() + i);
-        }
-    }
+    moveProjectiles();
 }

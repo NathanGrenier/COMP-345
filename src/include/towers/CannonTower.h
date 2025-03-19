@@ -30,5 +30,5 @@ public:
     CannonTower(float x, float y, int buyingCost, int refundValue);
 
     int getMaxLevel();
-    void shootProjectile(Critter* critter);
+    void shootProjectile(Critter* targettedCritter);
 };
