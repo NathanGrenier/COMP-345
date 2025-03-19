@@ -4,7 +4,13 @@
 
 class TowerDecorator : public Tower {
 public:
-    explicit TowerDecorator(Tower* tower) : wrappedTower(tower) {}
+    explicit TowerDecorator(Tower* tower, SDL_FRect towerPosition, std::string indicatorPath) : towerPosition(towerPosition), wrappedTower(tower) {
+        indicatorTexture.loadFromFile(indicatorPath);
+    }
+
+    ~TowerDecorator() {
+        indicatorTexture.destroy();
+    }
 
     std::vector<Projectile*>& getProjectiles() override {
         return wrappedTower->getProjectiles();
@@ -108,4 +114,6 @@ public:
 
 protected:
     Tower* wrappedTower;
+    SDL_FRect towerPosition;
+    LTexture indicatorTexture;
 };

@@ -67,6 +67,9 @@ int Projectile::getDamage() const
  */
 void Projectile::move(float multiplier)
 {
+    if (isOutside()) {
+        destroy();
+    }
     x += xSpeed * multiplier;
     y += ySpeed * multiplier;
 }

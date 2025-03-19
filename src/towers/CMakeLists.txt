@@ -5,8 +5,7 @@ add_library(towers STATIC
     RapidFireTower.cpp
     StandardTower.cpp
     TowerGroup.cpp
-    powerups/FirePowerup.cpp
-    powerups/IcePowerup.cpp "powerups/Powerup.cpp")
+    "powerups/Powerup.cpp")
 
 target_include_directories(towers PUBLIC ${CMAKE_SOURCE_DIR}/src/include)
 

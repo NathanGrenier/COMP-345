@@ -9,27 +9,27 @@
 // Base class for all powerups
 class Powerup {
 public:
-    Powerup(SDL_FRect position, std::string texturePath);
+    Powerup(SDL_FRect position, std::string powerupPath);
     virtual ~Powerup();
 
     // Check if the powerup is clicked
     virtual bool isClicked(float mouseX, float mouseY) const;
 
     // Apply the powerup to a tower
-    virtual Tower* applyPowerupToTower(Tower* tower) = 0;
+    virtual Tower* applyPowerupToTower(Tower* tower, SDL_FRect towerPosition) = 0;
 
     // Render the powerup on screen
-    virtual void render();
+    void render();
 
     // Update the powerup state (e.g., for frame cycling and bobbing)
     void update(float deltaTime);
 
     SDL_FRect position;
-
 public:
     bool isDragged = false;
 protected:
     LTexture powerupTexture;
+    LTexture indicatorTexture;
 
     // Frame cycling variables
     int currentFrame;      // Current frame to display (0-3)

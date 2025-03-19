@@ -6,10 +6,11 @@
 
 class SlowingDecorator : public TowerDecorator {
 public:
-    SlowingDecorator(Tower* tower)
-        : TowerDecorator(tower), wrappedTower(tower), currentFrame(0), frameTime(0),
+    SlowingDecorator(Tower* tower, SDL_FRect towerPosition, std::string indicatorPath)
+        : TowerDecorator(tower, towerPosition, indicatorPath), wrappedTower(tower), currentFrame(0), frameTime(0),
         slowDuration(4.0f), slowFactor(0.5f) {
         iceTexture.loadFromFile("assets/tower/ice-4f.png");
+        indicatorTexture.loadFromFile(indicatorPath);
 
         // Calculate individual frame dimensions for the ice sprite sheet
         frameWidth = iceTexture.getWidth() / 4.0f;
@@ -19,6 +20,10 @@ public:
         for (int i = 0; i < 4; ++i) {
             spriteClips[i] = { i * frameWidth, 0.f, frameWidth, frameHeight };
         }
+    }
+
+    ~SlowingDecorator() {
+        indicatorTexture.destroy();
     }
 
     void shootProjectile(Critter* critter) override {
@@ -100,11 +105,15 @@ public:
     void render() override {
         wrappedTower->render();  // Render the base tower
         renderSlowEffect();  // Render the slowing effect (ice effect)
+
+        // Render the indicator texture over the towerPosition (this is the key part)
+        renderIndicator();
     }
 
 private:
     Tower* wrappedTower;
     LTexture iceTexture;
+    LTexture indicatorTexture;  // The new texture for the indicator (e.g., ice effect)
     SDL_FRect spriteClips[4];
     int currentFrame;
     float frameTime;
@@ -115,4 +124,37 @@ private:
 
     const float slowDuration; // Duration for how long the slow effect lasts
     const float slowFactor;   // Factor by which the critter's speed is reduced
+
+    void renderIndicator() {
+        // Calculate the aspect ratio for the indicator texture
+        float indicatorWidth = indicatorTexture.getWidth() / 6.0f;
+        float indicatorHeight = indicatorTexture.getHeight();
+
+        float aspectRatio = indicatorWidth / indicatorHeight;
+
+        // Calculate the new width and height to fit within the towerPosition, preserving the aspect ratio
+        float newWidth = towerPosition.w;
+        float newHeight = towerPosition.w / aspectRatio;
+
+        // If the new height is greater than the available height, adjust based on the height instead
+        if (newHeight > towerPosition.h) {
+            newHeight = towerPosition.h;
+            newWidth = towerPosition.h * aspectRatio;
+        }
+
+        float centerX = towerPosition.x + towerPosition.w / 2.0f;
+        float centerY = towerPosition.y + towerPosition.h / 2.0f;
+
+        // Create the destination rectangle for the indicator texture
+        SDL_FRect srcRect = { currentFrame * indicatorWidth, 0, indicatorWidth, indicatorHeight };
+        SDL_FRect indicatorDestRect = {
+            centerX - newWidth / 2.0f,  // Adjust the X position to center it
+            centerY - newHeight / 2.0f, // Adjust the Y position to center it
+            newWidth,
+            newHeight
+        };
+
+        // Render the indicator texture
+        indicatorTexture.render(indicatorDestRect.x, indicatorDestRect.y, &srcRect, indicatorDestRect.w, indicatorDestRect.h);
+    }
 };

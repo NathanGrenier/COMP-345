@@ -18,7 +18,7 @@
  * @details Initializes the critter's position, target, and subscribes to the map's flow field.
  *          If the map is null, it sets safe default values for the target position.
  */
-Critter::Critter(int level, float speed, int hitPoints, int strength, int reward, SDL_FRect start, Map* map)
+Critter::Critter(int level, float speed, float hitPoints, int strength, int reward, SDL_FRect start, Map* map)
 	: level(level), speed(speed), hitPoints(hitPoints), strength(strength), reward(reward),
 	position(start), isAtExit(false), maxHitPoints(hitPoints), map(map) {
 
@@ -209,7 +209,7 @@ bool Critter::atExit() const {
  *
  * @param hitPoints The new hit points value.
  */
-void Critter::setHitPoints(int hitPoints) {
+void Critter::setHitPoints(float hitPoints) {
 	hitPoints = hitPoints;
 }
 

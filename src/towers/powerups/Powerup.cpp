@@ -6,7 +6,9 @@ Powerup::Powerup(SDL_FRect position, std::string texturePath)
     powerupTexture.loadFromFile(texturePath);
 }
 
-Powerup::~Powerup() {}
+Powerup::~Powerup() {
+    powerupTexture.destroy();
+}
 
 bool Powerup::isClicked(float mouseX, float mouseY) const {
     return (mouseX >= position.x && mouseX <= position.x + position.w &&
@@ -29,11 +31,11 @@ void Powerup::update(float deltaTime) {
 }
 
 void Powerup::render() {
-    int textureWidth = powerupTexture.getWidth() / 4;  // Original width of the texture
-    int textureHeight = powerupTexture.getHeight();  // Original height of the texture
+    float textureWidth = powerupTexture.getWidth() / 4;  // Original width of the texture
+    float textureHeight = powerupTexture.getHeight();  // Original height of the texture
 
     // Calculate the aspect ratio of the texture
-    float aspectRatio = static_cast<float>(textureWidth) / static_cast<float>(textureHeight);
+    float aspectRatio = textureWidth / textureHeight;
 
     // Calculate the new width and height to fit the powerup within the position's dimensions, preserving the aspect ratio
     float newWidth = position.w;

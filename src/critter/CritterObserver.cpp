@@ -134,10 +134,10 @@ CritterObserver::~CritterObserver() {
 void CritterObserver::updateAttributes() {
     SDL_Color textColor{ 0x00, 0x00, 0x00, 0xFF };
 
-    std::string speedStr = std::to_string(currentCritter->getSpeed());
-    std::string hitPointsStr = std::to_string(currentCritter->getHitPoints());
-    std::string strengthStr = std::to_string(currentCritter->getStrength());
-    std::string rewardStr = std::to_string(currentCritter->getReward());
+    std::string speedStr = std::to_string(static_cast<int>(currentCritter->getSpeed()));
+    std::string hitPointsStr = std::to_string(static_cast<int>(currentCritter->getHitPoints()));
+    std::string strengthStr = std::to_string(static_cast<int>(currentCritter->getStrength()));
+    std::string rewardStr = std::to_string(static_cast<int>(currentCritter->getReward()));
 
     (dynamic_cast<DetailAttribute*>(critterComponents[1]))->setValueText(speedStr, textColor);
     (dynamic_cast<DetailAttribute*>(critterComponents[2]))->setValueText(hitPointsStr, textColor);

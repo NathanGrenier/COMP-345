@@ -67,7 +67,6 @@ void TowerGroup::update(float deltaTime, std::vector<Critter*> critters) {
 				for (auto critter : critters) {
 					if (projectile->checkCollision(critter)) {
 						// Check if critter is dead
-						std::cout << critter->getHitPoints() << std::endl;
 						if (critter->getHitPoints() <= 0) {
 							float spawnChance = 0.2f; // 20% chance to spawn a powerup
 							if (rand() % 100 < spawnChance * 100) {
@@ -351,21 +350,33 @@ void TowerGroup::handleEvent(SDL_Event& e) {
 			bool towerClicked = false;
 			for (size_t i = 0; i < towers.size(); i++) {
 				if (towers[i]->isClicked(1)) {
-					// Unwrap the tower if it is already wrapped
+					// Unwrap the tower if it is already wrapped with a powerup
 					Tower* baseTower = towers[i];
+
+					// Unwrap all decorators (powerups) applied to the tower
 					while (auto* decorated = dynamic_cast<TowerDecorator*>(baseTower)) {
-						baseTower = decorated->getWrappedTower(); // Assuming getWrappedTower() exists
-						delete decorated; // Free old decorator
+						baseTower = decorated->getWrappedTower();  // Get the base tower without the decorator
+						// Do not delete decorated here; let the new decorator handle it
 					}
 
-					// Apply new powerup
-					Tower* upgradedTower = draggedPowerup->applyPowerupToTower(baseTower);
-					towers[i] = upgradedTower; // Replace old reference
+					// Apply the new powerup to the base tower (without previous decorators)
+					Tower* upgradedTower = draggedPowerup->applyPowerupToTower(baseTower, towers[i]->getCurrentRenderRect());
 
+					// Ensure the position of the tower is retained
+					SDL_FRect towerRect = towers[i]->getCurrentRenderRect();
+					upgradedTower->setCurrentRenderRect(towerRect.x, towerRect.y, towerRect.w, towerRect.h);
+
+					// Replace the old tower with the new upgraded tower
+					towers[i] = upgradedTower;  // Replace the tower reference in the array
+
+					// Remove the powerup from active powerups and clean up
 					activePowerups.erase(std::remove(activePowerups.begin(), activePowerups.end(), draggedPowerup), activePowerups.end());
+
+					// Only delete draggedPowerup if it's no longer needed
 					delete draggedPowerup;
-					draggedPowerup->isDragged = false;
-					draggedPowerup = nullptr;
+					draggedPowerup = nullptr;  // Set draggedPowerup to null after deletion
+
+					// Reset dragging state
 					dragging = false;
 					towerClicked = true;
 					break;

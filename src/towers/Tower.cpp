@@ -14,7 +14,7 @@
  * @brief Default Constructor, setting all values to 0
  */
 Tower::Tower() 
-    : buyingCost(0), refundValue(0), range(0), power(0), rateOfFire(0), level(0), shootingTimer(0), upgradeValues{ 0, 0, 0}
+    : upgradeCost(0), buyingCost(0), refundValue(0), range(0), power(0), rateOfFire(0), level(0), shootingTimer(0), upgradeValues{ 0, 0, 0}
 {
     currentRenderRect = { 0, 0, 0, 0 };
 }
@@ -33,7 +33,7 @@ Tower::Tower()
  * Uses default refund value ratio in Tower class 
  */
 Tower::Tower(float x, float y, float width, int buyingCost, int range, int power, int rateOfFire)
-    : buyingCost(buyingCost), range(range), power(power), rateOfFire(rateOfFire), level(1), shootingTimer(0), upgradeValues{ 0, 0, 0 }
+    : upgradeCost(0), buyingCost(buyingCost), range(range), power(power), rateOfFire(rateOfFire), level(1), shootingTimer(0), upgradeValues{ 0, 0, 0 }
 {
     refundValue = static_cast<int>(REFUND_RATIO * buyingCost);
     currentRenderRect = { x, y, width, width };
@@ -53,7 +53,7 @@ Tower::Tower(float x, float y, float width, int buyingCost, int range, int power
  * Sets Tower level to 1 and shootingTimer to 0 to immediately start firing once placed
  */
 Tower::Tower(float x, float y, float width, int buyingCost, int refundValue, int range, int power, int rateOfFire)
-    : buyingCost(buyingCost), refundValue(refundValue), range(range), power(power), rateOfFire(rateOfFire), level(1), shootingTimer(0), upgradeValues{ 0, 0, 0 }
+    : upgradeCost(0), buyingCost(buyingCost), refundValue(refundValue), range(range), power(power), rateOfFire(rateOfFire), level(1), shootingTimer(0), upgradeValues{ 0, 0, 0 }
 {
     currentRenderRect = { x, y, width, width };
 }
@@ -263,7 +263,7 @@ float Tower::calcDistance(Critter* critter) const
     float differenceY = posY - critterPosY;
 
     // distance formula
-    return sqrt(pow(differenceX, 2) + pow(differenceY, 2));
+    return static_cast<float>(sqrt(pow(differenceX, 2) + pow(differenceY, 2)));
 }
 
 /**
