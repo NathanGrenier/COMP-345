@@ -163,7 +163,7 @@ void Critter::takeDamage() {
 void Critter::update() {
 	if (isDamaged) {
 		// Get the time passed since the damage was taken
-		Uint32 elapsedTime = SDL_GetTicks() - damageTimer;
+		Uint64 elapsedTime = SDL_GetTicks() - damageTimer;
 
 		// Gradually increase the red component and adjust green/blue
 		if (elapsedTime < damageDuration) {
@@ -247,7 +247,7 @@ void Critter::setAtExit(bool con) {
  * @brief Gets the speed of the critter.
  * @return The speed of the critter.
  */
-int Critter::getSpeed() const  {
+float Critter::getSpeed() const  {
 	return speed;
 }
 
@@ -255,7 +255,7 @@ int Critter::getSpeed() const  {
  * @brief Sets the speed of the critter.
  * @param newSpeed The new speed value.
  */
-void Critter::setSpeed(int newSpeed) {
+void Critter::setSpeed(float newSpeed) {
 	speed = newSpeed;
 }
 

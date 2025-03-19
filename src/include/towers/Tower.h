@@ -15,10 +15,6 @@
 #include <critter/Critter.h>
 #include <ui/LTexture.h>
 
-#ifndef M_PI
-#define M_PI 3.14159265358979323846
-#endif
-
  /** @brief ratio between original tower cost and refund value */
 const double REFUND_RATIO = 0.5;
 
@@ -27,6 +23,7 @@ class Tower : public Observable
 public:
     static const int MAX_SHOOTING_TIMER = 100; /** @brief shooting timer to be decremented */
     static const int REFUND_PER_UPGRADE = 50; /** @brief additional gold refunded per level */
+    static constexpr float M_PI = 3.14159265358979323846f;
 
     Tower();
     Tower(float x, float y, float width, int buyingCost, int range, int power, int rateOfFire);

@@ -53,8 +53,8 @@ bool LTexture::loadFromFile(std::string path) {
 			}
 			else {
 				// Get image dimensions
-				mWidth = loadedSurface->w;
-				mHeight = loadedSurface->h;
+				mWidth = static_cast<float>(loadedSurface->w);
+				mHeight = static_cast<float>(loadedSurface->h);
 			}
 		}
 
@@ -87,8 +87,8 @@ bool LTexture::loadFromRenderedText(std::string textureText, SDL_Color textColor
 			SDL_Log("Unable to create texture from rendered text! SDL Error: %s\n", SDL_GetError());
 		}
 		else {
-			mWidth = textSurface->w;
-			mHeight = textSurface->h;
+			mWidth = static_cast<float>(textSurface->w);
+			mHeight = static_cast<float>(textSurface->h);
 		}
 
 		// Free temp surface
@@ -139,7 +139,7 @@ void LTexture::setBlending(SDL_BlendMode blendMode) {
 	SDL_SetTextureBlendMode(mTexture, blendMode);
 }
 
-void LTexture::setTextureSize(int newWidth, int newHeight) {
+void LTexture::setTextureSize(float newWidth, float newHeight) {
 	if (newWidth > 0 && newHeight > 0) {
 		mWidth = newWidth;
 		mHeight = newHeight;
@@ -197,7 +197,7 @@ void LTexture::render(float x, float y, SDL_FRect* clip, float width, float heig
  *
  * @return The width of the texture in pixels.
  */
-int LTexture::getWidth() const {
+float LTexture::getWidth() const {
 	return mWidth;
 }
 
@@ -206,6 +206,6 @@ int LTexture::getWidth() const {
  *
  * @return The height of the texture in pixels.
  */
-int LTexture::getHeight() const {
+float LTexture::getHeight() const {
 	return mHeight;
 }

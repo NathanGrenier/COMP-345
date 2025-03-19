@@ -21,7 +21,7 @@ DetailDisplay::DetailDisplay() : mPosition{ 0.f, 0.f }, width(0), height(0)
  * @param width the width of the display
  * @param height the height of the display
  */
-DetailDisplay::DetailDisplay(int width, int height) : mPosition { 0.f, 0.f }, width(width), height(height)
+DetailDisplay::DetailDisplay(float width, float height) : mPosition { 0.f, 0.f }, width(width), height(height)
 {
 
 }
@@ -30,7 +30,7 @@ DetailDisplay::DetailDisplay(int width, int height) : mPosition { 0.f, 0.f }, wi
  * @brief Accessor for width
  * @return the width of the display
  */
-int DetailDisplay::getWidth()
+float DetailDisplay::getWidth() const
 {
     return width;
 }
@@ -39,7 +39,7 @@ int DetailDisplay::getWidth()
  * @brief Mutator for width
  * @param width the new width
  */
-void DetailDisplay::setWidth(int width)
+void DetailDisplay::setWidth(float width)
 {
     DetailDisplay::width = width;
 }
@@ -48,7 +48,7 @@ void DetailDisplay::setWidth(int width)
  * @brief Accessor for height
  * @return the height of the display
  */
-int DetailDisplay::getHeight()
+float DetailDisplay::getHeight() const
 {
     return height;
 }
@@ -57,7 +57,7 @@ int DetailDisplay::getHeight()
  * @brief Mutator for height
  * @param height the new height of the display
  */
-void DetailDisplay::setHeight(int height)
+void DetailDisplay::setHeight(float height)
 {
     DetailDisplay::height = height;
 }
@@ -79,7 +79,7 @@ void DetailDisplay::setPosition(float x, float y)
  *
  * @return The SDL_FPoint representing the DetailDisplay's position.
  */
-SDL_FPoint DetailDisplay::getPosition() 
+SDL_FPoint DetailDisplay::getPosition() const 
 {
     return mPosition;
 }

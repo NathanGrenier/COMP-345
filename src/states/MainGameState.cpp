@@ -46,7 +46,7 @@ bool MainGameState::enter()
 		return false;
 	}
 
-	int intButtonHeight = 40;
+	float intButtonHeight = 40.0f;
 
 	pauseButton.loadFromFile("assets/ui/PauseButton.png");
 	exitButton.loadFromFile("assets/ui/ExitButton.png");
@@ -137,7 +137,7 @@ void MainGameState::handleEvent(SDL_Event &e)
 	if (e.type == SDL_EVENT_MOUSE_BUTTON_DOWN && e.button.button == SDL_BUTTON_LEFT) {
 		if (pauseButton.isClicked())
 		{
-			int buttonHeight = 40;
+			float buttonHeight = 40.0f;
 
 			if (isPaused) {
 				pauseButton.loadFromFile("assets/ui/PauseButton.png");
@@ -182,13 +182,13 @@ void MainGameState::update()
  */
 void MainGameState::render()
 {
-	SDL_FRect backRect = { 0, 0, static_cast<int>(Global::kScreenWidth - Global::viewerWidth), static_cast<int>(Global::headerHeight) };
+	SDL_FRect backRect = { 0, 0, Global::kScreenWidth - Global::viewerWidth, Global::headerHeight };
 
 	// Set the renderer color for the outline
 	SDL_SetRenderDrawColor(gRenderer, 168, 168, 168, 255); // Gray color for outline
 	SDL_RenderFillRect(gRenderer, &backRect); // Draw box outline
 
-	SDL_FRect foreRect = { 4, 4, static_cast<int>(Global::kScreenWidth - Global::viewerWidth - 5), static_cast<int>(Global::headerHeight - 8) };
+	SDL_FRect foreRect = { 4, 4, Global::kScreenWidth - Global::viewerWidth - 5, Global::headerHeight - 8 };
 
 	// Set the renderer color for the gray box
 	SDL_SetRenderDrawColor(gRenderer, 202, 202, 202, 255); // Gray color for box

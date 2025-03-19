@@ -24,7 +24,7 @@ Map::Map() {
 	cellCountY = 15;
 
 	cells.clear();
-	cells.reserve(cellCountX * cellCountY);
+	cells.reserve(static_cast<size_t>(cellCountX) * static_cast<size_t>(cellCountY));
 	for (int y = 0; y < cellCountY; y++) {
 		for (int x = 0; x < cellCountX; x++) {
 			Cell cell;
@@ -55,7 +55,7 @@ Map::Map() {
 Map::Map(int setCellCountX, int setCellCountY, std::string name) :
 	cellCountX(setCellCountX), cellCountY(setCellCountY), name(name) {
 	cells.clear();
-	cells.reserve(cellCountX * cellCountY);
+	cells.reserve(static_cast<size_t>(cellCountX) * static_cast<size_t>(cellCountY));
 
 	for (int y = 0; y < cellCountY; y++) {
 		for (int x = 0; x < cellCountX; x++) {
@@ -166,7 +166,8 @@ std::pair<int, int> Map::getCellFromPosition(float x, float y, const SDL_FRect& 
  * @return SDL_FPoint The center point of the cell.
  */
 SDL_FPoint Map::getCellCenter(int x, int y, const SDL_FRect& targetRect) {
-	SDL_FRect cellRect = scaleCellRect(cells[x + y * cellCountX], targetRect);
+	size_t index = static_cast<size_t>(x) + static_cast<size_t>(y) * static_cast<size_t>(cellCountX);
+	SDL_FRect cellRect = scaleCellRect(cells[index], targetRect);
 	return { cellRect.x + cellRect.w / 2.0f, cellRect.y + cellRect.h / 2.0f };
 }
 
@@ -312,7 +313,9 @@ SDL_FRect Map::getTargetPos(const SDL_FRect& targetRect) {
 
 	// Fallback if no target found (shouldn't occur with default setup)
 	setTarget(cellCountX / 2, cellCountY / 2);
-	return scaleCellRect(cells[cellCountX / 2 + cellCountY / 2 * cellCountX], targetRect);
+	size_t index = static_cast<size_t>(cellCountX) / 2 +
+		static_cast<size_t>(cellCountY) / 2 * static_cast<size_t>(cellCountX);
+	return scaleCellRect(cells[index], targetRect);
 }
 
 /**
@@ -602,7 +605,7 @@ bool Map::loadFromJson(const std::string& filePath) {
 
 	// Clear existing cells and reserve space for new ones
 	cells.clear();
-	cells.reserve(cellCountX * cellCountY);
+	cells.reserve(static_cast<size_t>(cellCountX) * static_cast<size_t>(cellCountY));
 
 	// Initialize the grid of cells
 	for (int y = 0; y < cellCountY; y++) {
@@ -801,7 +804,7 @@ void Map::updateMapDimensions(int newCellCountX, int newCellCountY) {
  * @return SDL_FRect Scaled rectangle of the cell.
  * @details Calculates the scaling factor and offset to fit the cell within the target rectangle while maintaining aspect ratio.
  */
-SDL_FRect Map::scaleCellRect(const Cell& cell, const SDL_FRect& targetRect) {
+SDL_FRect Map::scaleCellRect(const Cell& cell, const SDL_FRect& targetRect) const {
 	float mapWidth = cellCountX * getPixelPerCell();
 	float mapHeight = cellCountY * getPixelPerCell();
 

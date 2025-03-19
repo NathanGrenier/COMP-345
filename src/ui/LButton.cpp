@@ -157,22 +157,22 @@ void LButton::setSizeWithAspectRatio(float newWidth, float newHeight) {
 	float aspectRatio = static_cast<float>(kButtonWidth) / kButtonHeight;
 
 	// Adjust width and height while maintaining aspect ratio
-	int adjustedWidth = newWidth;
-	int adjustedHeight = newHeight;
+	float adjustedWidth = newWidth;
+	float adjustedHeight = newHeight;
 
 	if (newWidth == 0) {
-		adjustedWidth = static_cast<int>(newHeight * aspectRatio);
+		adjustedWidth = newHeight * aspectRatio;
 	} else if (newHeight == 0) {
-		adjustedHeight = static_cast<int>(newWidth / aspectRatio);
+		adjustedHeight = newWidth / aspectRatio;
 	} else {
 		// Maintain aspect ratio based on the closest fit
-		float widthRatio = static_cast<float>(newWidth) / kButtonWidth;
-		float heightRatio = static_cast<float>(newHeight) / kButtonHeight;
+		float widthRatio = newWidth / kButtonWidth;
+		float heightRatio = newHeight / kButtonHeight;
 
 		if (widthRatio < heightRatio) {
-			adjustedHeight = static_cast<int>(kButtonHeight * widthRatio);
+			adjustedHeight = kButtonHeight * widthRatio;
 		} else {
-			adjustedWidth = static_cast<int>(kButtonWidth * heightRatio);
+			adjustedWidth = kButtonWidth * heightRatio;
 		}
 	}
 

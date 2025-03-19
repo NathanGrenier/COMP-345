@@ -19,9 +19,9 @@
  * @param startingX horizontal starting position 
  * @param startingY vertical  starting position 
  */
-TowerObserver::TowerObserver(int startingX, int startingY) : currentTower(nullptr)
+TowerObserver::TowerObserver(float startingX, float startingY) : currentTower(nullptr)
 {
-    int componentWidth = DetailAttributeDisplay::ATTRIBUTE_DISPLAY_WIDTH - 2 * DetailDisplayComponent::DETAIL_COMPONENT_PADDING;
+     float componentWidth = DetailAttributeDisplay::ATTRIBUTE_DISPLAY_WIDTH - 2 * DetailDisplayComponent::DETAIL_COMPONENT_PADDING;
     
     // label for Tower information
     towerComponents.push_back(new DetailLabel(componentWidth, "assets/ui/TowerInformation.png"));
@@ -88,7 +88,8 @@ std::vector<DetailDisplayComponent*> TowerObserver::getTowerComponents()
  */
 void TowerObserver::render() {
     // Omit the buy/sell button if a Tower subclass is selected
-    int componentChangeNum = towerComponents.size();
+    int componentChangeNum = static_cast<int>(towerComponents.size());
+
     for (int i = 0; i < buyTowers.size(); i++) {
         if (currentTower == buyTowers[i]) {
             componentChangeNum -= 2;
@@ -127,29 +128,29 @@ void TowerObserver::render() {
         int timeOffset = (SDL_GetTicks() / speed) % dotSpacing;
 
         // ---- Top Edge (left to right for clockwise) ----
-        for (int i = x + timeOffset; i < x + w; i += dotSpacing) {
-            for (int t = 0; t < dotThickness; t++) {
+        for (float i = x + timeOffset; i < x + w; i += dotSpacing) {
+            for (float t = 0; t < dotThickness; t++) {
                 SDL_RenderPoint(gRenderer, i, y + t);  // Inward thickness
             }
         }
 
         // ---- Right Edge (top to bottom for clockwise) ----
-        for (int i = y + timeOffset; i < y + h; i += dotSpacing) {
-            for (int t = 0; t < dotThickness; t++) {
+        for (float i = y + timeOffset; i < y + h; i += dotSpacing) {
+            for (float t = 0; t < dotThickness; t++) {
                 SDL_RenderPoint(gRenderer, x + w - 1 - t, i);  // Inward thickness
             }
         }
 
         // ---- Bottom Edge (right to left for clockwise) ----
-        for (int i = x + w - timeOffset; i > x; i -= dotSpacing) {
-            for (int t = 0; t < dotThickness; t++) {
+        for (float i = x + w - timeOffset; i > x; i -= dotSpacing) {
+            for (float t = 0; t < dotThickness; t++) {
                 SDL_RenderPoint(gRenderer, i, y + h - 1 - t);  // Inward thickness
             }
         }
 
         // ---- Left Edge (bottom to top for clockwise) ----
-        for (int i = y + h - timeOffset; i > y; i -= dotSpacing) {
-            for (int t = 0; t < dotThickness; t++) {
+        for (float i = y + h - timeOffset; i > y; i -= dotSpacing) {
+            for (float t = 0; t < dotThickness; t++) {
                 SDL_RenderPoint(gRenderer, x + t, i);  // Inward thickness
             }
         }

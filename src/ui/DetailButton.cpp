@@ -23,11 +23,11 @@ DetailButton::DetailButton()
  * @param width the width of the DetailButton
  * @param path the path of the LButton image
  */
-DetailButton::DetailButton(int width, std::string path)
+DetailButton::DetailButton(float width, std::string path)
     : DetailDisplayComponent::DetailDisplayComponent(width), LButton::LButton()
 {
     LButton::loadFromFile(path);
-    LButton::setSizeWithAspectRatio(width, 0);
+    LButton::setSizeWithAspectRatio(width, 0.f);
 }
 
 /**

@@ -7,6 +7,11 @@
 #include <ui/DetailDisplayComponent.h>
 #include <Global.h>
 
+ const float DetailDisplayComponent::DETAIL_COMPONENT_PADDING = 8.0f;
+ const float DetailDisplayComponent::DETAIL_COMPONENT_SPACING = 45.0f; 
+ const float DetailDisplayComponent::COMPONENT_BORDER_WIDTH = 2.0f;    
+ const float DetailDisplayComponent::DETAIL_COMPONENT_HEIGHT = 15.0f;
+
 /**
  * @brief Default constructor.
  */
@@ -24,7 +29,7 @@ DetailDisplayComponent::DetailDisplayComponent()
  * Generally, components are scaled with aspect ratio kept constant.
  * Having a width locks the height based on the aspect ratio of the DetailDisplayComponent
  */
-DetailDisplayComponent::DetailDisplayComponent(int width)
+DetailDisplayComponent::DetailDisplayComponent(float width)
     : width(width), xPosition(0), yPosition(0)
 {
 

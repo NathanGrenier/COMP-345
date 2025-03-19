@@ -115,7 +115,7 @@ public:
     std::unordered_map<Cell, bool> wallCellDict;
     std::vector<Cell> cells;              /**< Grid cells storage */
 
-    SDL_FRect scaleCellRect(const Cell& cell, const SDL_FRect& targetRect);
+    SDL_FRect scaleCellRect(const Cell& cell, const SDL_FRect& targetRect) const;
 private:
     static const unsigned char flowDistanceMax = 255;
     SDL_FRect currentRenderRect;

@@ -33,8 +33,8 @@ public:
 	void render();  // Render critter (could be a simple shape or sprite)
 	void update();
 
-	int getSpeed() const;
-	void setSpeed(int speed);
+	float getSpeed() const;
+	void setSpeed(float speed);
 
 	int getReward() const { return reward; }
 	int getStrength() const { return strength; }
@@ -63,7 +63,7 @@ private:
 	LTexture critterTexture;
 	
 	bool isDamaged = false;
-	Uint32 damageTimer = 0; 
+	Uint64 damageTimer = 0; 
 	float redTintAlpha = 0.0f;
 	float greenTintAlpha = 0.0f;
 	float blueTintAlpha = 0.0f;

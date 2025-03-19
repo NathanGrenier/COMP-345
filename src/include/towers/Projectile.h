@@ -18,9 +18,9 @@
 class Projectile
 {
     public:
-        Projectile(float x, float y, int damage, bool isArea, int rotationAngle, float xSpeed, float ySpeed, std::string texturePath);
-        Projectile(float x, float y, int damage, bool isArea, int projectileSize, int rotationAngle, float xSpeed, float ySpeed, std::string texturePath);
-        int getDamage();
+        Projectile(float x, float y, int damage, bool isArea, float rotationAngle, float xSpeed, float ySpeed, std::string texturePath);
+        Projectile(float x, float y, int damage, bool isArea, int projectileSize, float rotationAngle, float xSpeed, float ySpeed, std::string texturePath);
+        int getDamage() const;
         int getIsArea();
 
         void move(float multiplier);
@@ -47,7 +47,7 @@ class Projectile
         float frameTimer = 0.0f;    // Timer to track when to switch frame
         float frameDuration = 0.1f; // Duration of each frame (0.1s -> 10 fps)
 
-        int rotationAngle;
+        float rotationAngle;
         float xSpeed;
         float ySpeed;
 };

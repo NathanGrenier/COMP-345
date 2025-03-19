@@ -163,7 +163,7 @@ void RapidFireTower::shootProjectile(Critter* critter)
             float differenceX = posX - critterPosX;
             float differenceY = posY - critterPosY;
 
-            float distance = sqrt(pow(differenceX, 2) + pow(differenceY, 2));
+            float distance = static_cast<float>(sqrt(pow(differenceX, 2) + pow(differenceY, 2)));
 
             // distance for projectile as a unit vector
             float speedX = (critterPosX - posX) / distance;

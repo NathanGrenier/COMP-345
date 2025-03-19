@@ -75,19 +75,19 @@ bool MapEditorState::enter() {
 	float buttonStartY = Global::headerHeight;
 
 	// Apply aspect ratio scaling
-	backButton.setSizeWithAspectRatio(mMessageTexture.getHeight() * 0.75, 0);
-	removeColumn.setSizeWithAspectRatio(squareButtonWidth, 0);
-	addColumn.setSizeWithAspectRatio(squareButtonWidth, 0);
-	removeRow.setSizeWithAspectRatio(squareButtonWidth, 0);
-	addRow.setSizeWithAspectRatio(squareButtonWidth, 0);
+	backButton.setSizeWithAspectRatio(mMessageTexture.getHeight() * 0.75f, 0.f);
+	removeColumn.setSizeWithAspectRatio(squareButtonWidth, 0.f);
+	addColumn.setSizeWithAspectRatio(squareButtonWidth, 0.f);
+	removeRow.setSizeWithAspectRatio(squareButtonWidth, 0.f);
+	addRow.setSizeWithAspectRatio(squareButtonWidth, 0.f);
 
-	selectStartPos.setSizeWithAspectRatio(buttonWidth, 0);
-	selectEndPos.setSizeWithAspectRatio(buttonWidth, 0);
-	selectWallCell.setSizeWithAspectRatio(buttonWidth, 0);
-	toggleFlowFieldVisibility.setSizeWithAspectRatio(buttonWidth, 0);
+	selectStartPos.setSizeWithAspectRatio(buttonWidth, 0.f);
+	selectEndPos.setSizeWithAspectRatio(buttonWidth, 0.f);
+	selectWallCell.setSizeWithAspectRatio(buttonWidth, 0.f);
+	toggleFlowFieldVisibility.setSizeWithAspectRatio(buttonWidth, 0.f);
 
-	saveMapButton.setSizeWithAspectRatio(Global::viewerWidth / 2 - 5, 0);
-	renameButton.setSizeWithAspectRatio(Global::viewerWidth / 2 - 5, 0);
+	saveMapButton.setSizeWithAspectRatio(Global::viewerWidth / 2 - 5, 0.f);
+	renameButton.setSizeWithAspectRatio(Global::viewerWidth / 2 - 5, 0.f);
 
 	// Set button positions first, then apply size
 	float renderedWidth = Global::kScreenWidth * 0.5f;
@@ -143,6 +143,8 @@ bool MapEditorState::exit() {
 }
 
 void MapEditorState::handleEvent(SDL_Event& e) {
+	if (map == nullptr) return;
+
 	backButton.handleEvent(&e);
 
 	addColumn.handleEvent(&e);

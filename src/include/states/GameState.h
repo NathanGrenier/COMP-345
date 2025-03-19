@@ -27,12 +27,12 @@ public:
     /**
      * @brief Distance of the title from the top of the window in pixels.
      */
-    int titleDistanceFromTop = 20;
+    float titleDistanceFromTop = 20.0f;
 
     /**
      * @brief Distance of the back button from the left of the window in pixels.
      */
-    int backButtonDistanceFromLeft = 30;
+    float backButtonDistanceFromLeft = 30.0f;
     
     /**
      * @brief Called when entering the state.

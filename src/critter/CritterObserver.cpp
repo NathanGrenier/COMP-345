@@ -6,8 +6,8 @@
 #include <string>
 #include <ui/DetailAttributeDisplay.h>
 
-CritterObserver::CritterObserver(int startingX, int startingY) : currentCritter(nullptr) {
-    int componentWidth = DetailAttributeDisplay::ATTRIBUTE_DISPLAY_WIDTH - 2 * DetailDisplayComponent::DETAIL_COMPONENT_PADDING;
+CritterObserver::CritterObserver(float startingX, float startingY) : currentCritter(nullptr) {
+    float componentWidth = DetailAttributeDisplay::ATTRIBUTE_DISPLAY_WIDTH - 2 * DetailDisplayComponent::DETAIL_COMPONENT_PADDING;
 
     // Label for Critter information
     critterComponents.push_back(new DetailLabel(componentWidth, "assets/ui/CritterInformation.png"));
@@ -73,29 +73,29 @@ void CritterObserver::render() {
         int timeOffset = (SDL_GetTicks() / speed) % dotSpacing;
 
         // ---- Top Edge (right to left for counter-clockwise) ----
-        for (int i = x + w - timeOffset; i > x; i -= dotSpacing) {
-            for (int t = 0; t < dotThickness; t++) {
+        for (float i = x + w - timeOffset; i > x; i -= dotSpacing) {
+            for (float t = 0; t < dotThickness; t++) {
                 SDL_RenderPoint(gRenderer, i, y + t);
             }
         }
 
         // ---- Left Edge (bottom to top for counter-clockwise) ----
-        for (int i = y + h - timeOffset; i > y; i -= dotSpacing) {
-            for (int t = 0; t < dotThickness; t++) {
+        for (float i = y + h - timeOffset; i > y; i -= dotSpacing) {
+            for (float t = 0; t < dotThickness; t++) {
                 SDL_RenderPoint(gRenderer, x + w - 1 - t, i);
             }
         }
 
         // ---- Bottom Edge (left to right for counter-clockwise) ----
-        for (int i = x + timeOffset; i < x + w; i += dotSpacing) {
-            for (int t = 0; t < dotThickness; t++) {
+        for (float i = x + timeOffset; i < x + w; i += dotSpacing) {
+            for (float t = 0; t < dotThickness; t++) {
                 SDL_RenderPoint(gRenderer, i, y + h - 1 - t);
             }
         }
 
         // ---- Right Edge (top to bottom for counter-clockwise) ----
-        for (int i = y + timeOffset; i < y + h; i += dotSpacing) {
-            for (int t = 0; t < dotThickness; t++) {
+        for (float i = y + timeOffset; i < y + h; i += dotSpacing) {
+            for (float t = 0; t < dotThickness; t++) {
                 SDL_RenderPoint(gRenderer, x + t, i);
             }
         }

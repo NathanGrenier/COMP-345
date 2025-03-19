@@ -120,20 +120,32 @@ void MapSelectState::handleEvent(SDL_Event& e) {
 
 	if (e.type == SDL_EVENT_MOUSE_BUTTON_DOWN && e.button.button == SDL_BUTTON_LEFT) {
 		if (leftArrow.isClicked()) {
-			selectedIndex = (selectedIndex > 0) ? selectedIndex - 1 : availableMaps.size() - 1;
-		} else if (rightArrow.isClicked()) {
-			selectedIndex = (selectedIndex + 1) % availableMaps.size();
+			if (selectedIndex > 0) {
+				selectedIndex--;
+			}
+			else {
+				selectedIndex = static_cast<int>(availableMaps.size()) - 1;
+			}
 		}
+		else if (rightArrow.isClicked()) {
+			selectedIndex = (selectedIndex + 1) % static_cast<int>(availableMaps.size());
+		}
+
 	}
 
 	if (e.type == SDL_EVENT_KEY_DOWN) {
 		switch (e.key.key) {
-			case SDLK_LEFT:
-				selectedIndex = (selectedIndex > 0) ? selectedIndex - 1 : availableMaps.size() - 1;
-				break;
-			case SDLK_RIGHT:
-				selectedIndex = (selectedIndex + 1) % availableMaps.size();
-				break;
+		case SDLK_LEFT:
+			if (selectedIndex > 0) {
+				selectedIndex--;
+			}
+			else {
+				selectedIndex = static_cast<int>(availableMaps.size()) - 1;
+			}
+			break;
+		case SDLK_RIGHT:
+			selectedIndex = (selectedIndex + 1) % static_cast<int>(availableMaps.size());
+			break;
 		}
 	}
 

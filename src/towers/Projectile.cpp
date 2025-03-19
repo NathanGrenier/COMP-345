@@ -22,9 +22,10 @@
  * Area damage is not yet implemented
  * Uses a default ProjectileSize of 3
  */
-Projectile::Projectile(float x, float y, int damage, bool isArea, int rotationAngle, float xSpeed, float ySpeed, std::string texturePath)
+Projectile::Projectile(float x, float y, int damage, bool isArea, float rotationAngle, float xSpeed, float ySpeed, std::string texturePath)
     : x(x), y(y), damage(damage), isArea(isArea), projectileSize(3), rotationAngle(rotationAngle), xSpeed(xSpeed), ySpeed(ySpeed)
-{
+{   
+    currentRenderRect = {};
     projectileTexture.loadFromFile(texturePath);
 }
 
@@ -40,9 +41,10 @@ Projectile::Projectile(float x, float y, int damage, bool isArea, int rotationAn
  * Damage is to be applied to critters, removing the same number of health from it
  * Area damage is not yet implemented
  */
-Projectile::Projectile(float x, float y, int damage, bool isArea, int projectileSize, int rotationAngle, float xSpeed, float ySpeed, std::string texturePath)
+Projectile::Projectile(float x, float y, int damage, bool isArea, int projectileSize, float rotationAngle, float xSpeed, float ySpeed, std::string texturePath)
     : x(x), y(y), damage(damage), isArea(isArea), projectileSize(projectileSize), rotationAngle(rotationAngle), xSpeed(xSpeed), ySpeed(ySpeed)
 {
+    currentRenderRect = {};
     projectileTexture.loadFromFile(texturePath);
 }
 
@@ -51,7 +53,7 @@ Projectile::Projectile(float x, float y, int damage, bool isArea, int projectile
  * 
  * @return The damage the Projectile will do to a critter
  */
-int Projectile::getDamage() 
+int Projectile::getDamage() const 
 {
     return damage;
 }
@@ -153,9 +155,9 @@ bool Projectile::checkCollision(Critter* critter) const {
     float tolerance = 0.0f;
 
     // Get critter's position and size
-    int critterX = critter->getPosition().x;
-    int critterY = critter->getPosition().y;
-    int critterSize = critter->getPosition().w; // Assuming square critter, w == h
+    float critterX = critter->getPosition().x;
+    float critterY = critter->getPosition().y;
+    float critterSize = critter->getPosition().w; // Assuming square critter, w == h
 
     // Calculate critter's midpoint
     float critterMidX = critterX + critterSize / 2.0f;
