@@ -174,7 +174,7 @@ bool Projectile::checkCollision(Critter* critter) const {
         critterMidX <= projectileRight + tolerance &&
         critterMidY >= projectileTop - tolerance &&
         critterMidY <= projectileBottom + tolerance) {
-        critter->takeDamage();
+        critter->takeDamage(5);
         critter->notify();
         return true; // Collision detected
     }

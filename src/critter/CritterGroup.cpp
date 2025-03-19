@@ -61,7 +61,7 @@ void CritterGroup::generateCritters(float deltaTime) {
 	if (timeElapsed >= generationDelay && critterIndex < waveLevel * 10) {
 		int level = waveLevel;
 		float speed = 75.0f;
-		int hitPoints = 10 + level * 2;
+		int hitPoints = 20 + level * 2;
 		int strength = level * 2;
 		int reward = level * 10;
 

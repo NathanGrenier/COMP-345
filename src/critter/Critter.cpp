@@ -154,14 +154,15 @@ void Critter::move(float deltaTime, const std::vector<Critter*> critters, float 
  *
  * @param damage The amount of damage to apply.
  */
-void Critter::takeDamage() {
-	hitPoints -= strength;
-	isDamaged = true;
+void Critter::takeDamage(float damage) {
+	hitPoints -= damage;
+	isHurt = true;
+	notify();
 	damageTimer = SDL_GetTicks();
 }
 
 void Critter::update() {
-	if (isDamaged) {
+	if (isHurt) {
 		// Get the time passed since the damage was taken
 		Uint64 elapsedTime = SDL_GetTicks() - damageTimer;
 
@@ -174,7 +175,7 @@ void Critter::update() {
 			redTintAlpha = maxRedAlpha - maxRedAlpha * ((elapsedTime - damageDuration) / float(damageDuration));
 
 			if (redTintAlpha <= 0.0f) {
-				isDamaged = false;
+				isHurt = false;
 				redTintAlpha = 255;
 				greenTintAlpha = 255;
 				blueTintAlpha = 255;

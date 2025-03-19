@@ -199,7 +199,6 @@ void MainGameState::render()
 	detailDisplay.render();
 
 	critterGroup->render();
-
 	towerGroup->render();
 
 	pauseButton.render();

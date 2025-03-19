@@ -26,7 +26,7 @@ public:
 	void onFlowFieldChanged() override;
 
 	void move(float deltaTime, const std::vector<Critter*> critters, float spacing);  // Move critter towards exit
-	void takeDamage(); // Apply damage from towers
+	void takeDamage(float damage); // Apply damage from towers
 	bool isAlive() const;        // Check if critter is still alive
 	void stealGold(int& playerGold) const;  // Steal gold if critter reaches the exit
 
@@ -43,7 +43,7 @@ public:
 	void setHitPoints(int hitPoints);
 
 	bool isClicked() const;
-
+	bool isDamaged() const { return isHurt; };
 	SDL_FRect getPosition() const;
 	SDL_FRect getCurrentRenderRect() const { return currentRenderRect; };
 
@@ -52,7 +52,7 @@ public:
 private:
 	int level;
 	float speed;
-	int hitPoints;
+	float hitPoints;
 	int strength;
 	int reward;
 	SDL_FRect position;
@@ -62,7 +62,7 @@ private:
 	SDL_FRect currentRenderRect;
 	LTexture critterTexture;
 	
-	bool isDamaged = false;
+	bool isHurt = false;
 	Uint64 damageTimer = 0; 
 	float redTintAlpha = 0.0f;
 	float greenTintAlpha = 0.0f;

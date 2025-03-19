@@ -14,7 +14,7 @@
  */
 RapidFireTower::RapidFireTower() : Tower(), fireBreak(0), fireBreakRate(0), burstSize(0), burstCount(0)
 {
-    towerTexture.loadFromFile("assets/tower/RapidFireTower.png");
+    getTowerTexture().loadFromFile("assets/tower/RapidFireTower.png");
     upgradeValues.rangeIncrease = 10;
     upgradeValues.rateOfFireIncrease = 3;
 }
@@ -34,7 +34,7 @@ RapidFireTower::RapidFireTower() : Tower(), fireBreak(0), fireBreakRate(0), burs
 RapidFireTower::RapidFireTower(float x, float y, float width, int buyingCost)
     : fireBreak(0), fireBreakRate(5), burstSize(50), burstCount(0), Tower(x, y, width, buyingCost, RAPID_RANGE, RAPID_POWER, RAPID_RATE_OF_FIRE)
 {
-    towerTexture.loadFromFile("assets/tower/RapidFireTower.png");
+    getTowerTexture().loadFromFile("assets/tower/RapidFireTower.png");
     upgradeValues.rangeIncrease = 10;
     upgradeValues.rateOfFireIncrease = 3;
 }
@@ -55,7 +55,7 @@ RapidFireTower::RapidFireTower(float x, float y, float width, int buyingCost)
 RapidFireTower::RapidFireTower(float x, float y, float width, int buyingCost, int refundValue)
     : fireBreak(0), fireBreakRate(5), burstSize(50), burstCount(0), Tower(x, y, width, buyingCost, refundValue, RAPID_RANGE, RAPID_POWER, RAPID_RATE_OF_FIRE)
 {
-    towerTexture.loadFromFile("assets/tower/RapidFireTower.png");
+    getTowerTexture().loadFromFile("assets/tower/RapidFireTower.png");
     upgradeValues.rangeIncrease = 10;
     upgradeValues.rateOfFireIncrease = 3;
 }
@@ -107,8 +107,8 @@ int RapidFireTower::getMaxLevel()
 void RapidFireTower::shootProjectile(Critter* critter)
 {
     // Ensure we're using the center of the tower
-    float towerCenterX = currentRenderRect.x + currentRenderRect.w / 2.0f;
-    float towerCenterY = currentRenderRect.y + currentRenderRect.h / 2.0f;
+    float towerCenterX = getCurrentRenderRect().x + getCurrentRenderRect().w / 2.0f;
+    float towerCenterY = getCurrentRenderRect().y + getCurrentRenderRect().h / 2.0f;
     float deltaAngle;
 
     // Check if there's a valid critter to target
@@ -121,12 +121,12 @@ void RapidFireTower::shootProjectile(Critter* critter)
 
         // Calculate the raw angle
         float angleRad = atan2(dirToTarget.y, dirToTarget.x);
-        float angleDeg = angleRad * (180.0f / M_PI);
+        float angleDeg = angleRad * (180.0f / PI_CONSTANT);
 
         // Adjust for sprite orientation (assuming "top" is default forward)
         angleDeg += 90.0f;
 
-        deltaAngle = angleDeg - rotationAngle;
+        deltaAngle = angleDeg - getRotation();
 
         // Normalize delta to [-180, 180] for shortest path
         while (deltaAngle > 180.0f) deltaAngle -= 360.0f;
@@ -140,8 +140,11 @@ void RapidFireTower::shootProjectile(Critter* critter)
         if (deltaAngle < -maxRotationStep) deltaAngle = -maxRotationStep;
 
         // Apply smooth rotation
-        rotationAngle = rotationAngle + deltaAngle;
+        setRotation(getRotation() + deltaAngle);
     }
+
+    std::vector<Projectile*>& projectiles = getProjectiles();
+    int shootingTimer = getShootingTimer();
 
     // checks if it is a shooting interval
     if (critter != nullptr && fireBreak <= 0 && fabs(deltaAngle) < 2.0f)
@@ -150,8 +153,8 @@ void RapidFireTower::shootProjectile(Critter* critter)
         if (shootingTimer <= 0)
         {
             // tower position with offset
-            float posX = currentRenderRect.x + currentRenderRect.w / 2;
-            float posY = currentRenderRect.y + currentRenderRect.w / 2;
+            float posX = getCurrentRenderRect().x + getCurrentRenderRect().w / 2;
+            float posY = getCurrentRenderRect().y + getCurrentRenderRect().w / 2;
 
             float currentCellSize = Global::currentMap->getPixelPerCell();
 
@@ -170,12 +173,12 @@ void RapidFireTower::shootProjectile(Critter* critter)
             float speedY = (critterPosY - posY) / distance;
 
             // fires a projectile, resets shooting timer
-            projectiles.push_back(new Projectile(posX, posY, power, false, 3, rotationAngle, speedX, speedY, "assets/tower/RapidFireProjectile.png"));
-            shootingTimer = MAX_SHOOTING_TIMER;
+            projectiles.push_back(new Projectile(posX, posY, getPower(), false, 3, getRotation(), speedX, speedY, "assets/tower/RapidFireProjectile.png"));
+            setShootingTimer(MAX_SHOOTING_TIMER);
         }
         else
         {
-            shootingTimer -= rateOfFire;
+            setShootingTimer(shootingTimer - getRateOfFire());
         }
 
         // if maximum interval time is reached
@@ -195,22 +198,5 @@ void RapidFireTower::shootProjectile(Critter* critter)
     // moves projectile at a moderate speed
     for (int i = 0; i < projectiles.size(); i++) {
         projectiles[i]->move(5);
-
-        // check if projectile hits critter
-        if (critter != nullptr && projectiles[i]->checkCollision(critter))
-        {
-            projectiles.erase(projectiles.begin() + i);
-
-            // clear projectiles if critter has no hp, no target
-            if (critter->getHitPoints() <= 0) {
-                projectiles.clear();
-            }
-
-        }
-        // check if projectile is outside of map
-        else if (projectiles[i]->isOutside())
-        {
-            projectiles.erase(projectiles.begin() + i);
-        }
     }
 }

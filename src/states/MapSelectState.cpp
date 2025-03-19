@@ -47,9 +47,9 @@ bool MapSelectState::enter() {
 	// Set sizes dynamically based on screen width
 	constexpr int buttonCount = 3;
 	const int buttonSpacing = 20;
-	const int maxButtonWidth = (Global::kScreenWidth - (buttonSpacing * (buttonCount + 1))) / buttonCount;
+	const float maxButtonWidth = (Global::kScreenWidth - (buttonSpacing * (buttonCount + 1))) / buttonCount;
 
-	float reducedHeight = mTitle.getHeight() * 0.75;
+	float reducedHeight = mTitle.getHeight() * 0.75f;
 
 	backButton.setSizeWithAspectRatio(reducedHeight, 0);
 	createButton.setSizeWithAspectRatio(maxButtonWidth, 0);
@@ -79,15 +79,14 @@ bool MapSelectState::enter() {
 	const int distanceBetweenArrows = 320; // Adjust this value as needed
 
 	// Calculate the total width that the arrows will occupy (including the space between them)
-	int totalArrowsWidth = leftArrow.kButtonWidth + rightArrow.kButtonWidth + distanceBetweenArrows;
+	float totalArrowsWidth = leftArrow.kButtonWidth + rightArrow.kButtonWidth + distanceBetweenArrows;
 
 	// Calculate the X position for the first arrow (leftArrow) to center them
-	int centerX = (Global::kScreenWidth - totalArrowsWidth) / 2;
+	float centerX = (Global::kScreenWidth - totalArrowsWidth) / 2;
 
 	// Set the positions for the arrows
-	leftArrow.setPosition(centerX, (static_cast<float>(Global::kScreenHeight) - mHoveredMapName.getHeight()) / 2 - 75);
-	rightArrow.setPosition(centerX + leftArrow.kButtonWidth + distanceBetweenArrows, (static_cast<float>(Global::kScreenHeight) - mHoveredMapName.getHeight()) / 2 - 75);
-
+	leftArrow.setPosition(centerX, ((Global::kScreenHeight) - mHoveredMapName.getHeight()) / 2 - 75);
+	rightArrow.setPosition(centerX + leftArrow.kButtonWidth + distanceBetweenArrows, ((Global::kScreenHeight) - mHoveredMapName.getHeight()) / 2 - 75);
 
 	for (auto& [mapName, map] : availableMaps) {
 		map.setCurrentRenderRect(targetRect);
@@ -188,10 +187,10 @@ void MapSelectState::render() {
 
 	// Render title below the map
 	mTitle.render(
-		(kScreenWidth - kScreenWidth * 0.5) / 2,
+		(kScreenWidth - kScreenWidth * 0.5f) / 2,
 		10.0f,
 		nullptr,
-		kScreenWidth * 0.5,
+		kScreenWidth * 0.5f,
 		-1
 	);
 
