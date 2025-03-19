@@ -13,31 +13,48 @@
 #pragma once
 
 #include <critter/Critter.h>
+#include <ui/LTexture.h>
 
 class Projectile
 {
     public:
-        Projectile(float x, float y, int damage, bool isArea, int speed);
-        Projectile(float x, float y, int damage, bool isArea, int speed, int projectileSize);
-        Projectile(float x, float y, int damage, bool isArea, int speed, const Critter* targettedCritter);
-        Projectile(float x, float y, int damage, bool isArea, int speed, int projectileSize, const Critter* targettedCritter);
+        Projectile(float x, float y, int damage, bool isArea, int rotationAngle, float xSpeed, float ySpeed, std::string texturePath);
+        Projectile(float x, float y, int damage, bool isArea, int projectileSize, int rotationAngle, float xSpeed, float ySpeed, std::string texturePath);
+        Projectile(float x, float y, int damage, bool isArea, int projectileSize, int rotationAngle, int speed, std::string texturePath, const Critter* targettedCritter);
+        Projectile(float x, float y, int damage, bool isArea, int projectileSize, int rotationAngle, int speed, std::string texturePath, int projectileSize, const Critter* targettedCritter);
         int getDamage();
         int getIsArea();
 
-        void move();
+        void move(float multiplier);
         void generateProjectile();
         bool isOutside();
 
+        bool checkCollision(Critter* critter);
         bool checkCollision();
+        void updateAnimation(float deltaTime);
 
         Critter* getTargettedCritter();
 
+        void destroy();
     private:
         float x; /** @brief x position for projectile */
         float y; /** @brief y position for projectile */
         int damage;
         int projectileSize;
         bool isArea; /** @brief if projectile has area of effect, to be implemented */
+
+        LTexture projectileTexture;
+        SDL_FRect currentRenderRect;
+
+        int currentFrame = 0;   // Current frame index
+        int frameCount = 4;     // Total number of frames in sprite sheet
+
+        float frameTimer = 0.0f;    // Timer to track when to switch frame
+        float frameDuration = 0.1f; // Duration of each frame (0.1s -> 10 fps)
+
+        int rotationAngle;
+        float xSpeed;
+        float ySpeed;
         int speed;
         const Critter* targettedCritter;
 };

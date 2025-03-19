@@ -41,12 +41,14 @@ GameState* gCurrentState{ nullptr };
 
 /** @brief The next game state to transition to. */
 GameState* gNextState{ nullptr };
+Map Global::currentMap;
 
-int Global::viewerWidth = 250;
-int Global::headerHeight = 75;
-Map* Global::currentMap = nullptr;
-
-SDL_FRect Global::mapViewRect = { 0.0f, Global::headerHeight, static_cast<float>(Global::kScreenWidth - Global::viewerWidth), static_cast<float>(Global::kScreenHeight - Global::headerHeight) };
+SDL_FRect Global::mapViewRect = {
+	Global::kScreenWidth * 0.02f,
+	Global::headerHeight + Global::kScreenHeight * 0.02f,
+	static_cast<float>(Global::kScreenWidth - Global::viewerWidth) - 2 * Global::kScreenWidth * 0.02f,
+	static_cast<float>(Global::kScreenHeight - Global::headerHeight) - 2 * Global::kScreenHeight * 0.02f
+};
 
 /**
  * @brief Sets the next game state.
@@ -123,7 +125,7 @@ bool loadMedia() {
 	bool success{ true };
 
 	// Load font
-	std::string fontPath = "./assets/fonts/lazy.ttf";
+	std::string fontPath = "./assets/fonts/lazy2.ttf";
 	if (gFont = TTF_OpenFont(fontPath.c_str(), 28); gFont == nullptr) {
 		SDL_Log("Could not load %s! SDL_ttf Error: %s\n", fontPath.c_str(), SDL_GetError());
 		success = false;

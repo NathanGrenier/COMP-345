@@ -25,7 +25,6 @@ Critter::Critter(int level, float speed, int hitPoints, int strength, int reward
 	if (map != nullptr) {
 		map->subscribe(this);
 
-		// Initialize target
 		SDL_FRect renderRect = map->getCurrentRenderRect();
 		float centerX = position.x + position.w / 2.0f;
 		float centerY = position.y + position.h / 2.0f;
@@ -42,6 +41,13 @@ Critter::Critter(int level, float speed, int hitPoints, int strength, int reward
 		targetCellY = -1;
 		targetPos = { 0.0f, 0.0f };
 	}
+
+	// Initialize target
+	critterTexture.loadFromFile("assets/critter/avatar/rat.png");
+}
+
+Critter::~Critter() {
+	critterTexture.destroy();
 }
 
 /**
@@ -83,7 +89,7 @@ bool rectanglesIntersect(const SDL_FRect& a, const SDL_FRect& b) {
  * @param critters A vector of all other critters to check for collisions.
  * @param spacing The minimum spacing between critters to avoid collision.
  */
-void Critter::move(float deltaTime, const std::vector<Critter>& critters, float spacing) {
+void Critter::move(float deltaTime, const std::vector<Critter*> critters, float spacing) {
 	if (isAtExit) return;
 
 	if (map == nullptr) return;
@@ -106,9 +112,9 @@ void Critter::move(float deltaTime, const std::vector<Critter>& critters, float 
 
 		// Collision check
 		bool collisionDetected = false;
-		for (const Critter& other : critters) {
-			if (&other == this) continue;
-			if (rectanglesIntersect(nextPosition, other.getPosition())) { // Use . to access methods
+		for (const Critter* other : critters) {
+			if (other == this) continue; // Compare pointers correctly
+			if (rectanglesIntersect(nextPosition, other->getPosition())) { // Use . to access methods
 				collisionDetected = true;
 				break;
 			}
@@ -128,6 +134,7 @@ void Critter::move(float deltaTime, const std::vector<Critter>& critters, float 
 		Vector2D flowDir = map->getFlowNormal(currentCellX, currentCellY);
 		if (flowDir.x == 0 && flowDir.y == 0) {
 			setAtExit(true);
+			notify();
 		} else {
 			int flowX = static_cast<int>(flowDir.x);
 			int flowY = static_cast<int>(flowDir.y);
@@ -145,9 +152,38 @@ void Critter::move(float deltaTime, const std::vector<Critter>& critters, float 
  *
  * @param damage The amount of damage to apply.
  */
-void Critter::takeDamage(int damage) {
-	hitPoints -= damage;
+void Critter::takeDamage() {
+	hitPoints -= strength;
+	isDamaged = true;
+	damageTimer = SDL_GetTicks();
 }
+
+void Critter::update() {
+	if (isDamaged) {
+		// Get the time passed since the damage was taken
+		Uint32 elapsedTime = SDL_GetTicks() - damageTimer;
+
+		// Gradually increase the red component and adjust green/blue
+		if (elapsedTime < damageDuration) {
+			// Fade in (increase the red component)
+			redTintAlpha = maxRedAlpha * (elapsedTime / float(damageDuration));
+		}
+		else {
+			redTintAlpha = maxRedAlpha - maxRedAlpha * ((elapsedTime - damageDuration) / float(damageDuration));
+
+			if (redTintAlpha <= 0.0f) {
+				isDamaged = false;
+				redTintAlpha = 255;
+				greenTintAlpha = 255;
+				blueTintAlpha = 255;
+			}
+		}
+
+		// Apply the red, green, and blue tint using setColor
+		critterTexture.setColor((Uint8)redTintAlpha, (Uint8)greenTintAlpha, (Uint8)blueTintAlpha);
+	}
+}
+
 
 /**
  * @brief Checks if the critter is still alive.
@@ -186,15 +222,9 @@ bool Critter::isClicked() const {
 	float mouseXPos, mouseYPos;
 	SDL_GetMouseState(&mouseXPos, &mouseYPos);
 
-	SDL_FRect critterRect = getPosition();
-
-	// Adjust the bounding box based on the scaling factor
-	float scaledWidth = critterRect.w * CRITTER_WIDTH_SCALE;
-	float scaledHeight = critterRect.h * CRITTER_HEIGHT_SCALE;
-
 	// Checking if the mouse position is inside the critter's rectangle
-	if (mouseXPos >= critterRect.x && mouseXPos <= critterRect.x + scaledWidth &&
-		mouseYPos >= critterRect.y && mouseYPos <= critterRect.y + scaledHeight) {
+	if (mouseXPos >= currentRenderRect.x && mouseXPos <= currentRenderRect.x + currentRenderRect.w &&
+		mouseYPos >= currentRenderRect.y && mouseYPos <= currentRenderRect.y + currentRenderRect.h) {
 		return true;
 	}
 	return false;
@@ -208,7 +238,6 @@ bool Critter::isClicked() const {
  * @param con Boolean indicating if the critter is at the exit.
  */
 void Critter::setAtExit(bool con) {
-	hitPoints = 0;
 	isAtExit = con;
 }
 
@@ -235,16 +264,15 @@ void Critter::setSpeed(int newSpeed) {
  *
  * @param renderer The SDL_Renderer used to draw the critter.
  */
-void Critter::render(SDL_Renderer* renderer) {
-	SDL_FRect currentCellSize = Global::currentMap->getPixelPerCell();
+void Critter::render() {
+	float currentCellSize = Global::currentMap.getPixelPerCell();
 
-	// Render critter as a red rectangle
-	SDL_FRect critterRect = { position.x, position.y, CRITTER_WIDTH_SCALE * currentCellSize.w, CRITTER_HEIGHT_SCALE * currentCellSize.h };
-	SDL_SetRenderDrawColor(renderer, 255, 0, 0, 255);  // Red color
-	SDL_RenderFillRect(renderer, &critterRect);
+	currentRenderRect = { position.x, position.y, currentCellSize * CRITTER_WIDTH_SCALE, currentCellSize * CRITTER_WIDTH_SCALE };
+
+	critterTexture.render(currentRenderRect.x, currentRenderRect.y, nullptr, currentRenderRect.w, currentRenderRect.h);
 
 	// Health bar positioning and size (above the critter)
-	SDL_FRect healthBarRect = { position.x, position.y - (currentCellSize.h * CRITTER_HEALTHBAR_PADDING),  currentCellSize.w * CRITTER_WIDTH_SCALE, currentCellSize.h * CRITTER_HEALTHBAR_HEIGHT };  // Just above the critter
+	SDL_FRect healthBarRect = { position.x, position.y - (currentCellSize * CRITTER_HEALTHBAR_PADDING),  currentCellSize * CRITTER_WIDTH_SCALE, currentCellSize * CRITTER_HEALTHBAR_HEIGHT };  // Just above the critter
 	SDL_FRect greenBar = healthBarRect;  // For the green part (current health)
 	SDL_FRect redBar = healthBarRect;  // For the red part (remaining health)
 
@@ -257,14 +285,14 @@ void Critter::render(SDL_Renderer* renderer) {
 	// Red bar width (representing the remaining health)
 	redBar.x = greenBar.x + greenBar.w;  // Start where the green bar ends
 	redBar.w = healthBarRect.w - greenBar.w;
-
+	
 	// Set color for the green part (current health)
-	SDL_SetRenderDrawColor(renderer, 0, 255, 0, 255);  // Green
-	SDL_RenderFillRect(renderer, &greenBar);
+	SDL_SetRenderDrawColor(gRenderer, 0, 255, 0, 255);  // Green
+	SDL_RenderFillRect(gRenderer, &greenBar);
 
 	// Set color for the red part (remaining health)
-	SDL_SetRenderDrawColor(renderer, 255, 0, 0, 255);  // Red
-	SDL_RenderFillRect(renderer, &redBar);
+	SDL_SetRenderDrawColor(gRenderer, 255, 0, 0, 255);  // Red
+	SDL_RenderFillRect(gRenderer, &redBar);
 }
 
 /**

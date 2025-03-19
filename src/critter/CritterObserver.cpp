@@ -46,11 +46,69 @@ void CritterObserver::render() {
     for (int i = 0; i < critterComponents.size(); i++) {
         critterComponents[i]->render();
     }
+
+    // Check if the current critter exists
+    if (currentCritter != nullptr) {
+        // Get position and dimensions of the critter
+        SDL_FRect critterRect = currentCritter->getCurrentRenderRect();
+
+        // Padding around the critter
+        const float padding = 4.0f;
+
+        // Adjusted rectangle for padding
+        float x = critterRect.x - padding;
+        float y = critterRect.y - padding;
+        float w = critterRect.w + 2 * padding;
+        float h = critterRect.h + 2 * padding;
+
+        // Set color for outline (black in this case)
+        SDL_SetRenderDrawColor(gRenderer, 0, 0, 0, 255);
+
+        // Dot properties
+        const int dotSpacing = 6;       // Space between dots
+        const int dotThickness = 2;     // Thickness of dots
+        const int speed = 100;          // Speed of animation (lower is faster)
+
+        // Animation phase offset based on time
+        int timeOffset = (SDL_GetTicks() / speed) % dotSpacing;
+
+        // ---- Top Edge (right to left for counter-clockwise) ----
+        for (int i = x + w - timeOffset; i > x; i -= dotSpacing) {
+            for (int t = 0; t < dotThickness; t++) {
+                SDL_RenderPoint(gRenderer, i, y + t);
+            }
+        }
+
+        // ---- Left Edge (bottom to top for counter-clockwise) ----
+        for (int i = y + h - timeOffset; i > y; i -= dotSpacing) {
+            for (int t = 0; t < dotThickness; t++) {
+                SDL_RenderPoint(gRenderer, x + w - 1 - t, i);
+            }
+        }
+
+        // ---- Bottom Edge (left to right for counter-clockwise) ----
+        for (int i = x + timeOffset; i < x + w; i += dotSpacing) {
+            for (int t = 0; t < dotThickness; t++) {
+                SDL_RenderPoint(gRenderer, i, y + h - 1 - t);
+            }
+        }
+
+        // ---- Right Edge (top to bottom for counter-clockwise) ----
+        for (int i = y + timeOffset; i < y + h; i += dotSpacing) {
+            for (int t = 0; t < dotThickness; t++) {
+                SDL_RenderPoint(gRenderer, x + t, i);
+            }
+        }
+    }
 }
 
 void CritterObserver::update(Observable* observable) {
     if (observable == currentCritter) {
         updateAttributes();
+
+        if (!currentCritter->isAlive() || currentCritter->atExit()) {
+            setCurrentCritter(nullptr);
+        }
     }
 }
 
@@ -68,9 +126,8 @@ void CritterObserver::handleButtonEvents(SDL_Event* e) {
 }
 
 CritterObserver::~CritterObserver() {
-    for (int i = 0; i < critterComponents.size(); i++) {
-        delete critterComponents[i];
-    }
+    currentCritter = nullptr;
+
     critterComponents.clear();
 }
 

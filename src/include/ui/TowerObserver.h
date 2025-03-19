@@ -27,7 +27,7 @@ public:
 	
 	// Observer override
 	void update(Observable* observable);
-	void handleButtonEvents(SDL_Event* e);
+	void handleButtonEvents(SDL_Event& e);
 
 	// Tower DetailDisplayComponent functions
 	bool initializeTowerComponents();

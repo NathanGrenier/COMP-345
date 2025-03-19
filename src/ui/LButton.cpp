@@ -46,7 +46,7 @@ void LButton::handleEvent(SDL_Event* e) {
 		SDL_GetMouseState(&x, &y);
 
 		SDL_FRect spriteClips[] = {
-			{ 0.f, 0 * kButtonHeight, kButtonWidth, kButtonHeight},
+			{ 0.f, 0 * kButtonHeight, kButtonWidth, kButtonHeight },
 			{ 0.f, 1 * kButtonHeight, kButtonWidth, kButtonHeight },
 			{ 0.f, 2 * kButtonHeight, kButtonWidth, kButtonHeight },
 			{ 0.f, 3 * kButtonHeight, kButtonWidth, kButtonHeight },

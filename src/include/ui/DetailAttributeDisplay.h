@@ -23,7 +23,7 @@ class CritterObserver;
 class DetailAttributeDisplay : public DetailDisplay {
 
 public:
-	static const int ATTRIBUTE_DISPLAY_WIDTH = 225; /** @brief width of the display */
+	static const int ATTRIBUTE_DISPLAY_WIDTH = Global::viewerWidth; /** @brief width of the display */
 
 	// constructor
 	DetailAttributeDisplay();
@@ -36,7 +36,7 @@ public:
 	//bool isDisplayingCritter();
 
 	// for button hovers, clicks
-	void handleButtonEvents(SDL_Event* e);
+	void handleButtonEvents(SDL_Event& e);
 
 	// accessors
 	TowerObserver* getTowerObserver();

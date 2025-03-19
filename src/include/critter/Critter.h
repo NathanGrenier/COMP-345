@@ -10,25 +10,28 @@
 #include <vector>
 #include <map/Map.h>
 #include <util/Observable.h>
+#include <ui/LTexture.h>
 
 class Critter : public Observable, public FlowFieldObserver {
 public:
 	Critter(int level, float speed, int hitPoints, int strength, int reward, SDL_FRect start, Map* map);
+	~Critter();
 
-	static constexpr float CRITTER_WIDTH_SCALE = 0.65f;
-	static constexpr float CRITTER_HEIGHT_SCALE = 0.65f;
+	static constexpr float CRITTER_WIDTH_SCALE = 1.00f;
+	static constexpr float CRITTER_HEIGHT_SCALE = 1.00f;
 
-	static constexpr float CRITTER_HEALTHBAR_HEIGHT = CRITTER_HEIGHT_SCALE * 0.4f;
-	static constexpr float CRITTER_HEALTHBAR_PADDING = CRITTER_HEIGHT_SCALE * 0.65f;
+	static constexpr float CRITTER_HEALTHBAR_HEIGHT = CRITTER_HEIGHT_SCALE * 0.3f;
+	static constexpr float CRITTER_HEALTHBAR_PADDING = CRITTER_HEIGHT_SCALE * 0.5f;
 
 	void onFlowFieldChanged() override;
 
-	void move(float deltaTime, const std::vector<Critter>& critters, float spacing);  // Move critter towards exit
-	void takeDamage(int damage); // Apply damage from towers
+	void move(float deltaTime, const std::vector<Critter*> critters, float spacing);  // Move critter towards exit
+	void takeDamage(); // Apply damage from towers
 	bool isAlive() const;        // Check if critter is still alive
 	void stealGold(int& playerGold);  // Steal gold if critter reaches the exit
 
-	void render(SDL_Renderer* renderer);  // Render critter (could be a simple shape or sprite)
+	void render();  // Render critter (could be a simple shape or sprite)
+	void update();
 
 	int getSpeed();
 	void setSpeed(int speed);
@@ -42,6 +45,7 @@ public:
 	bool isClicked() const;
 
 	SDL_FRect getPosition() const;
+	SDL_FRect getCurrentRenderRect() const { return currentRenderRect; };
 
 	bool atExit();
 	void setAtExit(bool con);
@@ -55,6 +59,16 @@ private:
 	bool isAtExit;
 	int maxHitPoints;
 	Map* map;
+	SDL_FRect currentRenderRect;
+	LTexture critterTexture;
+	
+	bool isDamaged = false;
+	Uint32 damageTimer = 0; 
+	float redTintAlpha = 0.0f;
+	float greenTintAlpha = 0.0f;
+	float blueTintAlpha = 0.0f;
+	const float maxRedAlpha = 255.0f;
+	const Uint32 damageDuration = 100;
 
 	int targetCellX;
 	int targetCellY;
