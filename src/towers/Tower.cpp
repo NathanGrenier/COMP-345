@@ -14,7 +14,7 @@
  * @brief Default Constructor, setting all values to 0
  */
 Tower::Tower() 
-    : buyingCost(0), refundValue(0), range(0), power(0), rateOfFire(0), level(0), shootingTimer(0), upgradeValues{ 0, 0, 0}
+    : upgradeCost(0), buyingCost(0), refundValue(0), range(0), power(0), rateOfFire(0), level(0), shootingTimer(0), upgradeValues{ 0, 0, 0}
 {
     currentRenderRect = { 0, 0, 0, 0 };
 }
@@ -33,7 +33,7 @@ Tower::Tower()
  * Uses default refund value ratio in Tower class 
  */
 Tower::Tower(float x, float y, float width, int buyingCost, int range, int power, int rateOfFire)
-    : buyingCost(buyingCost), range(range), power(power), rateOfFire(rateOfFire), level(1), shootingTimer(0), upgradeValues{ 0, 0, 0 }
+    : upgradeCost(0), buyingCost(buyingCost), range(range), power(power), rateOfFire(rateOfFire), level(1), shootingTimer(0), upgradeValues{ 0, 0, 0 }
 {
     refundValue = static_cast<int>(REFUND_RATIO * buyingCost);
     currentRenderRect = { x, y, width, width };
@@ -53,7 +53,7 @@ Tower::Tower(float x, float y, float width, int buyingCost, int range, int power
  * Sets Tower level to 1 and shootingTimer to 0 to immediately start firing once placed
  */
 Tower::Tower(float x, float y, float width, int buyingCost, int refundValue, int range, int power, int rateOfFire)
-    : buyingCost(buyingCost), refundValue(refundValue), range(range), power(power), rateOfFire(rateOfFire), level(1), shootingTimer(0), upgradeValues{ 0, 0, 0 }
+    : upgradeCost(0), buyingCost(buyingCost), refundValue(refundValue), range(range), power(power), rateOfFire(rateOfFire), level(1), shootingTimer(0), upgradeValues{ 0, 0, 0 }
 {
     currentRenderRect = { x, y, width, width };
 }
@@ -106,7 +106,7 @@ void Tower::generateAllProjectiles()
  * @brief Accessor for range
  * @return the range for the Tower
  */
-int Tower::getRange()
+int Tower::getRange() const
 {
     return range;
 }
@@ -115,7 +115,7 @@ int Tower::getRange()
  * @brief Accessor for power
  * @return the power for the Tower
  */
-int Tower::getPower()
+int Tower::getPower() const
 {
     return power;
 }
@@ -124,7 +124,7 @@ int Tower::getPower()
  * @brief Accessor for rate of fire
  * @return the rate of fire for the Tower
  */
-int Tower::getRateOfFire()
+int Tower::getRateOfFire() const
 {
     return rateOfFire;
 }
@@ -133,7 +133,7 @@ int Tower::getRateOfFire()
  * @brief Accessor for level
  * @return the level for the Tower
  */
-int Tower::getLevel()
+int Tower::getLevel() const
 {
     return level;
 }
@@ -166,7 +166,7 @@ int Tower::getUpgradeCost()
  * @brief Accessor for the Tower upgrade values
  * @return a struct containing the Tower upgrade values
  */
-Tower::UpgradeValues Tower::getUpgradeValues()
+Tower::UpgradeValues Tower::getUpgradeValues() const
 {
     return upgradeValues;
 }
@@ -181,6 +181,7 @@ Tower::UpgradeValues Tower::getUpgradeValues()
  */
 bool Tower::upgrade()
 {
+    std::cout << level << std::endl;
     // check if not yet max level
     if (level < getMaxLevel())
     {
@@ -247,7 +248,7 @@ bool Tower::isCritterInRange(Critter* critter)
  * Takes Tower and DummyCritter size in account for distance
  * @return the absolute distance between the Tower and the DummyCritter
  */
-float Tower::calcDistance(Critter* critter) 
+float Tower::calcDistance(Critter* critter) const
 {
     // considers Tower size
     float posX = currentRenderRect.x + currentRenderRect.w / 2;
@@ -262,7 +263,7 @@ float Tower::calcDistance(Critter* critter)
     float differenceY = posY - critterPosY;
 
     // distance formula
-    return sqrt(pow(differenceX, 2) + pow(differenceY, 2));
+    return static_cast<float>(sqrt(pow(differenceX, 2) + pow(differenceY, 2)));
 }
 
 /**
@@ -284,7 +285,7 @@ void Tower::setCurrentRenderRect(float originalX, float originalY, float w, floa
 }
 
 
-SDL_FRect Tower::getCurrentRenderRect() {
+SDL_FRect Tower::getCurrentRenderRect() const {
     return currentRenderRect;
 }
 

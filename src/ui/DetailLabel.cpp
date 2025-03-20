@@ -22,7 +22,7 @@ DetailLabel::DetailLabel()
  * @param width the width of the DetailLabel
  * @param path the path of the LTexture image
  */
-DetailLabel::DetailLabel(int width, std::string path)
+DetailLabel::DetailLabel(float width, std::string path)
 	: DetailDisplayComponent::DetailDisplayComponent(width)
 {
 	LTexture::loadFromFile(path);

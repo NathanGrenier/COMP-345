@@ -8,8 +8,11 @@
 #include <towers/RapidFireTower.h>
 #include <towers/CannonTower.h>
 #include <map/Map.h>
-
 #include <ui/DetailButton.h>
+
+#include <towers/powerups/Powerup.h>
+#include <towers/powerups/FirePowerup.h>
+#include <towers/powerups/IcePowerup.h>
 
  // Constructor
 TowerGroup::TowerGroup(int& playerGold, Map* map, DetailAttributeDisplay& detailDisplay)
@@ -39,14 +42,12 @@ TowerGroup::~TowerGroup() {
         delete tower;
     }
     towers.clear();
-}
 
-// Add a tower to the group
-void TowerGroup::addTower(Tower* tower) {
-}
+	for (Powerup* powerup : activePowerups) {
+		delete powerup;
+	}
 
-// Remove a tower from the group
-void TowerGroup::removeTower(Tower* tower) {
+	activePowerups.clear();
 }
 
 // Update all towers (e.g., shooting critters)
@@ -61,19 +62,37 @@ void TowerGroup::update(float deltaTime, std::vector<Critter*> critters) {
 		towers[i]->shootProjectile(targettedCritter);
 
 		if (critters.size()) {
-			// Now, check the projectiles fired by this tower for collisions
+			// Now, check the projectiles fired by this tower for collisions	
 			for (auto* projectile : towers[i]->getProjectiles()) {
 				for (auto critter : critters) {
 					if (projectile->checkCollision(critter)) {
-						critter->takeDamage();
-						critter->notify();
-						projectile->destroy(); // Destroy the projectile on collision
+						// Check if critter is dead
+						if (critter->getHitPoints() <= 0) {
+							float spawnChance = 0.2f; // 20% chance to spawn a powerup
+							if (rand() % 100 < spawnChance * 100) {
+								Powerup* powerup = nullptr;
+								int powerupType = rand() % 2; // Randomly choose between fire or ice
+								if (powerupType == 0) {
+									powerup = new FirePowerup(critter->getCurrentRenderRect());
+								}
+								else {
+									powerup = new IcePowerup(critter->getCurrentRenderRect());
+								}
+								activePowerups.push_back(powerup);
+							}
+						}
+						projectile->destroy();
 					}
 				}
 			}
 		}
+
+		for (Powerup* powerup : activePowerups) {
+			powerup->update(0.0008f);
+		}
 	}
 }
+
 
 
 // Render all towers
@@ -81,6 +100,10 @@ void TowerGroup::render() {
 	for (auto& tower : towers)
 	{
 		tower->render();
+	}
+
+	for (Powerup* powerup : activePowerups) {
+		powerup->render();
 	}
 }
 
@@ -101,8 +124,10 @@ void TowerGroup::upgradeTower(Tower* tower) {
 void TowerGroup::handleEvent(SDL_Event& e) {
 	// resets tower buy selection
 	bool buttonClick = false;
-
 	bool correctCell = false;
+
+	static Powerup* draggedPowerup = nullptr;
+	static bool dragging = false;
 
 	float mouseX, mouseY;
 	SDL_GetMouseState(&mouseX, &mouseY);
@@ -127,9 +152,31 @@ void TowerGroup::handleEvent(SDL_Event& e) {
 	float targetX = cellX * cellSize + currentRenderRect.x;
 	float targetY = cellY * cellSize + currentRenderRect.y;
 
+	if (dragging && draggedPowerup) {
+		if (!SDL_HasRectIntersectionFloat(&draggedPowerup->position, &Global::mapViewRect)) {
+			activePowerups.erase(std::remove(activePowerups.begin(), activePowerups.end(), draggedPowerup), activePowerups.end());
+			delete draggedPowerup;
+			draggedPowerup = nullptr;
+			dragging = false;
+			return;
+		}
+
+		draggedPowerup->position.x = mouseX - (draggedPowerup->position.w / 2);
+		draggedPowerup->position.y = mouseY - (draggedPowerup->position.h / 2);
+	}
+
+
 	// if click happens
 	if (e.type == SDL_EVENT_MOUSE_BUTTON_DOWN && e.button.button == SDL_BUTTON_LEFT)
 	{
+		for (Powerup* powerup : activePowerups) {
+			if (powerup->isClicked(mouseX, mouseY)) {
+				draggedPowerup = powerup;  // Start dragging powerup
+				dragging = true;
+				draggedPowerup->isDragged = true;
+				break;
+			}
+		}
 
 		// Ensure valid index range
 		if (cellX < 0 || cellX >= map->cellCountX || cellY < 0 || cellY >= map->cellCountY)
@@ -188,9 +235,9 @@ void TowerGroup::handleEvent(SDL_Event& e) {
 				// checks if tower is already max level
 				if (detailDisplay.getTowerObserver()->getCurrentTower()->upgrade())
 				{
+					detailDisplay.getTowerObserver()->getCurrentTower()->notify();
 					playerGold -= upgradeCost;
 				}
-
 
 				return;
 			}
@@ -285,9 +332,6 @@ void TowerGroup::handleEvent(SDL_Event& e) {
 					newTower->attach(detailDisplay.getTowerObserver());
 					newTower->notify();
 
-					// Mark the wall cell as occupied
-					std::cout << targetCell.x << " and " << targetCell.y << std::endl;
-
 					map->wallCellDict[targetCell] = true;
 				}
 			}
@@ -299,4 +343,51 @@ void TowerGroup::handleEvent(SDL_Event& e) {
 			return;
 		}
 	}
+
+	if (e.type == SDL_EVENT_MOUSE_BUTTON_UP && e.button.button == SDL_BUTTON_LEFT) {
+		if (dragging && draggedPowerup) {
+
+			bool towerClicked = false;
+			for (size_t i = 0; i < towers.size(); i++) {
+				if (towers[i]->isClicked(1)) {
+					// Unwrap the tower if it is already wrapped with a powerup
+					Tower* baseTower = towers[i];
+
+					// Unwrap all decorators (powerups) applied to the tower
+					while (auto* decorated = dynamic_cast<TowerDecorator*>(baseTower)) {
+						baseTower = decorated->getWrappedTower();  // Get the base tower without the decorator
+						// Do not delete decorated here; let the new decorator handle it
+					}
+
+					// Apply the new powerup to the base tower (without previous decorators)
+					Tower* upgradedTower = draggedPowerup->applyPowerupToTower(baseTower, towers[i]->getCurrentRenderRect());
+
+					// Ensure the position of the tower is retained
+					SDL_FRect towerRect = towers[i]->getCurrentRenderRect();
+					upgradedTower->setCurrentRenderRect(towerRect.x, towerRect.y, towerRect.w, towerRect.h);
+
+					// Replace the old tower with the new upgraded tower
+					towers[i] = upgradedTower;  // Replace the tower reference in the array
+
+					// Remove the powerup from active powerups and clean up
+					activePowerups.erase(std::remove(activePowerups.begin(), activePowerups.end(), draggedPowerup), activePowerups.end());
+
+					// Only delete draggedPowerup if it's no longer needed
+					delete draggedPowerup;
+					draggedPowerup = nullptr;  // Set draggedPowerup to null after deletion
+
+					// Reset dragging state
+					dragging = false;
+					towerClicked = true;
+					break;
+				}
+			}
+			if (!towerClicked) {
+				draggedPowerup->isDragged = false;
+				draggedPowerup = nullptr;
+				dragging = false;
+			}
+		}
+	}
+
 }

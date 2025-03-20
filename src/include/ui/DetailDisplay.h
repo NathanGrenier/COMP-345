@@ -17,24 +17,24 @@ public:
 
 	// constructors
 	DetailDisplay();
-	DetailDisplay(int width, int height);
+	DetailDisplay(float width, float height);
 
 	// accessors and mutators
 	void setPosition(float x, float y);
-	SDL_FPoint getPosition();
+	SDL_FPoint getPosition() const;
 
-	void setWidth(int width);
-	int getWidth();
+	void setWidth(float width);
+	float getWidth() const;
 
-	void setHeight(int height);
-	int getHeight();
+	void setHeight(float height);
+	float getHeight() const;
 
 	// shows rectangle box
 	virtual void render();
 
 protected:
-	int width;
-	int height;
+	float width;
+	float height;
 
 	SDL_FPoint mPosition; /** @brief top left position of the display */
 };

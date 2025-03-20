@@ -36,20 +36,20 @@ public:
 	//Sets blend mode
 	void setBlending(SDL_BlendMode blendMode);
 
-	void setTextureSize(int newWidth, int newHeight);
+	void setTextureSize(float newWidth, float newHeight);
 
 	//Draws texture
 	void render(float x, float y, SDL_FRect* clip = nullptr, float width = kOriginalSize, float height = kOriginalSize, double degrees = 0.0, SDL_FPoint* center = nullptr, SDL_FlipMode flipMode = SDL_FLIP_NONE);
 
 	//Gets texture dimensions
-	int getWidth();
-	int getHeight();
+	float getWidth() const;
+	float getHeight() const;
 
 private:
 	//Contains texture data
 	SDL_Texture* mTexture;
 
 	//Texture dimensions
-	int mWidth;
-	int mHeight;
+	float mWidth;
+	float mHeight;
 };

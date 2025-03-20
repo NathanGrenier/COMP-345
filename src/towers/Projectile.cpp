@@ -22,9 +22,10 @@
  * Area damage is not yet implemented
  * Uses a default ProjectileSize of 3
  */
-Projectile::Projectile(float x, float y, int damage, bool isArea, int rotationAngle, float xSpeed, float ySpeed, std::string texturePath)
+Projectile::Projectile(float x, float y, int damage, bool isArea, float rotationAngle, float xSpeed, float ySpeed, std::string texturePath)
     : x(x), y(y), damage(damage), isArea(isArea), projectileSize(3), rotationAngle(rotationAngle), xSpeed(xSpeed), ySpeed(ySpeed)
-{
+{   
+    currentRenderRect = {};
     projectileTexture.loadFromFile(texturePath);
 }
 
@@ -40,9 +41,10 @@ Projectile::Projectile(float x, float y, int damage, bool isArea, int rotationAn
  * Damage is to be applied to critters, removing the same number of health from it
  * Area damage is not yet implemented
  */
-Projectile::Projectile(float x, float y, int damage, bool isArea, int projectileSize, int rotationAngle, float xSpeed, float ySpeed, std::string texturePath)
+Projectile::Projectile(float x, float y, int damage, bool isArea, int projectileSize, float rotationAngle, float xSpeed, float ySpeed, std::string texturePath)
     : x(x), y(y), damage(damage), isArea(isArea), projectileSize(projectileSize), rotationAngle(rotationAngle), xSpeed(xSpeed), ySpeed(ySpeed)
 {
+    currentRenderRect = {};
     projectileTexture.loadFromFile(texturePath);
 }
 
@@ -51,7 +53,7 @@ Projectile::Projectile(float x, float y, int damage, bool isArea, int projectile
  * 
  * @return The damage the Projectile will do to a critter
  */
-int Projectile::getDamage() 
+int Projectile::getDamage() const 
 {
     return damage;
 }
@@ -65,6 +67,9 @@ int Projectile::getDamage()
  */
 void Projectile::move(float multiplier)
 {
+    if (isOutside()) {
+        destroy();
+    }
     x += xSpeed * multiplier;
     y += ySpeed * multiplier;
 }
@@ -78,7 +83,7 @@ void Projectile::move(float multiplier)
 void Projectile::generateProjectile()
 {
     // Define the sprite clips for each frame (horizontal sprite sheet)
-    float frameWidth = projectileTexture.getWidth() / 4;
+    float frameWidth = projectileTexture.getWidth() / static_cast<float>(4);
     float frameHeight = projectileTexture.getHeight();
 
     SDL_FRect spriteClips[] = {
@@ -88,7 +93,8 @@ void Projectile::generateProjectile()
         { 3.f * frameWidth, 0.f, frameWidth, frameHeight }
     };
 
-    float targetHeight = Global::currentMap.getPixelPerCell() * 0.8f;
+    float targetHeight = Global::currentMap->getPixelPerCell()
+        * 0.8f;
 
     // Maintain aspect ratio for width
     float aspectRatio = frameWidth / frameHeight;
@@ -131,7 +137,7 @@ void Projectile::destroy()
  * @return true if the Projectile is out of bounds
  * @return false if the Projectile is positioned correctly within the map 
  */
-bool Projectile::isOutside()
+bool Projectile::isOutside() const
 {
     return ((x < 0 || x > Global::mapViewRect.w - 20) || (y < Global::headerHeight || y > Global::kScreenHeight));
 }
@@ -147,14 +153,14 @@ bool Projectile::isOutside()
  * @return true if the Projectile is colliding with a critter 
  * @return false if the Projectile has not collided with critter
  */
-bool Projectile::checkCollision(Critter* critter) {
+bool Projectile::checkCollision(Critter* critter) const {
     // Midpoint collision tolerance (you can adjust this if you want a small margin of error)
     float tolerance = 0.0f;
 
     // Get critter's position and size
-    int critterX = critter->getPosition().x;
-    int critterY = critter->getPosition().y;
-    int critterSize = critter->getPosition().w; // Assuming square critter, w == h
+    float critterX = critter->getPosition().x;
+    float critterY = critter->getPosition().y;
+    float critterSize = critter->getPosition().w; // Assuming square critter, w == h
 
     // Calculate critter's midpoint
     float critterMidX = critterX + critterSize / 2.0f;
@@ -171,7 +177,7 @@ bool Projectile::checkCollision(Critter* critter) {
         critterMidX <= projectileRight + tolerance &&
         critterMidY >= projectileTop - tolerance &&
         critterMidY <= projectileBottom + tolerance) {
-        critter->takeDamage();
+        critter->takeDamage(5);
         critter->notify();
         return true; // Collision detected
     }

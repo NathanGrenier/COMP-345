@@ -22,7 +22,7 @@ class TowerObserver : public Observer
 {
 public:
 	// constructor and destructor
-	TowerObserver(int startingX, int startingY);
+	TowerObserver(float startingX, float startingY);
 	~TowerObserver();
 	
 	// Observer override

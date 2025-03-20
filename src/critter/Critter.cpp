@@ -18,9 +18,11 @@
  * @details Initializes the critter's position, target, and subscribes to the map's flow field.
  *          If the map is null, it sets safe default values for the target position.
  */
-Critter::Critter(int level, float speed, int hitPoints, int strength, int reward, SDL_FRect start, Map* map)
+Critter::Critter(int level, float speed, float hitPoints, int strength, int reward, SDL_FRect start, Map* map)
 	: level(level), speed(speed), hitPoints(hitPoints), strength(strength), reward(reward),
 	position(start), isAtExit(false), maxHitPoints(hitPoints), map(map) {
+
+	currentRenderRect = {};
 
 	if (map != nullptr) {
 		map->subscribe(this);
@@ -75,7 +77,7 @@ SDL_FRect Critter::getPosition() const {
  * @param b The second rectangle.
  * @return True if the rectangles intersect, false otherwise.
  */
-bool rectanglesIntersect(const SDL_FRect& a, const SDL_FRect& b) {
+static bool rectanglesIntersect(const SDL_FRect& a, const SDL_FRect& b) {
 	return (a.x < b.x + b.w && a.x + a.w > b.x && a.y < b.y + b.h && a.y + a.h > b.y);
 }
 
@@ -152,16 +154,17 @@ void Critter::move(float deltaTime, const std::vector<Critter*> critters, float 
  *
  * @param damage The amount of damage to apply.
  */
-void Critter::takeDamage() {
-	hitPoints -= strength;
-	isDamaged = true;
+void Critter::takeDamage(float damage) {
+	hitPoints -= damage;
+	isHurt = true;
+	notify();
 	damageTimer = SDL_GetTicks();
 }
 
 void Critter::update() {
-	if (isDamaged) {
+	if (isHurt) {
 		// Get the time passed since the damage was taken
-		Uint32 elapsedTime = SDL_GetTicks() - damageTimer;
+		Uint64 elapsedTime = SDL_GetTicks() - damageTimer;
 
 		// Gradually increase the red component and adjust green/blue
 		if (elapsedTime < damageDuration) {
@@ -172,7 +175,7 @@ void Critter::update() {
 			redTintAlpha = maxRedAlpha - maxRedAlpha * ((elapsedTime - damageDuration) / float(damageDuration));
 
 			if (redTintAlpha <= 0.0f) {
-				isDamaged = false;
+				isHurt = false;
 				redTintAlpha = 255;
 				greenTintAlpha = 255;
 				blueTintAlpha = 255;
@@ -197,7 +200,7 @@ bool Critter::isAlive() const {
  * @brief Checks if the critter has reached the exit.
  * @return True if the critter has reached the exit, false otherwise.
  */
-bool Critter::atExit() {
+bool Critter::atExit() const {
 	return isAtExit;
 }
 
@@ -206,7 +209,7 @@ bool Critter::atExit() {
  *
  * @param hitPoints The new hit points value.
  */
-void Critter::setHitPoints(int hitPoints) {
+void Critter::setHitPoints(float hitPoints) {
 	hitPoints = hitPoints;
 }
 
@@ -245,7 +248,7 @@ void Critter::setAtExit(bool con) {
  * @brief Gets the speed of the critter.
  * @return The speed of the critter.
  */
-int Critter::getSpeed() {
+float Critter::getSpeed() const  {
 	return speed;
 }
 
@@ -253,7 +256,7 @@ int Critter::getSpeed() {
  * @brief Sets the speed of the critter.
  * @param newSpeed The new speed value.
  */
-void Critter::setSpeed(int newSpeed) {
+void Critter::setSpeed(float newSpeed) {
 	speed = newSpeed;
 }
 
@@ -265,7 +268,7 @@ void Critter::setSpeed(int newSpeed) {
  * @param renderer The SDL_Renderer used to draw the critter.
  */
 void Critter::render() {
-	float currentCellSize = Global::currentMap.getPixelPerCell();
+	float currentCellSize = Global::currentMap->getPixelPerCell();
 
 	currentRenderRect = { position.x, position.y, currentCellSize * CRITTER_WIDTH_SCALE, currentCellSize * CRITTER_WIDTH_SCALE };
 
@@ -302,6 +305,6 @@ void Critter::render() {
  *
  * @param playerGold The player's current gold amount, which will be reduced by the critter's strength.
  */
-void Critter::stealGold(int& playerGold) {
+void Critter::stealGold(int& playerGold) const {
 	playerGold -= strength;
 }

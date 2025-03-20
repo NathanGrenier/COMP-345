@@ -14,7 +14,7 @@
  */
 CannonTower::CannonTower() : Tower()
 {
-    towerTexture.loadFromFile("assets/tower/CannonTower.png");
+    getTowerTexture().loadFromFile("assets/tower/CannonTower.png");
     upgradeValues.rangeIncrease = 50;
     upgradeValues.powerIncrease = 5;
     upgradeValues.rateOfFireIncrease = 1;
@@ -33,7 +33,7 @@ CannonTower::CannonTower() : Tower()
 CannonTower::CannonTower(float x, float y, float width, int buyingCost)
     : Tower(x, y, width, buyingCost, CANNON_RANGE, CANNON_POWER, CANNON_RATE_OF_FIRE)
 {
-    towerTexture.loadFromFile("assets/tower/CannonTower.png");
+    getTowerTexture().loadFromFile("assets/tower/CannonTower.png");
     upgradeValues.rangeIncrease = 50;
     upgradeValues.powerIncrease = 5;
     upgradeValues.rateOfFireIncrease = 1;
@@ -52,7 +52,7 @@ CannonTower::CannonTower(float x, float y, float width, int buyingCost)
 CannonTower::CannonTower(float x, float y, float width, int buyingCost, int refundValue)
     : Tower(x, y, width, buyingCost, refundValue, CANNON_RANGE, CANNON_POWER, CANNON_RATE_OF_FIRE)
 {
-    towerTexture.loadFromFile("assets/tower/CannonTower.png");
+    getTowerTexture().loadFromFile("assets/tower/CannonTower.png");
     upgradeValues.rangeIncrease = 50;
     upgradeValues.powerIncrease = 5;
     upgradeValues.rateOfFireIncrease = 1;
@@ -81,8 +81,8 @@ int CannonTower::getMaxLevel()
 void CannonTower::shootProjectile(Critter* critter)
 {
     // Ensure we're using the center of the tower
-    float towerCenterX = currentRenderRect.x + currentRenderRect.w / 2.0f;
-    float towerCenterY = currentRenderRect.y + currentRenderRect.h / 2.0f;
+    float towerCenterX = getCurrentRenderRect().x + getCurrentRenderRect().w / 2.0f;
+    float towerCenterY = getCurrentRenderRect().y + getCurrentRenderRect().h / 2.0f;
     float deltaAngle = 0;
 
     // Target the center of the critter
@@ -93,12 +93,12 @@ void CannonTower::shootProjectile(Critter* critter)
 
         // Calculate the raw angle
         float angleRad = atan2(dirToTarget.y, dirToTarget.x);
-        float angleDeg = angleRad * (180.0f / M_PI);
+        float angleDeg = angleRad * (180.0f / PI_CONSTANT);
 
         // Adjust for sprite orientation (assuming "top" is default forward)
         angleDeg += 90.0f;
 
-        deltaAngle = angleDeg - rotationAngle;
+        deltaAngle = angleDeg - getRotation();
 
         // Normalize delta to [-180, 180] for shortest path
         while (deltaAngle > 180.0f) deltaAngle -= 360.0f;
@@ -112,17 +112,19 @@ void CannonTower::shootProjectile(Critter* critter)
         if (deltaAngle < -maxRotationStep) deltaAngle = -maxRotationStep;
 
         // Apply smooth rotation
-        rotationAngle = rotationAngle + deltaAngle;
+        setRotation(getRotation() + deltaAngle);
     }
 
+    std::vector<Projectile*>& projectiles = getProjectiles();
+
     // checks if it is time to shoot
-    if (critter != nullptr && shootingTimer <= 0 && fabs(deltaAngle) < 2.0f)
+    if (critter != nullptr && getShootingTimer() <= 0 && fabs(deltaAngle) < 2.0f)
     {
         // tower position with offset
-        float posX = currentRenderRect.x + currentRenderRect.w / 2;
-        float posY = currentRenderRect.y + currentRenderRect.w / 2;
+        float posX = getCurrentRenderRect().x + getCurrentRenderRect().w / 2;
+        float posY = getCurrentRenderRect().y + getCurrentRenderRect().w / 2;
 
-        float currentCellSize = Global::currentMap.getPixelPerCell();
+        float currentCellSize = Global::currentMap->getPixelPerCell();
 
         // critter position with offset
         float critterPosX = critter->getPosition().x + Critter::CRITTER_WIDTH_SCALE * currentCellSize / 2;
@@ -132,39 +134,23 @@ void CannonTower::shootProjectile(Critter* critter)
         float differenceX = posX - critterPosX;
         float differenceY = posY - critterPosY;
 
-        float distance = sqrt(pow(differenceX, 2) + pow(differenceY, 2));
+        float distance = (float)sqrt(pow(differenceX, 2) + pow(differenceY, 2));
 
         // distance for projectile as a unit vector
         float speedX = (critterPosX - posX) / distance;
         float speedY = (critterPosY - posY) / distance;
 
-        // fires a big sized projectile, resets shooting timer
-        projectiles.push_back(new Projectile(posX, posY, power, false, 6, rotationAngle, speedX, speedY, "assets/tower/CannonProjectile.png"));
-        shootingTimer = MAX_SHOOTING_TIMER;
+        // Fires a big-sized projectile, resets shooting timer
+        projectiles.push_back(new Projectile(posX, posY, getPower(), false, 6, getRotation(), speedX, speedY, "assets/tower/CannonProjectile.png"));
+        setShootingTimer(MAX_SHOOTING_TIMER);
     }
-    else // decreases shooting timer
+    else // Decreases shooting timer
     {
-        shootingTimer -= rateOfFire;
+        setShootingTimer(getShootingTimer() - getRateOfFire());
     }
 
-    // moves projectile at a slow speed
+    // Moves projectile at a slow speed
     for (int i = 0; i < projectiles.size(); i++) {
         projectiles[i]->move(5);
-
-        // check if projectile hits critter
-        if (critter != nullptr && projectiles[i]->checkCollision(critter))
-        {
-            projectiles.erase(projectiles.begin() + i);
-
-            // clear projectiles if critter has no hp, no target
-            if (critter->getHitPoints() <= 0) {
-                projectiles.clear();
-            }
-        }
-        // check if projectile is outside of map
-        else if (projectiles[i]->isOutside())
-        {
-            projectiles.erase(projectiles.begin() + i);
-        }
     }
 }

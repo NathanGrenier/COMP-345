@@ -13,6 +13,9 @@
 #include <critter/CritterObserver.h>
 #include <Global.h>
 
+
+const float DetailAttributeDisplay::ATTRIBUTE_DISPLAY_WIDTH = Global::viewerWidth;
+
 /**
  * @brief Default constructor.
  */
@@ -21,7 +24,7 @@ DetailAttributeDisplay::DetailAttributeDisplay()
 {
     setPosition(Global::kScreenWidth - getWidth(), 0);
 
-    int componentWidth = ATTRIBUTE_DISPLAY_WIDTH - 2 * DetailDisplayComponent::DETAIL_COMPONENT_PADDING;
+    float componentWidth = ATTRIBUTE_DISPLAY_WIDTH - 2 * DetailDisplayComponent::DETAIL_COMPONENT_PADDING;
 
     // Existing components for Towers
     components.push_back(new DetailLabel(componentWidth, "assets/ui/BuyTower.png"));
@@ -29,7 +32,7 @@ DetailAttributeDisplay::DetailAttributeDisplay()
     components.push_back(new DetailButton(componentWidth, "assets/ui/RapidFireTower.png"));
     components.push_back(new DetailButton(componentWidth, "assets/ui/CannonTower.png"));
 
-    int currentY = DetailDisplayComponent::DETAIL_COMPONENT_PADDING;
+    float currentY = DetailDisplayComponent::DETAIL_COMPONENT_PADDING;
 
     // Initialize Tower buttons
     for (int i = 0; i < components.size(); i++) {

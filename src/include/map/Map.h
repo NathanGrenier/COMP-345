@@ -94,13 +94,13 @@ public:
     bool saveToJson(const std::string& filePath);
     void calculatePixelsPerCell();
     void drawOnTargetRect(const SDL_FRect& targetRect);
-    SDL_FRect getCurrentRenderRect();
+    SDL_FRect getCurrentRenderRect() const;
     void setCurrentRenderRect(SDL_FRect newTargetRect);
 
-    float getPixelPerCell();
+    float getPixelPerCell() const;
     void updateMapDimensions(int newCellCountX, int newCellCountY);
 
-    std::pair<int, int> getCellFromPosition(float x, float y, const SDL_FRect& targetRect);
+    std::pair<int, int> getCellFromPosition(float x, float y, const SDL_FRect& targetRect) const;
     SDL_FPoint getCellCenter(int x, int y, const SDL_FRect& targetRect);
 
     void subscribe(FlowFieldObserver* observer);
@@ -108,19 +108,19 @@ public:
     void notifyObservers();
 
     void setName(std::string newName);
-    std::string getName();
+    std::string getName() const;
     void setPath(std::string newPath);
-    std::string getPath();
+    std::string getPath() const;
 
     std::unordered_map<Cell, bool> wallCellDict;
     std::vector<Cell> cells;              /**< Grid cells storage */
 
-    SDL_FRect scaleCellRect(const Cell& cell, const SDL_FRect& targetRect);
+    SDL_FRect scaleCellRect(const Cell& cell, const SDL_FRect& targetRect) const;
 private:
     static const unsigned char flowDistanceMax = 255;
     SDL_FRect currentRenderRect;
 
-    bool isInbounds(int x, int y);
+    bool isInbounds(int x, int y) const;
     void drawCell(const Cell& cell, const SDL_FRect& rect);
     void calculateFlowField();
     void calculateDistances();
