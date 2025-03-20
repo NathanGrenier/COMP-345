@@ -206,7 +206,7 @@ void MainGameState::render()
 
 	// Render player gold
 	int displayedGold = std::min(playerGold, 999);
-	renderText("Gold: " + std::to_string(playerGold), 10.0f, 10.0f);
+	renderText("Gold: " + std::to_string(displayedGold), 10.0f, 10.0f);
 
 	// Render wave level
 	std::string waveText = "Wave: " + std::to_string(waveLevel);

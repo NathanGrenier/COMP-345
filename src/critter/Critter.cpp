@@ -5,6 +5,7 @@
 #include <Global.h>
 
 /**
+ * @class Critter
  * @brief Constructs a new Critter object with specified attributes and initializes its position and target.
  *
  * @param level The level of the critter.

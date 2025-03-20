@@ -6,6 +6,15 @@
 #include <string>
 #include <ui/DetailAttributeDisplay.h>
 
+/**
+ * @class CritterObserver
+ * @brief Observes and displays information about a critter.
+ *
+ * The CritterObserver class manages the display of various attributes of a critter,
+ * such as speed, hit points, strength, and reward. It provides functionality for
+ * updating the information when the critter's state changes and renders visual
+ * indicators like a border around the critter.
+ */
 CritterObserver::CritterObserver(float startingX, float startingY) : currentCritter(nullptr) {
     float componentWidth = DetailAttributeDisplay::ATTRIBUTE_DISPLAY_WIDTH - 2 * DetailDisplayComponent::DETAIL_COMPONENT_PADDING;
 
@@ -31,6 +40,13 @@ CritterObserver::CritterObserver(float startingX, float startingY) : currentCrit
     }
 }
 
+/**
+ * @brief Initializes the components displaying critter attributes.
+ *
+ * Sets the labels for the critter attributes like speed, hit points, strength, and reward.
+ *
+ * @return True if all components were initialized successfully, false otherwise.
+ */
 bool CritterObserver::initializeCritterComponents() {
     SDL_Color textColor{ 0x00, 0x00, 0x00, 0xFF };
 
@@ -42,6 +58,12 @@ bool CritterObserver::initializeCritterComponents() {
     return success1 && success2 && success3 && success4;
 }
 
+/**
+ * @brief Renders the critter observer and its components.
+ *
+ * This function renders the components of the CritterObserver, and if the current
+ * critter is not null, it also renders an animated border around the critter.
+ */
 void CritterObserver::render() {
     for (int i = 0; i < critterComponents.size(); i++) {
         critterComponents[i]->render();
@@ -102,6 +124,14 @@ void CritterObserver::render() {
     }
 }
 
+/**
+ * @brief Updates the critter observer based on changes in the observed critter.
+ *
+ * This function checks if the current critter has changed and updates the observer's
+ * displayed attributes accordingly. It also handles critter death or exit events.
+ *
+ * @param observable The object being observed (the critter).
+ */
 void CritterObserver::update(Observable* observable) {
     if (observable == currentCritter) {
         updateAttributes();
@@ -112,25 +142,53 @@ void CritterObserver::update(Observable* observable) {
     }
 }
 
+/**
+ * @brief Sets the current critter being observed.
+ *
+ * @param critter The critter to observe.
+ */
 void CritterObserver::setCurrentCritter(Critter* critter) {
     currentCritter = critter;
 }
 
+/**
+ * @brief Gets the current critter being observed.
+ *
+ * @return The current critter being observed.
+ */
 Critter* CritterObserver::getCurrentCritter() {
     return currentCritter;
 }
 
+/**
+ * @brief Handles button events for the critter observer's components.
+ *
+ * This function forwards the event to the buttons in the observer's UI to handle interactions.
+ *
+ * @param e The SDL event to be handled.
+ */
 void CritterObserver::handleButtonEvents(SDL_Event* e) {
     (dynamic_cast<DetailButton*>(critterComponents[5]))->handleEvent(e);
     (dynamic_cast<DetailButton*>(critterComponents[6]))->handleEvent(e);
 }
 
+/**
+ * @brief Destructor for the CritterObserver.
+ *
+ * Cleans up any resources used by the CritterObserver.
+ */
 CritterObserver::~CritterObserver() {
     currentCritter = nullptr;
 
     critterComponents.clear();
 }
 
+/**
+ * @brief Updates the attribute values displayed for the current critter.
+ *
+ * This function updates the attribute text for the critter's speed, hit points, strength,
+ * and reward based on the current critter's state.
+ */
 void CritterObserver::updateAttributes() {
     SDL_Color textColor{ 0x00, 0x00, 0x00, 0xFF };
 
@@ -145,6 +203,17 @@ void CritterObserver::updateAttributes() {
     (dynamic_cast<DetailAttribute*>(critterComponents[4]))->setValueText(rewardStr, textColor);
 }
 
+/**
+ * @brief Formats the value string to display the current and upgrade values.
+ *
+ * If the critter has reached its max level, only the current value is displayed.
+ * Otherwise, both the current value and the upgrade value are shown.
+ *
+ * @param currentValue The current value of the critter attribute.
+ * @param upgradeValue The value of the next upgrade to the critter attribute.
+ * @param critterAtMaxLevel Whether the critter has reached its maximum level.
+ * @return A formatted string displaying the current and upgrade values.
+ */
 std::string CritterObserver::formatValueStr(int currentValue, int upgradeValue, bool critterAtMaxLevel) {
     if (critterAtMaxLevel) {
         return std::to_string(currentValue);
