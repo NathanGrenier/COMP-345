@@ -16,7 +16,9 @@
 class DetailDisplayComponent {
 public:
 	static const int DETAIL_COMPONENT_PADDING = 8; /** @brief padding for components, used on sides */
-	static const int DETAIL_COMPONENT_SPACING = 45; /** @brief spacing for components, used vertically */
+	static const int DETAIL_COMPONENT_SPACING = 40; /** @brief spacing for components, used vertically */
+	static const int TOWER_COMPONENT_SPACING = 20; /** @brief spacing for components, used vertically */
+	static const int CRITTER_COMPONENT_SPACING = 20; /** @brief spacing for components, used vertically */
 	static const int COMPONENT_BORDER_WIDTH = 2;    /** @brief width of the border around a component */
 	static const int DETAIL_COMPONENT_HEIGHT = 15;  /** @brief default height of a component */
 

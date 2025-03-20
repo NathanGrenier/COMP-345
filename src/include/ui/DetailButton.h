@@ -21,6 +21,7 @@ public:
 	DetailButton(int width, std::string path);
 
 	void setComponentPosition(float x, float y);
+	void setComponentImagePath(std::string path);
 
 	void render();
 };

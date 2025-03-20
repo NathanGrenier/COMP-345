@@ -37,8 +37,8 @@ DetailAttributeDisplay::DetailAttributeDisplay()
         currentY += DetailDisplayComponent::DETAIL_COMPONENT_SPACING;
     }
 
-    towerObserver = new TowerObserver(mPosition.x + DetailDisplayComponent::DETAIL_COMPONENT_PADDING, currentY + DetailDisplayComponent::DETAIL_COMPONENT_SPACING);
-    critterObserver = new CritterObserver(mPosition.x + DetailDisplayComponent::DETAIL_COMPONENT_PADDING, currentY + DetailDisplayComponent::DETAIL_COMPONENT_SPACING);
+    towerObserver = new TowerObserver(mPosition.x + DetailDisplayComponent::DETAIL_COMPONENT_PADDING, currentY + DetailDisplayComponent::TOWER_COMPONENT_SPACING);
+    critterObserver = new CritterObserver(mPosition.x + DetailDisplayComponent::DETAIL_COMPONENT_PADDING, currentY + DetailDisplayComponent::CRITTER_COMPONENT_SPACING);
 }
 
 /**

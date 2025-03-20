@@ -47,6 +47,20 @@ void DetailButton::setComponentPosition(float x, float y)
 }
 
 /**
+ * @brief Sets the DetailButton's path.
+ *
+ * @details sets the image path of a DetailButton, usually to change its text.
+ * Assumes that position has already been set previously.
+ * @param path the path of the LButton image
+ */
+void DetailButton::setComponentImagePath(std::string path)
+{
+    LButton::loadFromFile(path);
+    LButton::setSizeWithAspectRatio(width, 0);
+    LButton::setPosition(xPosition, yPosition);
+}
+
+/**
  * @brief Renders the button
  * @details Simply calls the LButton render() method
  * This allows the DetailButton to use render() without problem as a DetailDisplayComponent,

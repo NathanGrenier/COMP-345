@@ -62,7 +62,9 @@ void DetailAttribute::render()
 	DetailDisplayComponent::render();
 
 	// renders text
-	detailAttributeTexture.render(xPosition, yPosition, nullptr, 0, DetailDisplayComponent::DETAIL_COMPONENT_HEIGHT * 0.9);
-	detailValueTexture.render(xPosition + DETAIL_VALUE_PADDING, yPosition, nullptr, 0, DetailDisplayComponent::DETAIL_COMPONENT_HEIGHT * 0.9);
+	float verticalPadding = 3.0f;
+	float horizontalPadding = 5.0f;
+	detailAttributeTexture.render(xPosition + horizontalPadding, yPosition + verticalPadding, nullptr, 0, DetailDisplayComponent::DETAIL_COMPONENT_HEIGHT * 0.7);
+	detailValueTexture.render(xPosition + DETAIL_VALUE_PADDING, yPosition + verticalPadding, nullptr, 0, DetailDisplayComponent::DETAIL_COMPONENT_HEIGHT * 0.7);
 }
 
