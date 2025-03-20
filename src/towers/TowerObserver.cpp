@@ -90,7 +90,7 @@ bool TowerObserver::initializeTowerComponents()
     bool success2 = (dynamic_cast<DetailAttribute*>(towerComponents[2]))->setAttributeText("Power", textColor);
     bool success3 = (dynamic_cast<DetailAttribute*>(towerComponents[3]))->setAttributeText("Rate of fire", textColor);
     bool success4 = (dynamic_cast<DetailAttribute*>(towerComponents[4]))->setAttributeText("Level", textColor);
-    bool success5 = (dynamic_cast<DetailAttribute*>(towerComponents[5]))->setAttributeText("Upgrade cost", textColor);
+    bool success5 = (dynamic_cast<DetailAttribute*>(towerComponents[5]))->setAttributeText("Buying cost", textColor);
     bool success6 = (dynamic_cast<DetailAttribute*>(towerComponents[6]))->setAttributeText("Refund value", textColor);
 
     return (success1 && success2 && success3 && success4 && success5 && success6);
@@ -113,6 +113,7 @@ void TowerObserver::render() {
     // Omit the upgrade/sell/strategy button if a Tower subclass is selected
     int componentChangeNum = towerComponents.size();
     
+    // whether to include buying/selling and changing Critter targetting while buying a Tower
     for (int i = 0; i < buyTowers.size(); i++) {
         if (currentTower == buyTowers[i]) {
             towerStrategyIndex = -1;
@@ -121,9 +122,29 @@ void TowerObserver::render() {
         }
     }
 
+    // checking for tower level
+    int maxLevel = currentTower->getMaxLevel();
+    int currentLevel = currentTower->getLevel();
+    bool towerAtMaxLevel = (maxLevel == currentLevel);
+    
+    // sets the position for the relevant Tower components, whether you can buy/upgrade or none
+    int verticalPosition5 = towerComponents[4]->getComponentYPosition() + DetailAttribute::DETAIL_ATTRIBUTE_SPACING;
+    if (towerAtMaxLevel)
+    {
+        towerComponents[6]->setComponentPosition(towerComponents[6]->getComponentXPosition(), verticalPosition5);
+    }
+    else
+    {
+        towerComponents[5]->setComponentPosition(towerComponents[5]->getComponentXPosition(), verticalPosition5);
+        towerComponents[6]->setComponentPosition(towerComponents[6]->getComponentXPosition(), verticalPosition5 + DetailAttribute::DETAIL_ATTRIBUTE_SPACING);
+    }
+
     // Render the DetailDisplayComponent
     for (int i = 0; i < componentChangeNum; i++) {
-        towerComponents[i]->render();
+        if (!(towerAtMaxLevel && i == 5))
+        {
+            towerComponents[i]->render();
+        }
     }
 
     // Check if currentTower exists
@@ -265,15 +286,25 @@ void TowerObserver::updateAttributes()
     std::string levelStr = std::format("{} / {}", currentTower->getLevel(), currentTower->getMaxLevel());
     std::string refundValueStr = std::format("{}", currentTower->getRefundValue());
 
+    dynamic_cast<DetailAttribute*>(towerComponents[5])->setAttributeText("Upgrade cost", textColor);
+    
     // shows dash if already max level as upgrade cost
-    std::string upgradeCostStr;
+    std::string buyUpgradeCostStr;
     if (towerAtMaxLevel)
     {
-        upgradeCostStr = "-";
+        buyUpgradeCostStr = "0";
     }
     else
     {
-        upgradeCostStr = std::to_string(currentTower->getUpgradeCost());
+        buyUpgradeCostStr = std::to_string(currentTower->getUpgradeCost());
+
+        for (int i = 0; i < buyTowers.size(); i++) {
+            if (currentTower == buyTowers[i]) {
+                dynamic_cast<DetailAttribute*>(towerComponents[5])->setAttributeText("Buying cost", textColor);
+                buyUpgradeCostStr = std::to_string(currentTower->getBuyingCost());
+                break;
+            }
+        }
     }
 
     // sets the text for the DetailAttribute values
@@ -281,7 +312,7 @@ void TowerObserver::updateAttributes()
     (dynamic_cast<DetailAttribute*>(towerComponents[2]))->setValueText(powerStr, textColor);
     (dynamic_cast<DetailAttribute*>(towerComponents[3]))->setValueText(rateOfFireStr, textColor);
     (dynamic_cast<DetailAttribute*>(towerComponents[4]))->setValueText(levelStr, textColor);
-    (dynamic_cast<DetailAttribute*>(towerComponents[5]))->setValueText(upgradeCostStr, textColor);
+    (dynamic_cast<DetailAttribute*>(towerComponents[5]))->setValueText(buyUpgradeCostStr, textColor);
     (dynamic_cast<DetailAttribute*>(towerComponents[6]))->setValueText(refundValueStr, textColor);
 }
 

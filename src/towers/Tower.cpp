@@ -148,6 +148,15 @@ int Tower::getRefundValue()
 }
 
 /**
+ * @brief Accessor for buying cost
+ * @return the cost for buying a Tower
+ */
+int Tower::getBuyingCost()
+{
+    return buyingCost;
+}
+
+/**
  * @brief Calculates the upgrade cost of a Tower with current level in consideration
  * 
  * @details Adds 100 on top of an additional amount of coins as the cost of upgrading a Tower

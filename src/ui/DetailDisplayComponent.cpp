@@ -44,6 +44,26 @@ void DetailDisplayComponent::setComponentPosition(float x, float y)
 }
 
 /**
+ * @brief Accessor for the DetailDisplayComponent's horizontal position.
+ *
+ * @return The x-coordinate of the DetailDisplayComponent.
+ */
+float DetailDisplayComponent::getComponentXPosition()
+{
+    return xPosition;
+}
+
+/**
+ * @brief Accessor for the DetailDisplayComponent's vertical position.
+ *
+ * @return The y-coordinate of the DetailDisplayComponent.
+ */
+float DetailDisplayComponent::getComponentYPosition()
+{
+    return yPosition;
+}
+
+/**
  * @brief Draws a box for a DetailDisplayComponent
  * 
  * @details Rectangle is based on width and default height.

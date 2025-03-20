@@ -38,7 +38,7 @@ private:
     Map* map;                                      // Pointer to the map for tower placement validation
     DetailAttributeDisplay& detailDisplay;         // UI detail display for selected tower information
     std::vector<Tower*> towers;                    // Vector containing all tower instances
-    int towerBuySelect = 0;
+    int towerBuySelect = -1;
 
     Tower* dummyStandardTower; /** @brief dummy StandardTower for details before buying Tower */
     Tower* dummyRapidFireTower; /** @brief dummy RapidFireTower for details before buying Tower */

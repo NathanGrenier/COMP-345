@@ -27,6 +27,8 @@ public:
 	DetailDisplayComponent(int width);
 
 	virtual void setComponentPosition(float x, float y);
+	float getComponentXPosition();
+	float getComponentYPosition();
 
 	virtual void render();
 

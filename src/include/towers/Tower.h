@@ -40,6 +40,7 @@ public:
     int getPower();
     int getRateOfFire();
     int getLevel();
+    int getBuyingCost();
     std::vector<Projectile *>& getProjectiles() { return projectiles; }
 
     virtual int getRefundValue();

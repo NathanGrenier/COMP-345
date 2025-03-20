@@ -19,9 +19,9 @@
 TowerGroup::TowerGroup(int& playerGold, Map* map, DetailAttributeDisplay& detailDisplay)
     : playerGold(playerGold), map(map), detailDisplay(detailDisplay) {
 	// creating dummy Towers
-	dummyStandardTower = new StandardTower(0, 0, 0, 0, 12);
-	dummyRapidFireTower = new RapidFireTower(0, 0, 0, 0, 25);
-	dummyCannonTower = new CannonTower(0, 0, 0, 50);
+	dummyStandardTower = new StandardTower(0, 0, 0, 25);
+	dummyRapidFireTower = new RapidFireTower(0, 0, 0, 50);
+	dummyCannonTower = new CannonTower(0, 0, 0, 100);
 
 	TowerObserver* towerObserver = detailDisplay.getTowerObserver();
 
@@ -241,6 +241,8 @@ void TowerGroup::handleEvent(SDL_Event& e) {
 		Tower* currentTower = detailDisplay.getTowerObserver()->getCurrentTower();
 		if (currentTower != nullptr && (dynamic_cast<DetailButton*>(detailDisplay.getTowerComponents()[10]))->isClicked())
 		{
+			buttonClick = true;
+			
 			int strategyIndex = getStrategyIndex(currentTower);
 			++strategyIndex %= TowerObserver::STRATEGY_COUNT;
 			currentTower->setCritterTargettingStrategy(strategies[strategyIndex]);
@@ -345,6 +347,7 @@ void TowerGroup::handleEvent(SDL_Event& e) {
 			}
 			else
 			{
+				towerBuySelect = -1;
 				detailDisplay.selectTower(nullptr);
 			}
 
