@@ -16,5 +16,5 @@
 class TargetNearExit : public TowerStrategy
 {
 public:
-	Critter* targetCritter(std::vector<Critter>& critters, Tower& tower);
+	Critter* targetCritter(std::vector<Critter*> critters, Tower& tower);
 };

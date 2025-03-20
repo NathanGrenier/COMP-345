@@ -9,7 +9,11 @@
 #include <towers/Tower.h>
 #include <towers/Projectile.h>
 #include <towers/TargetNearExit.h>
+#include <towers/TargetNearTower.h>
+#include <towers/TargetStrongest.h>
+#include <towers/TargetWeakest.h>
 #include <iostream>
+#include <string>
 
 /**
  * @brief Default Constructor, setting all values to 0
@@ -69,7 +73,7 @@ Tower::Tower(float x, float y, float width, int buyingCost, int refundValue, int
  * @return Critter pointer for first Critter that is in range of the Tower
  * @return nullptr if no Critter is in range
  */
-Critter* Tower::findCritter(std::vector<Critter>& critters) {
+Critter* Tower::findCritter(std::vector<Critter*> critters) {
     return critterTargettingStrategy->targetCritter(critters, *this);
 }
 
@@ -290,28 +294,42 @@ void Tower::setRotation(float angle) {
 }
 
 /**
+ * @brief Mutator for Tower Strategy
+ * @param newStrategy the new TowerStrategy to use
+ */
+void Tower::setCritterTargettingStrategy(TowerStrategy* newStrategy) {
+    critterTargettingStrategy = newStrategy;
+    notify();
+}
+
+/**
+ * @brief Accessor for Tower Strategy
+ */
+TowerStrategy* Tower::getCritterTargettingStrategy() {
+    return critterTargettingStrategy;
+}
+
+/**
  * @brief Moves Projectiles towards their targetted Critter
  */
-void Tower::moveProjectiles()
+void Tower::moveProjectiles(float multiplier, Critter* critter)
 {
     for (int i = 0; i < projectiles.size(); i++) {
-        projectiles[i]->move();
+        projectiles[i]->move(multiplier);
 
-        // check if projectile hits critter
-        if (projectiles[i]->checkCollision())
-        {
-            Critter* critter = projectiles[i]->getTargettedCritter();
-            critter->takeDamage(power);
-            critter->notify();
-            projectiles.erase(projectiles.begin() + i);
+        //// check if projectile hits critter
+        //if (critter != nullptr && projectiles[i]->checkCollision(critter))
+        //{
+        //    projectiles.erase(projectiles.begin() + i);
 
-            // clear projectiles if critter has no hp, no target
-            if (!critter->isAlive()) {
-                projectiles.clear();
-            }
-        }
+        //    // clear projectiles if critter has no hp, no target
+        //    //if (critter->getHitPoints() <= 0) {
+        //    //    projectiles.clear();
+        //    //}
+        //}
+        
         // check if projectile is outside of map
-        else if (projectiles[i]->isOutside())
+        if (projectiles[i]->isOutside())
         {
             projectiles.erase(projectiles.begin() + i);
         }

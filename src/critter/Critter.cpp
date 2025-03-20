@@ -152,8 +152,8 @@ void Critter::move(float deltaTime, const std::vector<Critter*> critters, float 
  *
  * @param damage The amount of damage to apply.
  */
-void Critter::takeDamage() {
-	hitPoints -= strength;
+void Critter::takeDamage(int damage) {
+	hitPoints -= damage;
 	isDamaged = true;
 	damageTimer = SDL_GetTicks();
 }

@@ -17,17 +17,17 @@
  * @param critters 
  * @return 
  */
-Critter* TargetNearTower::targetCritter(std::vector<Critter>& critters, Tower& tower)
+Critter* TargetNearTower::targetCritter(std::vector<Critter*> critters, Tower& tower)
 {
 	Critter* currentCritter = nullptr;
 	float currentDistance = -1;
 
 	for (int i = 0; i < critters.size(); i++)
 	{
-		Critter* critter = &critters[i];
-		if (tower.isCritterInRange(*critter))
+		Critter* critter = critters[i];
+		if (tower.isCritterInRange(critter))
 		{
-			float newDistance = tower.calcDistance(*critter);
+			float newDistance = tower.calcDistance(critter);
 			
 			if (newDistance < currentDistance || currentDistance == -1)
 			{

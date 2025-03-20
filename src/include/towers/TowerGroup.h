@@ -31,6 +31,8 @@ public:
 
     void upgradeTower(Tower* tower);                // Upgrade a selected tower, if possible
     void handleEvent(SDL_Event& e);
+
+    static int getStrategyIndex(Tower* tower); /** @brief index for the strategy of a Tower */
 private:
     int& playerGold;                               // Reference to player's gold for buying/upgrading towers
     Map* map;                                      // Pointer to the map for tower placement validation
@@ -41,6 +43,8 @@ private:
     Tower* dummyStandardTower; /** @brief dummy StandardTower for details before buying Tower */
     Tower* dummyRapidFireTower; /** @brief dummy RapidFireTower for details before buying Tower */
     Tower* dummyCannonTower; /** @brief dummy CannonTower for details before buying Tower */
+    TowerStrategy** strategies; /** @brief Tower Strategies for targetting Critters */
+
 
     const int STANDARD_TOWER_COST = 25; /** @brief gold cost for standard tower */
     const int CANNON_TOWER_COST = 100; /** @brief gold cost for cannon tower */

@@ -15,6 +15,7 @@
 #include <critter/Critter.h>
 #include <ui/LTexture.h>
 #include <towers/TowerStrategy.h>
+#include <string>
 
 #ifndef M_PI
 #define M_PI 3.14159265358979323846
@@ -47,6 +48,7 @@ public:
 
     virtual bool upgrade();
     virtual void shootProjectile(Critter* targettedCritter) = 0;
+    void moveProjectiles(float multiplier, Critter* critter);
 
     Critter* findCritter(std::vector<Critter*> critters); /** finds critter in range of tower */
     void clearProjectiles();
@@ -60,13 +62,15 @@ public:
     };
 
     UpgradeValues getUpgradeValues();
+    float calcDistance(Critter* critter);
 
     void render();
     void setRotation(float angle);
-    void moveProjectiles();
     float getRotation() const { return rotationAngle; }
     void setCurrentRenderRect(float originalX, float originalY, float w, float h);
     SDL_FRect getCurrentRenderRect();
+    void setCritterTargettingStrategy(TowerStrategy* newStrategy);
+    TowerStrategy* getCritterTargettingStrategy();
 
 protected:
     SDL_FRect currentRenderRect;
@@ -78,7 +82,6 @@ protected:
     int rateOfFire; /** @brief higher rate of fire indicates faster shooting */
     int level;
     int shootingTimer; /** @brief decremented with rate of fire for shooting */
-    float calcDistance(Critter* critter);
     std::vector<Projectile *> projectiles; /** @brief vector of all projectile */
     UpgradeValues upgradeValues;
     TowerStrategy* critterTargettingStrategy;

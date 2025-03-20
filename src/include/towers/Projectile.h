@@ -18,10 +18,14 @@
 class Projectile
 {
     public:
+        // straight projectile
         Projectile(float x, float y, int damage, bool isArea, int rotationAngle, float xSpeed, float ySpeed, std::string texturePath);
         Projectile(float x, float y, int damage, bool isArea, int projectileSize, int rotationAngle, float xSpeed, float ySpeed, std::string texturePath);
-        Projectile(float x, float y, int damage, bool isArea, int projectileSize, int rotationAngle, int speed, std::string texturePath, const Critter* targettedCritter);
-        Projectile(float x, float y, int damage, bool isArea, int projectileSize, int rotationAngle, int speed, std::string texturePath, int projectileSize, const Critter* targettedCritter);
+        
+        // homing projectile
+        Projectile(float x, float y, int damage, bool isArea, int rotationAngle, int speed, const Critter* targettedCritter, std::string texturePath);
+        Projectile(float x, float y, int damage, bool isArea, int projectileSize, int rotationAngle, int speed, const Critter* targettedCritter, std::string texturePath);
+        
         int getDamage();
         int getIsArea();
 

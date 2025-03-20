@@ -16,5 +16,5 @@ class Tower;
 class TowerStrategy 
 {
 public:
-	virtual Critter* targetCritter(std::vector<Critter>& critters, Tower& tower) = 0;
+	virtual Critter* targetCritter(std::vector<Critter*> critters, Tower& tower) = 0;
 };

@@ -17,14 +17,14 @@
  * @param critters 
  * @return 
  */
-Critter* TargetWeakest::targetCritter(std::vector<Critter>& critters, Tower& tower)
+Critter* TargetWeakest::targetCritter(std::vector<Critter*> critters, Tower& tower)
 {
 	Critter* currentCritter = nullptr;
 
 	for (int i = 0; i < critters.size(); i++)
 	{
-		Critter* critter = &critters[i];
-		if (tower.isCritterInRange(*critter))
+		Critter* critter = critters[i];
+		if (tower.isCritterInRange(critter))
 		{
 			if (currentCritter != nullptr)
 			{

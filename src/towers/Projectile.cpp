@@ -25,27 +25,7 @@
 Projectile::Projectile(float x, float y, int damage, bool isArea, int rotationAngle, float xSpeed, float ySpeed, std::string texturePath)
     : x(x), y(y), damage(damage), isArea(isArea), projectileSize(3), rotationAngle(rotationAngle), xSpeed(xSpeed), ySpeed(ySpeed)
 {
-
-}
-
-/**
- * @brief Constructor with position, damage, and if projectile damages an area
- * 
- * @param x Horizontal position using pixels
- * @param y Vertical position using pixels
- * @param damage Amount of health points to take from a critter
- * @param isArea true if projectile should deal damage in an area (not implemented)
- * @param speed speed of the Projectile
- * @param targettedCritter Critter that the Projectile will travel to
- * @details Constructor for Projectile with x, y position, damage, and if damage is area damage
- * Damage is to be applied to critters, removing the same number of health from it
- * Area damage is not yet implemented
- * Uses a default ProjectileSize of 3
- */
-Projectile::Projectile(float x, float y, int damage, bool isArea, int speed, const Critter* targettedCritter)
-    : x(x), y(y), damage(damage), isArea(isArea), speed(speed), projectileSize(3), targettedCritter(targettedCritter)
-{
-    
+    projectileTexture.loadFromFile(texturePath);
 }
 
 /**
@@ -80,7 +60,7 @@ Projectile::Projectile(float x, float y, int damage, bool isArea, int projectile
  * Area damage is not yet implemented
  * Uses a default ProjectileSize of 3
  */
-Projectile::Projectile(float x, float y, int damage, bool isArea, int rotationAngle, int speed, std::string texturePath)
+Projectile::Projectile(float x, float y, int damage, bool isArea, int projectileSize, int rotationAngle, int speed, const Critter* targettedCritter, std::string texturePath)
     : x(x), y(y), damage(damage), isArea(isArea), speed(speed), projectileSize(3), rotationAngle(rotationAngle)
 {
     targettedCritter = nullptr;
@@ -101,7 +81,7 @@ Projectile::Projectile(float x, float y, int damage, bool isArea, int rotationAn
  * Damage is to be applied to critters, removing the same number of health from it
  * Area damage is not yet implemented
  */
-Projectile::Projectile(float x, float y, int damage, bool isArea, int rotationAngle, int speed, int projectileSize, std::string texturePath)
+Projectile::Projectile(float x, float y, int damage, bool isArea, int rotationAngle, int speed, const Critter* targettedCritter, std::string texturePath)
     : x(x), y(y), damage(damage), isArea(isArea), speed(speed), projectileSize(projectileSize), rotationAngle(rotationAngle), targettedCritter(targettedCritter)
 {
     targettedCritter = nullptr;
@@ -263,10 +243,20 @@ bool Projectile::checkCollision(Critter* critter) {
         critterMidX <= projectileRight + tolerance &&
         critterMidY >= projectileTop - tolerance &&
         critterMidY <= projectileBottom + tolerance) {
-        critter->takeDamage();
-        critter->notify();
+        
+        
+        // removed damage in projectile collision
+        //critter->takeDamage(damage);
+        //critter->notify();
+
+
+
+
         return true; // Collision detected
     }
+
+    return false;
+}
 
 Critter* Projectile::getTargettedCritter()
 {

@@ -11,15 +11,20 @@
 #include <ui/DetailLabel.h>
 #include <ui/DetailAttribute.h>
 #include <ui/DetailButton.h>
+#include <towers/TargetNearExit.h>
+#include <towers/TargetNearTower.h>
+#include <towers/TargetStrongest.h>
+#include <towers/TargetWeakest.h>
 #include <format>
 #include <string>
+#include <towers/TowerGroup.h>
 
 /**
  * @brief Constructor with starting position for placing DetailDisplayComponent
  * @param startingX horizontal starting position 
  * @param startingY vertical  starting position 
  */
-TowerObserver::TowerObserver(int startingX, int startingY) : currentTower(nullptr)
+TowerObserver::TowerObserver(int startingX, int startingY) : currentTower(nullptr), towerStrategyIndex(-1)
 {
     int componentWidth = DetailAttributeDisplay::ATTRIBUTE_DISPLAY_WIDTH - 2 * DetailDisplayComponent::DETAIL_COMPONENT_PADDING;
     
@@ -38,19 +43,37 @@ TowerObserver::TowerObserver(int startingX, int startingY) : currentTower(nullpt
     towerComponents.push_back(new DetailButton(componentWidth, "assets/ui/UpgradeTower.png"));
     towerComponents.push_back(new DetailButton(componentWidth, "assets/ui/SellTower.png"));
 
+    towerComponents.push_back(new DetailLabel(componentWidth, "assets/ui/CritterTargetting.png"));
+
+    towerStrategyPaths = new std::string[STRATEGY_COUNT];
+    towerStrategyPaths[0] = "assets/ui/TargetNearestToExit.png";
+    towerStrategyPaths[1] = "assets/ui/TargetNearestToTower.png";
+    towerStrategyPaths[2] = "assets/ui/TargetStrongest.png";
+    towerStrategyPaths[3] = "assets/ui/TargetWeakest.png";
+
+    towerComponents.push_back(new DetailButton(componentWidth, towerStrategyPaths[0]));
+
     // adds spacing
     for (int i = 0; i < towerComponents.size(); i++) {
         towerComponents[i]->setComponentPosition(startingX, startingY);
+        int additionalSpacing = 0;
 
         // adds spacing for DetailDisplayComponent: DetailButtons and DetailLabels
-        if (i > 5 || i == 0)
+        if (i > 6 || i == 0)
         {
-            startingY += DetailDisplayComponent::DETAIL_COMPONENT_SPACING;
+            additionalSpacing = DetailDisplayComponent::DETAIL_COMPONENT_SPACING;
+
+            if (i == 8)
+            {
+                additionalSpacing += DetailAttribute::DETAIL_ATTRIBUTE_SPACING;
+            }
         }
         else // regular spacing for DetailAttributes
         {
-            startingY += DetailAttribute::DETAIL_ATTRIBUTE_SPACING;
+            additionalSpacing = DetailAttribute::DETAIL_ATTRIBUTE_SPACING;
         }
+
+        startingY += additionalSpacing;
     }
 }
 
@@ -84,14 +107,16 @@ std::vector<DetailDisplayComponent*> TowerObserver::getTowerComponents()
 
 /**
  * @brief Renders the DetailDisplayComponent to describe a Tower
- * @details Renders buy and sell button depending on whether a Tower is selected or if a Tower class is selected
+ * @details Renders upgrade, sell, and strategy button depending on whether a Tower is selected or if a Tower class is selected
  */
 void TowerObserver::render() {
-    // Omit the buy/sell button if a Tower subclass is selected
+    // Omit the upgrade/sell/strategy button if a Tower subclass is selected
     int componentChangeNum = towerComponents.size();
+    
     for (int i = 0; i < buyTowers.size(); i++) {
         if (currentTower == buyTowers[i]) {
-            componentChangeNum -= 2;
+            towerStrategyIndex = -1;
+            componentChangeNum -= 4;
             break;
         }
     }
@@ -180,6 +205,7 @@ void TowerObserver::update(Observable* observable)
     {
         // update the attributes on the view
         updateAttributes();
+        updateStrategyButton();
     }
 }
 
@@ -209,6 +235,11 @@ void TowerObserver::handleButtonEvents(SDL_Event& e)
 {
     (dynamic_cast<DetailButton*>(towerComponents[7]))->handleEvent(&e);
     (dynamic_cast<DetailButton*>(towerComponents[8]))->handleEvent(&e);
+
+    if (towerStrategyIndex >= 0)
+    {
+        (dynamic_cast<DetailButton*>(towerComponents[10]))->handleEvent(&e);
+    }
 }
 
 /**
@@ -252,6 +283,18 @@ void TowerObserver::updateAttributes()
     (dynamic_cast<DetailAttribute*>(towerComponents[4]))->setValueText(levelStr, textColor);
     (dynamic_cast<DetailAttribute*>(towerComponents[5]))->setValueText(upgradeCostStr, textColor);
     (dynamic_cast<DetailAttribute*>(towerComponents[6]))->setValueText(refundValueStr, textColor);
+}
+
+/**
+ * @brief 
+ * 
+ */
+void TowerObserver::updateStrategyButton()
+{
+    TowerStrategy* critterTargettingStrategy = currentTower->getCritterTargettingStrategy();
+    towerStrategyIndex = TowerGroup::getStrategyIndex(currentTower);
+
+    (dynamic_cast<DetailButton*>(towerComponents[10]))->setComponentImagePath(towerStrategyPaths[towerStrategyIndex]);
 }
 
 /**

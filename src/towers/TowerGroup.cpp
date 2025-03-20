@@ -10,6 +10,10 @@
 #include <map/Map.h>
 
 #include <ui/DetailButton.h>
+#include <towers/TargetNearExit.h>
+#include <towers/TargetWeakest.h>
+#include <towers/TargetStrongest.h>
+#include <towers/TargetNearTower.h>
 
  // Constructor
 TowerGroup::TowerGroup(int& playerGold, Map* map, DetailAttributeDisplay& detailDisplay)
@@ -30,6 +34,14 @@ TowerGroup::TowerGroup(int& playerGold, Map* map, DetailAttributeDisplay& detail
 	dummyStandardTower->attach(towerObserver);
 	dummyRapidFireTower->attach(towerObserver);
 	dummyCannonTower->attach(towerObserver);
+
+
+	// initializing TowerStrategy objects
+	strategies = new TowerStrategy * [TowerObserver::STRATEGY_COUNT];
+	strategies[0] = new TargetNearExit;
+	strategies[1] = new TargetNearTower;
+	strategies[2] = new TargetStrongest;
+	strategies[3] = new TargetWeakest;
 }
 
 // Destructor
@@ -65,7 +77,7 @@ void TowerGroup::update(float deltaTime, std::vector<Critter*> critters) {
 			for (auto* projectile : towers[i]->getProjectiles()) {
 				for (auto critter : critters) {
 					if (projectile->checkCollision(critter)) {
-						critter->takeDamage();
+						critter->takeDamage(projectile->getDamage());
 						critter->notify();
 						projectile->destroy(); // Destroy the projectile on collision
 					}
@@ -96,6 +108,34 @@ Tower* TowerGroup::getTowerAtPosition(float x, float y, float scaleFactor) {
 
 // Upgrade a tower (if possible)
 void TowerGroup::upgradeTower(Tower* tower) {
+}
+
+/**
+ * @brief Converts the TowerStrategy of a Tower to match the index in the strategies array
+ */
+int TowerGroup::getStrategyIndex(Tower* tower)
+{
+	TowerStrategy* critterTargettingStrategy = tower->getCritterTargettingStrategy();
+	if (dynamic_cast<TargetNearExit*>(critterTargettingStrategy))
+	{
+		return 0;
+	}
+	else if (dynamic_cast<TargetNearTower*>(critterTargettingStrategy))
+	{
+		return 1;
+	}
+	else if (dynamic_cast<TargetStrongest*>(critterTargettingStrategy))
+	{
+		return 2;
+	}
+	else if (dynamic_cast<TargetWeakest*>(critterTargettingStrategy))
+	{
+		return 3;
+	}
+	else
+	{
+		return -1;
+	}
 }
 
 void TowerGroup::handleEvent(SDL_Event& e) {
@@ -194,6 +234,18 @@ void TowerGroup::handleEvent(SDL_Event& e) {
 
 				return;
 			}
+		}
+
+		// checking if changing TowerStrategy
+		int startingIndex = TowerObserver::TOWER_COMPONENT_COUNT - TowerObserver::STRATEGY_COUNT + 1; 
+		Tower* currentTower = detailDisplay.getTowerObserver()->getCurrentTower();
+		if (currentTower != nullptr && (dynamic_cast<DetailButton*>(detailDisplay.getTowerComponents()[10]))->isClicked())
+		{
+			int strategyIndex = getStrategyIndex(currentTower);
+			++strategyIndex %= TowerObserver::STRATEGY_COUNT;
+			currentTower->setCritterTargettingStrategy(strategies[strategyIndex]);
+
+			return;
 		}
 
 		// checking if selling tower
