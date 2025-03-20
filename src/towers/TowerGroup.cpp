@@ -1,7 +1,7 @@
 /**
- * @file TowerGroup.cpp
- * @brief Implementation file for TowerGroup class managing a group of towers.
- */
+ * @class TowerGroup
+ * @brief Manages a collection of towers, handling their placement, upgrades, and interactions.
+ */	
 
 #include <towers/TowerGroup.h>
 #include <towers/StandardTower.h>
@@ -14,7 +14,15 @@
 #include <towers/powerups/FirePowerup.h>
 #include <towers/powerups/IcePowerup.h>
 
- // Constructor
+ /**
+  * @brief Constructs a TowerGroup object.
+  *
+  * Initializes dummy towers for display and attaches them to the observer pattern.
+  *
+  * @param playerGold Reference to player's gold amount.
+  * @param map Pointer to the game map.
+  * @param detailDisplay Reference to the UI detail display.
+  */
 TowerGroup::TowerGroup(int& playerGold, Map* map, DetailAttributeDisplay& detailDisplay)
     : playerGold(playerGold), map(map), detailDisplay(detailDisplay) {
 	// creating dummy Towers
@@ -35,7 +43,11 @@ TowerGroup::TowerGroup(int& playerGold, Map* map, DetailAttributeDisplay& detail
 	dummyCannonTower->attach(towerObserver);
 }
 
-// Destructor
+/**
+ * @brief Destructor for TowerGroup.
+ *
+ * Cleans up dynamically allocated towers and power-ups.
+ */
 TowerGroup::~TowerGroup() {
     // Clean up dynamically allocated towers
     for (Tower* tower : towers) {
@@ -50,7 +62,14 @@ TowerGroup::~TowerGroup() {
 	activePowerups.clear();
 }
 
-// Update all towers (e.g., shooting critters)
+/**
+ * @brief Updates all towers and active powerups.
+ *
+ * Handles projectile generation, targeting, shooting, and powerup spawning.
+ *
+ * @param deltaTime The time elapsed since the last update.
+ * @param critters List of critters in the game.
+ */
 void TowerGroup::update(float deltaTime, std::vector<Critter*> critters) {
 	for (int i = 0; i < towers.size(); i++) {
 		towers[i]->generateAllProjectiles();
@@ -93,9 +112,9 @@ void TowerGroup::update(float deltaTime, std::vector<Critter*> critters) {
 	}
 }
 
-
-
-// Render all towers
+/**
+ * @brief Renders all towers and active powerups.
+ */
 void TowerGroup::render() {
 	for (auto& tower : towers)
 	{
@@ -107,20 +126,42 @@ void TowerGroup::render() {
 	}
 }
 
-// Access the list of towers
+
+/**
+ * @brief Retrieves the list of towers.
+ * @return A reference to the vector containing all towers.
+ */
 std::vector<Tower*>& TowerGroup::getTowers() {
     return towers;
 }
 
-// Find and return the tower at a specific position (for selecting/upgrading)
+/**
+ * @brief Finds and returns a tower at a given position.
+ *
+ * @param x The x-coordinate to check.
+ * @param y The y-coordinate to check.
+ * @param scaleFactor The scaling factor for grid positioning.
+ * @return A pointer to the tower at the specified position, or nullptr if none exists.
+ */
 Tower* TowerGroup::getTowerAtPosition(float x, float y, float scaleFactor) {
     return nullptr;
 }
 
-// Upgrade a tower (if possible)
+/**
+ * @brief Upgrades a given tower.
+ *
+ * @param tower The tower to upgrade.
+ */
 void TowerGroup::upgradeTower(Tower* tower) {
 }
 
+/**
+ * @brief Handles player interactions with towers and powerups.
+ *
+ * Processes clicks for tower placement, upgrades, selling, and powerup interactions.
+ *
+ * @param e The SDL event structure representing user input.
+ */
 void TowerGroup::handleEvent(SDL_Event& e) {
 	// resets tower buy selection
 	bool buttonClick = false;

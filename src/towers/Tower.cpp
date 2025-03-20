@@ -181,8 +181,6 @@ Tower::UpgradeValues Tower::getUpgradeValues() const
  */
 bool Tower::upgrade()
 {
-    std::cout << level << std::endl;
-    // check if not yet max level
     if (level < getMaxLevel())
     {
         range += upgradeValues.rangeIncrease;

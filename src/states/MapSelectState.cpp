@@ -1,4 +1,4 @@
-/// @file MapSelectState.cpp
+/// @class MapSelectState
 /// @brief Implementation of the MapSelectState class.
 
 #include <iostream>
