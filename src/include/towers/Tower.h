@@ -16,7 +16,7 @@
 #include <ui/LTexture.h>
 
  /** @brief Ratio between original tower cost and refund value */
-const double REFUND_RATIO = 0.5;
+const double REFUND_RATIO = 0.8;
 
 /**
  * @brief The Tower class is the parent class for all tower types that can shoot at critters.

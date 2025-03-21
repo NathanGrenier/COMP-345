@@ -16,6 +16,9 @@ public:
 	//Initializes texture variables
 	LTexture();
 
+	// Constructor for shared textures
+	LTexture(SDL_Texture* texture, bool owns);
+
 	//Cleans up texture variables
 	~LTexture();
 
@@ -48,6 +51,7 @@ public:
 private:
 	//Contains texture data
 	SDL_Texture* mTexture;
+	bool mOwnsTexture;
 
 	//Texture dimensions
 	float mWidth;

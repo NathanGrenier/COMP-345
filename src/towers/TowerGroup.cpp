@@ -1,7 +1,7 @@
 /**
  * @class TowerGroup
  * @brief Manages a collection of towers, handling their placement, upgrades, and interactions.
- */	
+ */
 
 #include <towers/TowerGroup.h>
 #include <towers/StandardTower.h>
@@ -24,7 +24,7 @@
   * @param detailDisplay Reference to the UI detail display.
   */
 TowerGroup::TowerGroup(int& playerGold, Map* map, DetailAttributeDisplay& detailDisplay)
-    : playerGold(playerGold), map(map), detailDisplay(detailDisplay) {
+	: playerGold(playerGold), map(map), detailDisplay(detailDisplay) {
 	// creating dummy Towers
 	dummyStandardTower = new StandardTower(0, 0, 0, 0, 12);
 	dummyRapidFireTower = new RapidFireTower(0, 0, 0, 0, 25);
@@ -49,11 +49,11 @@ TowerGroup::TowerGroup(int& playerGold, Map* map, DetailAttributeDisplay& detail
  * Cleans up dynamically allocated towers and power-ups.
  */
 TowerGroup::~TowerGroup() {
-    // Clean up dynamically allocated towers
-    for (Tower* tower : towers) {
-        delete tower;
-    }
-    towers.clear();
+	// Clean up dynamically allocated towers
+	for (Tower* tower : towers) {
+		delete tower;
+	}
+	towers.clear();
 
 	for (Powerup* powerup : activePowerups) {
 		delete powerup;
@@ -86,15 +86,14 @@ void TowerGroup::update(float deltaTime, std::vector<Critter*> critters) {
 				for (auto critter : critters) {
 					if (projectile->checkCollision(critter)) {
 						// Check if critter is dead
-						if (critter->getHitPoints() <= 0) {
-							float spawnChance = 0.2f; // 20% chance to spawn a powerup
+						if (!critter->isAlive()) {
+							float spawnChance = 0.02f; // 2% chance to spawn a powerup
 							if (rand() % 100 < spawnChance * 100) {
 								Powerup* powerup = nullptr;
 								int powerupType = rand() % 2; // Randomly choose between fire or ice
 								if (powerupType == 0) {
 									powerup = new FirePowerup(critter->getCurrentRenderRect());
-								}
-								else {
+								} else {
 									powerup = new IcePowerup(critter->getCurrentRenderRect());
 								}
 								activePowerups.push_back(powerup);
@@ -132,7 +131,7 @@ void TowerGroup::render() {
  * @return A reference to the vector containing all towers.
  */
 std::vector<Tower*>& TowerGroup::getTowers() {
-    return towers;
+	return towers;
 }
 
 /**
@@ -144,7 +143,7 @@ std::vector<Tower*>& TowerGroup::getTowers() {
  * @return A pointer to the tower at the specified position, or nullptr if none exists.
  */
 Tower* TowerGroup::getTowerAtPosition(float x, float y, float scaleFactor) {
-    return nullptr;
+	return nullptr;
 }
 
 /**
@@ -152,8 +151,7 @@ Tower* TowerGroup::getTowerAtPosition(float x, float y, float scaleFactor) {
  *
  * @param tower The tower to upgrade.
  */
-void TowerGroup::upgradeTower(Tower* tower) {
-}
+void TowerGroup::upgradeTower(Tower* tower) {}
 
 /**
  * @brief Handles player interactions with towers and powerups.
@@ -223,8 +221,7 @@ void TowerGroup::handleEvent(SDL_Event& e) {
 		if (cellX < 0 || cellX >= map->cellCountX || cellY < 0 || cellY >= map->cellCountY)
 		{
 			correctCell = false;
-		}
-		else
+		} else
 		{
 			// Compute the index for accessing the cell
 			int index = cellX + cellY * map->cellCountX;
@@ -247,18 +244,18 @@ void TowerGroup::handleEvent(SDL_Event& e) {
 					// displays different values from dummy Towers
 					switch (i)
 					{
-					case 1:
-						detailDisplay.selectTower(dummyStandardTower);
-						dummyStandardTower->notify();
-						return;
-					case 2:
-						detailDisplay.selectTower(dummyRapidFireTower);
-						dummyRapidFireTower->notify();
-						return;
-					case 3:
-						detailDisplay.selectTower(dummyCannonTower);
-						dummyCannonTower->notify();
-						return;
+						case 1:
+							detailDisplay.selectTower(dummyStandardTower);
+							dummyStandardTower->notify();
+							return;
+						case 2:
+							detailDisplay.selectTower(dummyRapidFireTower);
+							dummyRapidFireTower->notify();
+							return;
+						case 3:
+							detailDisplay.selectTower(dummyCannonTower);
+							dummyCannonTower->notify();
+							return;
 					}
 				}
 			}
@@ -332,32 +329,32 @@ void TowerGroup::handleEvent(SDL_Event& e) {
 				// Checks for currently selected tower
 				switch (towerBuySelect)
 				{
-				case 0: // Buy standard tower
-					if (playerGold >= STANDARD_TOWER_COST)
-					{
-						playerGold -= STANDARD_TOWER_COST;
-						newTower = new StandardTower(targetX, targetY, map->getPixelPerCell(), STANDARD_TOWER_COST);
-					}
-					towerBuySelect = -1;
-					break;
+					case 0: // Buy standard tower
+						if (playerGold >= STANDARD_TOWER_COST)
+						{
+							playerGold -= STANDARD_TOWER_COST;
+							newTower = new StandardTower(targetX, targetY, map->getPixelPerCell(), STANDARD_TOWER_COST);
+						}
+						towerBuySelect = -1;
+						break;
 
-				case 1: // Buy rapid fire tower
-					if (playerGold >= RAPID_FIRE_TOWER_COST)
-					{
-						playerGold -= RAPID_FIRE_TOWER_COST;
-						newTower = new RapidFireTower(targetX, targetY, map->getPixelPerCell(), RAPID_FIRE_TOWER_COST);
-					}
-					towerBuySelect = -1;
-					break;
+					case 1: // Buy rapid fire tower
+						if (playerGold >= RAPID_FIRE_TOWER_COST)
+						{
+							playerGold -= RAPID_FIRE_TOWER_COST;
+							newTower = new RapidFireTower(targetX, targetY, map->getPixelPerCell(), RAPID_FIRE_TOWER_COST);
+						}
+						towerBuySelect = -1;
+						break;
 
-				case 2: // Buy cannon tower
-					if (playerGold >= CANNON_TOWER_COST)
-					{
-						playerGold -= CANNON_TOWER_COST;
-						newTower = new CannonTower(targetX, targetY, map->getPixelPerCell(), CANNON_TOWER_COST);
-					}
-					towerBuySelect = -1;
-					break;
+					case 2: // Buy cannon tower
+						if (playerGold >= CANNON_TOWER_COST)
+						{
+							playerGold -= CANNON_TOWER_COST;
+							newTower = new CannonTower(targetX, targetY, map->getPixelPerCell(), CANNON_TOWER_COST);
+						}
+						towerBuySelect = -1;
+						break;
 				}
 
 				// If a new tower was successfully created, place it in the towers list
@@ -375,8 +372,7 @@ void TowerGroup::handleEvent(SDL_Event& e) {
 
 					map->wallCellDict[targetCell] = true;
 				}
-			}
-			else
+			} else
 			{
 				detailDisplay.selectTower(nullptr);
 			}
