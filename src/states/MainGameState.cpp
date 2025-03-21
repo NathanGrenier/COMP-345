@@ -18,7 +18,7 @@
  *
  */
 
-/// Static instance of MainGameState
+ /// Static instance of MainGameState
 MainGameState MainGameState::sMainGameState;
 
 /**
@@ -26,8 +26,7 @@ MainGameState MainGameState::sMainGameState;
  *
  * @return Pointer to the MainGameState instance.
  */
-MainGameState *MainGameState::get()
-{
+MainGameState* MainGameState::get() {
 	return &sMainGameState;
 }
 
@@ -38,8 +37,7 @@ MainGameState *MainGameState::get()
  *
  * @return Always returns true.
  */
-bool MainGameState::enter()
-{
+bool MainGameState::enter() {
 	if (Global::currentMap == nullptr)
 	{
 		std::cerr << "Global::currentMap was null" << std::endl;
@@ -89,8 +87,7 @@ bool MainGameState::enter()
  *
  * @return Always returns true.
  */
-bool MainGameState::exit()
-{
+bool MainGameState::exit() {
 	TextureLoader::deallocateTextures();
 
 	mBackgroundTexture.destroy();
@@ -122,8 +119,7 @@ bool MainGameState::exit()
  *
  * @param e The SDL_Event object containing input data.
  */
-void MainGameState::handleEvent(SDL_Event &e)
-{
+void MainGameState::handleEvent(SDL_Event& e) {
 	// handles hovering, clicking of buttons
 	if (!isPaused) {
 		towerGroup->handleEvent(e);
@@ -144,15 +140,14 @@ void MainGameState::handleEvent(SDL_Event &e)
 				pauseButton.setSizeWithAspectRatio(0, buttonHeight);
 				pauseButton.setPosition(Global::kScreenWidth - Global::viewerWidth + 30, Global::kScreenHeight - buttonHeight - 20);
 				isPaused = false;
-			}
-			else {
+			} else {
 				pauseButton.loadFromFile("assets/ui/PlayButton.png");
 				pauseButton.setSizeWithAspectRatio(0, buttonHeight);
 				pauseButton.setPosition(Global::kScreenWidth - Global::viewerWidth + 30, Global::kScreenHeight - buttonHeight - 20);
 				isPaused = true;
 			}
 
-			
+
 		}
 		if (exitButton.isClicked())
 		{
@@ -166,8 +161,7 @@ void MainGameState::handleEvent(SDL_Event &e)
  *
  * This function is called every frame to update the game's logic.
  */
-void MainGameState::update()
-{
+void MainGameState::update() {
 	if (isPaused) return;
 
 	critterGroup->update(0.016f);
@@ -180,8 +174,7 @@ void MainGameState::update()
  *
  * This function is called every frame to render the game's visuals.
  */
-void MainGameState::render()
-{
+void MainGameState::render() {
 	SDL_FRect backRect = { 0, 0, Global::kScreenWidth - Global::viewerWidth, Global::headerHeight };
 
 	// Set the renderer color for the outline
@@ -220,8 +213,7 @@ void MainGameState::render()
  * @param x The x-coordinate of the text.
  * @param y The y-coordinate of the text.
  */
-void MainGameState::renderText(const std::string &text, float x, float y)
-{
+void MainGameState::renderText(const std::string& text, float x, float y) {
 	SDL_Color textColor = { 0, 0, 0, 255 };
 	LTexture textTexture;
 	textTexture.loadFromRenderedText(text, textColor);

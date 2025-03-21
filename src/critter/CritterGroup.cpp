@@ -1,11 +1,14 @@
-#include <critter/CritterGroup.h>
 #include <cstdlib>
 #include <string>
 #include <cmath>
-#include <ui/LTexture.h>
 #include <iostream>
 #include <Global.h>
+#include <ui/LTexture.h>
 #include <critter/CritterObserver.h>
+#include <critter/CritterGroup.h>
+#include <critter/NormalCritter.h>
+#include <critter/FastCritter.h>
+#include <critter/TankCritter.h>
 
 /**
  * @class CritterGroup
@@ -29,7 +32,6 @@
 CritterGroup::CritterGroup(int& waveLevel, int& playerGold, SDL_FRect startPosition, SDL_FRect endPosition, Map* map, DetailAttributeDisplay& detailDisplay)
 	: waveLevel(waveLevel), playerGold(playerGold), startPosition(startPosition), endPosition(endPosition), map(map), detailDisplay(detailDisplay) {}
 
-
 /**
  * @brief Destructor for CritterGroup.
  *
@@ -39,7 +41,6 @@ CritterGroup::~CritterGroup() {
 	for (Critter* critter : critters) {
 		delete critter;
 	}
-
 	critters.clear();
 }
 
@@ -52,62 +53,52 @@ CritterGroup::~CritterGroup() {
  * @param deltaTime Time elapsed since the last frame.
  */
 void CritterGroup::generateCritters(float deltaTime) {
-	const float spacing = 100.0f;  // Minimum distance between critters
-	const float generationDelay = 5.0f;  // Delay before generating the next critter
-
-	// Update time elapsed
+	const float spacing = 100.0f;
+	const float generationDelay = 5.0f;
 	timeElapsed += deltaTime;
 
 	if (timeElapsed >= generationDelay && critterIndex < waveLevel * 10) {
 		int level = waveLevel;
-		float speed = 75.0f;
-		float hitPoints = 20 + level * 2.0f;
-		int strength = level * 2;
-		int reward = level * 10;
-
 		float currentCellSize = Global::currentMap->getPixelPerCell();
-
 		SDL_FRect spawnCenter = {
-			startPosition.x + (startPosition.w / 2.0f) - (currentCellSize * Critter::CRITTER_WIDTH_SCALE / 2.0f),  // Adjust for half of critter width
-			startPosition.y + (startPosition.h / 2.0f) - (currentCellSize * Critter::CRITTER_HEIGHT_SCALE / 2.0f),  // Adjust for half of critter height
+			startPosition.x + (startPosition.w / 2.0f) - (currentCellSize * Critter::CRITTER_WIDTH_SCALE / 2.0f),
+			startPosition.y + (startPosition.h / 2.0f) - (currentCellSize * Critter::CRITTER_HEIGHT_SCALE / 2.0f),
 			currentCellSize * Critter::CRITTER_WIDTH_SCALE,
 			currentCellSize * Critter::CRITTER_HEIGHT_SCALE
 		};
 
-		// Check if the start position is clear (no existing critters overlap)
 		bool canSpawn = true;
 		for (Critter* critter : critters) {
-			SDL_FRect critterPos = critter->getPosition(); // Use -> to access methods
+			SDL_FRect critterPos = critter->getPosition();
 			float distanceX = std::abs(spawnCenter.x - critterPos.x);
 			float distanceY = std::abs(spawnCenter.y - critterPos.y);
-
 			if (distanceX < spacing && distanceY < spacing) {
 				canSpawn = false;
-				break;  // Stop checking further since overlap is found
+				break;
 			}
 		}
 
-		// Only spawn if there's no overlap
 		if (canSpawn) {
-			// Dynamically allocate a new Critter and push the pointer into the list
-			Critter* newCritter = new Critter(level, speed, hitPoints, strength, reward, spawnCenter, map);
+			Critter* newCritter;
+			int type = rand() % 3;
+			if (type == 0) {
+				newCritter = new NormalCritter(level, spawnCenter, map);
+			} else if (type == 1) {
+				newCritter = new FastCritter(level, spawnCenter, map);
+			} else {
+				newCritter = new TankCritter(level, spawnCenter, map);
+			}
 			critters.push_back(newCritter);
-
 			aliveCritters++;
 			crittersSpawned++;
-
-			// Attach new critter to the DetailAttributeDisplay observer
 			newCritter->attach(detailDisplay.getCritterObserver());
-
 			critterIndex++;
 			timeElapsed = 0.0f;
 		}
-
 	}
 }
 
-void CritterGroup::handleEvent(SDL_Event& e)
-{
+void CritterGroup::handleEvent(SDL_Event& e) {
 	// Check if clicking on towers or critters
 	if (e.type == SDL_EVENT_MOUSE_BUTTON_DOWN && e.button.button == SDL_BUTTON_LEFT)
 	{
@@ -148,21 +139,19 @@ void CritterGroup::update(float deltaTime) {
 	for (auto it = critters.begin(); it != critters.end(); ) {
 		Critter* critter = *it;
 
-		critter->update();
+		critter->update(deltaTime);
 
 		if (critter->atExit()) {
 			critter->stealGold(playerGold);  // Take gold when reaching exit
 			critter->detach(detailDisplay.getCritterObserver()); // Detach observer
 			it = critters.erase(it);  // Erase critter and advance iterator
 			--aliveCritters;
-		}
-		else if (!critter->isAlive()) {
+		} else if (!critter->isAlive() && !critter->isDying()) {
 			playerGold += critter->getReward();  // Reward player if critter is killed before exit
 			critter->detach(detailDisplay.getCritterObserver()); // Detach observer
 			it = critters.erase(it);  // Erase critter and advance iterator
 			--aliveCritters;
-		}
-		else {
+		} else {
 			critter->move(deltaTime, critters, 5.0f);  // Move if alive and not at exit
 			++it;  // Advance to next critter
 		}

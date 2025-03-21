@@ -2,6 +2,9 @@ out/
 build/
 .vs/
 .vscode/
+repomix-output.txt
+repomix.config.json
+hs_err_pid*.log
 
 # Docs
 docs/**
