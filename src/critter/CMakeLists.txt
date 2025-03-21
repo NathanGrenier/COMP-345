@@ -4,7 +4,8 @@ CritterGroup.cpp
 NormalCritter.cpp
 FastCritter.cpp
 TankCritter.cpp
-CritterObserver.cpp) 
+CritterObserver.cpp 
+CritterFactory.cpp) 
 
 target_include_directories(critter PUBLIC ${CMAKE_SOURCE_DIR}/src/include)
 

@@ -16,7 +16,7 @@ CannonTower::CannonTower() : Tower()
 {
     getTowerTexture().loadFromFile("assets/tower/CannonTower.png");
     upgradeValues.rangeIncrease = 50;
-    upgradeValues.powerIncrease = 5;
+    upgradeValues.powerIncrease = 15;
     upgradeValues.rateOfFireIncrease = 1;
 }
 
@@ -35,7 +35,7 @@ CannonTower::CannonTower(float x, float y, float width, int buyingCost)
 {
     getTowerTexture().loadFromFile("assets/tower/CannonTower.png");
     upgradeValues.rangeIncrease = 50;
-    upgradeValues.powerIncrease = 5;
+    upgradeValues.powerIncrease = 15;
     upgradeValues.rateOfFireIncrease = 1;
 }
 
@@ -54,7 +54,7 @@ CannonTower::CannonTower(float x, float y, float width, int buyingCost, int refu
 {
     getTowerTexture().loadFromFile("assets/tower/CannonTower.png");
     upgradeValues.rangeIncrease = 50;
-    upgradeValues.powerIncrease = 5;
+    upgradeValues.powerIncrease = 15;
     upgradeValues.rateOfFireIncrease = 1;
 }
 

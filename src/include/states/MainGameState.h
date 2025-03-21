@@ -53,6 +53,7 @@ private:
 	LButton playButton;
 
 	bool isPaused = false;
+	bool endlessMode;
 
 	/** @brief Pointer to the map being edited
 	 *  @details nullptr if no map is currently loaded

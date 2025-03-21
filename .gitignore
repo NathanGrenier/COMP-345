@@ -5,6 +5,7 @@ build/
 repomix-output.txt
 repomix.config.json
 hs_err_pid*.log
+enc_temp_folder/**
 
 # Docs
 docs/**

@@ -21,7 +21,7 @@ class CannonTower : public Tower
 {
 public:
     static const int CANNON_RANGE = 125; /** @brief default range for CannonTower */
-    static const int CANNON_POWER = 10; /** @brief default projectile damage for CannonTower */
+    static const int CANNON_POWER = 20; /** @brief default projectile damage for CannonTower */
     static const int CANNON_RATE_OF_FIRE = 1; /** @brief default rate of fire for CannonTower */
     static const int CANNON_MAX_LEVEL = 3; /** @brief default maxmimum level for CannonTower */
 

@@ -58,7 +58,7 @@ public:
 	// Common logic methods
 	void onFlowFieldChanged() override;
 	SDL_FRect getPosition() const;
-	void move(float deltaTime, const std::vector<Critter*> critters, float spacing);
+	void move(float deltaTime, const std::vector<Critter*> critters);
 	void takeDamage(float damage);
 	void update(float deltaTime);
 	bool isAlive() const;

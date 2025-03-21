@@ -74,44 +74,11 @@ bool MainGameState::enter() {
 	detailDisplay = DetailAttributeDisplay();
 	bool success = detailDisplay.initializeComponents();
 
-	critterGroup = new CritterGroup(waveLevel, playerGold, map->getSpawnerPos(Global::mapViewRect), map->getTargetPos(Global::mapViewRect), map, detailDisplay);
+	endlessMode = true;
+	critterGroup = new CritterGroup(waveLevel, playerGold, map->getSpawnerPos(Global::mapViewRect), map->getTargetPos(Global::mapViewRect), map, detailDisplay, endlessMode);
 	towerGroup = new TowerGroup(playerGold, map, detailDisplay);
 
 	return success;
-}
-
-/**
- * @brief Handles the exit logic for the main game state.
- *
- * This function is called when transitioning out of the main game state.
- *
- * @return Always returns true.
- */
-bool MainGameState::exit() {
-	TextureLoader::deallocateTextures();
-
-	mBackgroundTexture.destroy();
-
-	mMessageTexture.destroy();
-
-	pauseButton.destroy();
-	exitButton.destroy();
-
-	isPaused = false;
-
-	delete critterGroup;
-	critterGroup = nullptr;
-
-	delete towerGroup;
-	towerGroup = nullptr;
-
-	delete map;
-	map = nullptr;
-
-	playerGold = 999;
-	waveLevel = 0;
-
-	return true;
 }
 
 /**
@@ -167,6 +134,11 @@ void MainGameState::update() {
 	critterGroup->update(0.016f);
 
 	towerGroup->update(0.016f, critterGroup->getCritters());
+
+	if (critterGroup->isGameWon()) {
+		std::cout << "Game was Won!" << std::endl;
+		setNextState(TitleState::get());
+	}
 }
 
 /**
@@ -204,6 +176,40 @@ void MainGameState::render() {
 	// Render wave level
 	std::string waveText = "Wave: " + std::to_string(waveLevel);
 	renderText(waveText, 10.0f, 50.0f);
+}
+
+/**
+ * @brief Handles the exit logic for the main game state.
+ *
+ * This function is called when transitioning out of the main game state.
+ *
+ * @return Always returns true.
+ */
+bool MainGameState::exit() {
+	TextureLoader::deallocateTextures();
+
+	mBackgroundTexture.destroy();
+
+	mMessageTexture.destroy();
+
+	pauseButton.destroy();
+	exitButton.destroy();
+
+	isPaused = false;
+
+	delete critterGroup;
+	critterGroup = nullptr;
+
+	delete towerGroup;
+	towerGroup = nullptr;
+
+	delete map;
+	map = nullptr;
+
+	playerGold = 999;
+	waveLevel = 0;
+
+	return true;
 }
 
 /**

@@ -70,10 +70,9 @@ SDL_FRect Critter::getPosition() const {
  *
  * @param deltaTime Time elapsed since the last frame.
  * @param critters A vector of all other critters to check for collisions.
- * @param spacing The minimum spacing between critters to avoid collision.
  */
 
-void Critter::move(float deltaTime, const std::vector<Critter*> critters, float spacing) {
+void Critter::move(float deltaTime, const std::vector<Critter*> critters) {
 	if (isAtExit || map == nullptr || currentState != State::ALIVE) return;
 
 	SDL_FRect renderRect = map->getCurrentRenderRect();

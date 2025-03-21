@@ -4,6 +4,7 @@
 
 NormalCritter::NormalCritter(int level, SDL_FRect start, Map* map)
 	: Critter(level, start, map) {
+	speed = 50.0f;
 	hitPoints = 20.0f + level * 2.0f;
 	maxHitPoints = hitPoints;
 	strength = level * 2;

@@ -4,7 +4,7 @@
 
 TankCritter::TankCritter(int level, SDL_FRect start, Map* map)
 	: Critter(level, start, map) {
-	speed = 25.0f + level * 2.0f;
+	speed = 30.0f;
 	hitPoints = 30.0f + level * 5.0f;
 	maxHitPoints = hitPoints;
 	strength = level * 2;
