@@ -17,12 +17,12 @@
 class DetailAttribute : public DetailDisplayComponent
 {
 public:
-	static const int DETAIL_ATTRIBUTE_SPACING = 20; /** @brief padding for detail components, used on sides */
-	static const int DETAIL_VALUE_PADDING = 120;	/** @brief spacing for detail components, used vertically */
+	static const float DETAIL_ATTRIBUTE_SPACING; /** @brief padding for detail components, used on sides */
+	static const float DETAIL_VALUE_PADDING;	/** @brief spacing for detail components, used vertically */
 
 	// constructors
 	DetailAttribute();
-	DetailAttribute(int width);
+	DetailAttribute(float width);
 
 	bool setAttributeText(const std::string& text, SDL_Color textColor);
 	bool setValueText(const std::string& text, SDL_Color textColor);

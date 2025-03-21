@@ -26,5 +26,5 @@ public:
     StandardTower(float x, float y, float width, int buyingCost, int refundValue);
 
     int getMaxLevel();
-    void shootProjectile(Critter* targettedCritter);
+    void shootProjectile(Critter* targettedCritter) override;
 };

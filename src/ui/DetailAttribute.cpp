@@ -8,6 +8,9 @@
 #include <ui/DetailAttribute.h>
 #include <Global.h>
 
+const float DetailAttribute::DETAIL_ATTRIBUTE_SPACING = 20; /** @brief padding for detail components, used on sides */
+const float DetailAttribute::DETAIL_VALUE_PADDING = 120;
+
 /**
  * @brief Default constructor.
  */
@@ -21,7 +24,7 @@ DetailAttribute::DetailAttribute()
  * @brief Constructor with width
  * @param width the width of a DetailAttribute
  */
-DetailAttribute::DetailAttribute(int width)
+DetailAttribute::DetailAttribute(float width)
 	: DetailDisplayComponent::DetailDisplayComponent(width)
 {
 

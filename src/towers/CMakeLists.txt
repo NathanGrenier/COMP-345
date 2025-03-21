@@ -9,7 +9,8 @@ add_library(towers STATIC
     TargetStrongest.cpp
     TargetWeakest.cpp
     TowerStrategy.cpp
-    TowerGroup.cpp)
+    TowerGroup.cpp
+    powerups/Powerup.cpp)
 
 target_include_directories(towers PUBLIC ${CMAKE_SOURCE_DIR}/src/include)
 

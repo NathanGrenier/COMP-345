@@ -4,9 +4,15 @@
  * @author Denmar Ermitano
  * @date 2025-03-02
  */
-
 #include <ui/DetailDisplayComponent.h>
 #include <Global.h>
+
+ const float DetailDisplayComponent::DETAIL_COMPONENT_PADDING = 8.0f;
+ const float DetailDisplayComponent::DETAIL_COMPONENT_SPACING = 40.0f; 
+ const float DetailDisplayComponent::TOWER_COMPONENT_SPACING = 20.0f;
+ const float DetailDisplayComponent::CRITTER_COMPONENT_SPACING = 20.0f;
+ const float DetailDisplayComponent::COMPONENT_BORDER_WIDTH = 2.0f;
+ const float DetailDisplayComponent::DETAIL_COMPONENT_HEIGHT = 15.0f;
 
 /**
  * @brief Default constructor.
@@ -25,7 +31,7 @@ DetailDisplayComponent::DetailDisplayComponent()
  * Generally, components are scaled with aspect ratio kept constant.
  * Having a width locks the height based on the aspect ratio of the DetailDisplayComponent
  */
-DetailDisplayComponent::DetailDisplayComponent(int width)
+DetailDisplayComponent::DetailDisplayComponent(float width)
     : width(width), xPosition(0), yPosition(0)
 {
 
@@ -72,7 +78,7 @@ float DetailDisplayComponent::getComponentYPosition()
 void DetailDisplayComponent::render() 
 {
     // draws rectangle for border
-    SDL_FRect borderRect = { xPosition, yPosition, width, DETAIL_COMPONENT_HEIGHT };
+    SDL_FRect borderRect = { xPosition, yPosition, static_cast<float>(width), static_cast<float>(DETAIL_COMPONENT_HEIGHT) };
     SDL_SetRenderDrawColor(gRenderer, 0x77, 0x77, 0x77, 0xFF);
     SDL_RenderFillRect(gRenderer, &borderRect);
 
@@ -81,7 +87,7 @@ void DetailDisplayComponent::render()
         xPosition + COMPONENT_BORDER_WIDTH,
         yPosition + COMPONENT_BORDER_WIDTH,
         width - (2 * COMPONENT_BORDER_WIDTH),
-        DETAIL_COMPONENT_HEIGHT - (2 * COMPONENT_BORDER_WIDTH)
+        static_cast<float>(DETAIL_COMPONENT_HEIGHT - (2 * COMPONENT_BORDER_WIDTH))
     };
     SDL_SetRenderDrawColor(gRenderer, 0xFF, 0xFF, 0xFF, 0xFF);
     SDL_RenderFillRect(gRenderer, &innerRect);

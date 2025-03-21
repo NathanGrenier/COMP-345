@@ -40,13 +40,13 @@ MainGameState *MainGameState::get()
  */
 bool MainGameState::enter()
 {
-	if (Global::currentMap.isEmpty())
+	if (Global::currentMap == nullptr)
 	{
 		std::cerr << "Global::currentMap was null" << std::endl;
 		return false;
 	}
 
-	int intButtonHeight = 40;
+	float intButtonHeight = 40.0f;
 
 	pauseButton.loadFromFile("assets/ui/PauseButton.png");
 	exitButton.loadFromFile("assets/ui/ExitButton.png");
@@ -57,9 +57,8 @@ bool MainGameState::enter()
 	exitButton.setPosition(Global::kScreenWidth - Global::viewerWidth + 30 + pauseButton.kButtonWidth + 30, Global::kScreenHeight - intButtonHeight - 20);
 	pauseButton.setPosition(Global::kScreenWidth - Global::viewerWidth + 30, Global::kScreenHeight - intButtonHeight - 20);
 
-	map = new Map(Global::currentMap);
+	map = new Map(*Global::currentMap);
 	map->setFlowFieldVisibility(false);
-	map->setCurrentRenderRect(Global::mapViewRect);
 
 	for (auto& cell : map->cells)
 	{
@@ -101,6 +100,8 @@ bool MainGameState::exit()
 	pauseButton.destroy();
 	exitButton.destroy();
 
+	isPaused = false;
+
 	delete critterGroup;
 	critterGroup = nullptr;
 
@@ -136,7 +137,7 @@ void MainGameState::handleEvent(SDL_Event &e)
 	if (e.type == SDL_EVENT_MOUSE_BUTTON_DOWN && e.button.button == SDL_BUTTON_LEFT) {
 		if (pauseButton.isClicked())
 		{
-			int buttonHeight = 40;
+			float buttonHeight = 40.0f;
 
 			if (isPaused) {
 				pauseButton.loadFromFile("assets/ui/PauseButton.png");
@@ -181,13 +182,13 @@ void MainGameState::update()
  */
 void MainGameState::render()
 {
-	SDL_FRect backRect = { 0, 0, static_cast<int>(Global::kScreenWidth - Global::viewerWidth), static_cast<int>(Global::headerHeight) };
+	SDL_FRect backRect = { 0, 0, Global::kScreenWidth - Global::viewerWidth, Global::headerHeight };
 
 	// Set the renderer color for the outline
 	SDL_SetRenderDrawColor(gRenderer, 168, 168, 168, 255); // Gray color for outline
 	SDL_RenderFillRect(gRenderer, &backRect); // Draw box outline
 
-	SDL_FRect foreRect = { 4, 4, static_cast<int>(Global::kScreenWidth - Global::viewerWidth - 5), static_cast<int>(Global::headerHeight - 8) };
+	SDL_FRect foreRect = { 4, 4, Global::kScreenWidth - Global::viewerWidth - 5, Global::headerHeight - 8 };
 
 	// Set the renderer color for the gray box
 	SDL_SetRenderDrawColor(gRenderer, 202, 202, 202, 255); // Gray color for box
@@ -198,7 +199,6 @@ void MainGameState::render()
 	detailDisplay.render();
 
 	critterGroup->render();
-
 	towerGroup->render();
 
 	pauseButton.render();
@@ -206,7 +206,7 @@ void MainGameState::render()
 
 	// Render player gold
 	int displayedGold = std::min(playerGold, 999);
-	renderText("Gold: " + std::to_string(playerGold), 10.0f, 10.0f);
+	renderText("Gold: " + std::to_string(displayedGold), 10.0f, 10.0f);
 
 	// Render wave level
 	std::string waveText = "Wave: " + std::to_string(waveLevel);

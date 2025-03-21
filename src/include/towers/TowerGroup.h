@@ -5,6 +5,7 @@
 #include <ui/DetailAttributeDisplay.h>
 #include <ui/LTexture.h>
 #include <map/Map.h>
+#include <towers/powerups/Powerup.h>
 
 /**
  * @file TowerGroup.h
@@ -21,8 +22,6 @@ public:
     TowerGroup(int& playerGold, Map* map, DetailAttributeDisplay& detailDisplay);
     ~TowerGroup();
 
-    void addTower(Tower* tower);                    // Add a new tower to the group
-    void removeTower(Tower* tower);                 // Remove a tower from the group
     void update(float deltaTime, std::vector<Critter*> critters);  // Update towers to attack critters
     void render();            // Render all towers
 
@@ -38,6 +37,7 @@ private:
     Map* map;                                      // Pointer to the map for tower placement validation
     DetailAttributeDisplay& detailDisplay;         // UI detail display for selected tower information
     std::vector<Tower*> towers;                    // Vector containing all tower instances
+    std::vector<Powerup*> activePowerups;
     int towerBuySelect = -1;
 
     Tower* dummyStandardTower; /** @brief dummy StandardTower for details before buying Tower */

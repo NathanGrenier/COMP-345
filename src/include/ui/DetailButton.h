@@ -18,7 +18,7 @@ class DetailButton : public DetailDisplayComponent, public LButton {
 public:
 	// constructors
 	DetailButton();
-	DetailButton(int width, std::string path);
+	DetailButton(float width, std::string path);
 
 	void setComponentPosition(float x, float y);
 	void setComponentImagePath(std::string path);

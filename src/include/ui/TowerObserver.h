@@ -24,7 +24,7 @@ public:
 	static const int TOWER_COMPONENT_COUNT = 13; /** @brief number of tower components */
 	static const int STRATEGY_COUNT = 4; /** @brief number of tower strategies */
 	// constructor and destructor
-	TowerObserver(int startingX, int startingY);
+	TowerObserver(float startingX, float startingY);
 	~TowerObserver();
 	
 	// Observer override

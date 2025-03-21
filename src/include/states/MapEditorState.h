@@ -64,7 +64,7 @@ private:
 	int mouseDownStatus = 0;
 	int keyDownStatus = 0;
 
-	SDL_FRect mapView;
+	SDL_FRect mapView = {};
 
 	/** @brief Pointer to the map being edited
 	 *  @details nullptr if no map is currently loaded
