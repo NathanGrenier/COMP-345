@@ -42,6 +42,8 @@ public:
 	int getHitPoints() const { return hitPoints; }
 	void setHitPoints(int hitPoints);
 
+	float getDistanceTravelled() const { return distanceTravelled; };
+
 	bool isClicked() const;
 
 	SDL_FRect getPosition() const;
@@ -55,6 +57,7 @@ private:
 	int hitPoints;
 	int strength;
 	int reward;
+	float distanceTravelled;
 	SDL_FRect position;
 	bool isAtExit;
 	int maxHitPoints;

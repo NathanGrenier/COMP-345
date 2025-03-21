@@ -28,7 +28,7 @@ Critter* TargetNearExit::targetCritter(std::vector<Critter*> critters, Tower& to
 		{
 			if (currentCritter != nullptr)
 			{
-				if (critter->getHitPoints() > currentCritter->getHitPoints())
+				if (critter->getDistanceTravelled() > currentCritter->getDistanceTravelled())
 				{
 					currentCritter = critter;
 				}

@@ -19,7 +19,7 @@
  *          If the map is null, it sets safe default values for the target position.
  */
 Critter::Critter(int level, float speed, int hitPoints, int strength, int reward, SDL_FRect start, Map* map)
-	: level(level), speed(speed), hitPoints(hitPoints), strength(strength), reward(reward),
+	: level(level), speed(speed), hitPoints(hitPoints), strength(strength), reward(reward), distanceTravelled(0.0f),
 	position(start), isAtExit(false), maxHitPoints(hitPoints), map(map) {
 
 	if (map != nullptr) {
@@ -110,6 +110,8 @@ void Critter::move(float deltaTime, const std::vector<Critter*> critters, float 
 		float deltaY = direction.y * speed * deltaTime;
 		SDL_FRect nextPosition = { position.x + deltaX, position.y + deltaY, position.w, position.h };
 
+		float addedDistance = sqrt(pow(deltaX, 2) + pow(deltaY, 2));
+
 		// Collision check
 		bool collisionDetected = false;
 		for (const Critter* other : critters) {
@@ -122,6 +124,7 @@ void Critter::move(float deltaTime, const std::vector<Critter*> critters, float 
 
 		if (!collisionDetected) {
 			position = nextPosition;
+			distanceTravelled += addedDistance;
 		}
 	}
 
