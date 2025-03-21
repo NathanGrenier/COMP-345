@@ -43,7 +43,7 @@ GameState* gCurrentState{ nullptr };
 GameState* gNextState{ nullptr };
 Map* Global::currentMap;
 
-float Global::viewerWidth = kScreenWidth * 0.3f; 
+float Global::viewerWidth = kScreenWidth * 0.3f;
 float Global::headerHeight = kScreenHeight * 0.15f;
 
 SDL_FRect Global::mapViewRect = {

@@ -16,6 +16,9 @@ public:
 	//Initializes texture variables
 	LTexture();
 
+	// Constructor for shared textures
+	LTexture(SDL_Texture* texture, bool owns);
+
 	//Cleans up texture variables
 	~LTexture();
 
@@ -39,7 +42,7 @@ public:
 	void setTextureSize(float newWidth, float newHeight);
 
 	//Draws texture
-	void render(float x, float y, SDL_FRect* clip = nullptr, float width = kOriginalSize, float height = kOriginalSize, double degrees = 0.0, SDL_FPoint* center = nullptr, SDL_FlipMode flipMode = SDL_FLIP_NONE);
+	void render(float x, float y, SDL_FRect* clip = nullptr, float width = kOriginalSize, float height = kOriginalSize, double degrees = 0.0, float sizeMulti = 1.0f, SDL_FPoint* center = nullptr, SDL_FlipMode flipMode = SDL_FLIP_NONE);
 
 	//Gets texture dimensions
 	float getWidth() const;
@@ -48,6 +51,7 @@ public:
 private:
 	//Contains texture data
 	SDL_Texture* mTexture;
+	bool mOwnsTexture;
 
 	//Texture dimensions
 	float mWidth;

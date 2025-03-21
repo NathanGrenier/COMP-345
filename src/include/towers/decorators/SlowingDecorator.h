@@ -155,7 +155,7 @@ public:
 
             // Only render the ice effect if the slow timer is active
             if (slowTimers.find(critter) != slowTimers.end()) {
-                iceTexture.render(critterRect.x, critterRect.y, &spriteClips[currentFrame], critterRect.w, critterRect.h);
+                iceTexture.render(critterRect.x, critterRect.y, &spriteClips[currentFrame], critterRect.w, critterRect.h, 0.0f, EFFECT_RENDER_SIZE_MULTIPLIER);
             }
         }
     }

@@ -12,11 +12,16 @@
  *
  * @author Nirav Patel
  */
-LTexture::LTexture() :
-	// Initialize texture variables
-	mTexture{ nullptr },
-	mWidth{ 0 },
-	mHeight{ 0 } {
+LTexture::LTexture() : mTexture(nullptr), mOwnsTexture(true), mWidth(0), mHeight(0) {}
+
+// Constructor for Shared Textures
+LTexture::LTexture(SDL_Texture* texture, bool owns = false) : mTexture(texture), mOwnsTexture(owns) {
+	if (mTexture) {
+		SDL_GetTextureSize(mTexture, &mWidth, &mHeight);
+	} else {
+		mWidth = 0;
+		mHeight = 0;
+	}
 }
 
 /**
@@ -24,7 +29,9 @@ LTexture::LTexture() :
  */
 LTexture::~LTexture() {
 	// Clean up texture
-	destroy();
+	if (mOwnsTexture && mTexture) {
+		destroy();
+	}
 }
 
 /**
@@ -40,18 +47,15 @@ bool LTexture::loadFromFile(std::string path) {
 	// Load surface
 	if (SDL_Surface* loadedSurface = IMG_Load(path.c_str()); loadedSurface == nullptr) {
 		SDL_Log("Unable to load image %s! SDL_image error: %s\n", path.c_str(), SDL_GetError());
-	}
-	else {
+	} else {
 		// Color key image (removes cyan background)
 		if (!SDL_SetSurfaceColorKey(loadedSurface, true, SDL_MapSurfaceRGB(loadedSurface, 0x00, 0xFF, 0xFF))) {
 			SDL_Log("Unable to color key! SDL error: %s", SDL_GetError());
-		}
-		else {
+		} else {
 			// Create texture from surface
 			if (mTexture = SDL_CreateTextureFromSurface(gRenderer, loadedSurface); mTexture == nullptr) {
 				SDL_Log("Unable to create texture from loaded pixels! SDL error: %s\n", SDL_GetError());
-			}
-			else {
+			} else {
 				// Get image dimensions
 				mWidth = static_cast<float>(loadedSurface->w);
 				mHeight = static_cast<float>(loadedSurface->h);
@@ -80,13 +84,11 @@ bool LTexture::loadFromRenderedText(std::string textureText, SDL_Color textColor
 	// Load text surface
 	if (SDL_Surface* textSurface = TTF_RenderText_Blended(gFont, textureText.c_str(), 0, textColor); textSurface == nullptr) {
 		SDL_Log("Unable to render text surface! SDL_ttf Error: %s\n", SDL_GetError());
-	}
-	else {
+	} else {
 		// Create texture from surface
 		if (mTexture = SDL_CreateTextureFromSurface(gRenderer, textSurface); mTexture == nullptr) {
 			SDL_Log("Unable to create texture from rendered text! SDL Error: %s\n", SDL_GetError());
-		}
-		else {
+		} else {
 			mWidth = static_cast<float>(textSurface->w);
 			mHeight = static_cast<float>(textSurface->h);
 		}
@@ -158,7 +160,7 @@ void LTexture::setTextureSize(float newWidth, float newHeight) {
  * @param center The point to rotate around (nullptr for center).
  * @param flipMode The SDL_FlipMode to apply.
  */
-void LTexture::render(float x, float y, SDL_FRect* clip, float width, float height, double degrees, SDL_FPoint* center, SDL_FlipMode flipMode) {
+void LTexture::render(float x, float y, SDL_FRect* clip, float width, float height, double degrees, float sizeMulti, SDL_FPoint* center, SDL_FlipMode flipMode) {
 	// Set texture position
 	SDL_FRect dstRect = { x, y, static_cast<float>(mWidth), static_cast<float>(mHeight) };
 
@@ -176,17 +178,25 @@ void LTexture::render(float x, float y, SDL_FRect* clip, float width, float heig
 		// Only width is provided, calculate height based on aspect ratio
 		dstRect.w = width;
 		dstRect.h = dstRect.w / aspectRatio;
-	}
-	else if (height > 0 && width <= 0) {
+	} else if (height > 0 && width <= 0) {
 		// Only height is provided, calculate width based on aspect ratio
 		dstRect.h = height;
 		dstRect.w = dstRect.h * aspectRatio;
-	}
-	else {
+	} else {
 		// If both width and height are provided, use them directly
 		if (width > 0) dstRect.w = width;
 		if (height > 0) dstRect.h = height;
 	}
+
+	// Scale Size
+	float centerX = dstRect.x + dstRect.w / 2.0f;
+	float centerY = dstRect.y + dstRect.h / 2.0f;
+
+	dstRect.w = dstRect.w * sizeMulti;
+	dstRect.h = dstRect.h * sizeMulti;
+
+	dstRect.x = centerX - dstRect.w / 2.0f;
+	dstRect.y = centerY - dstRect.h / 2.0f;
 
 	// Render texture with the updated dimensions
 	SDL_RenderTextureRotated(gRenderer, mTexture, clip, &dstRect, degrees, center, flipMode);

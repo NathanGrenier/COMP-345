@@ -238,4 +238,6 @@ protected:
     Tower* wrappedTower; ///< The wrapped Tower object.
     SDL_FRect towerPosition; ///< The position of the tower in the game world.
     LTexture indicatorTexture; ///< The texture for the tower's indicator.
+
+    static constexpr float EFFECT_RENDER_SIZE_MULTIPLIER = 0.50f;
 };
