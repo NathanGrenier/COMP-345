@@ -17,11 +17,21 @@ public:
 	bool isDamaged() const override;
 	void setupAnimationFrames() override;
 
+	// Static texture members
+	static inline SDL_Texture* loadedTextureWalkUp = nullptr;
+	static inline SDL_Texture* loadedTextureWalkDown = nullptr;
+	static inline SDL_Texture* loadedTextureWalkSide = nullptr;
+	static inline SDL_Texture* loadedTextureDeathUp = nullptr;
+	static inline SDL_Texture* loadedTextureDeathDown = nullptr;
+	static inline SDL_Texture* loadedTextureDeathSide = nullptr;
+
+	static void loadTextures();
+
 private:
 	float speed = 75.0f;
 	float hitPoints = 10.0f;
 	float maxHitPoints = 10.0f;
 	int strength = 2;
 	int reward = 10;
-	std::string texturePath = "assets/critters/bee/D_Walk.png";
+	static inline const std::string baseTexturePath = "critters/bee";
 };

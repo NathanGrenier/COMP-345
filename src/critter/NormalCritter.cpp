@@ -1,4 +1,6 @@
 #include <critter/NormalCritter.h>
+#include <util/TextureLoader.h>
+#include <Global.h>
 
 NormalCritter::NormalCritter(int level, SDL_FRect start, Map* map)
 	: Critter(level, start, map) {
@@ -7,23 +9,29 @@ NormalCritter::NormalCritter(int level, SDL_FRect start, Map* map)
 	strength = level * 2;
 	reward = level * 10;
 
-	//critterTexture.loadFromFile(getTexturePath());
-
 	setupAnimationFrames();
 	frameTime = (1.0f / animationFramesWalkSide.size()) * 0.8;
 	//std::cout << std::fixed << "Normal Critter Frame Time: " << frameTime << std::endl;
 }
 
-void NormalCritter::setupAnimationFrames() {
-	// Load walking animations
-	textureWalkUp.loadFromFile("assets/critters/slime/U_Walk.png");
-	textureWalkDown.loadFromFile("assets/critters/slime/D_Walk.png");
-	textureWalkSide.loadFromFile("assets/critters/slime/S_Walk.png");
+void NormalCritter::loadTextures() {
+	loadedTextureWalkUp = TextureLoader::loadTexture(gRenderer, NormalCritter::baseTexturePath + "/U_Walk.png");
+	loadedTextureWalkDown = TextureLoader::loadTexture(gRenderer, NormalCritter::baseTexturePath + "/D_Walk.png");
+	loadedTextureWalkSide = TextureLoader::loadTexture(gRenderer, NormalCritter::baseTexturePath + "/S_Walk.png");
 
-	// Load death animations
-	textureDeathUp.loadFromFile("assets/critters/slime/U_Death.png");
-	textureDeathDown.loadFromFile("assets/critters/slime/D_Death.png");
-	textureDeathSide.loadFromFile("assets/critters/slime/S_Death.png");
+	loadedTextureDeathUp = TextureLoader::loadTexture(gRenderer, NormalCritter::baseTexturePath + "/U_Death.png");
+	loadedTextureDeathDown = TextureLoader::loadTexture(gRenderer, NormalCritter::baseTexturePath + "/D_Death.png");
+	loadedTextureDeathSide = TextureLoader::loadTexture(gRenderer, NormalCritter::baseTexturePath + "/S_Death.png");
+}
+
+void NormalCritter::setupAnimationFrames() {
+	textureWalkUp = LTexture(NormalCritter::loadedTextureWalkUp, false);
+	textureWalkDown = LTexture(NormalCritter::loadedTextureWalkDown, false);
+	textureWalkSide = LTexture(NormalCritter::loadedTextureWalkSide, false);
+
+	textureDeathUp = LTexture(NormalCritter::loadedTextureDeathUp, false);
+	textureDeathDown = LTexture(NormalCritter::loadedTextureDeathDown, false);
+	textureDeathSide = LTexture(NormalCritter::loadedTextureDeathSide, false);
 
 	const int animFrames = 6;
 
@@ -94,7 +102,7 @@ void NormalCritter::setHitPoints(float hitPoints) {
 float NormalCritter::getMaxHitPoints() const { return maxHitPoints; }
 int NormalCritter::getStrength() const { return strength; }
 int NormalCritter::getReward() const { return reward; }
-std::string NormalCritter::getTexturePath() const { return texturePath; }
+std::string NormalCritter::getTexturePath() const { return baseTexturePath; }
 bool NormalCritter::isDamaged() const {
 	return this->isHurt;
 }

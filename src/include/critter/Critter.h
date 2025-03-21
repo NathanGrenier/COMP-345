@@ -110,7 +110,9 @@ protected:
 	std::vector<SDL_FRect> animationFramesWalkDown;
 	std::vector<SDL_FRect> animationFramesWalkSide;
 
-	LTexture textureDeathUp, textureDeathDown, textureDeathSide;
+	LTexture textureDeathUp;
+	LTexture textureDeathDown;
+	LTexture textureDeathSide;
 	std::vector<SDL_FRect> animationFramesDeathUp, animationFramesDeathDown, animationFramesDeathSide;
 	State currentState;
 };

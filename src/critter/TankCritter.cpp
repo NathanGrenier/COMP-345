@@ -1,4 +1,6 @@
 #include <critter/TankCritter.h>
+#include <Global.h>
+#include <util/TextureLoader.h>
 
 TankCritter::TankCritter(int level, SDL_FRect start, Map* map)
 	: Critter(level, start, map) {
@@ -14,16 +16,24 @@ TankCritter::TankCritter(int level, SDL_FRect start, Map* map)
 
 }
 
-void TankCritter::setupAnimationFrames() {
-	// Load walk animations
-	textureWalkUp.loadFromFile("assets/critters/ogre/U_Walk.png");
-	textureWalkDown.loadFromFile("assets/critters/ogre/D_Walk.png");
-	textureWalkSide.loadFromFile("assets/critters/ogre/S_Walk.png");
+void TankCritter::loadTextures() {
+	loadedTextureWalkUp = TextureLoader::loadTexture(gRenderer, TankCritter::baseTexturePath + "/U_Walk.png");
+	loadedTextureWalkDown = TextureLoader::loadTexture(gRenderer, TankCritter::baseTexturePath + "/D_Walk.png");
+	loadedTextureWalkSide = TextureLoader::loadTexture(gRenderer, TankCritter::baseTexturePath + "/S_Walk.png");
 
-	// Load death animations
-	textureDeathUp.loadFromFile("assets/critters/ogre/U_Death.png");
-	textureDeathDown.loadFromFile("assets/critters/ogre/D_Death.png");
-	textureDeathSide.loadFromFile("assets/critters/ogre/S_Death.png");
+	loadedTextureDeathUp = TextureLoader::loadTexture(gRenderer, TankCritter::baseTexturePath + "/U_Death.png");
+	loadedTextureDeathDown = TextureLoader::loadTexture(gRenderer, TankCritter::baseTexturePath + "/D_Death.png");
+	loadedTextureDeathSide = TextureLoader::loadTexture(gRenderer, TankCritter::baseTexturePath + "/S_Death.png");
+}
+
+void TankCritter::setupAnimationFrames() {
+	textureWalkUp = LTexture(TankCritter::loadedTextureWalkUp, false);
+	textureWalkDown = LTexture(TankCritter::loadedTextureWalkDown, false);
+	textureWalkSide = LTexture(TankCritter::loadedTextureWalkSide, false);
+
+	textureDeathUp = LTexture(TankCritter::loadedTextureDeathUp, false);
+	textureDeathDown = LTexture(TankCritter::loadedTextureDeathDown, false);
+	textureDeathSide = LTexture(TankCritter::loadedTextureDeathSide, false);
 
 	const int animFrames = 6;
 
@@ -94,7 +104,7 @@ void TankCritter::setHitPoints(float hitPoints) {
 float TankCritter::getMaxHitPoints() const { return maxHitPoints; }
 int TankCritter::getStrength() const { return strength; }
 int TankCritter::getReward() const { return reward; }
-std::string TankCritter::getTexturePath() const { return texturePath; }
+std::string TankCritter::getTexturePath() const { return baseTexturePath; }
 bool TankCritter::isDamaged() const {
 	return this->isHurt;
 }

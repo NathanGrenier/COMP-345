@@ -17,11 +17,21 @@ public:
 	bool isDamaged() const override;
 	void setupAnimationFrames() override;
 
+	// Static texture members
+	static inline SDL_Texture* loadedTextureWalkUp = nullptr;
+	static inline SDL_Texture* loadedTextureWalkDown = nullptr;
+	static inline SDL_Texture* loadedTextureWalkSide = nullptr;
+	static inline SDL_Texture* loadedTextureDeathUp = nullptr;
+	static inline SDL_Texture* loadedTextureDeathDown = nullptr;
+	static inline SDL_Texture* loadedTextureDeathSide = nullptr;
+
+	static void loadTextures();
+
 private:
 	float speed = 25.0f;
 	float hitPoints = 30.0f;
 	float maxHitPoints = 30.0f;
 	int strength = 2;
 	int reward = 10;
-	std::string texturePath = "assets/critters/ogre/D_Walk.png";
+	static inline const std::string baseTexturePath = "critters/ogre";
 };

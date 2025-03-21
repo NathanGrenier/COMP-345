@@ -30,7 +30,11 @@
   * @param detailDisplay Reference to the DetailAttributeDisplay for critter details.
   */
 CritterGroup::CritterGroup(int& waveLevel, int& playerGold, SDL_FRect startPosition, SDL_FRect endPosition, Map* map, DetailAttributeDisplay& detailDisplay)
-	: waveLevel(waveLevel), playerGold(playerGold), startPosition(startPosition), endPosition(endPosition), map(map), detailDisplay(detailDisplay) {}
+	: waveLevel(waveLevel), playerGold(playerGold), startPosition(startPosition), endPosition(endPosition), map(map), detailDisplay(detailDisplay) {
+	NormalCritter::loadTextures();
+	FastCritter::loadTextures();
+	TankCritter::loadTextures();
+}
 
 /**
  * @brief Destructor for CritterGroup.

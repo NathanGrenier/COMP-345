@@ -1,4 +1,6 @@
 #include <critter/FastCritter.h>
+#include <Global.h>
+#include <util/TextureLoader.h>
 
 FastCritter::FastCritter(int level, SDL_FRect start, Map* map)
 	: Critter(level, start, map) {
@@ -14,16 +16,24 @@ FastCritter::FastCritter(int level, SDL_FRect start, Map* map)
 
 }
 
-void FastCritter::setupAnimationFrames() {
-	// Load walk animations
-	textureWalkUp.loadFromFile("assets/critters/bee/U_Walk.png");
-	textureWalkDown.loadFromFile("assets/critters/bee/D_Walk.png");
-	textureWalkSide.loadFromFile("assets/critters/bee/S_Walk.png");
+void FastCritter::loadTextures() {
+	loadedTextureWalkUp = TextureLoader::loadTexture(gRenderer, FastCritter::baseTexturePath + "/U_Walk.png");
+	loadedTextureWalkDown = TextureLoader::loadTexture(gRenderer, FastCritter::baseTexturePath + "/D_Walk.png");
+	loadedTextureWalkSide = TextureLoader::loadTexture(gRenderer, FastCritter::baseTexturePath + "/S_Walk.png");
 
-	// Load death animations
-	textureDeathUp.loadFromFile("assets/critters/bee/U_Death.png");
-	textureDeathDown.loadFromFile("assets/critters/bee/D_Death.png");
-	textureDeathSide.loadFromFile("assets/critters/bee/S_Death.png");
+	loadedTextureDeathUp = TextureLoader::loadTexture(gRenderer, FastCritter::baseTexturePath + "/U_Death.png");
+	loadedTextureDeathDown = TextureLoader::loadTexture(gRenderer, FastCritter::baseTexturePath + "/D_Death.png");
+	loadedTextureDeathSide = TextureLoader::loadTexture(gRenderer, FastCritter::baseTexturePath + "/S_Death.png");
+}
+
+void FastCritter::setupAnimationFrames() {
+	textureWalkUp = LTexture(FastCritter::loadedTextureWalkUp, false);
+	textureWalkDown = LTexture(FastCritter::loadedTextureWalkDown, false);
+	textureWalkSide = LTexture(FastCritter::loadedTextureWalkSide, false);
+
+	textureDeathUp = LTexture(FastCritter::loadedTextureDeathUp, false);
+	textureDeathDown = LTexture(FastCritter::loadedTextureDeathDown, false);
+	textureDeathSide = LTexture(FastCritter::loadedTextureDeathSide, false);
 
 	const int animFrames = 6;
 
@@ -94,7 +104,7 @@ void FastCritter::setHitPoints(float hitPoints) {
 float FastCritter::getMaxHitPoints() const { return maxHitPoints; }
 int FastCritter::getStrength() const { return strength; }
 int FastCritter::getReward() const { return reward; }
-std::string FastCritter::getTexturePath() const { return texturePath; }
+std::string FastCritter::getTexturePath() const { return baseTexturePath; }
 bool FastCritter::isDamaged() const {
 	return this->isHurt;
 }
