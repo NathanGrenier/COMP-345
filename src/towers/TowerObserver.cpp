@@ -56,7 +56,7 @@ TowerObserver::TowerObserver(float startingX, float startingY) : currentTower(nu
     // adds spacing
     for (int i = 0; i < towerComponents.size(); i++) {
         towerComponents[i]->setComponentPosition(startingX, startingY);
-        int additionalSpacing = 0;
+        float additionalSpacing = 0.0f;
 
         // adds spacing for DetailDisplayComponent: DetailButtons and DetailLabels
         if (i > 6 || i == 0)
@@ -128,7 +128,7 @@ void TowerObserver::render() {
     bool towerAtMaxLevel = (maxLevel == currentLevel);
     
     // sets the position for the relevant Tower components, whether you can buy/upgrade or none
-    int verticalPosition5 = towerComponents[4]->getComponentYPosition() + DetailAttribute::DETAIL_ATTRIBUTE_SPACING;
+    float verticalPosition5 = towerComponents[4]->getComponentYPosition() + DetailAttribute::DETAIL_ATTRIBUTE_SPACING;
     if (towerAtMaxLevel)
     {
         towerComponents[6]->setComponentPosition(towerComponents[6]->getComponentXPosition(), verticalPosition5);
@@ -322,7 +322,6 @@ void TowerObserver::updateAttributes()
  */
 void TowerObserver::updateStrategyButton()
 {
-    TowerStrategy* critterTargettingStrategy = currentTower->getCritterTargettingStrategy();
     towerStrategyIndex = TowerGroup::getStrategyIndex(currentTower);
 
     (dynamic_cast<DetailButton*>(towerComponents[10]))->setComponentImagePath(towerStrategyPaths[towerStrategyIndex]);

@@ -118,8 +118,8 @@ void StandardTower::shootProjectile(Critter* targettedCritter)
 
     std::vector<Projectile*>& projectiles = getProjectiles();
 
-     // checks if it is time to shoot
-    if (nullptr && shootingTimer <= 0 && fabs(deltaAngle) < 2.0f)
+    // checks if it is time to shoot
+    if (getShootingTimer() <= 0 && fabs(deltaAngle) < 2.0f)
     {
         if (targettedCritter != nullptr)
         {
@@ -127,7 +127,7 @@ void StandardTower::shootProjectile(Critter* targettedCritter)
             float posX = getCurrentRenderRect().x + getCurrentRenderRect().w / 2;
             float posY = getCurrentRenderRect().y + getCurrentRenderRect().w / 2;
 
-        float currentCellSize = Global::currentMap->getPixelPerCell();
+            float currentCellSize = Global::currentMap->getPixelPerCell();
 
             // critter position with offset
             float critterPosX = targettedCritter->getPosition().x + Critter::CRITTER_WIDTH_SCALE * currentCellSize / 2;
@@ -137,15 +137,15 @@ void StandardTower::shootProjectile(Critter* targettedCritter)
             float differenceX = posX - critterPosX;
             float differenceY = posY - critterPosY;
 
-        float distance = (float)sqrt(pow(differenceX, 2) + pow(differenceY, 2));
+            float distance = (float)sqrt(pow(differenceX, 2) + pow(differenceY, 2));
 
             // distance for projectile as a unit vector
             float speedX = (critterPosX - posX) / distance;
             float speedY = (critterPosY - posY) / distance;
 
             // fires a projectile with the default size, resets shooting timer
-            projectiles.push_back(new Projectile(posX, posY, getPower(), false, 6, getRotationAngle(), speedX, speedY, "assets/tower/StandardProjectile.png"));
-            shootingTimer(MAX_SHOOTING_TIMER);
+            projectiles.push_back(new Projectile(posX, posY, getPower(), false, 6, getRotation(), speedX, speedY, "assets/tower/StandardProjectile.png"));
+            setShootingTimer(MAX_SHOOTING_TIMER);
         }
     }
     else // decreases shooting timer

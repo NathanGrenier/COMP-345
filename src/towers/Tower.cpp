@@ -301,6 +301,10 @@ void Tower::setRotation(float angle) {
     rotationAngle = angle;
 }
 
+void Tower::setShootingTimer(int newShootingTimer) {
+    shootingTimer = newShootingTimer;
+}
+
 /**
  * @brief Mutator for Tower Strategy
  * @param newStrategy the new TowerStrategy to use

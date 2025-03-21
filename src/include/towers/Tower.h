@@ -100,7 +100,6 @@ public:
     virtual int getRange() const;
     
     int getBuyingCost();
-    std::vector<Projectile *>& getProjectiles() { return projectiles; }
 
     /**
      * @brief Retrieves the power of the tower.
@@ -149,6 +148,7 @@ public:
      * @param targettedCritter The critter that the tower should shoot at.
      */
     virtual void shootProjectile(Critter* targettedCritter) = 0;
+    
     void moveProjectiles(float multiplier, Critter* critter);
 
     /**
@@ -221,8 +221,14 @@ public:
      */
     virtual int& getShootingTimer() { return shootingTimer; };
 
-    void setCritterTargettingStrategy(TowerStrategy* newStrategy);
-    TowerStrategy* getCritterTargettingStrategy();
+    /**
+     * @brief Sets the shooting timer for the tower.
+     * @param newShootingTimer The new value for the shooting timer of the Tower.
+     */
+    virtual void setShootingTimer(int newShootingTimer);
+
+    virtual void setCritterTargettingStrategy(TowerStrategy* newStrategy);
+    virtual TowerStrategy* getCritterTargettingStrategy();
 
     /**
      * @brief Calculates the distance between the tower and a critter.
@@ -243,13 +249,9 @@ private:
     int level; /**< @brief The level of the tower */
     int shootingTimer; /**< @brief The shooting timer of the tower */
 
-
     std::vector<Projectile*> projectiles; /**< @brief A vector of all projectiles fired by the tower */
     LTexture towerTexture; /**< @brief The texture of the tower */
-    std::vector<Projectile *> projectiles; /** @brief vector of all projectile */
 
-    UpgradeValues upgradeValues;
+    //UpgradeValues upgradeValues;
     TowerStrategy* critterTargettingStrategy;
-
-    LTexture towerTexture;
 };

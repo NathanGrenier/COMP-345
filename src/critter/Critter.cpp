@@ -21,7 +21,7 @@
  */
 Critter::Critter(int level, float speed, float hitPoints, int strength, int reward, SDL_FRect start, Map* map)
 	: level(level), speed(speed), hitPoints(hitPoints), strength(strength), reward(reward), distanceTravelled(0.0f),
-	position(start), isAtExit(false), maxHitPoints(hitPoints), map(map) {
+	position(start), isAtExit(false), maxHitPoints(static_cast<int>(hitPoints)), map(map) {
 
 	currentRenderRect = {};
 
@@ -113,7 +113,7 @@ void Critter::move(float deltaTime, const std::vector<Critter*> critters, float 
 		float deltaY = direction.y * speed * deltaTime;
 		SDL_FRect nextPosition = { position.x + deltaX, position.y + deltaY, position.w, position.h };
 
-		float addedDistance = sqrt(pow(deltaX, 2) + pow(deltaY, 2));
+		float addedDistance = static_cast<float>(sqrt(pow(deltaX, 2) + pow(deltaY, 2)));
 
 		// Collision check
 		bool collisionDetected = false;

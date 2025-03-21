@@ -67,8 +67,8 @@ public:
 
 
     // homing projectile
-    Projectile(float x, float y, int damage, bool isArea, float rotationAngle, int speed, const Critter* targettedCritter, std::string texturePath);
-    Projectile(float x, float y, int damage, bool isArea, int projectileSize, float rotationAngle, float speed, const Critter* targettedCritter, std::string texturePath);
+    Projectile(float x, float y, int damage, bool isArea, float rotationAngle, float speed, Critter* targettedCritter, std::string texturePath);
+    Projectile(float x, float y, int damage, bool isArea, int projectileSize, float rotationAngle, float speed, Critter* targettedCritter, std::string texturePath);
 
 
 
@@ -151,6 +151,8 @@ public:
      */
     void destroy();
 
+    Critter* getTargettedCritter();
+
 private:
     float x; /**< The x position of the projectile. */
     float y; /**< The y position of the projectile. */
@@ -171,5 +173,5 @@ private:
     float xSpeed; /**< The horizontal speed of the projectile. */
     float ySpeed; /**< The vertical speed of the projectile. */
     float speed;
-    const Critter* targettedCritter;
+    Critter* const targettedCritter;
 };

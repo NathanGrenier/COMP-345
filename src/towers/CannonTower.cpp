@@ -122,12 +122,11 @@ void CannonTower::shootProjectile(Critter* targettedCritter)
     {
         if (targettedCritter != nullptr)
         {
-            
             // tower position with offset
             float posX = getCurrentRenderRect().x + getCurrentRenderRect().w / 2;
             float posY = getCurrentRenderRect().y + getCurrentRenderRect().w / 2;
 
-        float currentCellSize = Global::currentMap->getPixelPerCell();
+            float currentCellSize = Global::currentMap->getPixelPerCell();
 
             // critter position with offset
             float critterPosX = targettedCritter->getPosition().x + Critter::CRITTER_WIDTH_SCALE * currentCellSize / 2;
@@ -137,15 +136,15 @@ void CannonTower::shootProjectile(Critter* targettedCritter)
             float differenceX = posX - critterPosX;
             float differenceY = posY - critterPosY;
 
-        float distance = (float)sqrt(pow(differenceX, 2) + pow(differenceY, 2));
+            float distance = (float)sqrt(pow(differenceX, 2) + pow(differenceY, 2));
 
             // distance for projectile as a unit vector
             float speedX = (critterPosX - posX) / distance;
             float speedY = (critterPosY - posY) / distance;
 
             // fires a big sized projectile, resets shooting timer
-            projectiles.push_back(new Projectile(posX, posY, getPower(), false, 6, getRotationAngle(), speedX, speedY, "assets/tower/CannonProjectile.png"));
-            shootingTimer(MAX_SHOOTING_TIMER);
+            projectiles.push_back(new Projectile(posX, posY, getPower(), false, 6, getRotation(), speedX, speedY, "assets/tower/CannonProjectile.png"));
+            setShootingTimer(MAX_SHOOTING_TIMER);
         }
     }
     else // decreases shooting timer

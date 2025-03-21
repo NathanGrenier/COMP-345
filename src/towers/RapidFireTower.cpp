@@ -175,7 +175,7 @@ void RapidFireTower::shootProjectile(Critter* targettedCritter)
                 float speedY = (critterPosY - posY) / distance;
 
                 // fires a projectile, resets shooting timer
-                projectiles.push_back(new Projectile(posX, posY, getPower(), false, 6, getRotationAngle(), speedX, speedY, "assets/tower/RapidFireProjectile.png"));
+                projectiles.push_back(new Projectile(posX, posY, getPower(), false, 6, getRotation(), speedX, speedY, "assets/tower/RapidFireProjectile.png"));
                 setShootingTimer(MAX_SHOOTING_TIMER);
             }
         }

@@ -23,10 +23,12 @@
  * Uses a default ProjectileSize of 3
  */
 Projectile::Projectile(float x, float y, int damage, bool isArea, float rotationAngle, float xSpeed, float ySpeed, std::string texturePath)
-    : x(x), y(y), damage(damage), isArea(isArea), projectileSize(3), rotationAngle(rotationAngle), xSpeed(xSpeed), ySpeed(ySpeed)
+    : x(x), y(y), damage(damage), isArea(isArea), projectileSize(3), rotationAngle(rotationAngle), xSpeed(xSpeed), ySpeed(ySpeed), targettedCritter(nullptr)
 {   
     currentRenderRect = {};
     projectileTexture.loadFromFile(texturePath);
+
+    
 }
 
 /**
@@ -42,7 +44,7 @@ Projectile::Projectile(float x, float y, int damage, bool isArea, float rotation
  * Area damage is not yet implemented
  */
 Projectile::Projectile(float x, float y, int damage, bool isArea, int projectileSize, float rotationAngle, float xSpeed, float ySpeed, std::string texturePath)
-    : x(x), y(y), damage(damage), isArea(isArea), projectileSize(projectileSize), rotationAngle(rotationAngle), xSpeed(xSpeed), ySpeed(ySpeed)
+    : x(x), y(y), damage(damage), isArea(isArea), projectileSize(projectileSize), rotationAngle(rotationAngle), xSpeed(xSpeed), ySpeed(ySpeed), targettedCritter(nullptr)
 {
     currentRenderRect = {};
     projectileTexture.loadFromFile(texturePath);
@@ -62,10 +64,9 @@ Projectile::Projectile(float x, float y, int damage, bool isArea, int projectile
  * Area damage is not yet implemented
  * Uses a default ProjectileSize of 3
  */
-Projectile::Projectile(float x, float y, int damage, bool isArea, int projectileSize, int rotationAngle, int speed, const Critter* targettedCritter, std::string texturePath)
-    : x(x), y(y), damage(damage), isArea(isArea), speed(speed), projectileSize(3), rotationAngle(rotationAngle)
+Projectile::Projectile(float x, float y, int damage, bool isArea, int projectileSize, float rotationAngle, float speed, Critter* targettedCritter, std::string texturePath)
+    : x(x), y(y), damage(damage), isArea(isArea), speed(speed), projectileSize(3), rotationAngle(rotationAngle), targettedCritter(targettedCritter)
 {
-    targettedCritter = nullptr;
     projectileTexture.loadFromFile(texturePath);
 }
 
@@ -83,10 +84,9 @@ Projectile::Projectile(float x, float y, int damage, bool isArea, int projectile
  * Damage is to be applied to critters, removing the same number of health from it
  * Area damage is not yet implemented
  */
-Projectile::Projectile(float x, float y, int damage, bool isArea, int rotationAngle, int speed, const Critter* targettedCritter, std::string texturePath)
+Projectile::Projectile(float x, float y, int damage, bool isArea, float rotationAngle, float speed, Critter* targettedCritter, std::string texturePath)
     : x(x), y(y), damage(damage), isArea(isArea), speed(speed), projectileSize(projectileSize), rotationAngle(rotationAngle), targettedCritter(targettedCritter)
 {
-    targettedCritter = nullptr;
     projectileTexture.loadFromFile(texturePath);
 }
 
@@ -136,8 +136,7 @@ void Projectile::generateProjectile()
         { 3.f * frameWidth, 0.f, frameWidth, frameHeight }
     };
 
-    float targetHeight = Global::currentMap->getPixelPerCell()
-        * 0.8f;
+    float targetHeight = Global::currentMap->getPixelPerCell() * 0.8f;
 
     // Maintain aspect ratio for width
     float aspectRatio = frameWidth / frameHeight;
@@ -182,7 +181,7 @@ void Projectile::destroy()
  */
 bool Projectile::isOutside() const
 {
-    return ((x < 0 || x > Global::mapViewRect.w - 20) || (y < Global::headerHeight || y > Global::kScreenHeight));
+    return ((x < 0 || x > Global::mapViewRect.w) || (y < Global::headerHeight || y > Global::kScreenHeight));
 }
 
 /**

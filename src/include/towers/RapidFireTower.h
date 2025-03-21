@@ -18,7 +18,7 @@
 class RapidFireTower : public Tower
 {
 public:
-    static const int RAPID_RANGE = 75; /** @brief default range for RapidFireTower */
+    static const int RAPID_RANGE = 7589; /** @brief default range for RapidFireTower */
     static const int RAPID_POWER = 1; /** @brief default projectile damage for RapidFireTower */
     static const int RAPID_RATE_OF_FIRE = 10; /** @brief default rate of fire for RapidFireTower */
     static const int RAPID_MAX_LEVEL = 3; /** @brief default max level for RapidFireTower */

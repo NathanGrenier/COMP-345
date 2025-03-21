@@ -218,6 +218,22 @@ public:
         return wrappedTower;
     }
 
+    /**
+     * @brief Mutator for Tower Strategy
+     * @param newStrategy the new TowerStrategy to use
+     */
+    void setCritterTargettingStrategy(TowerStrategy* newStrategy) override {
+        wrappedTower->setCritterTargettingStrategy(newStrategy);
+    }
+
+    /**
+     * @brief Accessor for Tower Strategy
+     */
+    TowerStrategy* getCritterTargettingStrategy() override {
+
+        return wrappedTower->getCritterTargettingStrategy();
+    }
+
 protected:
     Tower* wrappedTower; ///< The wrapped Tower object.
     SDL_FRect towerPosition; ///< The position of the tower in the game world.

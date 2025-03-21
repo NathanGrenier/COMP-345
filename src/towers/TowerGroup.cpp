@@ -97,8 +97,14 @@ void TowerGroup::update(float deltaTime, std::vector<Critter*> critters) {
 			for (auto* projectile : towers[i]->getProjectiles()) {
 				for (auto critter : critters) {
 					if (projectile->checkCollision(critter)) {
+						critter->takeDamage(static_cast<float>(projectile->getDamage()));
+						critter->notify();
+						projectile->destroy();
+
 						// Check if critter is dead
 						if (critter->getHitPoints() <= 0) {
+
+
 							float spawnChance = 0.2f; // 20% chance to spawn a powerup
 							if (rand() % 100 < spawnChance * 100) {
 								Powerup* powerup = nullptr;
@@ -112,10 +118,6 @@ void TowerGroup::update(float deltaTime, std::vector<Critter*> critters) {
 								activePowerups.push_back(powerup);
 							}
 						}
-						
-						critter->takeDamage(projectile->getDamage());
-						critter->notify();
-						projectile->destroy();
 					}
 				}
 			}
@@ -337,6 +339,7 @@ void TowerGroup::handleEvent(SDL_Event& e) {
 			int strategyIndex = getStrategyIndex(currentTower);
 			++strategyIndex %= TowerObserver::STRATEGY_COUNT;
 			currentTower->setCritterTargettingStrategy(strategies[strategyIndex]);
+			currentTower->notify();
 
 			return;
 		}
@@ -467,6 +470,11 @@ void TowerGroup::handleEvent(SDL_Event& e) {
 
 					// Replace the old tower with the new upgraded tower
 					towers[i] = upgradedTower;  // Replace the tower reference in the array
+
+					// reattaches the tower observer
+					baseTower->detach(detailDisplay.getTowerObserver());
+					upgradedTower->attach(detailDisplay.getTowerObserver());
+					detailDisplay.getTowerObserver()->setCurrentTower(upgradedTower);
 
 					// Remove the powerup from active powerups and clean up
 					activePowerups.erase(std::remove(activePowerups.begin(), activePowerups.end(), draggedPowerup), activePowerups.end());
