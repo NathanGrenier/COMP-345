@@ -23,11 +23,11 @@ DetailButton::DetailButton()
  * @param width the width of the DetailButton
  * @param path the path of the LButton image
  */
-DetailButton::DetailButton(int width, std::string path)
+DetailButton::DetailButton(float width, std::string path)
     : DetailDisplayComponent::DetailDisplayComponent(width), LButton::LButton()
 {
     LButton::loadFromFile(path);
-    LButton::setSizeWithAspectRatio(width, 0);
+    LButton::setSizeWithAspectRatio(width, 0.f);
 }
 
 /**
@@ -44,6 +44,20 @@ void DetailButton::setComponentPosition(float x, float y)
     LButton::setPosition(x, y);
     xPosition = x;
     yPosition = y;
+}
+
+/**
+ * @brief Sets the DetailButton's path.
+ *
+ * @details sets the image path of a DetailButton, usually to change its text.
+ * Assumes that position has already been set previously.
+ * @param path the path of the LButton image
+ */
+void DetailButton::setComponentImagePath(std::string path)
+{
+    LButton::loadFromFile(path);
+    LButton::setSizeWithAspectRatio(width, 0);
+    LButton::setPosition(xPosition, yPosition);
 }
 
 /**

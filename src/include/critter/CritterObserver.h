@@ -24,7 +24,7 @@ public:
      * @param startingX Horizontal starting position.
      * @param startingY Vertical starting position.
      */
-    CritterObserver(int startingX, int startingY);
+    CritterObserver(float startingX, float startingY);
 
     /**
      * @brief Initializes the DetailDisplayComponent for displaying Critter's information.

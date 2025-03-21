@@ -12,6 +12,7 @@
 #include <unordered_map>
 #include <SDL3/SDL.h>
 #include <SDL3_image/SDL_image.h>
+#include <iostream>
 
  /** @brief Static map storing all loaded textures */
 std::unordered_map<std::string, SDL_Texture*> TextureLoader::loadedTextures;
@@ -45,6 +46,7 @@ static std::unordered_map<std::string, SDL_Texture*>& getLoadedTextures() {
  */
 SDL_Texture* TextureLoader::loadTexture(SDL_Renderer* renderer, std::string filename) {
 	if (filename == "") {
+		std::cerr << "Filename is empty for file: " << filename << std::endl;
 		return nullptr;
 	}
 
@@ -74,6 +76,7 @@ SDL_Texture* TextureLoader::loadTexture(SDL_Renderer* renderer, std::string file
 			}
 		}
 	}
+
 	return nullptr;
 }
 

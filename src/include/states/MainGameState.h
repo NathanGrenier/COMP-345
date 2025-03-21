@@ -52,7 +52,8 @@ private:
 	LButton exitButton;
 	LButton playButton;
 
-	bool isPaused;
+	bool isPaused = false;
+	bool endlessMode;
 
 	/** @brief Pointer to the map being edited
 	 *  @details nullptr if no map is currently loaded
@@ -63,5 +64,5 @@ private:
 	TowerGroup* towerGroup = nullptr;
 
 	DetailAttributeDisplay detailDisplay; /** @brief ui display for details */
-	int towerBuySelect; /** @brief selected Tower as index */
+	int towerBuySelect = 0; /** @brief selected Tower as index */
 };

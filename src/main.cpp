@@ -41,7 +41,10 @@ GameState* gCurrentState{ nullptr };
 
 /** @brief The next game state to transition to. */
 GameState* gNextState{ nullptr };
-Map Global::currentMap;
+Map* Global::currentMap;
+
+float Global::viewerWidth = kScreenWidth * 0.3f;
+float Global::headerHeight = kScreenHeight * 0.15f;
 
 SDL_FRect Global::mapViewRect = {
 	Global::kScreenWidth * 0.02f,
@@ -89,7 +92,7 @@ bool init() {
 		success = false;
 	} else {
 		// Create window and renderer
-		if (!SDL_CreateWindowAndRenderer("Tower Defense - NullTerminators", Global::kScreenWidth, Global::kScreenHeight, 0, &gWindow, &gRenderer)) {
+		if (!SDL_CreateWindowAndRenderer("Tower Defense - NullTerminators", static_cast<int>(Global::kScreenWidth), static_cast<int>(Global::kScreenHeight), 0, &gWindow, &gRenderer)) {
 			SDL_Log("Window could not be created! SDL error: %s\n", SDL_GetError());
 			success = false;
 		} else {

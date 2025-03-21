@@ -11,6 +11,8 @@
  */
 LButton::LButton() :
 	mPosition{ 0.f, 0.f },
+	originalHeight{ 0.f },
+	originalWidth{ 0.f },
 	mCurrentSprite{ eButtonSpriteMouseOut }, kButtonHeight{ 0 }, kButtonWidth{ 0 } {}
 
 /**
@@ -29,7 +31,7 @@ void LButton::setPosition(float x, float y) {
  *
  * @return The SDL_FPoint representing the button's position.
  */
-SDL_FPoint LButton::getPosition() {
+SDL_FPoint LButton::getPosition() const {
 	return mPosition;
 }
 
@@ -110,7 +112,7 @@ bool LButton::loadFromFile(std::string path) {
 	bool result = gButtonSpriteTexture.loadFromFile(path);
 	if (result) {
 		kButtonWidth = gButtonSpriteTexture.getWidth();
-		kButtonHeight = gButtonSpriteTexture.getHeight() / eButtonSpriteCount;
+		kButtonHeight = gButtonSpriteTexture.getHeight() / static_cast<float>(eButtonSpriteCount);
 		originalWidth = kButtonWidth;
 		originalHeight = kButtonHeight;
 	}
@@ -138,7 +140,7 @@ void LButton::render() {
  *
  * @return True if the button is clicked, false otherwise.
  */
-bool LButton::isClicked() {
+bool LButton::isClicked() const {
 	// Get the current mouse position
 	float x, y;
 	SDL_GetMouseState(&x, &y);
@@ -148,7 +150,7 @@ bool LButton::isClicked() {
 			y >= mPosition.y && y <= mPosition.y + kButtonHeight);
 }
 
-void LButton::setSizeWithAspectRatio(int newWidth, int newHeight) {
+void LButton::setSizeWithAspectRatio(float newWidth, float newHeight) {
 	if (kButtonWidth == 0 || kButtonHeight == 0) {
 		return; // Avoid division by zero
 	}
@@ -156,22 +158,22 @@ void LButton::setSizeWithAspectRatio(int newWidth, int newHeight) {
 	float aspectRatio = static_cast<float>(kButtonWidth) / kButtonHeight;
 
 	// Adjust width and height while maintaining aspect ratio
-	int adjustedWidth = newWidth;
-	int adjustedHeight = newHeight;
+	float adjustedWidth = newWidth;
+	float adjustedHeight = newHeight;
 
 	if (newWidth == 0) {
-		adjustedWidth = static_cast<int>(newHeight * aspectRatio);
+		adjustedWidth = newHeight * aspectRatio;
 	} else if (newHeight == 0) {
-		adjustedHeight = static_cast<int>(newWidth / aspectRatio);
+		adjustedHeight = newWidth / aspectRatio;
 	} else {
 		// Maintain aspect ratio based on the closest fit
-		float widthRatio = static_cast<float>(newWidth) / kButtonWidth;
-		float heightRatio = static_cast<float>(newHeight) / kButtonHeight;
+		float widthRatio = newWidth / kButtonWidth;
+		float heightRatio = newHeight / kButtonHeight;
 
 		if (widthRatio < heightRatio) {
-			adjustedHeight = static_cast<int>(kButtonHeight * widthRatio);
+			adjustedHeight = kButtonHeight * widthRatio;
 		} else {
-			adjustedWidth = static_cast<int>(kButtonWidth * heightRatio);
+			adjustedWidth = kButtonWidth * heightRatio;
 		}
 	}
 

@@ -18,7 +18,7 @@ class DetailLabel : public DetailDisplayComponent, public LTexture
 public:
 	// constructors
 	DetailLabel();
-	DetailLabel(int width, std::string path);
+	DetailLabel(float width, std::string path);
 
 	void render();
 private:

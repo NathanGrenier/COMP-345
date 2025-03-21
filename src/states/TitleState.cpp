@@ -67,13 +67,13 @@ bool TitleState::enter() {
 
 	// Define vertical spacing for buttons
 	constexpr int buttonSpacing = 20;
-	int totalHeight = 0;
+	float totalHeight = 0;
 	for (int i = 0; i < kButtonCount; ++i) {
 		totalHeight += buttons[i].kButtonHeight + buttonSpacing;
 	}
 	totalHeight -= buttonSpacing; // Remove extra spacing after the last button
 
-	int startY = (Global::kScreenHeight - totalHeight) / 2;
+	float startY = (Global::kScreenHeight - totalHeight) / 2;
 
 	// Set button positions centered on the screen
 	for (int i = 0; i < kButtonCount; ++i) {

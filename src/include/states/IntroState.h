@@ -9,8 +9,6 @@
 #include "GameState.h"
 #include "../UI/LTexture.h"
 
-#ifndef INTROSTATE_H
-#define INTROSTATE_H
 class IntroState : public GameState {
 public:
     //Static accessor
@@ -37,6 +35,5 @@ private:
     
     LTexture mCursorPromptTexture;
 
-    float oscillationOffset;
+    float oscillationOffset = 0.0f;
 };
-#endif

@@ -9,8 +9,6 @@
 #include "GameState.h"
 #include "../UI/LTexture.h"
 
-#ifndef TITLESTATE_H
-#define TITLESTATE_H
 class TitleState : public GameState {
 public:
     //Static accessor
@@ -35,4 +33,3 @@ private:
     //Intro message
     LTexture mMessageTexture;
 };
-#endif

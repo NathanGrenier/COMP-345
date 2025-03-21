@@ -16,6 +16,7 @@
 #include <ui/LTexture.h>
 #include <ui/LButton.h>
 #include <unordered_map>
+#include <Global.h>
 
 class MapSelectState : public GameState {
 public:
@@ -54,4 +55,14 @@ private:
     LButton createButton;
     LButton editButton;
     LButton selectButton;
+
+    float mapWidth = Global::kScreenWidth * 0.6;
+    float mapHeight = Global::kScreenHeight * 0.6;
+
+    SDL_FRect targetRect = {
+        (Global::kScreenWidth - mapWidth) / 2.0f,
+        (Global::kScreenHeight - mapHeight) / 2.0f - 25,
+        mapWidth,
+        mapHeight
+    };
 };
