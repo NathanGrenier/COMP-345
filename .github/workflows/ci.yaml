@@ -31,3 +31,6 @@ jobs:
       - name: Build the Project
         working-directory: ./build
         run: cmake --build . --config Release
+
+      - name: Install the Release Build
+        run: ./install.bat
