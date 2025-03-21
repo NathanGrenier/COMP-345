@@ -27,8 +27,7 @@ jobs:
 
       - name: Configure CMake Project
         working-directory: ./build
-        run: cmake -DCMAKE_BUILD_TYPE=Release -DCMAKE_C_FLAGS="/D_CRT_SECURE_NO_WARNINGS" -DBUILD_SHARED_LIBS=OFF ..
-        # run: cmake -DCMAKE_BUILD_TYPE=Release -DCMAKE_C_FLAGS="/D_CRT_SECURE_NO_WARNINGS" -DCMAKE_CXX_FLAGS="/D_CRT_SECURE_NO_WARNINGS /EHsc" -DBUILD_SHARED_LIBS=OFF ..
+        run: cmake -DCMAKE_BUILD_TYPE=Release -DCMAKE_EXE_LINKER_FLAGS="-Wl,--subsystem,windows" -DBUILD_SHARED_LIBS=OFF ..
 
       - name: Build the Project
         working-directory: ./build
