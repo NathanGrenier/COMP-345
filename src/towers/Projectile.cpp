@@ -198,7 +198,9 @@ void Projectile::destroy()
  */
 bool Projectile::isOutside() const
 {
-    return ((x < 0 || x > Global::mapViewRect.w) || (y < Global::headerHeight || y > Global::kScreenHeight));
+    //return ((x < 0 || x > Global::mapViewRect.w) || (y < Global::headerHeight || y > Global::kScreenHeight));
+    int buffer = 20;
+    return ((x < 0 || x > Global::mapViewRect.w + buffer) || (y < Global::headerHeight || y > Global::kScreenHeight + buffer));
 }
 
 /**

@@ -143,7 +143,7 @@ void CannonTower::shootProjectile(Critter* targettedCritter)
             float speedY = (critterPosY - posY) / distance;
 
             // fires a big sized projectile, resets shooting timer
-            projectiles.push_back(new Projectile(posX, posY, getPower(), false, 6, getRotation(), speedX, speedY, "assets/tower/CannonProjectile.png"));
+            projectiles.push_back(new Projectile(posX, posY, getPower(), false, 10, getRotation(), speedX, speedY, "assets/tower/CannonProjectile.png"));
             setShootingTimer(MAX_SHOOTING_TIMER);
         }
     }

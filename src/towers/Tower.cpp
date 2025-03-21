@@ -239,7 +239,10 @@ bool Tower::isClicked(float scaleFactor) const
  */
 bool Tower::isCritterInRange(Critter* critter) 
 {
-    return range >= calcDistance(critter);
+    float relativeRange = static_cast<float>(range) / Tower::STAT_CELL_RATIO;
+    float relativeDistance = calcDistance(critter) / Global::currentMap->getPixelPerCell();
+    
+    return relativeRange >= relativeDistance;
 }
 
 /**
@@ -329,7 +332,7 @@ TowerStrategy* Tower::getCritterTargettingStrategy() {
 void Tower::moveProjectiles(float multiplier, Critter* critter)
 {
     for (int i = 0; i < projectiles.size(); i++) {
-        projectiles[i]->move(multiplier);
+        projectiles[i]->move(multiplier / Tower::STAT_CELL_RATIO * Global::currentMap->getPixelPerCell());
         
         // check if projectile is outside of map
         if (projectiles[i]->isOutside())
