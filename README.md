@@ -45,7 +45,7 @@ The repo can be cloned at https://github.com/NathanGrenier/COMP-345.
 
 Run the following commands to build the application in release mode:
 1. `mkdir -p ./build; cd build`
-2. `cmake -DCMAKE_BUILD_TYPE=Release ..`
+2. `cmake -DCMAKE_BUILD_TYPE=Release -DCMAKE_EXE_LINKER_FLAGS="-Wl,--subsystem,windows" -DBUILD_SHARED_LIBS=OFF ..`
 3. `cmake --build . --config Release`
 
 ## Doxygen Comments

@@ -3,6 +3,7 @@ build/
 .vs/
 .vscode/
 repomix-output.txt
+repomix.config.json
 
 # Docs
 docs/**
