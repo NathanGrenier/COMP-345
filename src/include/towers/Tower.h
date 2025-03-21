@@ -30,7 +30,7 @@ public:
     static const int MAX_SHOOTING_TIMER = 100; /**< @brief Shooting timer to be decremented */
     static const int REFUND_PER_UPGRADE = 50; /**< @brief Additional gold refunded per level */
     static constexpr float PI_CONSTANT = 3.14159265358979323846f; /**< @brief The constant PI for tower calculations */
-
+    
     /**
      * @brief Default constructor for Tower.
      * Initializes a tower with default attributes.
@@ -99,6 +99,10 @@ public:
      */
     virtual int getRange() const;
     
+    /**
+     * @brief Retrieves the buying cost of the tower.
+     * @return The cost of the tower in gold.
+     */
     int getBuyingCost();
 
     /**
@@ -149,6 +153,11 @@ public:
      */
     virtual void shootProjectile(Critter* targettedCritter) = 0;
     
+    /**
+     * @brief Moves projectiles fired by a tower forward.
+     * @param multiplier multiplier for moving the projectile slower/faster.
+     * @param critter The critter that the tower should shoot at.
+     */
     void moveProjectiles(float multiplier, Critter* critter);
 
     /**
@@ -226,8 +235,17 @@ public:
      * @param newShootingTimer The new value for the shooting timer of the Tower.
      */
     virtual void setShootingTimer(int newShootingTimer);
-
+    
+    /**
+     * @brief Mutator for Tower Strategy
+     * @param newStrategy the new TowerStrategy to use
+     */
     virtual void setCritterTargettingStrategy(TowerStrategy* newStrategy);
+    
+    /**
+     * @brief Accessor for Tower Strategy
+     * @returns the TargettingStrategy object that determines the Tower's targetting pattern
+     */
     virtual TowerStrategy* getCritterTargettingStrategy();
 
     /**
@@ -252,6 +270,5 @@ private:
     std::vector<Projectile*> projectiles; /**< @brief A vector of all projectiles fired by the tower */
     LTexture towerTexture; /**< @brief The texture of the tower */
 
-    //UpgradeValues upgradeValues;
-    TowerStrategy* critterTargettingStrategy;
+    TowerStrategy* critterTargettingStrategy; /**< @brief The TowerStrategy object for the tower to use */
 };

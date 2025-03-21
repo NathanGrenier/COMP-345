@@ -15,12 +15,12 @@
 
 class DetailDisplayComponent {
 public:
-	static const float DETAIL_COMPONENT_PADDING; /** @brief padding for components, used on sides */
-	static const float DETAIL_COMPONENT_SPACING; /** @brief spacing for components, used vertically */
-	static const float TOWER_COMPONENT_SPACING; /** @brief spacing for components, used vertically */
-	static const float CRITTER_COMPONENT_SPACING; /** @brief spacing for components, used vertically */
-	static const float COMPONENT_BORDER_WIDTH;    /** @brief width of the border around a component */
-	static const float DETAIL_COMPONENT_HEIGHT;  /** @brief default height of a component */
+	static const float DETAIL_COMPONENT_PADDING; /**< @brief padding for components, used on sides */
+	static const float DETAIL_COMPONENT_SPACING; /**< @brief spacing for components, used vertically */
+	static const float TOWER_COMPONENT_SPACING; /**< @brief spacing for components, used vertically */
+	static const float CRITTER_COMPONENT_SPACING; /**< @brief spacing for components, used vertically */
+	static const float COMPONENT_BORDER_WIDTH;    /**< @brief width of the border around a component */
+	static const float DETAIL_COMPONENT_HEIGHT;  /**< @brief default height of a component */
 
 	// constructors
 	DetailDisplayComponent();
@@ -33,8 +33,8 @@ public:
 	virtual void render();
 
 protected:
-	float xPosition; /** @brief x position of the component */
-	float yPosition; /** @brief y position of the component */
-	float width; /** @brief width of the component, used for scaling */
+	float xPosition; /**< @brief x position of the component */
+	float yPosition; /**< @brief y position of the component */
+	float width; /**< @brief width of the component, used for scaling */
 };
 

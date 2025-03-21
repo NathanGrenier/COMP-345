@@ -322,23 +322,14 @@ TowerStrategy* Tower::getCritterTargettingStrategy() {
 }
 
 /**
- * @brief Moves Projectiles towards their targetted Critter
+ * @brief Moves projectiles fired by a tower forward.
+ * @param multiplier multiplier for moving the projectile slower/faster.
+ * @param critter The critter that the tower should shoot at.
  */
 void Tower::moveProjectiles(float multiplier, Critter* critter)
 {
     for (int i = 0; i < projectiles.size(); i++) {
         projectiles[i]->move(multiplier);
-
-        //// check if projectile hits critter
-        //if (critter != nullptr && projectiles[i]->checkCollision(critter))
-        //{
-        //    projectiles.erase(projectiles.begin() + i);
-
-        //    // clear projectiles if critter has no hp, no target
-        //    //if (critter->getHitPoints() <= 0) {
-        //    //    projectiles.clear();
-        //    //}
-        //}
         
         // check if projectile is outside of map
         if (projectiles[i]->isOutside())

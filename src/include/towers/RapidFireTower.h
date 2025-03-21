@@ -18,11 +18,11 @@
 class RapidFireTower : public Tower
 {
 public:
-    static const int RAPID_RANGE = 7589; /** @brief default range for RapidFireTower */
-    static const int RAPID_POWER = 1; /** @brief default projectile damage for RapidFireTower */
-    static const int RAPID_RATE_OF_FIRE = 10; /** @brief default rate of fire for RapidFireTower */
-    static const int RAPID_MAX_LEVEL = 3; /** @brief default max level for RapidFireTower */
-    static const int MAX_RAPID_FIRE_BREAK = 200; /** @brief break maximum for no shooting intervals */
+    static const int RAPID_RANGE = 75; /**< @brief default range for RapidFireTower */
+    static const int RAPID_POWER = 1; /**< @brief default projectile damage for RapidFireTower */
+    static const int RAPID_RATE_OF_FIRE = 10; /**< @brief default rate of fire for RapidFireTower */
+    static const int RAPID_MAX_LEVEL = 3; /**< @brief default max level for RapidFireTower */
+    static const int MAX_RAPID_FIRE_BREAK = 200; /**< @brief break maximum for no shooting intervals */
 
     RapidFireTower();
     RapidFireTower(float x, float y, float width, int buyingCost);
@@ -33,8 +33,8 @@ public:
     void shootProjectile(Critter* targettedCritter) override;
 
 private:
-    int fireBreak; /** @brief decremented for no shooting interval */
-    int fireBreakRate; /** @brief amount to decrement fireBreak by */
-    int burstSize; /** @brief time for projectiles to be fired in an interval */
-    int burstCount; /** @brief counts time for firing projectiles in interval */
+    int fireBreak; /**< @brief decremented for no shooting interval */
+    int fireBreakRate; /**< @brief amount to decrement fireBreak by */
+    int burstSize; /**< @brief time for projectiles to be fired in an interval */
+    int burstCount; /**< @brief counts time for firing projectiles in interval */
 };

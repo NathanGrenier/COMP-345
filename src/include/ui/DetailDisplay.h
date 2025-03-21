@@ -13,7 +13,7 @@
 
 class DetailDisplay {
 public:
-	static const int DETAIL_BORDER_WIDTH = 4; /** @brief width of the disply border */
+	static const int DETAIL_BORDER_WIDTH = 4; /**< @brief width of the disply border */
 
 	// constructors
 	DetailDisplay();
@@ -33,9 +33,9 @@ public:
 	virtual void render();
 
 protected:
-	float width;
-	float height;
+	float width; /**< @brief width of the display */
+	float height; /**< @brief height of the display */
 
-	SDL_FPoint mPosition; /** @brief top left position of the display */
+	SDL_FPoint mPosition; /**< @brief top left position of the display */
 };
 

@@ -43,8 +43,10 @@ TowerObserver::TowerObserver(float startingX, float startingY) : currentTower(nu
     towerComponents.push_back(new DetailButton(componentWidth, "assets/ui/UpgradeTower.png"));
     towerComponents.push_back(new DetailButton(componentWidth, "assets/ui/SellTower.png"));
 
+    // label for TowerStrategy object of the Tower
     towerComponents.push_back(new DetailLabel(componentWidth, "assets/ui/CritterTargetting.png"));
 
+    // array of TowerStrategy paths
     towerStrategyPaths = new std::string[STRATEGY_COUNT];
     towerStrategyPaths[0] = "assets/ui/TargetNearestToExit.png";
     towerStrategyPaths[1] = "assets/ui/TargetNearestToTower.png";
@@ -287,9 +289,9 @@ void TowerObserver::updateAttributes()
     std::string refundValueStr = std::format("{}", currentTower->getRefundValue());
 
     dynamic_cast<DetailAttribute*>(towerComponents[5])->setAttributeText("Upgrade cost", textColor);
-    
-    // shows dash if already max level as upgrade cost
     std::string buyUpgradeCostStr;
+    
+    // determines whether to show either initial cost or upgrade cost
     if (towerAtMaxLevel)
     {
         buyUpgradeCostStr = "0";
@@ -317,8 +319,7 @@ void TowerObserver::updateAttributes()
 }
 
 /**
- * @brief 
- * 
+ * @brief Updates the TowerStrategy button to match the one with the currently selected Tower
  */
 void TowerObserver::updateStrategyButton()
 {

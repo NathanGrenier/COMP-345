@@ -55,7 +55,7 @@ std::vector<DetailDisplayComponent*> DetailAttributeDisplay::getComponents()
 
 /**
  * @brief Accessor for Tower detail components
- * @return the array of DetailDisplayComponent object pointers for the TowerObserver
+ * @return the vector of DetailDisplayComponent object pointers for the TowerObserver
  */
 std::vector<DetailDisplayComponent*> DetailAttributeDisplay::getTowerComponents()
 {
@@ -121,14 +121,26 @@ void DetailAttributeDisplay::handleButtonEvents(SDL_Event& e)
     towerObserver->handleButtonEvents(e);
 }
 
+/**
+ * @brief Accessor for critter component vector
+ * @return the DetailDisplayComponent objects for the Critter UI
+ */
 std::vector<DetailDisplayComponent*> DetailAttributeDisplay::getCritterComponents() {
     return critterComponents;
 }
 
+/**
+ * @brief Accessor for the CritterObserver
+ * @return the CritterObserver used in the DetailDisplay
+ */
 CritterObserver* DetailAttributeDisplay::getCritterObserver() {
     return critterObserver;
 }
 
+/**
+ * @brief Selects Critter to be shown through the CritterObserver
+ * @param critter the Tower to have details displayed in the CritterObserver
+ */
 void DetailAttributeDisplay::selectCritter(Critter* critter) {
     // When a critter is selected, you could set its details to the display components or perform additional logic
     if (critter != nullptr) {
@@ -143,6 +155,11 @@ void DetailAttributeDisplay::selectCritter(Critter* critter) {
     towerObserver->setCurrentTower(nullptr);
 }
 
+/**
+ * @brief Checks if Critter details are currently supposed to be displayed
+ * @return true if Critter details should be displayed
+ * @return false if Critter details should not be displayed, either empty or Tower
+ */
 bool DetailAttributeDisplay::isDisplayingCritter() {
     return critterObserver->getCurrentCritter() != nullptr;
 }

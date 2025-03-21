@@ -22,6 +22,7 @@
   * @brief Constructs a TowerGroup object.
   *
   * Initializes dummy towers for display and attaches them to the observer pattern.
+  * Initializes TowerStrategy objects for Towers to use.
   *
   * @param playerGold Reference to player's gold amount.
   * @param map Pointer to the game map.
@@ -30,9 +31,9 @@
 TowerGroup::TowerGroup(int& playerGold, Map* map, DetailAttributeDisplay& detailDisplay)
     : playerGold(playerGold), map(map), detailDisplay(detailDisplay) {
 	// creating dummy Towers
-	dummyStandardTower = new StandardTower(0, 0, 0, 25);
-	dummyRapidFireTower = new RapidFireTower(0, 0, 0, 50);
-	dummyCannonTower = new CannonTower(0, 0, 0, 100);
+	dummyStandardTower = new StandardTower(0, 0, 0, STANDARD_TOWER_COST);
+	dummyRapidFireTower = new RapidFireTower(0, 0, 0, RAPID_FIRE_TOWER_COST);
+	dummyCannonTower = new CannonTower(0, 0, 0, CANNON_TOWER_COST);
 
 	TowerObserver* towerObserver = detailDisplay.getTowerObserver();
 

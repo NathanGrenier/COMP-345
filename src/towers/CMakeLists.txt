@@ -8,7 +8,7 @@ add_library(towers STATIC
     TargetNearTower.cpp
     TargetStrongest.cpp
     TargetWeakest.cpp
-    TowerStrategy.cpp
+    
     TowerGroup.cpp
     powerups/Powerup.cpp)
 

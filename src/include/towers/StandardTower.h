@@ -16,10 +16,10 @@
 class StandardTower : public Tower
 {
 public:
-    static const int STANDARD_RANGE = 100; /** @brief default range for StandardTower */
-    static const int STANDARD_POWER = 3; /** @brief default projectile damage for StandardTower */
-    static const int STANDARD_RATE_OF_FIRE = 4; /** @brief default rate of fire for StandardTower */
-    static const int STANDARD_MAX_LEVEL = 5; /** @brief default max level for StandardTower */
+    static const int STANDARD_RANGE = 100; /**< @brief default range for StandardTower */
+    static const int STANDARD_POWER = 3; /**< @brief default projectile damage for StandardTower */
+    static const int STANDARD_RATE_OF_FIRE = 4; /**< @brief default rate of fire for StandardTower */
+    static const int STANDARD_MAX_LEVEL = 5; /**< @brief default max level for StandardTower */
 
     StandardTower();
     StandardTower(float x, float y, float width, int buyingCost);
