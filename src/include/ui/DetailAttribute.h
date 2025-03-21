@@ -17,8 +17,8 @@
 class DetailAttribute : public DetailDisplayComponent
 {
 public:
-	static const float DETAIL_ATTRIBUTE_SPACING; /** @brief padding for detail components, used on sides */
-	static const float DETAIL_VALUE_PADDING;	/** @brief spacing for detail components, used vertically */
+	static const float DETAIL_ATTRIBUTE_SPACING; /**< @brief padding for detail components, used on sides */
+	static const float DETAIL_VALUE_PADDING;	/**< @brief spacing for detail components, used vertically */
 
 	// constructors
 	DetailAttribute();
@@ -29,7 +29,7 @@ public:
 	void render();
 
 protected:
-	LTexture detailAttributeTexture; /** @brief LTexture for labelling an attribute */
-	LTexture detailValueTexture; /** @brief LTexture for the value an attribute */
+	LTexture detailAttributeTexture; /**< @brief LTexture for labelling an attribute */
+	LTexture detailValueTexture; /**< @brief LTexture for the value an attribute */
 };
 

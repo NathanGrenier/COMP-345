@@ -5,6 +5,8 @@
 #include <cstdlib>
 
 Critter* CritterFactory::createCritterByType(std::string type, int waveLevel, SDL_FRect position, Map* map) {
+	waveLevel -= 1;
+
 	if (type == "Normal") {
 		return new NormalCritter(waveLevel, position, map);
 	} else if (type == "Fast") {

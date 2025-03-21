@@ -160,7 +160,7 @@ void LTexture::setTextureSize(float newWidth, float newHeight) {
  * @param center The point to rotate around (nullptr for center).
  * @param flipMode The SDL_FlipMode to apply.
  */
-void LTexture::render(float x, float y, SDL_FRect* clip, float width, float height, double degrees, SDL_FPoint* center, SDL_FlipMode flipMode) {
+void LTexture::render(float x, float y, SDL_FRect* clip, float width, float height, double degrees, float sizeMulti, SDL_FPoint* center, SDL_FlipMode flipMode) {
 	// Set texture position
 	SDL_FRect dstRect = { x, y, static_cast<float>(mWidth), static_cast<float>(mHeight) };
 
@@ -187,6 +187,16 @@ void LTexture::render(float x, float y, SDL_FRect* clip, float width, float heig
 		if (width > 0) dstRect.w = width;
 		if (height > 0) dstRect.h = height;
 	}
+
+	// Scale Size
+	float centerX = dstRect.x + dstRect.w / 2.0f;
+	float centerY = dstRect.y + dstRect.h / 2.0f;
+
+	dstRect.w = dstRect.w * sizeMulti;
+	dstRect.h = dstRect.h * sizeMulti;
+
+	dstRect.x = centerX - dstRect.w / 2.0f;
+	dstRect.y = centerY - dstRect.h / 2.0f;
 
 	// Render texture with the updated dimensions
 	SDL_RenderTextureRotated(gRenderer, mTexture, clip, &dstRect, degrees, center, flipMode);

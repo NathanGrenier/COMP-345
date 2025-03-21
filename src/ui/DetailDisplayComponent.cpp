@@ -8,8 +8,10 @@
 #include <Global.h>
 
  const float DetailDisplayComponent::DETAIL_COMPONENT_PADDING = 8.0f;
- const float DetailDisplayComponent::DETAIL_COMPONENT_SPACING = 45.0f; 
- const float DetailDisplayComponent::COMPONENT_BORDER_WIDTH = 2.0f;    
+ const float DetailDisplayComponent::DETAIL_COMPONENT_SPACING = 40.0f; 
+ const float DetailDisplayComponent::TOWER_COMPONENT_SPACING = 20.0f;
+ const float DetailDisplayComponent::CRITTER_COMPONENT_SPACING = 20.0f;
+ const float DetailDisplayComponent::COMPONENT_BORDER_WIDTH = 2.0f;
  const float DetailDisplayComponent::DETAIL_COMPONENT_HEIGHT = 15.0f;
 
 /**
@@ -45,6 +47,26 @@ void DetailDisplayComponent::setComponentPosition(float x, float y)
 {
     xPosition = x;
     yPosition = y;
+}
+
+/**
+ * @brief Accessor for the DetailDisplayComponent's horizontal position.
+ *
+ * @return The x-coordinate of the DetailDisplayComponent.
+ */
+float DetailDisplayComponent::getComponentXPosition()
+{
+    return xPosition;
+}
+
+/**
+ * @brief Accessor for the DetailDisplayComponent's vertical position.
+ *
+ * @return The y-coordinate of the DetailDisplayComponent.
+ */
+float DetailDisplayComponent::getComponentYPosition()
+{
+    return yPosition;
 }
 
 /**

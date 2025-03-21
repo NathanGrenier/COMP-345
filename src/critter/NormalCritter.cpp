@@ -4,11 +4,9 @@
 
 NormalCritter::NormalCritter(int level, SDL_FRect start, Map* map)
 	: Critter(level, start, map) {
-	speed = 50.0f;
-	hitPoints = 20.0f + level * 2.0f;
-	maxHitPoints = hitPoints;
-	strength = level * 2;
-	reward = level * 10;
+	maxHitPoints += level * 2.0f;
+	hitPoints = maxHitPoints;
+	reward += level * reward;
 
 	setupAnimationFrames();
 	frameTime = (1.0f / animationFramesWalkSide.size()) * 0.8;
@@ -101,7 +99,6 @@ void NormalCritter::setHitPoints(float hitPoints) {
 	this->hitPoints = hitPoints;
 }
 float NormalCritter::getMaxHitPoints() const { return maxHitPoints; }
-int NormalCritter::getStrength() const { return strength; }
 int NormalCritter::getReward() const { return reward; }
 std::string NormalCritter::getTexturePath() const { return baseTexturePath; }
 bool NormalCritter::isDamaged() const {

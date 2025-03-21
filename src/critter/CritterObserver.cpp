@@ -193,7 +193,7 @@ void CritterObserver::updateAttributes() {
 
 	std::string speedStr = std::to_string(static_cast<int>(currentCritter->getSpeed()));
 	std::string hitPointsStr = std::to_string(static_cast<int>(currentCritter->getHitPoints()));
-	std::string strengthStr = std::to_string(static_cast<int>(currentCritter->getStrength()));
+	std::string strengthStr = std::to_string(static_cast<int>(currentCritter->getHitPoints()));
 	std::string rewardStr = std::to_string(static_cast<int>(currentCritter->getReward()));
 
 	(dynamic_cast<DetailAttribute*>(critterComponents[1]))->setValueText(speedStr, textColor);

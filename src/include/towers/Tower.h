@@ -14,6 +14,8 @@
 #include <util/Observable.h>
 #include <critter/Critter.h>
 #include <ui/LTexture.h>
+#include <towers/TowerStrategy.h>
+#include <string>
 
  /** @brief Ratio between original tower cost and refund value */
 const double REFUND_RATIO = 0.8;
@@ -27,8 +29,9 @@ class Tower : public Observable
 public:
     static const int MAX_SHOOTING_TIMER = 100; /**< @brief Shooting timer to be decremented */
     static const int REFUND_PER_UPGRADE = 50; /**< @brief Additional gold refunded per level */
+    static const int STAT_CELL_RATIO = 20; /**< @brief Ratio of Tower stat unit (range) per map cell */
     static constexpr float PI_CONSTANT = 3.14159265358979323846f; /**< @brief The constant PI for tower calculations */
-
+    
     /**
      * @brief Default constructor for Tower.
      * Initializes a tower with default attributes.
@@ -96,6 +99,12 @@ public:
      * @return The range of the tower.
      */
     virtual int getRange() const;
+    
+    /**
+     * @brief Retrieves the buying cost of the tower.
+     * @return The cost of the tower in gold.
+     */
+    int getBuyingCost();
 
     /**
      * @brief Retrieves the power of the tower.
@@ -141,9 +150,16 @@ public:
 
     /**
      * @brief Makes the tower shoot a projectile at a given critter.
+     * @param targettedCritter The critter that the tower should shoot at.
+     */
+    virtual void shootProjectile(Critter* targettedCritter) = 0;
+    
+    /**
+     * @brief Moves projectiles fired by a tower forward.
+     * @param multiplier multiplier for moving the projectile slower/faster.
      * @param critter The critter that the tower should shoot at.
      */
-    virtual void shootProjectile(Critter* critter) = 0;
+    void moveProjectiles(float multiplier, Critter* critter);
 
     /**
      * @brief Clears all projectiles fired by the tower.
@@ -217,9 +233,28 @@ public:
 
     /**
      * @brief Sets the shooting timer for the tower.
-     * @param newShootingTimer The new value for the shooting timer.
+     * @param newShootingTimer The new value for the shooting timer of the Tower.
      */
-    virtual void setShootingTimer(int newShootingTimer) { shootingTimer = newShootingTimer; };
+    virtual void setShootingTimer(int newShootingTimer);
+    
+    /**
+     * @brief Mutator for Tower Strategy
+     * @param newStrategy the new TowerStrategy to use
+     */
+    virtual void setCritterTargettingStrategy(TowerStrategy* newStrategy);
+    
+    /**
+     * @brief Accessor for Tower Strategy
+     * @returns the TargettingStrategy object that determines the Tower's targetting pattern
+     */
+    virtual TowerStrategy* getCritterTargettingStrategy();
+
+    /**
+     * @brief Calculates the distance between the tower and a critter.
+     * @param critter The critter to calculate the distance to.
+     * @return The calculated distance between the tower and the critter.
+     */
+    float calcDistance(Critter* critter) const;
 
 private:
     SDL_FRect currentRenderRect; /**< @brief The current render rectangle for the tower */
@@ -233,13 +268,8 @@ private:
     int level; /**< @brief The level of the tower */
     int shootingTimer; /**< @brief The shooting timer of the tower */
 
-    /**
-     * @brief Calculates the distance between the tower and a critter.
-     * @param critter The critter to calculate the distance to.
-     * @return The calculated distance between the tower and the critter.
-     */
-    float calcDistance(Critter* critter) const;
-
     std::vector<Projectile*> projectiles; /**< @brief A vector of all projectiles fired by the tower */
     LTexture towerTexture; /**< @brief The texture of the tower */
+
+    TowerStrategy* critterTargettingStrategy; /**< @brief The TowerStrategy object for the tower to use */
 };

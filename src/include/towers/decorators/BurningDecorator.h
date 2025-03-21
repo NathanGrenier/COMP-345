@@ -146,7 +146,7 @@ public:
 			if (burnTimers.find(critter) != burnTimers.end()) {
 				critter->takeDamage(0.5f);  // Reduce the critter's hit points over time
 
-				burningTexture.render(burnRect.x, burnRect.y, &spriteClips[currentFrame], burnRect.w, burnRect.h);
+				burningTexture.render(burnRect.x, burnRect.y, &spriteClips[currentFrame], burnRect.w, burnRect.h, 0.0f, EFFECT_RENDER_SIZE_MULTIPLIER);
 			}
 		}
 	}

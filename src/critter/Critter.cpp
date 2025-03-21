@@ -6,10 +6,11 @@
 
 Critter::Critter(int level, SDL_FRect start, Map* map)
 	: level(level), position(start), isAtExit(false), map(map),
-	currentFrame(0), animationTimer(0.0f), frameTime(0.1f),
+	currentFrame(0), animationTimer(0.0f), frameTime(0.1f), distanceTravelled(0.0f),
 	isHurt(false), damageTimer(0), redTintAlpha(255), greenTintAlpha(255), blueTintAlpha(255), currentState(State::ALIVE) {
 	currentRenderRect = {};
-	if (map != nullptr) {
+	if (map != nullptr)
+	{
 		map->subscribe(this);
 		SDL_FRect renderRect = map->getCurrentRenderRect();
 		float centerX = position.x + position.w / 2.0f;
@@ -23,11 +24,16 @@ Critter::Critter(int level, SDL_FRect start, Map* map)
 		targetPos = map->getCellCenter(targetCellX, targetCellY, renderRect);
 
 		// Set initial direction
-		if (flowX == 1) currentDirection = Direction::RIGHT;
-		else if (flowX == -1) currentDirection = Direction::LEFT;
-		else if (flowY == 1) currentDirection = Direction::DOWN;
-		else if (flowY == -1) currentDirection = Direction::UP;
-	} else {
+		if (flowX == 1)
+			currentDirection = Direction::RIGHT;
+		else if (flowX == -1)
+			currentDirection = Direction::LEFT;
+		else if (flowY == 1)
+			currentDirection = Direction::DOWN;
+		else if (flowY == -1)
+			currentDirection = Direction::UP;
+	} else
+	{
 		targetCellX = -1;
 		targetCellY = -1;
 		targetPos = { 0.0f, 0.0f };
@@ -73,7 +79,8 @@ SDL_FRect Critter::getPosition() const {
  */
 
 void Critter::move(float deltaTime, const std::vector<Critter*> critters) {
-	if (isAtExit || map == nullptr || currentState != State::ALIVE) return;
+	if (isAtExit || map == nullptr || currentState != State::ALIVE)
+		return;
 
 	SDL_FRect renderRect = map->getCurrentRenderRect();
 	Vector2D critterCenter(position.x + position.w / 2.0f, position.y + position.h / 2.0f);
@@ -81,47 +88,65 @@ void Critter::move(float deltaTime, const std::vector<Critter*> critters) {
 	Vector2D direction = targetVec - critterCenter;
 	float distanceToTarget = direction.magnitude();
 
+
 	if (distanceToTarget > 0) {
 		direction = direction.normalize();
 		float deltaX = direction.x * getSpeed() * deltaTime;
 		float deltaY = direction.y * getSpeed() * deltaTime;
+
+		float addedDistance = static_cast<float>(sqrt(pow(deltaX, 2) + pow(deltaY, 2)));
+		distanceTravelled += addedDistance;
+
 		position = { position.x + deltaX, position.y + deltaY, position.w, position.h };
 	}
 
 	// Check if the critter has reached or passed the target
 	bool reachedTarget = false;
-	if (distanceToTarget < 1.0f) {
+	if (distanceToTarget < 1.0f)
+	{
 		reachedTarget = true;
-	} else {
+	} else
+	{
 		Vector2D toTarget = targetVec - critterCenter;
-		if (currentDirection == Direction::RIGHT && toTarget.x <= 0) {
+		if (currentDirection == Direction::RIGHT && toTarget.x <= 0)
+		{
 			reachedTarget = true;
-		} else if (currentDirection == Direction::LEFT && toTarget.x >= 0) {
+		} else if (currentDirection == Direction::LEFT && toTarget.x >= 0)
+		{
 			reachedTarget = true;
-		} else if (currentDirection == Direction::DOWN && toTarget.y <= 0) {
+		} else if (currentDirection == Direction::DOWN && toTarget.y <= 0)
+		{
 			reachedTarget = true;
-		} else if (currentDirection == Direction::UP && toTarget.y >= 0) {
+		} else if (currentDirection == Direction::UP && toTarget.y >= 0)
+		{
 			reachedTarget = true;
 		}
 	}
 
-	if (reachedTarget) {
+	if (reachedTarget)
+	{
 		int currentCellX = targetCellX;
 		int currentCellY = targetCellY;
 		Vector2D flowDir = map->getFlowNormal(currentCellX, currentCellY);
-		if (flowDir.x == 0 && flowDir.y == 0) {
+		if (flowDir.x == 0 && flowDir.y == 0)
+		{
 			setAtExit(true);
 			notify();
-		} else {
+		} else
+		{
 			int flowX = static_cast<int>(flowDir.x);
 			int flowY = static_cast<int>(flowDir.y);
 			targetCellX = currentCellX + flowX;
 			targetCellY = currentCellY + flowY;
 			targetPos = map->getCellCenter(targetCellX, targetCellY, renderRect);
-			if (flowX == 1) currentDirection = Direction::RIGHT;
-			else if (flowX == -1) currentDirection = Direction::LEFT;
-			else if (flowY == 1) currentDirection = Direction::DOWN;
-			else if (flowY == -1) currentDirection = Direction::UP;
+			if (flowX == 1)
+				currentDirection = Direction::RIGHT;
+			else if (flowX == -1)
+				currentDirection = Direction::LEFT;
+			else if (flowY == 1)
+				currentDirection = Direction::DOWN;
+			else if (flowY == -1)
+				currentDirection = Direction::UP;
 		}
 	}
 }
@@ -138,29 +163,36 @@ void Critter::takeDamage(float damage) {
 	isHurt = true;
 	notify();
 	damageTimer = SDL_GetTicks();
-	if (getHitPoints() <= 0 && currentState == State::ALIVE) {
+	if (getHitPoints() <= 0 && currentState == State::ALIVE)
+	{
 		currentState = State::DYING;
-		currentFrame = 0;            // Reset frame for death animation
+		currentFrame = 0; // Reset frame for death animation
 		animationTimer = 0.0f;
 	}
 }
 
 void Critter::update(float deltaTime) {
-	if (currentState == State::ALIVE) {
-		if (isHurt) {
+	if (currentState == State::ALIVE)
+	{
+		if (isHurt)
+		{
 			Uint64 elapsedTime = SDL_GetTicks() - damageTimer;
-			if (elapsedTime < damageDuration) {
+			if (elapsedTime < damageDuration)
+			{
 				redTintAlpha = maxRedAlpha * (elapsedTime / float(damageDuration));
-			} else {
+			} else
+			{
 				redTintAlpha = maxRedAlpha - maxRedAlpha * ((elapsedTime - damageDuration) / float(damageDuration));
-				if (redTintAlpha <= 0.0f) {
+				if (redTintAlpha <= 0.0f)
+				{
 					isHurt = false;
 					redTintAlpha = 255;
 					greenTintAlpha = 255;
 					blueTintAlpha = 255;
 				}
 			}
-		} else {
+		} else
+		{
 			redTintAlpha = 255;
 			greenTintAlpha = 255;
 			blueTintAlpha = 255;
@@ -168,25 +200,37 @@ void Critter::update(float deltaTime) {
 
 		// Walking animation logic
 		animationTimer += deltaTime;
-		if (animationTimer >= frameTime) {
+		if (animationTimer >= frameTime)
+		{
 			std::vector<SDL_FRect>* currentFrames = nullptr;
-			switch (currentDirection) {
-				case Direction::UP: currentFrames = &animationFramesWalkUp; break;
-				case Direction::DOWN: currentFrames = &animationFramesWalkDown; break;
+			switch (currentDirection)
+			{
+				case Direction::UP:
+					currentFrames = &animationFramesWalkUp;
+					break;
+				case Direction::DOWN:
+					currentFrames = &animationFramesWalkDown;
+					break;
 				case Direction::LEFT:
-				case Direction::RIGHT: currentFrames = &animationFramesWalkSide; break;
+				case Direction::RIGHT:
+					currentFrames = &animationFramesWalkSide;
+					break;
 			}
-			if (currentFrames && !currentFrames->empty()) {
+			if (currentFrames && !currentFrames->empty())
+			{
 				currentFrame = (currentFrame + 1) % currentFrames->size();
 			}
 			animationTimer = 0.0f;
 		}
-	} else if (currentState == State::DYING) {
+	} else if (currentState == State::DYING)
+	{
 		// Death animation logic
 		animationTimer += deltaTime;
-		if (animationTimer >= frameTime) {
+		if (animationTimer >= frameTime)
+		{
 			std::vector<SDL_FRect>* currentFrames = nullptr;
-			switch (currentDirection) {
+			switch (currentDirection)
+			{
 				case Direction::UP:
 					currentFrames = &animationFramesDeathUp;
 					break;
@@ -198,10 +242,12 @@ void Critter::update(float deltaTime) {
 					currentFrames = &animationFramesDeathSide;
 					break;
 			}
-			if (currentFrames && !currentFrames->empty()) {
+			if (currentFrames && !currentFrames->empty())
+			{
 				currentFrame++;
-				if (currentFrame >= static_cast<int>(currentFrames->size())) {
-					currentState = State::DEAD; // Transition to DEAD after animation completes
+				if (currentFrame >= static_cast<int>(currentFrames->size()))
+				{
+					currentState = State::DEAD;				  // Transition to DEAD after animation completes
 					currentFrame = currentFrames->size() - 1; // Hold on last frame
 				}
 			}
@@ -217,7 +263,6 @@ void Critter::update(float deltaTime) {
 	textureDeathDown.setColor((Uint8)redTintAlpha, (Uint8)greenTintAlpha, (Uint8)blueTintAlpha);
 	textureDeathSide.setColor((Uint8)redTintAlpha, (Uint8)greenTintAlpha, (Uint8)blueTintAlpha);
 }
-
 
 bool Critter::isAlive() const {
 	return this->currentState == State::ALIVE;
@@ -236,12 +281,12 @@ bool Critter::atExit() const {
 }
 
 /**
-* @brief Checks if the critter is clicked based on mouse position.
-*
-* @param mouseX The x-coordinate of the mouse.
-* @param mouseY The y-coordinate of the mouse.
-* @return true if the critter was clicked; false otherwise.
-*/
+ * @brief Checks if the critter is clicked based on mouse position.
+ *
+ * @param mouseX The x-coordinate of the mouse.
+ * @param mouseY The y-coordinate of the mouse.
+ * @return true if the critter was clicked; false otherwise.
+ */
 bool Critter::isClicked() const {
 	// Get the current mouse position
 	float mouseXPos, mouseYPos;
@@ -249,7 +294,8 @@ bool Critter::isClicked() const {
 
 	// Checking if the mouse position is inside the critter's rectangle
 	if (mouseXPos >= currentRenderRect.x && mouseXPos <= currentRenderRect.x + currentRenderRect.w &&
-		mouseYPos >= currentRenderRect.y && mouseYPos <= currentRenderRect.y + currentRenderRect.h) {
+		mouseYPos >= currentRenderRect.y && mouseYPos <= currentRenderRect.y + currentRenderRect.h)
+	{
 		return true;
 	}
 	return false;
@@ -281,9 +327,11 @@ void Critter::render() {
 	std::vector<SDL_FRect>* currentFrames = nullptr;
 	SDL_FlipMode flip = SDL_FLIP_NONE;
 
-	if (currentState == State::ALIVE) {
+	if (currentState == State::ALIVE)
+	{
 		// Render walking animation
-		switch (currentDirection) {
+		switch (currentDirection)
+		{
 			case Direction::UP:
 				currentTexture = &textureWalkUp;
 				currentFrames = &animationFramesWalkUp;
@@ -302,9 +350,11 @@ void Critter::render() {
 				currentFrames = &animationFramesWalkSide;
 				break;
 		}
-	} else if (currentState == State::DYING || currentState == State::DEAD) {
+	} else if (currentState == State::DYING || currentState == State::DEAD)
+	{
 		// Render death animation
-		switch (currentDirection) {
+		switch (currentDirection)
+		{
 			case Direction::UP:
 				currentTexture = &textureDeathUp;
 				currentFrames = &animationFramesDeathUp;
@@ -325,16 +375,19 @@ void Critter::render() {
 		}
 	}
 
-	if (currentTexture && currentFrames && !currentFrames->empty()) {
+	if (currentTexture && currentFrames && !currentFrames->empty())
+	{
 		SDL_FRect destRect = { currentRenderRect.x, currentRenderRect.y, currentRenderRect.w, currentRenderRect.h };
 		SDL_FRect* clip = &(*currentFrames)[currentFrame];
-		currentTexture->render(destRect.x, destRect.y, clip, destRect.w, destRect.h, 0.0, nullptr, flip);
+
+		currentTexture->render(destRect.x, destRect.y, clip, destRect.w, destRect.h, 0.0, CRITTER_SPRITE_MODIFIER, nullptr, flip);
 	}
 
 	// Render health bar only if ALIVE
-	if (currentState == State::ALIVE) {
+	if (currentState == State::ALIVE)
+	{
 		SDL_FRect healthBarRect = { position.x, position.y - (currentCellSize * CRITTER_HEALTHBAR_PADDING),
-									currentCellSize * CRITTER_WIDTH_SCALE, currentCellSize * CRITTER_HEALTHBAR_HEIGHT };
+								   currentCellSize * CRITTER_WIDTH_SCALE, currentCellSize * CRITTER_HEALTHBAR_HEIGHT };
 		SDL_FRect greenBar = healthBarRect;
 		SDL_FRect redBar = healthBarRect;
 
@@ -359,5 +412,5 @@ void Critter::render() {
  * @param playerGold The player's current gold amount, which will be reduced by the critter's strength.
  */
 void Critter::stealGold(int& playerGold) const {
-	playerGold -= getStrength();
+	playerGold -= getHitPoints();
 }

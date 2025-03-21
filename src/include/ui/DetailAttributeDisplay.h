@@ -52,10 +52,10 @@ public:
 	void render();
 
 protected:
-	std::vector<DetailDisplayComponent*> components; /** @brief vector of all components */
+	std::vector<DetailDisplayComponent*> components; /**< @brief vector of all common components */
 
-	CritterObserver* critterObserver;
-	TowerObserver* towerObserver;
+	CritterObserver* critterObserver; /**< @brief pointer to CritterObserver to hold components for Critter UI */
+	TowerObserver* towerObserver; /**< @brief pointer to TowerObserver to hold components for Tower UI */
 
-	std::vector<DetailDisplayComponent*> critterComponents;
+	std::vector<DetailDisplayComponent*> critterComponents; /**< @brief vector of all components */
 };

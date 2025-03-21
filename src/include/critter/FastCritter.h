@@ -11,7 +11,6 @@ public:
 	float getHitPoints() const override;
 	void setHitPoints(float hitPoints) override;
 	float getMaxHitPoints() const override;
-	int getStrength() const override;
 	int getReward() const override;
 	std::string getTexturePath() const override;
 	bool isDamaged() const override;
@@ -29,9 +28,8 @@ public:
 
 private:
 	float speed = 75.0f;
-	float hitPoints = 10.0f;
+	float hitPoints;
 	float maxHitPoints = 10.0f;
-	int strength = 2;
-	int reward = 10;
+	int reward = 5;
 	static inline const std::string baseTexturePath = "critters/bee";
 };

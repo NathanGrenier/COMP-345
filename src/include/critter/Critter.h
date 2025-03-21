@@ -18,14 +18,20 @@
 #include <util/Observable.h>
 #include <ui/LTexture.h>
 
-enum class Direction {
-	UP,
-	DOWN,
-	LEFT,
-	RIGHT
+enum class Direction
+{
+    UP,
+    DOWN,
+    LEFT,
+    RIGHT
 };
 
-enum class State { ALIVE, DYING, DEAD };
+enum class State
+{
+    ALIVE,
+    DYING,
+    DEAD
+};
 
 /**
  * @class Critter
@@ -36,83 +42,87 @@ enum class State { ALIVE, DYING, DEAD };
  * class also handles rendering and updating the critter's position, health, and other
  * properties.
  */
-class Critter : public Observable, public FlowFieldObserver {
+class Critter : public Observable, public FlowFieldObserver
+{
 public:
-	Critter(int level, SDL_FRect start, Map* map);
+    Critter(int level, SDL_FRect start, Map *map);
 
-	virtual ~Critter();
+    virtual ~Critter();
 
-	// Pure virtual functions for subclass-specific attributes
-	virtual std::string getType() const = 0;
-	virtual float getSpeed() const = 0;
-	virtual void setSpeed(float speed) = 0;
-	virtual float getHitPoints() const = 0;
-	virtual void setHitPoints(float hitPoints) = 0;
-	virtual float getMaxHitPoints() const = 0;
-	virtual int getStrength() const = 0;
-	virtual int getReward() const = 0;
-	virtual std::string getTexturePath() const = 0;
-	virtual bool isDamaged() const = 0;
-	virtual void setupAnimationFrames() = 0;
+    // Pure virtual functions for subclass-specific attributes
+    virtual std::string getType() const = 0;
+    virtual float getSpeed() const = 0;
+    virtual void setSpeed(float speed) = 0;
+    virtual float getHitPoints() const = 0;
+    virtual void setHitPoints(float hitPoints) = 0;
+    virtual float getMaxHitPoints() const = 0;
+    virtual int getReward() const = 0;
+    virtual std::string getTexturePath() const = 0;
+    virtual bool isDamaged() const = 0;
+    virtual void setupAnimationFrames() = 0;
 
-	// Common logic methods
-	void onFlowFieldChanged() override;
-	SDL_FRect getPosition() const;
-	void move(float deltaTime, const std::vector<Critter*> critters);
-	void takeDamage(float damage);
-	void update(float deltaTime);
-	bool isAlive() const;
-	bool isDying() const;
-	bool atExit() const;
-	bool isClicked() const;
-	void setAtExit(bool con);
-	void render();
-	void stealGold(int& playerGold) const;
-	SDL_FRect getCurrentRenderRect() const { return currentRenderRect; }
+    // Common logic methods
+    void onFlowFieldChanged() override;
+    SDL_FRect getPosition() const;
+    void move(float deltaTime, const std::vector<Critter *> critters);
+    void takeDamage(float damage);
+    void update(float deltaTime);
+    bool isAlive() const;
+    bool isDying() const;
+    bool atExit() const;
+    bool isClicked() const;
+    void setAtExit(bool con);
+    void render();
+    void stealGold(int &playerGold) const;
+    SDL_FRect getCurrentRenderRect() const { return currentRenderRect; }
+    float getDistanceTravelled() const { return distanceTravelled; };
 
-	// Constants
-	static constexpr float CRITTER_WIDTH_SCALE = 1.0f; /**< Width scale for the critter */
-	static constexpr float CRITTER_HEIGHT_SCALE = 1.0f; /**< Height scale for the critter */
+    // Constants
+    static constexpr float CRITTER_WIDTH_SCALE = 1.0f;  /**< Width scale for the critter */
+    static constexpr float CRITTER_HEIGHT_SCALE = 1.0f; /**< Height scale for the critter */
 
-	static constexpr float CRITTER_HEALTHBAR_HEIGHT = CRITTER_HEIGHT_SCALE * 0.15f; /**< Height of the health bar */
-	static constexpr float CRITTER_HEALTHBAR_PADDING = CRITTER_HEIGHT_SCALE * 0.15f; /**< Padding for the health bar */
+    static constexpr float CRITTER_HEALTHBAR_HEIGHT = CRITTER_HEIGHT_SCALE * 0.15f;  /**< Height of the health bar */
+    static constexpr float CRITTER_HEALTHBAR_PADDING = CRITTER_HEIGHT_SCALE * 0.15f; /**< Padding for the health bar */
+
+    static constexpr float CRITTER_SPRITE_MODIFIER = 2.0f;
 
 protected:
-	int level;
-	float hitPoints;
-	SDL_FRect position;
-	bool isAtExit;
-	Map* map;
-	int targetCellX;
-	int targetCellY;
-	SDL_FPoint targetPos;
-	LTexture critterTexture;
-	SDL_FRect currentRenderRect;
-	Direction currentDirection;
+    int level;
+    float hitPoints;
+    SDL_FRect position;
+    bool isAtExit;
+    Map *map;
+    int targetCellX;
+    int targetCellY;
+    SDL_FPoint targetPos;
+    LTexture critterTexture;
+    SDL_FRect currentRenderRect;
+    Direction currentDirection;
+    float distanceTravelled; /**< The distanced travelled by the critter, away from the spawn point*/
 
-	// Health bar damage effect
-	bool isHurt = false;
-	Uint64 damageTimer = 0;
-	const Uint64 damageDuration = 500;
-	float redTintAlpha = 255;
-	float greenTintAlpha = 255;
-	float blueTintAlpha = 255;
-	const float maxRedAlpha = 255;
+    // Health bar damage effect
+    bool isHurt = false;
+    Uint64 damageTimer = 0;
+    const Uint64 damageDuration = 500;
+    float redTintAlpha = 255;
+    float greenTintAlpha = 255;
+    float blueTintAlpha = 255;
+    const float maxRedAlpha = 255;
 
-	// Animation textures and frames for each direction
-	int currentFrame;
-	float animationTimer;
-	float frameTime;
-	LTexture textureWalkUp;
-	LTexture textureWalkDown;
-	LTexture textureWalkSide;
-	std::vector<SDL_FRect> animationFramesWalkUp;
-	std::vector<SDL_FRect> animationFramesWalkDown;
-	std::vector<SDL_FRect> animationFramesWalkSide;
+    // Animation textures and frames for each direction
+    int currentFrame;
+    float animationTimer;
+    float frameTime;
+    LTexture textureWalkUp;
+    LTexture textureWalkDown;
+    LTexture textureWalkSide;
+    std::vector<SDL_FRect> animationFramesWalkUp;
+    std::vector<SDL_FRect> animationFramesWalkDown;
+    std::vector<SDL_FRect> animationFramesWalkSide;
 
-	LTexture textureDeathUp;
-	LTexture textureDeathDown;
-	LTexture textureDeathSide;
-	std::vector<SDL_FRect> animationFramesDeathUp, animationFramesDeathDown, animationFramesDeathSide;
-	State currentState;
+    LTexture textureDeathUp;
+    LTexture textureDeathDown;
+    LTexture textureDeathSide;
+    std::vector<SDL_FRect> animationFramesDeathUp, animationFramesDeathDown, animationFramesDeathSide;
+    State currentState;
 };

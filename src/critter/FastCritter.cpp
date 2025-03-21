@@ -4,11 +4,9 @@
 
 FastCritter::FastCritter(int level, SDL_FRect start, Map* map)
 	: Critter(level, start, map) {
-	speed = 75.0f;
-	hitPoints = 10.0f + level * 1.0f;
-	maxHitPoints = hitPoints;
-	strength = level * 2;
-	reward = level * 10;
+	maxHitPoints += level * 1.0f;
+	hitPoints = maxHitPoints;
+	reward += level * 10;
 
 	setupAnimationFrames();
 	frameTime = (1.0f / animationFramesWalkSide.size()) * 0.5;
@@ -102,7 +100,6 @@ void FastCritter::setHitPoints(float hitPoints) {
 	this->hitPoints = hitPoints;
 }
 float FastCritter::getMaxHitPoints() const { return maxHitPoints; }
-int FastCritter::getStrength() const { return strength; }
 int FastCritter::getReward() const { return reward; }
 std::string FastCritter::getTexturePath() const { return baseTexturePath; }
 bool FastCritter::isDamaged() const {

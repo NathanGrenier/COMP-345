@@ -27,7 +27,7 @@ class Projectile
 {
 public:
     /**
-     * @brief Constructs a projectile with specific parameters.
+     * @brief Constructor with position, damage, and if projectile damages an area for a non-homing projectile
      *
      * Initializes the projectile's position, damage, speed, rotation angle,
      * and texture for rendering. This version does not take size into account.
@@ -44,7 +44,7 @@ public:
     Projectile(float x, float y, int damage, bool isArea, float rotationAngle, float xSpeed, float ySpeed, std::string texturePath);
 
     /**
-     * @brief Constructs a projectile with specific parameters, including size.
+     * @brief Constructor with position, damage, if projectile damages an area, and projectile size for a non-homing projectile
      *
      * Initializes the projectile's position, damage, speed, size, rotation angle,
      * and texture for rendering. This version supports custom projectile sizes.
@@ -60,6 +60,39 @@ public:
      * @param texturePath The file path to the texture for the projectile.
      */
     Projectile(float x, float y, int damage, bool isArea, int projectileSize, float rotationAngle, float xSpeed, float ySpeed, std::string texturePath);
+
+    /**
+     * @brief Constructor with position, damage, and if projectile damages an area for a homing projectile
+     *
+     * Initializes the projectile's position, damage, speed, rotation angle,
+     * and texture for rendering. This version does not take size into account.
+     *
+     * @param x The x position of the projectile.
+     * @param y The y position of the projectile.
+     * @param damage The amount of damage the projectile does to critters.
+     * @param isArea Whether the projectile has an area of effect (not yet implemented).
+     * @param rotationAngle The rotation angle of the projectile.
+     * @param speed The speed of the projectile.
+     * @param texturePath The file path to the texture for the projectile.
+     */
+    Projectile(float x, float y, int damage, bool isArea, float rotationAngle, float speed, Critter* targettedCritter, std::string texturePath);
+    
+    /**
+     * @brief Constructor with position, damage, if projectile damages an area, and projectile size for a homing projectile
+     *
+     * Initializes the projectile's position, damage, speed, size, rotation angle,
+     * and texture for rendering. This version supports custom projectile sizes.
+     *
+     * @param x The x position of the projectile.
+     * @param y The y position of the projectile.
+     * @param damage The amount of damage the projectile does to critters.
+     * @param isArea Whether the projectile has an area of effect (not yet implemented).
+     * @param projectileSize The size of the projectile.
+     * @param rotationAngle The rotation angle of the projectile.
+     * @param speed The speed of the projectile.
+     * @param texturePath The file path to the texture for the projectile.
+     */
+    Projectile(float x, float y, int damage, bool isArea, int projectileSize, float rotationAngle, float speed, Critter* targettedCritter, std::string texturePath);
 
     /**
      * @brief Returns the damage value of the projectile.
@@ -91,22 +124,32 @@ public:
     void generateProjectile();
 
     /**
-     * @brief Checks if the projectile is outside of the game world boundaries.
+     * @brief Checks if projectile is outside the map area
      *
-     * @return A boolean indicating if the projectile has gone outside the game world.
+     * @details Check if projectile is either horizontally or vertically out of bounds
+     * Checks both lower and upper bounds
+     * Lower bounds being 0,
+     * Upper bounds being the screen size in pixels
+     * @return true if the Projectile is out of bounds
+     * @return false if the Projectile is positioned correctly within the map
      */
     bool isOutside() const;
 
     /**
      * @brief Checks if the projectile collides with a critter.
      *
-     * This method detects whether the projectile intersects with a critter,
-     * and if so, applies damage to the critter.
-     *
      * @param critter The critter to check for collision with.
      * @return A boolean indicating whether a collision occurred.
      */
     bool checkCollision(Critter* critter) const;
+
+    /**
+     * @brief Checks if the projectile collides with the targetted critter.
+     * This check is for homing projectiles.
+     *
+     * @return A boolean indicating whether a collision occurred with the targetted Critter.
+     */
+    bool checkCollision();
 
     /**
      * @brief Updates the projectile's animation frame based on delta time.
@@ -125,6 +168,14 @@ public:
      */
     void destroy();
 
+    /**
+     * @brief Accessor for targetted Critter in the case of homing Projectile
+     * 
+     * @return nullptr if the Projectile is non-homing
+     * @return the pointer to the targettedCritter if the Projectile is homing
+     */
+    Critter* getTargettedCritter();
+
 private:
     float x; /**< The x position of the projectile. */
     float y; /**< The y position of the projectile. */
@@ -142,6 +193,8 @@ private:
     float frameDuration = 0.1f; /**< Duration of each frame in the animation (10 fps). */
 
     float rotationAngle; /**< The rotation angle of the projectile. */
-    float xSpeed; /**< The horizontal speed of the projectile. */
-    float ySpeed; /**< The vertical speed of the projectile. */
+    float xSpeed; /**< The horizontal speed of a non-homing projectile. */
+    float ySpeed; /**< The vertical speed of  a non-homing projectile. */
+    float speed; /**< The overall speed of a homing projectile. */
+    Critter* const targettedCritter;/**< The target of a homing projectile. */
 };
