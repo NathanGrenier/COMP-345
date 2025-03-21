@@ -48,6 +48,8 @@ Run the following commands to build the application in release mode:
 2. `cmake -DCMAKE_BUILD_TYPE=Release -DCMAKE_EXE_LINKER_FLAGS="-Wl,--subsystem,windows" -DBUILD_SHARED_LIBS=OFF ..`
 3. `cmake --build . --config Release`
 
+You can also use the `.\install.bat` script to build and launch the release version.
+
 ## Doxygen Comments
 
 In order to generate Doxygen documentation, you must first install the software. Follow this guide (just the installation): https://darkognu.eu/programming/tutorials/doxygen_tutorial_cpp
