@@ -258,16 +258,20 @@ bool Tower::isCritterInRange(Critter* critter)
 float Tower::calcDistance(Critter* critter) const
 {
     // considers Tower size
-    float posX = currentRenderRect.x + currentRenderRect.w / 2;
-    float posY = currentRenderRect.y + currentRenderRect.w / 2;
+    float halfTowerSize = currentRenderRect.w / 2.0f;
+    float posX = currentRenderRect.x + halfTowerSize;
+    float posY = currentRenderRect.y + halfTowerSize;
 
     // considers Critter size
-    float critterPosX = critter->getPosition().x;
-    float critterPosY = critter->getPosition().y;
+    float halfCritterSize = Global::currentMap->getPixelPerCell() * Critter::CRITTER_WIDTH_SCALE / 2.0f;
+    float critterPosX = critter->getPosition().x + halfCritterSize;
+    float critterPosY = critter->getPosition().y + halfCritterSize;
 
     // distance in each direction
     float differenceX = posX - critterPosX;
     float differenceY = posY - critterPosY;
+
+    //std::cout << differenceY << std::endl;
 
     // distance formula
     return static_cast<float>(sqrt(pow(differenceX, 2) + pow(differenceY, 2)));
