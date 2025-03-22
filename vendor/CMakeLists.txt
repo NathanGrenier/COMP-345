@@ -10,8 +10,8 @@ set(SDLIMAGE_JPEG OFF)
 set(SDLIMAGE_WEBP OFF)
 add_subdirectory(SDL_image EXCLUDE_FROM_ALL)
 # SDL_ttf
+set(SDL_TTF_SVG OFF)
 add_subdirectory(SDL_ttf EXCLUDE_FROM_ALL)
-set(SDLTTF_PLUTOSVG_ENABLED FALSE)
 # json
 add_subdirectory(json)
 
