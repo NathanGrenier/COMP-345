@@ -20,8 +20,6 @@ All assignment documentation can be found in the [`deliverables/`](deliverables/
 
 The project's documentation can be found online here: https://comp345.ngrenier.com/
 
-The [project's documentation](docs/html/index.html), generated using Doxygen, can be viewed in any web browser. It can also be [viewed as a PDF](docs/latex/refman.pdf).
-
 # Getting Started
 
 The repo can be cloned at https://github.com/NathanGrenier/COMP-345.
@@ -44,6 +42,15 @@ The repo can be cloned at https://github.com/NathanGrenier/COMP-345.
 </div>
 
 # Contributing
+
+## Building the Release Version
+
+Run the following commands to build the application in release mode:
+1. `mkdir -p ./build; cd build`
+2. `cmake -DCMAKE_BUILD_TYPE=Release -DCMAKE_EXE_LINKER_FLAGS="-Wl" ..`
+3. `cmake --build . --config Release`
+
+You can also use the `.\install.bat` script to build and launch the release version.
 
 ## Doxygen Comments
 

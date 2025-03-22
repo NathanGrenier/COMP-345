@@ -1,5 +1,9 @@
 add_executable(${PROJECT_NAME})
-target_sources(${PROJECT_NAME} PRIVATE main.cpp LTimer.cpp "include/critter/CritterObserver.h")
+set_target_properties(COMP-345 PROPERTIES
+    WIN32_EXECUTABLE $<IF:$<CONFIG:Release>,TRUE,FALSE>
+)
+
+target_sources(${PROJECT_NAME} PRIVATE main.cpp LTimer.cpp)
 target_link_libraries(${PROJECT_NAME} PRIVATE vendor states ui map util towers)
 
 target_include_directories(${PROJECT_NAME} PUBLIC ${CMAKE_CURRENT_SOURCE_DIR}/include)

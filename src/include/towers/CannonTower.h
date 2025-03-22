@@ -10,25 +10,27 @@
  * Much more expensive variation of StandardTower
  * Implements shooting projectiles at critters at a slow pace
  * Upgrades are for range, rate of fire, and power
- *
  */
 
 #pragma once
 #include <critter/Critter.h>
 #include "Tower.h"
 
-class CannonTower : public Tower
-{
+class CannonTower : public Tower {
 public:
-    static const int CANNON_RANGE = 125; /** @brief default range for CannonTower */
-    static const int CANNON_POWER = 10; /** @brief default projectile damage for CannonTower */
-    static const int CANNON_RATE_OF_FIRE = 1; /** @brief default rate of fire for CannonTower */
-    static const int CANNON_MAX_LEVEL = 3; /** @brief default maxmimum level for CannonTower */
+	static const int CANNON_RANGE = 150;      /** @brief default range for CannonTower */
+	static const int CANNON_POWER = 20;       /** @brief default projectile damage for CannonTower */
+	static const int CANNON_RATE_OF_FIRE = 1; /** @brief default rate of fire for CannonTower */
+	static const int CANNON_MAX_LEVEL = 3;    /** @brief default maxmimum level for CannonTower */
 
-    CannonTower();
-    CannonTower(float x, float y, int buyingCost);
-    CannonTower(float x, float y, int buyingCost, int refundValue);
+	static const int rangeIncreasePerLevel = 50;
+	static const int powerIncreasePerLevel = 15;
+	static const int rateOfFireIncreasePerLevel = 1;
 
-    int getMaxLevel();
-    void shootProjectile(Critter* critter);
+	CannonTower();
+	CannonTower(float x, float y, float width, int buyingCost);
+	CannonTower(float x, float y, float width, int buyingCost, int refundValue);
+
+	int getMaxLevel();
+	void shootProjectile(Critter* targettedCritter);
 };

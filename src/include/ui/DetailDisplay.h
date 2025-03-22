@@ -13,29 +13,29 @@
 
 class DetailDisplay {
 public:
-	static const int DETAIL_BORDER_WIDTH = 4; /** @brief width of the disply border */
+	static const int DETAIL_BORDER_WIDTH = 4; /**< @brief width of the disply border */
 
 	// constructors
 	DetailDisplay();
-	DetailDisplay(int width, int height);
+	DetailDisplay(float width, float height);
 
 	// accessors and mutators
 	void setPosition(float x, float y);
-	SDL_FPoint getPosition();
+	SDL_FPoint getPosition() const;
 
-	void setWidth(int width);
-	int getWidth();
+	void setWidth(float width);
+	float getWidth() const;
 
-	void setHeight(int height);
-	int getHeight();
+	void setHeight(float height);
+	float getHeight() const;
 
 	// shows rectangle box
 	virtual void render();
 
 protected:
-	int width;
-	int height;
+	float width; /**< @brief width of the display */
+	float height; /**< @brief height of the display */
 
-	SDL_FPoint mPosition; /** @brief top left position of the display */
+	SDL_FPoint mPosition; /**< @brief top left position of the display */
 };
 

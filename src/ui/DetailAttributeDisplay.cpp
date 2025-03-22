@@ -13,6 +13,9 @@
 #include <critter/CritterObserver.h>
 #include <Global.h>
 
+
+const float DetailAttributeDisplay::ATTRIBUTE_DISPLAY_WIDTH = Global::viewerWidth;
+
 /**
  * @brief Default constructor.
  */
@@ -21,7 +24,7 @@ DetailAttributeDisplay::DetailAttributeDisplay()
 {
     setPosition(Global::kScreenWidth - getWidth(), 0);
 
-    int componentWidth = ATTRIBUTE_DISPLAY_WIDTH - 2 * DetailDisplayComponent::DETAIL_COMPONENT_PADDING;
+    float componentWidth = ATTRIBUTE_DISPLAY_WIDTH - 2 * DetailDisplayComponent::DETAIL_COMPONENT_PADDING;
 
     // Existing components for Towers
     components.push_back(new DetailLabel(componentWidth, "assets/ui/BuyTower.png"));
@@ -29,7 +32,7 @@ DetailAttributeDisplay::DetailAttributeDisplay()
     components.push_back(new DetailButton(componentWidth, "assets/ui/RapidFireTower.png"));
     components.push_back(new DetailButton(componentWidth, "assets/ui/CannonTower.png"));
 
-    int currentY = DetailDisplayComponent::DETAIL_COMPONENT_PADDING;
+    float currentY = DetailDisplayComponent::DETAIL_COMPONENT_PADDING;
 
     // Initialize Tower buttons
     for (int i = 0; i < components.size(); i++) {
@@ -37,8 +40,8 @@ DetailAttributeDisplay::DetailAttributeDisplay()
         currentY += DetailDisplayComponent::DETAIL_COMPONENT_SPACING;
     }
 
-    towerObserver = new TowerObserver(mPosition.x + DetailDisplayComponent::DETAIL_COMPONENT_PADDING, currentY + DetailDisplayComponent::DETAIL_COMPONENT_SPACING);
-    critterObserver = new CritterObserver(mPosition.x + DetailDisplayComponent::DETAIL_COMPONENT_PADDING, currentY + DetailDisplayComponent::DETAIL_COMPONENT_SPACING);
+    towerObserver = new TowerObserver(mPosition.x + DetailDisplayComponent::DETAIL_COMPONENT_PADDING, currentY + DetailDisplayComponent::TOWER_COMPONENT_SPACING);
+    critterObserver = new CritterObserver(mPosition.x + DetailDisplayComponent::DETAIL_COMPONENT_PADDING, currentY + DetailDisplayComponent::CRITTER_COMPONENT_SPACING);
 }
 
 /**
@@ -52,7 +55,7 @@ std::vector<DetailDisplayComponent*> DetailAttributeDisplay::getComponents()
 
 /**
  * @brief Accessor for Tower detail components
- * @return the array of DetailDisplayComponent object pointers for the TowerObserver
+ * @return the vector of DetailDisplayComponent object pointers for the TowerObserver
  */
 std::vector<DetailDisplayComponent*> DetailAttributeDisplay::getTowerComponents()
 {
@@ -107,25 +110,37 @@ bool DetailAttributeDisplay::isDisplayingTower()
  * Also calls the TowerObserver object's buttons' handleEvent(e) methods
  * @param e the event to be handled for the DetailButton
  */
-void DetailAttributeDisplay::handleButtonEvents(SDL_Event* e)
+void DetailAttributeDisplay::handleButtonEvents(SDL_Event& e)
 {
     // handles buy Tower buttons
-    (dynamic_cast<DetailButton*>(components[1]))->handleEvent(e);
-    (dynamic_cast<DetailButton*>(components[2]))->handleEvent(e);
-    (dynamic_cast<DetailButton*>(components[3]))->handleEvent(e);
+    (dynamic_cast<DetailButton*>(components[1]))->handleEvent(&e);
+    (dynamic_cast<DetailButton*>(components[2]))->handleEvent(&e);
+    (dynamic_cast<DetailButton*>(components[3]))->handleEvent(&e);
     
     // handles buttons from TowerObserver
     towerObserver->handleButtonEvents(e);
 }
 
+/**
+ * @brief Accessor for critter component vector
+ * @return the DetailDisplayComponent objects for the Critter UI
+ */
 std::vector<DetailDisplayComponent*> DetailAttributeDisplay::getCritterComponents() {
     return critterComponents;
 }
 
+/**
+ * @brief Accessor for the CritterObserver
+ * @return the CritterObserver used in the DetailDisplay
+ */
 CritterObserver* DetailAttributeDisplay::getCritterObserver() {
     return critterObserver;
 }
 
+/**
+ * @brief Selects Critter to be shown through the CritterObserver
+ * @param critter the Tower to have details displayed in the CritterObserver
+ */
 void DetailAttributeDisplay::selectCritter(Critter* critter) {
     // When a critter is selected, you could set its details to the display components or perform additional logic
     if (critter != nullptr) {
@@ -140,6 +155,11 @@ void DetailAttributeDisplay::selectCritter(Critter* critter) {
     towerObserver->setCurrentTower(nullptr);
 }
 
+/**
+ * @brief Checks if Critter details are currently supposed to be displayed
+ * @return true if Critter details should be displayed
+ * @return false if Critter details should not be displayed, either empty or Tower
+ */
 bool DetailAttributeDisplay::isDisplayingCritter() {
     return critterObserver->getCurrentCritter() != nullptr;
 }

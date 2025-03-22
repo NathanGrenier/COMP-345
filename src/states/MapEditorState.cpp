@@ -20,14 +20,16 @@ MapEditorState* MapEditorState::get() {
 
 bool MapEditorState::enter() {
 	if (Global::currentMap == nullptr) {
-		Global::currentMap = new Map(15, 15, "Default");
+		map = new Map(15, 15, "Default");
 		mMessageTexture.loadFromFile("assets/ui/MapCreation.png");
-	} else {
+	}
+	else {
+		map = Global::currentMap;
 		mMessageTexture.loadFromFile("assets/ui/MapEditing.png");
 	}
-	map = Global::currentMap;
 	originalName = map->getName();
 	map->setFlowFieldVisibility(true);
+	map->setCurrentRenderRect(Global::mapViewRect);
 
 	backButton.loadFromFile("assets/ui/LeftArrow.png");
 
@@ -73,19 +75,19 @@ bool MapEditorState::enter() {
 	float buttonStartY = Global::headerHeight;
 
 	// Apply aspect ratio scaling
-	backButton.setSizeWithAspectRatio(mMessageTexture.getHeight() * 0.75, 0);
-	removeColumn.setSizeWithAspectRatio(squareButtonWidth, 0);
-	addColumn.setSizeWithAspectRatio(squareButtonWidth, 0);
-	removeRow.setSizeWithAspectRatio(squareButtonWidth, 0);
-	addRow.setSizeWithAspectRatio(squareButtonWidth, 0);
+	backButton.setSizeWithAspectRatio(mMessageTexture.getHeight() * 0.75f, 0.f);
+	removeColumn.setSizeWithAspectRatio(squareButtonWidth, 0.f);
+	addColumn.setSizeWithAspectRatio(squareButtonWidth, 0.f);
+	removeRow.setSizeWithAspectRatio(squareButtonWidth, 0.f);
+	addRow.setSizeWithAspectRatio(squareButtonWidth, 0.f);
 
-	selectStartPos.setSizeWithAspectRatio(buttonWidth, 0);
-	selectEndPos.setSizeWithAspectRatio(buttonWidth, 0);
-	selectWallCell.setSizeWithAspectRatio(buttonWidth, 0);
-	toggleFlowFieldVisibility.setSizeWithAspectRatio(buttonWidth, 0);
+	selectStartPos.setSizeWithAspectRatio(buttonWidth, 0.f);
+	selectEndPos.setSizeWithAspectRatio(buttonWidth, 0.f);
+	selectWallCell.setSizeWithAspectRatio(buttonWidth, 0.f);
+	toggleFlowFieldVisibility.setSizeWithAspectRatio(buttonWidth, 0.f);
 
-	saveMapButton.setSizeWithAspectRatio(Global::viewerWidth / 2 - 5, 0);
-	renameButton.setSizeWithAspectRatio(Global::viewerWidth / 2 - 5, 0);
+	saveMapButton.setSizeWithAspectRatio(Global::viewerWidth / 2 - 5, 0.f);
+	renameButton.setSizeWithAspectRatio(Global::viewerWidth / 2 - 5, 0.f);
 
 	// Set button positions first, then apply size
 	float renderedWidth = Global::kScreenWidth * 0.5f;
@@ -114,7 +116,6 @@ bool MapEditorState::enter() {
 
 
 bool MapEditorState::exit() {
-	Global::currentMap = nullptr;
 	map = nullptr;
 
 	backButton.destroy();
@@ -142,6 +143,8 @@ bool MapEditorState::exit() {
 }
 
 void MapEditorState::handleEvent(SDL_Event& e) {
+	if (map == nullptr) return;
+
 	backButton.handleEvent(&e);
 
 	addColumn.handleEvent(&e);
@@ -198,20 +201,15 @@ void MapEditorState::handleEvent(SDL_Event& e) {
 			// Attempt to delete the original map file
 			if (std::remove(originalMapPath.c_str()) != 0) {
 				std::cerr << "Error: Failed to delete the original map file: " << originalMapPath << std::endl;
-			} else {
-				std::cout << "Original map file deleted successfully: " << originalMapPath << std::endl;
 			}
 
 			// Attempt to delete the current map file (if it exists)
 			if (originalMapPath != newMapPath && std::remove(newMapPath.c_str()) != 0) {
 				std::cerr << "Error: Failed to delete the current map file: " << newMapPath << std::endl;
-			} else {
-				std::cout << "Current map file deleted successfully: " << newMapPath << std::endl;
 			}
 
 			// Save the map as a new JSON file
 			if (map->saveToJson(newMapPath)) {
-				std::cout << "Map saved successfully to: " << newMapPath << std::endl;
 				currentMessage.loadFromRenderedText("Save Success!", { 0, 0, 0, 255 });
 			} else {
 				std::cerr << "Failed to save the map." << std::endl;
@@ -240,16 +238,16 @@ void MapEditorState::handleEvent(SDL_Event& e) {
 	SDL_GetMouseState(&mouseX, &mouseY);
 
 	// Calculate scaling factor
-	float mapWidth = map->cellCountX * map->PIXELS_PER_CELL;
-	float mapHeight = map->cellCountY * map->PIXELS_PER_CELL;
+	float mapWidth = map->cellCountX * map->getPixelPerCell();
+	float mapHeight = map->cellCountY * map->getPixelPerCell();
 	float scaleX = currentRenderRect.w / mapWidth;
 	float scaleY = currentRenderRect.h / mapHeight;
 	float scale = std::min(scaleX, scaleY);
 
 	// Convert mouse position
 	Vector2D mousePosition(
-		(mouseX - currentRenderRect.x) / scale / map->PIXELS_PER_CELL,
-		(mouseY - currentRenderRect.y) / scale / map->PIXELS_PER_CELL
+		(mouseX - currentRenderRect.x) / scale / map->getPixelPerCell(),
+		(mouseY - currentRenderRect.y) / scale / map->getPixelPerCell()
 	);
 
 	if (map != nullptr) {
@@ -318,7 +316,7 @@ void MapEditorState::render() {
 	float buttonStartX = Global::kScreenWidth - Global::viewerWidth - (Global::viewerWidth - buttonWidth) / 2.0f;
 	float buttonStartY = Global::headerHeight + 20;
 
-	map->drawOnTargetRect(gRenderer, mapView);
+	map->drawOnTargetRect(mapView);
 
 	mMessageTexture.render((Global::kScreenWidth - Global::kScreenWidth * 0.5) / 2, titleDistanceFromTop, nullptr, Global::kScreenWidth * 0.5, -1);
 

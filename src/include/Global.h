@@ -27,14 +27,14 @@ extern TTF_Font* gFont; ///< Global pointer to the font used for rendering text.
  */
 class Global {
 public:
-	static int viewerWidth;
-	static int headerHeight;
+    static inline const float kScreenWidth{ 800 };  // Constant, set at compile-time
+    static inline const float kScreenHeight{ 600 }; // Constant, set at compile-time
 
-	static constexpr int kScreenWidth{ 800 };
-	static constexpr int kScreenHeight{ 600 };
+    static float viewerWidth;  // This will now be settable
+    static float headerHeight;  // Constant value
 
-	static Map* currentMap;
-	static SDL_FRect mapViewRect;
+    static Map* currentMap;
+    static SDL_FRect mapViewRect;
 };
 
 /**
