@@ -1,4 +1,8 @@
 add_executable(${PROJECT_NAME})
+set_target_properties(COMP-345 PROPERTIES
+    WIN32_EXECUTABLE $<IF:$<CONFIG:Release>,TRUE,FALSE>
+)
+
 target_sources(${PROJECT_NAME} PRIVATE main.cpp LTimer.cpp)
 target_link_libraries(${PROJECT_NAME} PRIVATE vendor states ui map util towers)
 

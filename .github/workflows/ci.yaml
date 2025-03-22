@@ -20,17 +20,17 @@ jobs:
 
       - name: Get Gitmodules (Recursively)
         run: git submodule update --init --recursive
-           
+          
+      - name: Build the Release Build
+        run: ./install.bat
+
       - name: Create Build Directory
-        run: mkdir -p ./build
+        run: mkdir -p ./build2
 
       - name: Configure CMake Project
-        working-directory: ./build
-        run: cmake -DCMAKE_BUILD_TYPE=Release -DCMAKE_EXE_LINKER_FLAGS="-Wl,--subsystem,windows" -DBUILD_SHARED_LIBS=OFF ..
+        working-directory: ./build2
+        run: cmake -DCMAKE_BUILD_TYPE=Release -DCMAKE_EXE_LINKER_FLAGS="-Wl" -DBUILD_SHARED_LIBS=OFF ..
 
       - name: Build the Project
-        working-directory: ./build
+        working-directory: ./build2
         run: cmake --build . --config Release
-
-      - name: Install the Release Build
-        run: ./install.bat
