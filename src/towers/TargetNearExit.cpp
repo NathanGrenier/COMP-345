@@ -20,7 +20,7 @@ Critter* TargetNearExit::targetCritter(std::vector<Critter*> critters, Tower& to
 	for (int i = 0; i < critters.size(); i++)
 	{
 		Critter* critter = critters[i];
-		if (tower.isCritterInRange(critter))
+		if (critter->isAlive() && tower.isCritterInRange(critter))
 		{
 			// replacing currently selected critter
 			if (currentCritter != nullptr)

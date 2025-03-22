@@ -26,65 +26,67 @@
   */
 class Powerup {
 public:
-    /**
-     * @brief Constructs a Powerup object with a specific position and texture.
-     * @param position The position of the powerup in the game world.
-     * @param powerupPath The file path to the texture of the powerup.
-     */
-    Powerup(SDL_FRect position, std::string powerupPath);
+	/**
+	 * @brief Constructs a Powerup object with a specific position and texture.
+	 * @param position The position of the powerup in the game world.
+	 * @param powerupPath The file path to the texture of the powerup.
+	 */
+	Powerup(SDL_FRect position, std::string powerupPath);
 
-    /**
-     * @brief Destructor for the Powerup class.
-     * Cleans up any allocated resources, such as textures.
-     */
-    virtual ~Powerup();
+	/**
+	 * @brief Destructor for the Powerup class.
+	 * Cleans up any allocated resources, such as textures.
+	 */
+	virtual ~Powerup();
 
-    /**
-     * @brief Checks if the powerup was clicked by the player.
-     * @param mouseX The X-coordinate of the mouse cursor.
-     * @param mouseY The Y-coordinate of the mouse cursor.
-     * @return true if the powerup was clicked, false otherwise.
-     */
-    virtual bool isClicked(float mouseX, float mouseY) const;
+	/**
+	 * @brief Checks if the powerup was clicked by the player.
+	 * @param mouseX The X-coordinate of the mouse cursor.
+	 * @param mouseY The Y-coordinate of the mouse cursor.
+	 * @return true if the powerup was clicked, false otherwise.
+	 */
+	virtual bool isClicked(float mouseX, float mouseY) const;
 
-    /**
-     * @brief Applies the powerup effect to a given tower.
-     * This is a pure virtual function, meant to be implemented by derived classes to apply specific power-up effects to towers.
-     * @param tower The tower to apply the powerup to.
-     * @param towerPosition The position of the tower.
-     * @return A pointer to the modified tower.
-     */
-    virtual Tower* applyPowerupToTower(Tower* tower, SDL_FRect towerPosition) = 0;
+	/**
+	 * @brief Applies the powerup effect to a given tower.
+	 * This is a pure virtual function, meant to be implemented by derived classes to apply specific power-up effects to towers.
+	 * @param tower The tower to apply the powerup to.
+	 * @param towerPosition The position of the tower.
+	 * @return A pointer to the modified tower.
+	 */
+	virtual Tower* applyPowerupToTower(Tower* tower, SDL_FRect towerPosition) = 0;
 
-    /**
-     * @brief Renders the powerup on the screen.
-     * This function draws the powerup at its current position on the screen.
-     */
-    void render();
+	/**
+	 * @brief Renders the powerup on the screen.
+	 * This function draws the powerup at its current position on the screen.
+	 */
+	void render();
 
-    /**
-     * @brief Updates the powerup's state.
-     * This method updates the powerup's frame (for animation) and applies the bobbing effect.
-     * @param deltaTime The time elapsed since the last frame, used for frame cycling and updating the bobbing effect.
-     */
-    void update(float deltaTime);
+	/**
+	 * @brief Updates the powerup's state.
+	 * This method updates the powerup's frame (for animation) and applies the bobbing effect.
+	 * @param deltaTime The time elapsed since the last frame, used for frame cycling and updating the bobbing effect.
+	 */
+	void update(float deltaTime);
 
-    SDL_FRect position; /**< @brief The current position of the powerup in the game world */
+	SDL_FRect position; /**< @brief The current position of the powerup in the game world */
 
 public:
-    bool isDragged = false; /**< @brief Indicates whether the powerup is being dragged by the player */
+	bool isDragged = false; /**< @brief Indicates whether the powerup is being dragged by the player */
 
 protected:
-    LTexture powerupTexture; /**< @brief The texture used for displaying the powerup */
-    LTexture indicatorTexture; /**< @brief The texture used for displaying the powerup's indicator */
+	LTexture powerupTexture; /**< @brief The texture used for displaying the powerup */
+	LTexture indicatorTexture; /**< @brief The texture used for displaying the powerup's indicator */
 
-    // Frame cycling variables for animation
-    int currentFrame; /**< @brief The current frame of the powerup's animation (0-3) */
-    float frameTime; /**< @brief The accumulated time for frame cycling */
-    float frameDuration; /**< @brief The duration of each frame in the animation (1/60th of a second for 60 FPS) */
+	// Frame cycling variables for animation
+	int currentFrame; /**< @brief The current frame of the powerup's animation (0-3) */
+	float frameTime; /**< @brief The accumulated time for frame cycling */
+	float frameDuration; /**< @brief The duration of each frame in the animation (1/60th of a second for 60 FPS) */
 
-    // Bobbing effect variables
-    float bobbingSpeed; /**< @brief The speed at which the powerup bobs up and down */
-    float bobbingHeight; /**< @brief The height of the bobbing movement */
-    float bobbingOffset; /**< @brief The current vertical offset for the bobbing effect */
+	// Bobbing effect variables
+	float bobbingSpeed; /**< @brief The speed at which the powerup bobs up and down */
+	float bobbingHeight; /**< @brief The height of the bobbing movement */
+	float bobbingOffset; /**< @brief The current vertical offset for the bobbing effect */
+
+	static constexpr float SIZE_SCALE_FACTOR = 0.8f;
 };
