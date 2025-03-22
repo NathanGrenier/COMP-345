@@ -1,5 +1,16 @@
 # About
 
+## How to Play
+You can download and play the game here: https://github.com/NathanGrenier/COMP-345/releases
+
+Steps:
+1. Download the `COMP-345.zip` file.
+2. Unzip it.
+3. Run the `COMP-345.exe` file.
+
+> [!IMPORTANT]
+> The game only runs on Windows.
+
 ## Team Members
 
 | Name            | Student ID | Email                      |
