@@ -23,7 +23,7 @@ jobs:
         run: git submodule update --init --recursive
 
       - name: Install the Release Build
-        run: ./install.bat /skipstart
+        run: ./install.bat /skipstart /verbose /clean-pb
 
       - name: Zip the Release Directory
         working-directory: ./build
