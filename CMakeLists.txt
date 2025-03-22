@@ -5,10 +5,6 @@ set(CMAKE_RUNTIME_OUTPUT_DIRECTORY ${CMAKE_CURRENT_BINARY_DIR})
 set(CMAKE_CXX_STANDARD 23)
 set(CMAKE_CXX_STANDARD_REQUIRED ON)
 
-#if(MSVC)
-#    add_compile_definitions(_CRT_SECURE_NO_WARNINGS)
-#endif()
-
 # Could also be added to CMakeSettings.json ("cmakeCommandArgs": "-DBUILD_SHARED_LIBS=OFF",)
 set(BUILD_SHARED_LIBS ON)
 

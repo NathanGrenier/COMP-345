@@ -2,6 +2,7 @@
 set(SDL_TEST OFF)
 
 # SDL
+set(SDL_XINPUT OFF)
 add_subdirectory(SDL EXCLUDE_FROM_ALL)
 # SDL_image
 set(SDLIMAGE_AVIF OFF)
