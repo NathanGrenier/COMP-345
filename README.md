@@ -41,6 +41,15 @@ The repo can be cloned at https://github.com/NathanGrenier/COMP-345.
 
 # Contributing
 
+## Building the Release Version
+
+Run the following commands to build the application in release mode:
+1. `mkdir -p ./build; cd build`
+2. `cmake -DCMAKE_BUILD_TYPE=Release -DCMAKE_EXE_LINKER_FLAGS="-Wl" ..`
+3. `cmake --build . --config Release`
+
+You can also use the `.\install.bat` script to build and launch the release version.
+
 ## Doxygen Comments
 
 In order to generate Doxygen documentation, you must first install the software. Follow this guide (just the installation): https://darkognu.eu/programming/tutorials/doxygen_tutorial_cpp

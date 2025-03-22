@@ -18,16 +18,15 @@
  * @brief Default constructor.
  */
 DetailDisplayComponent::DetailDisplayComponent()
-    : width(0), xPosition(0), yPosition(0)
-{
-    
+	: width(0), xPosition(0), yPosition(0) {
+
 }
 
 /**
  * @brief Constructor containing width
  * @param width the width of a DetailDisplayComponent
- * 
- * @details Width is used for scaling. 
+ *
+ * @details Width is used for scaling.
  * Generally, components are scaled with aspect ratio kept constant.
  * Having a width locks the height based on the aspect ratio of the DetailDisplayComponent
  */
@@ -43,10 +42,9 @@ DetailDisplayComponent::DetailDisplayComponent(float width)
  * @param x The x-coordinate of the DetailDisplayComponent.
  * @param y The y-coordinate of the DetailDisplayComponent.
  */
-void DetailDisplayComponent::setComponentPosition(float x, float y)
-{
-    xPosition = x;
-    yPosition = y;
+void DetailDisplayComponent::setComponentPosition(float x, float y) {
+	xPosition = x;
+	yPosition = y;
 }
 
 /**
@@ -71,7 +69,7 @@ float DetailDisplayComponent::getComponentYPosition()
 
 /**
  * @brief Draws a box for a DetailDisplayComponent
- * 
+ *
  * @details Rectangle is based on width and default height.
  * Generally, this method is overridden when the DetailDisplayComponent instead uses an image (like in the case of buttons)
  */

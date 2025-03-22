@@ -22,7 +22,7 @@ Critter* TargetStrongest::targetCritter(std::vector<Critter*> critters, Tower& t
 		Critter* critter = critters[i];
 
 		// checks if critter is in range
-		if (tower.isCritterInRange(critter))
+		if (critter->isAlive() && tower.isCritterInRange(critter))
 		{
 			if (currentCritter != nullptr)
 			{

@@ -48,10 +48,10 @@ void LButton::handleEvent(SDL_Event* e) {
 		SDL_GetMouseState(&x, &y);
 
 		SDL_FRect spriteClips[] = {
-			{ 0.f, 0 * kButtonHeight, kButtonWidth, kButtonHeight },
-			{ 0.f, 1 * kButtonHeight, kButtonWidth, kButtonHeight },
-			{ 0.f, 2 * kButtonHeight, kButtonWidth, kButtonHeight },
-			{ 0.f, 3 * kButtonHeight, kButtonWidth, kButtonHeight },
+			{ 0.f, static_cast<float>(0 * kButtonHeight), static_cast<float>(kButtonWidth), static_cast<float>(kButtonHeight)},
+			{ 0.f, static_cast<float>(1 * kButtonHeight), static_cast<float>(kButtonWidth), static_cast<float>(kButtonHeight)},
+			{ 0.f, static_cast<float>(2 * kButtonHeight), static_cast<float>(kButtonWidth), static_cast<float>(kButtonHeight)},
+			{ 0.f, static_cast<float>(3 * kButtonHeight), static_cast<float>(kButtonWidth), static_cast<float>(kButtonHeight)},
 		};
 
 		// Calculate the clip's width and height based on the current sprite
@@ -124,11 +124,12 @@ bool LButton::loadFromFile(std::string path) {
  */
 void LButton::render() {
 	SDL_FRect spriteClips[] = {
-	{ 0.f, 0 * originalHeight, originalWidth, originalHeight},
-	{ 0.f, 1 * originalHeight, originalWidth, originalHeight },
-	{ 0.f, 2 * originalHeight, originalWidth, originalHeight },
-	{ 0.f, 3 * originalHeight, originalWidth, originalHeight },
+	{ 0.f, static_cast<float>(0 * originalHeight), static_cast<float>(originalWidth), static_cast<float>(originalHeight) },
+	{ 0.f, static_cast<float>(1 * originalHeight), static_cast<float>(originalWidth), static_cast<float>(originalHeight) },
+	{ 0.f, static_cast<float>(2 * originalHeight), static_cast<float>(originalWidth), static_cast<float>(originalHeight) },
+	{ 0.f, static_cast<float>(3 * originalHeight), static_cast<float>(originalWidth), static_cast<float>(originalHeight) },
 	};
+
 
 	// Render the button using the current sprite state
 	gButtonSpriteTexture.render(mPosition.x, mPosition.y, &spriteClips[mCurrentSprite], kButtonWidth, kButtonHeight);

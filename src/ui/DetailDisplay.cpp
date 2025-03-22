@@ -11,8 +11,7 @@
  /**
   * @brief Default Constructor
   */
-DetailDisplay::DetailDisplay() : mPosition{ 0.f, 0.f }, width(0), height(0)
-{
+DetailDisplay::DetailDisplay() : mPosition{ 0.f, 0.f }, width(0), height(0) {
 
 }
 
@@ -68,10 +67,9 @@ void DetailDisplay::setHeight(float height)
  * @param x The x-coordinate of the DetailDisplay.
  * @param y The y-coordinate of the DetailDisplay.
  */
-void DetailDisplay::setPosition(float x, float y) 
-{
-    mPosition.x = x;
-    mPosition.y = y;
+void DetailDisplay::setPosition(float x, float y) {
+	mPosition.x = x;
+	mPosition.y = y;
 }
 
 /**
@@ -86,7 +84,7 @@ SDL_FPoint DetailDisplay::getPosition() const
 
 /**
  * @brief To render the DetailDisplay
- * 
+ *
  * @details Draws the box for the DetailDisplay
  * Generates a rectangle with a border
  */

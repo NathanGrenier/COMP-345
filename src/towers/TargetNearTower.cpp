@@ -22,7 +22,7 @@ Critter* TargetNearTower::targetCritter(std::vector<Critter*> critters, Tower& t
 	{
 		// checks if critter is in range
 		Critter* critter = critters[i];
-		if (tower.isCritterInRange(critter))
+		if (critter->isAlive() && tower.isCritterInRange(critter))
 		{
 			
 			// checks distance from Tower and replaces if critter is closer
