@@ -10,8 +10,7 @@ on:
 jobs:
   build:
     name: Build C++ Project on Windows
-    runs-on: windows-latest
-    # runs-on: windows-2022
+    runs-on: windows-2025
     steps:
       - name: Checkout repository
         uses: actions/checkout@v3
