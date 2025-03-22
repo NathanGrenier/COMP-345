@@ -7,7 +7,7 @@ rmdir /s /q build 2>nul
 mkdir build & cd build
 
 :: Configure and build
-cmake -DCMAKE_BUILD_TYPE=Release -DCMAKE_EXE_LINKER_FLAGS="-Wl" -DBUILD_SHARED_LIBS=OFF ..
+cmake -DCMAKE_BUILD_TYPE=Release -DCMAKE_EXE_LINKER_FLAGS="-Wl" ..
 cmake --build . --config Release
 
 :: Start the Executable

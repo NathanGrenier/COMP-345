@@ -11,7 +11,7 @@ permissions:
 jobs:  
   release:
     name: 🚀 Windows Release
-    runs-on: windows-latest
+    runs-on: windows-2025
     steps:
       - name: Checkout repository
         uses: actions/checkout@v3
@@ -21,20 +21,20 @@ jobs:
 
       - name: Get Gitmodules (Recursively)
         run: git submodule update --init --recursive
-        
-      - name: Create Build Directory
-        run: mkdir -p ./build
 
       - name: Install the Release Build
         run: ./install.bat
         
-      - name: Configure CMake Project
-        working-directory: ./build
-        run: cmake -DCMAKE_BUILD_TYPE=Release -DCMAKE_EXE_LINKER_FLAGS="-Wl,--subsystem,windows" -DBUILD_SHARED_LIBS=OFF ..
+      # - name: Create Build Directory
+      #   run: mkdir -p ./build
 
-      - name: Build the Project
-        working-directory: ./build
-        run: cmake --build . --config Release
+      # - name: Configure CMake Project
+      #   working-directory: ./build
+      #   run: cmake -DCMAKE_BUILD_TYPE=Release -DCMAKE_EXE_LINKER_FLAGS="-Wl" ..
+
+      # - name: Build the Project
+      #   working-directory: ./build
+      #   run: cmake --build . --config Release
 
       - name: Zip the Release Directory
         working-directory: ./build
