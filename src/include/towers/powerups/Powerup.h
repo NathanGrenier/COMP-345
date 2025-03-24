@@ -73,6 +73,7 @@ public:
 
 public:
 	bool isDragged = false; /**< @brief Indicates whether the powerup is being dragged by the player */
+	bool markForDespawn = false;
 
 protected:
 	LTexture powerupTexture; /**< @brief The texture used for displaying the powerup */
@@ -87,6 +88,11 @@ protected:
 	float bobbingSpeed; /**< @brief The speed at which the powerup bobs up and down */
 	float bobbingHeight; /**< @brief The height of the bobbing movement */
 	float bobbingOffset; /**< @brief The current vertical offset for the bobbing effect */
+
+	float lifetime;      // Total lifetime before despawning
+	float elapsedTime;   // Tracks how long the powerup has existed
+	float flickerStartTime; // When the flickering should begin
+	bool isVisible;
 
 	static constexpr float SIZE_SCALE_FACTOR = 0.8f;
 };

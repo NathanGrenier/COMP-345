@@ -134,10 +134,18 @@ void TowerGroup::update(float deltaTime, std::vector<Critter *> critters)
 				}
 			}
 		}
+	}
 
-		for (Powerup *powerup : activePowerups)
-		{
-			powerup->update(0.0008f);
+	for (auto it = activePowerups.begin(); it != activePowerups.end(); ) {
+		Powerup* powerup = *it;
+		powerup->update(0.0008f);
+
+		if (powerup->markForDespawn) {
+			delete powerup;  // Free memory
+			it = activePowerups.erase(it);  // Remove from list and move iterator
+		}
+		else {
+			++it;
 		}
 	}
 }
