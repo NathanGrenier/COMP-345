@@ -8,7 +8,7 @@ add_library(ui STATIC
     DetailButton.cpp
     DetailAttribute.cpp
     "../towers/TowerObserver.cpp"
-)
+ "ParallaxBackground.cpp")
 
 target_include_directories(ui PUBLIC ${CMAKE_SOURCE_DIR}/src/include)
 

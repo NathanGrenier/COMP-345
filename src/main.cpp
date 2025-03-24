@@ -53,6 +53,12 @@ SDL_FRect Global::mapViewRect = {
 	static_cast<float>(Global::kScreenHeight - Global::headerHeight) - 2 * Global::kScreenHeight * 0.02f
 };
 
+bool isFading = false; // Controls when fading occurs
+float fadeAlpha = 0.0f; // Alpha value (0 = fully visible, 255 = fully black)
+bool fadeIn = false; // Determines fade direction
+LTimer fadeTimer; // Timer for tracking fade duration
+constexpr Uint64 fadeDuration = 500'000'000;
+
 /**
  * @brief Sets the next game state.
  *
@@ -73,10 +79,11 @@ void setNextState(GameState* newState) {
  */
 void changeState() {
 	if (gNextState != nullptr) {
-		gCurrentState->exit();
-		gNextState->enter();
-		gCurrentState = gNextState;
-		gNextState = nullptr;
+		// Start fading
+		isFading = true;
+		fadeIn = false; // Start with fade-out effect
+		fadeAlpha = 0.0f;
+		fadeTimer.start();
 	}
 }
 
@@ -214,48 +221,76 @@ int main(int argc, char* args[]) {
 
 			// Main game loop
 			while (!quit) {
-				// Reset FPS calculations if needed
-				if (resetFps) {
-					fpsTimer.start();
-					renderedFrames = 0;
-					renderingNS = 0;
-					resetFps = false;
-				}
-
 				// Start frame timer
 				capTimer.start();
 
 				// Process events
 				while (SDL_PollEvent(&e)) {
-					// Handle events in the current state
 					gCurrentState->handleEvent(e);
 
-					// Handle quit event
 					if (e.type == SDL_EVENT_QUIT) {
+						std::cout << "[DEBUG] Quit event received. Transitioning to ExitState.\n";
 						setNextState(ExitState::get());
 						quit = true;
-					} else if (e.type == SDL_EVENT_KEY_DOWN && e.key.key == SDLK_ESCAPE) {
+					}
+					else if (e.type == SDL_EVENT_KEY_DOWN && e.key.key == SDLK_ESCAPE) {
+						std::cout << "[DEBUG] Escape key pressed. Transitioning to TitleState.\n";
 						setNextState(TitleState::get());
 					}
 				}
 
-				// Update the current state
+				// Handle fading transition
+				if (isFading) {
+					// Correct fadeProgress calculation (scaled from 0 to 1)
+					Uint64 elapsedTime = fadeTimer.getTicksNS();
+					float fadeProgress = static_cast<float>(elapsedTime) / static_cast<float>(fadeDuration);
+					fadeAlpha = std::clamp(fadeIn ? (1.0f - fadeProgress) * 255.0f : fadeProgress * 255.0f, 0.0f, 255.0f);
+
+					std::cout << "[DEBUG] Fading " << (fadeIn ? "in" : "out")
+						<< ". Alpha: " << fadeAlpha << " and progress is " << fadeTimer.getTicksNS() << "\n";
+
+					// If fade-out is complete, switch game states
+					if (fadeAlpha >= 255 && !fadeIn) {
+						std::cout << "[DEBUG] Fade-out complete. Switching game state.\n";
+						gCurrentState->exit();
+						gNextState->enter();
+						gCurrentState = gNextState;
+						gNextState = nullptr;
+						fadeIn = true;
+						fadeTimer.start();
+					}
+
+					// If fade-in is complete, stop fading
+					if (fadeAlpha <= 0 && fadeIn) {
+						std::cout << "[DEBUG] Fade-in complete. Transition finished.\n";
+						isFading = false;
+					}
+				}
+
+				// Update the current state if not transitioning
 				gCurrentState->update();
 
-				// Change state if needed
-				changeState();
+				if (!isFading) {
+					changeState();
+				}
 
 				// Clear the screen
-				SDL_SetRenderDrawColor(gRenderer, 0xFF, 0xFF, 0xFF, 0xFF);
+				SDL_SetRenderDrawColor(gRenderer, 0, 0, 0, 0);
 				SDL_RenderClear(gRenderer);
 
 				// Render the current state
 				gCurrentState->render();
 
+				// Apply fade effect if needed
+				if (isFading) {
+					SDL_SetRenderDrawColor(gRenderer, 0, 0, 0, static_cast<Uint8>(fadeAlpha));
+					SDL_RenderFillRect(gRenderer, nullptr);
+				}
+
 				// Present the updated frame
 				SDL_RenderPresent(gRenderer);
 
-				// Cap frame rate to maintain 60 FPS
+				// Cap frame rate
 				constexpr Uint64 nsPerFrame = 1000000000 / kScreenFps;
 				Uint64 frameNs = capTimer.getTicksNS();
 				if (frameNs < nsPerFrame) {
