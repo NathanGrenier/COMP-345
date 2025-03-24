@@ -39,6 +39,8 @@ TitleState* TitleState::get() {
  * @return True if successful, false otherwise.
  */
 bool TitleState::enter() {
+	bg.loadTexture(gRenderer, LTexture::getRandomBackground("assets/backgrounds"));
+
 	bool success = true;
 	SDL_Color textColor{ 0x00, 0x00, 0x00, 0xFF };
 
@@ -129,10 +131,9 @@ void TitleState::handleEvent(SDL_Event& e) {
 /**
  * @brief Updates the title state logic.
  *
- * Currently, this function does not perform any updates.
  */
 void TitleState::update() {
-	// No updates needed for title state
+	bg.update(0.016f);
 }
 
 /**
@@ -141,9 +142,7 @@ void TitleState::update() {
  * Clears the screen, renders the background, title text, and menu buttons.
  */
 void TitleState::render() {
-	// Clear screen
-	SDL_SetRenderDrawColor(gRenderer, 0xFF, 0xFF, 0xFF, 0xFF);
-	SDL_RenderClear(gRenderer);
+	bg.render(gRenderer);
 
 	// Render background
 	mBackgroundTexture.render(0, 0);

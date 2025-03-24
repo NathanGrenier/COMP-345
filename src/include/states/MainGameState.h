@@ -44,8 +44,7 @@ private:
 
 	//Intro background
 	LTexture mBackgroundTexture;
-
-	//Intro message
+	ParallaxBackground bg;
 	LTexture mMessageTexture;
 
 	LButton pauseButton;

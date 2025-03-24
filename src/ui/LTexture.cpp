@@ -2,6 +2,8 @@
 #include <SDL3_image/SDL_image.h>
 #include <ui/LTexture.h>
 #include <Global.h>
+#include <filesystem>
+#include <random>
 
 /**
  * @class LTexture
@@ -218,4 +220,28 @@ float LTexture::getWidth() const {
  */
 float LTexture::getHeight() const {
 	return mHeight;
+}
+
+std::string LTexture::getRandomBackground(const std::string& directory) {
+	std::vector<std::string> files;
+
+	// Iterate through the directory and collect file names
+	for (const auto& entry : std::filesystem::directory_iterator(directory)) {
+		if (entry.is_regular_file()) {
+			files.push_back(entry.path().string());
+		}
+	}
+
+	// Ensure there are files to pick from
+	if (files.empty()) {
+		SDL_Log("No background images found in %s\n", directory.c_str());
+		return "";
+	}
+
+	// Select a random file
+	std::random_device rd;
+	std::mt19937 gen(rd());
+	std::uniform_int_distribution<size_t> distrib(0, files.size() - 1);
+
+	return files[distrib(gen)];
 }

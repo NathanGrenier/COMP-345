@@ -19,6 +19,8 @@ MapEditorState* MapEditorState::get() {
 }
 
 bool MapEditorState::enter() {
+	bg.loadTexture(gRenderer, LTexture::getRandomBackground("assets/backgrounds"));
+
 	if (Global::currentMap == nullptr) {
 		map = new Map(15, 15, "Default");
 		mMessageTexture.loadFromFile("assets/ui/MapCreation.png");
@@ -47,7 +49,7 @@ bool MapEditorState::enter() {
 
 	saveMapButton.loadFromFile("assets/ui/SaveButton.png");
 	renameButton.loadFromFile("assets/ui/RenameButton.png");
-	textField.loadFromRenderedText("File Name: " + map->getName(), { 0, 0, 0, 255 });
+	textField.loadFromRenderedText("File Name: " + map->getName(), { 255, 255, 255, 255 });
 
 	// Map view calculations
 	float availableWidth = Global::kScreenWidth - Global::viewerWidth;
@@ -101,7 +103,7 @@ bool MapEditorState::enter() {
 	removeRow.setPosition(startX, removeColumn.getPosition().y + removeColumn.kButtonHeight + groupSpacing);
 	addRow.setPosition(removeRow.getPosition().x + removeRow.kButtonWidth + textWidth + buttonSpacing * 9, removeRow.getPosition().y);
 
-	currentMessage.loadFromRenderedText("Selected: Start", { 0, 0, 0, 255 });
+	currentMessage.loadFromRenderedText("Selected: Start", { 255, 255, 255, 255 });
 
 	selectStartPos.setPosition(buttonStartX, addRow.getPosition().y + addRow.kButtonHeight + groupSpacing);
 	selectEndPos.setPosition(buttonStartX, selectStartPos.getPosition().y + selectStartPos.kButtonHeight + buttonSpacing);
@@ -166,16 +168,16 @@ void MapEditorState::handleEvent(SDL_Event& e) {
 			setNextState(MapSelectState::get());
 		} else if (selectStartPos.isClicked()) {
 			currentSelection = "Start";
-			currentMessage.loadFromRenderedText("Selected: Start", { 0, 0, 0, 255 });
+			currentMessage.loadFromRenderedText("Selected: Start", { 255, 255, 255, 255 });
 		} else if (selectEndPos.isClicked()) {
 			currentSelection = "End";
-			currentMessage.loadFromRenderedText("Selected: End", { 0, 0, 0, 255 });
+			currentMessage.loadFromRenderedText("Selected: End", { 255, 255, 255, 255 });
 		} else if (selectWallCell.isClicked()) {
 			currentSelection = "Wall";
-			currentMessage.loadFromRenderedText("Selected: Edit Wall", { 0, 0, 0, 255 });
+			currentMessage.loadFromRenderedText("Selected: Edit Wall", { 255, 255, 255, 255 });
 		} else if (toggleFlowFieldVisibility.isClicked()) {
 			std::string textToDisplay = "Flow Visibility: " + std::string(map->isFlowFieldVisible ? "On" : "Off");
-			currentMessage.loadFromRenderedText(textToDisplay, { 0, 0, 0, 255 });
+			currentMessage.loadFromRenderedText(textToDisplay, { 255, 255, 255, 255 });
 			map->toggleFlowFieldVisibility();
 		} else if (renameButton.isClicked()) {
 			currentSelection = "Rename";
@@ -301,6 +303,8 @@ void MapEditorState::handleEvent(SDL_Event& e) {
 
 
 void MapEditorState::update() {
+	bg.update(0.016f);
+
 	// Set color to black and fill the map view
 	SDL_SetRenderDrawColor(gRenderer, 0, 0, 0, 255);  // Black (R=0, G=0, B=0, A=255)
 	SDL_RenderFillRect(gRenderer, &mapView);
@@ -310,6 +314,8 @@ void MapEditorState::update() {
 }
 
 void MapEditorState::render() {
+	bg.render(gRenderer);
+
 	float buttonWidth = Global::viewerWidth * 0.8f;
 	float buttonSpacing = 30.0f;
 	float buttonHeight = 25.0f;

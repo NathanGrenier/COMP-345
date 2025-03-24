@@ -34,6 +34,8 @@ MapSelectState* MapSelectState::get() {
 bool MapSelectState::enter() {
 	loadAvailableMaps();
 
+	bg.loadTexture(gRenderer, LTexture::getRandomBackground("assets/backgrounds"));
+
 	mTitle.loadFromFile("assets/ui/MapSelectionMessage.png");
 
 	// Load button textures
@@ -171,6 +173,8 @@ void MapSelectState::handleEvent(SDL_Event& e) {
 
 
 void MapSelectState::update() {
+	bg.update(0.016f);
+
 	if (!availableMaps.empty()) {
 		auto it = std::next(availableMaps.begin(), selectedIndex);
 		selectedMapFilePath = it->first;
@@ -182,6 +186,8 @@ void MapSelectState::update() {
 }
 
 void MapSelectState::render() {
+	bg.render(gRenderer);
+
 	float kScreenWidth = Global::kScreenWidth;
 	float kScreenHeight = Global::kScreenHeight;
 

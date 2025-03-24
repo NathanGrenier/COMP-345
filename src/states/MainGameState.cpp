@@ -44,6 +44,8 @@ bool MainGameState::enter() {
 		return false;
 	}
 
+	bg.loadTexture(gRenderer, LTexture::getRandomBackground("assets/backgrounds"));
+
 	float intButtonHeight = 40.0f;
 
 	pauseButton.loadFromFile("assets/ui/PauseButton.png");
@@ -131,6 +133,8 @@ void MainGameState::handleEvent(SDL_Event& e) {
 void MainGameState::update() {
 	if (isPaused) return;
 
+	bg.update(0.016f);
+
 	critterGroup->update(0.016f);
 
 	towerGroup->update(0.016f, critterGroup->getCritters());
@@ -158,6 +162,8 @@ void MainGameState::render() {
 	// Set the renderer color for the gray box
 	SDL_SetRenderDrawColor(gRenderer, 202, 202, 202, 255); // Gray color for box
 	SDL_RenderFillRect(gRenderer, &foreRect); // Draw filled box
+
+	bg.render(gRenderer);
 
 	map->drawOnTargetRect(Global::mapViewRect);
 
@@ -220,7 +226,7 @@ bool MainGameState::exit() {
  * @param y The y-coordinate of the text.
  */
 void MainGameState::renderText(const std::string& text, float x, float y) {
-	SDL_Color textColor = { 0, 0, 0, 255 };
+	SDL_Color textColor = { 255, 255, 255, 255 };
 	LTexture textTexture;
 	textTexture.loadFromRenderedText(text, textColor);
 	textTexture.render(x, y);
