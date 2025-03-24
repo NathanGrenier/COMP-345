@@ -63,6 +63,6 @@ private:
 	CritterGroup* critterGroup = nullptr;
 	TowerGroup* towerGroup = nullptr;
 
-	DetailAttributeDisplay detailDisplay; /** @brief ui display for details */
+	DetailAttributeDisplay* detailDisplay; /** @brief ui display for details */
 	int towerBuySelect = 0; /** @brief selected Tower as index */
 };

@@ -35,5 +35,8 @@ private:
     
     LTexture mCursorPromptTexture;
 
+    LTexture mParallaxTexture1;
+    LTexture mParallaxTexture2;
+
     float oscillationOffset = 0.0f;
 };

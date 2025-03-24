@@ -19,7 +19,7 @@
 class TowerGroup {
 public:
     // Constructor with parameters
-    TowerGroup(int& playerGold, Map* map, DetailAttributeDisplay& detailDisplay);
+    TowerGroup(int& playerGold, Map* map, DetailAttributeDisplay* detailDisplay);
     ~TowerGroup();
 
     void update(float deltaTime, std::vector<Critter*> critters);  // Update towers to attack critters
@@ -35,7 +35,7 @@ public:
 private:
     int& playerGold;                               // Reference to player's gold for buying/upgrading towers
     Map* map;                                      // Pointer to the map for tower placement validation
-    DetailAttributeDisplay& detailDisplay;         // UI detail display for selected tower information
+    DetailAttributeDisplay* detailDisplay;         // UI detail display for selected tower information
     std::vector<Tower*> towers;                    // Vector containing all tower instances
     std::vector<Powerup*> activePowerups;
     int towerBuySelect = -1;

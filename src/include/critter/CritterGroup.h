@@ -30,7 +30,7 @@ struct WaveConfig {
 class CritterGroup {
 public:
 	// Constructor with parameters
-	CritterGroup(int& waveLevel, int& playerGold, SDL_FRect startPosition, SDL_FRect endPosition, Map* map, DetailAttributeDisplay& detailDisplay, bool endlessMode);
+	CritterGroup(int& waveLevel, int& playerGold, SDL_FRect startPosition, SDL_FRect endPosition, Map* map, DetailAttributeDisplay* detailDisplay, bool endlessMode);
 	~CritterGroup();
 
 	void generateCritters(float deltaTime);
@@ -49,7 +49,7 @@ private:
 	bool endlessMode;
 	bool gameWon = false;
 
-	DetailAttributeDisplay& detailDisplay;
+	DetailAttributeDisplay* detailDisplay;
 	int crittersSpawned = 0;
 	int aliveCritters = 0;
 	bool waveInProgress = true;

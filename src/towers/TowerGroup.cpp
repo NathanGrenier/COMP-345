@@ -28,7 +28,7 @@
  * @param map Pointer to the game map.
  * @param detailDisplay Reference to the UI detail display.
  */
-TowerGroup::TowerGroup(int &playerGold, Map *map, DetailAttributeDisplay &detailDisplay)
+TowerGroup::TowerGroup(int &playerGold, Map *map, DetailAttributeDisplay* detailDisplay)
 	: playerGold(playerGold), map(map), detailDisplay(detailDisplay)
 {
 	// creating dummy Towers
@@ -36,7 +36,7 @@ TowerGroup::TowerGroup(int &playerGold, Map *map, DetailAttributeDisplay &detail
 	dummyRapidFireTower = new RapidFireTower(0, 0, 0, RAPID_FIRE_TOWER_COST);
 	dummyCannonTower = new CannonTower(0, 0, 0, CANNON_TOWER_COST);
 
-	TowerObserver *towerObserver = detailDisplay.getTowerObserver();
+	TowerObserver *towerObserver = detailDisplay->getTowerObserver();
 
 	// adding dummy Towers to display values before buying Towers
 	towerObserver->addToBuyTowers(dummyStandardTower);
@@ -305,7 +305,7 @@ void TowerGroup::handleEvent(SDL_Event &e)
 		}
 
 		// checking if buying tower
-		std::vector<DetailDisplayComponent *> components = detailDisplay.getComponents();
+		std::vector<DetailDisplayComponent *> components = detailDisplay->getComponents();
 
 		for (int i = 0; i < components.size(); i++)
 		{
@@ -320,15 +320,15 @@ void TowerGroup::handleEvent(SDL_Event &e)
 					switch (i)
 					{
 					case 1:
-						detailDisplay.selectTower(dummyStandardTower);
+						detailDisplay->selectTower(dummyStandardTower);
 						dummyStandardTower->notify();
 						return;
 					case 2:
-						detailDisplay.selectTower(dummyRapidFireTower);
+						detailDisplay->selectTower(dummyRapidFireTower);
 						dummyRapidFireTower->notify();
 						return;
 					case 3:
-						detailDisplay.selectTower(dummyCannonTower);
+						detailDisplay->selectTower(dummyCannonTower);
 						dummyCannonTower->notify();
 						return;
 					}
@@ -337,18 +337,18 @@ void TowerGroup::handleEvent(SDL_Event &e)
 		}
 
 		// checking if upgrading tower
-		if (detailDisplay.getTowerObserver()->getCurrentTower() != nullptr && (dynamic_cast<DetailButton *>(detailDisplay.getTowerComponents()[7]))->isClicked())
+		if (detailDisplay->getTowerObserver()->getCurrentTower() != nullptr && (dynamic_cast<DetailButton *>(detailDisplay->getTowerComponents()[7]))->isClicked())
 		{
 			buttonClick = true;
-			int upgradeCost = detailDisplay.getTowerObserver()->getCurrentTower()->getUpgradeCost();
+			int upgradeCost = detailDisplay->getTowerObserver()->getCurrentTower()->getUpgradeCost();
 
 			// checks if enough coins for upgrade
 			if (playerGold >= upgradeCost)
 			{
 				// checks if tower is already max level
-				if (detailDisplay.getTowerObserver()->getCurrentTower()->upgrade())
+				if (detailDisplay->getTowerObserver()->getCurrentTower()->upgrade())
 				{
-					detailDisplay.getTowerObserver()->getCurrentTower()->notify();
+					detailDisplay->getTowerObserver()->getCurrentTower()->notify();
 					playerGold -= upgradeCost;
 				}
 
@@ -358,8 +358,8 @@ void TowerGroup::handleEvent(SDL_Event &e)
 
 		// checking if changing TowerStrategy
 		int startingIndex = TowerObserver::TOWER_COMPONENT_COUNT - TowerObserver::STRATEGY_COUNT + 1;
-		Tower *currentTower = detailDisplay.getTowerObserver()->getCurrentTower();
-		if (currentTower != nullptr && (dynamic_cast<DetailButton *>(detailDisplay.getTowerComponents()[10]))->isClicked())
+		Tower *currentTower = detailDisplay->getTowerObserver()->getCurrentTower();
+		if (currentTower != nullptr && (dynamic_cast<DetailButton *>(detailDisplay->getTowerComponents()[10]))->isClicked())
 		{
 			buttonClick = true;
 
@@ -372,22 +372,22 @@ void TowerGroup::handleEvent(SDL_Event &e)
 		}
 
 		// checking if selling tower
-		if (detailDisplay.getTowerObserver()->getCurrentTower() != nullptr && (dynamic_cast<DetailButton *>(detailDisplay.getTowerComponents()[8]))->isClicked())
+		if (detailDisplay->getTowerObserver()->getCurrentTower() != nullptr && (dynamic_cast<DetailButton *>(detailDisplay->getTowerComponents()[8]))->isClicked())
 		{
 			buttonClick = true;
-			playerGold += detailDisplay.getTowerObserver()->getCurrentTower()->getRefundValue();
+			playerGold += detailDisplay->getTowerObserver()->getCurrentTower()->getRefundValue();
 
 			// find tower to erase
 			for (int i = 0; i < towers.size(); i++)
 			{
-				if (towers[i] == detailDisplay.getTowerObserver()->getCurrentTower())
+				if (towers[i] == detailDisplay->getTowerObserver()->getCurrentTower())
 				{
 					towers.erase(towers.begin() + i);
 
 					map->wallCellDict[targetCell] = false;
 				}
 			}
-			detailDisplay.selectTower(nullptr);
+			detailDisplay->selectTower(nullptr);
 
 			return;
 		}
@@ -403,7 +403,7 @@ void TowerGroup::handleEvent(SDL_Event &e)
 		{
 			if (towers[i]->isClicked(1.5f))
 			{
-				detailDisplay.selectTower(towers[i]);
+				detailDisplay->selectTower(towers[i]);
 				towers[i]->notify();
 				towerClick = true;
 			}
@@ -451,13 +451,13 @@ void TowerGroup::handleEvent(SDL_Event &e)
 				if (newTower != nullptr)
 				{
 					towers.push_back(newTower);
-					detailDisplay.selectTower(newTower);
+					detailDisplay->selectTower(newTower);
 
 					float scaleFactor = 1.5f;
 					float newSize = map->getPixelPerCell() * scaleFactor;
 					newTower->setCurrentRenderRect(targetX, targetY, newSize, newSize);
 
-					newTower->attach(detailDisplay.getTowerObserver());
+					newTower->attach(detailDisplay->getTowerObserver());
 					newTower->notify();
 
 					map->wallCellDict[targetCell] = true;
@@ -466,7 +466,7 @@ void TowerGroup::handleEvent(SDL_Event &e)
 			else
 			{
 				towerBuySelect = -1;
-				detailDisplay.selectTower(nullptr);
+				detailDisplay->selectTower(nullptr);
 			}
 
 			return;
@@ -504,9 +504,9 @@ void TowerGroup::handleEvent(SDL_Event &e)
 					towers[i] = upgradedTower; // Replace the tower reference in the array
 
 					// reattaches the tower observer
-					baseTower->detach(detailDisplay.getTowerObserver());
-					upgradedTower->attach(detailDisplay.getTowerObserver());
-					detailDisplay.getTowerObserver()->setCurrentTower(upgradedTower);
+					baseTower->detach(detailDisplay->getTowerObserver());
+					upgradedTower->attach(detailDisplay->getTowerObserver());
+					detailDisplay->getTowerObserver()->setCurrentTower(upgradedTower);
 
 					// Remove the powerup from active powerups and clean up
 					activePowerups.erase(std::remove(activePowerups.begin(), activePowerups.end(), draggedPowerup), activePowerups.end());

@@ -118,18 +118,8 @@ void TitleState::handleEvent(SDL_Event& e) {
                 // Transition to the corresponding game state
                 switch (i) {
                 case 0:
-                    setNextState(MapSelectState::get());  // Load main game
+                    setNextState(MapSelectState::get());
                     break;
-    //            case 1:
-    //                setNextState(Part1State::get());  // Load Part 1
-    //                break;
-    //            case 2:
-    //                //setNextState(Part2State::get());  // Load Part 2
-    //                setNextState(UITestState::get());  // Load UI test
-    //                break;
-    //            //case 3:
-				//	setNextState(Part3State::get());  // Load Part 3
-				//	break;
                 }
             }
         }

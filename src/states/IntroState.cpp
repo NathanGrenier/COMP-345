@@ -48,6 +48,11 @@ bool IntroState::enter() {
         SDL_Log("Failed to render intro text!\n");
         success = false;
     }
+    if (mParallaxTexture1.loadFromFile("assets/background/blue-nebula.png"))
+    {
+        SDL_Log("Failed to render background!\n");
+        success = false;
+    }
 
     return success;
 }

@@ -71,8 +71,8 @@ bool MainGameState::enter() {
 		}
 	}
 
-	detailDisplay = DetailAttributeDisplay();
-	bool success = detailDisplay.initializeComponents();
+	detailDisplay = new DetailAttributeDisplay();
+	bool success = detailDisplay->initializeComponents();
 
 	endlessMode = true;
 	critterGroup = new CritterGroup(waveLevel, playerGold, map->getSpawnerPos(Global::mapViewRect), map->getTargetPos(Global::mapViewRect), map, detailDisplay, endlessMode);
@@ -91,7 +91,7 @@ void MainGameState::handleEvent(SDL_Event& e) {
 	if (!isPaused) {
 		towerGroup->handleEvent(e);
 		critterGroup->handleEvent(e);
-		detailDisplay.handleButtonEvents(e);
+		detailDisplay->handleButtonEvents(e);
 	}
 
 	pauseButton.handleEvent(&e);
@@ -161,7 +161,7 @@ void MainGameState::render() {
 
 	map->drawOnTargetRect(Global::mapViewRect);
 
-	detailDisplay.render();
+	detailDisplay->render();
 
 	critterGroup->render();
 	towerGroup->render();
