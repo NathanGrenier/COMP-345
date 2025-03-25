@@ -10,6 +10,7 @@ namespace fs = std::filesystem;
 std::vector<std::string> ParallaxBackground::backgroundImages;
 std::vector<std::string> ParallaxBackground::starImages;
 std::vector<std::string> ParallaxBackground::propImages;
+std::unordered_set<int> ParallaxBackground::propXPositions;
 
 ParallaxBackground::ParallaxBackground() {
     // Seed the random number generator

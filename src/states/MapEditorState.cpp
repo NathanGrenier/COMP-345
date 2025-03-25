@@ -22,7 +22,7 @@ bool MapEditorState::enter() {
 	bg = new ParallaxBackground();
 	std::srand(std::time(0));
 
-	for (int i = 0; i < 15; ++i) {
+	for (int i = 0; i < Global::numberOfProps; ++i) {
 		float randomSpeed = 5.0f + std::rand() % 11;
 		bg->addLayer(randomSpeed, Global::kScreenHeight);
 	}

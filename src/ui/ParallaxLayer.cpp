@@ -2,6 +2,7 @@
 #include <ui/ParallaxBackground.h>
 #include <Global.h>
 
+
 ParallaxLayer::ParallaxLayer(float speed, float y, const std::string& filepath)
     : speed(speed), x1(0), x2(0), y(y), width(0), height(0) {
     // Load the texture from file
@@ -14,21 +15,50 @@ ParallaxLayer::ParallaxLayer(float speed, float y, const std::string& filepath)
     width = texture.getWidth();
     height = texture.getHeight();
 
+    // Calculate random scale factor for size variation
     float scaleFactor = 1.0f + (std::rand() % 51) / 100.0f;
     width = static_cast<int>(width * scaleFactor);
     height = static_cast<int>(height * scaleFactor);
     rotationAngle = 0;
 
-    // Set the second texture's starting position
-    x2 = x1 + width;
-
+    // Ensure prop doesn't overlap existing props by finding a suitable x1 position
     if (isProp) {
-        x1 = std::rand() % static_cast<int>(Global::kScreenWidth);
-        rotationAngle = std::rand() % 360;
+        // Try several random positions to ensure no overlap
+        bool overlapDetected = true;
+        int maxAttempts = 100; // Maximum number of attempts before giving up
+        while (overlapDetected && maxAttempts > 0) {
+            x1 = std::rand() % static_cast<int>(Global::kScreenWidth);
+            overlapDetected = false;
+
+            // Check if this x1 position overlaps with any previously spawned props
+            for (int existingX : ParallaxBackground::propXPositions) {
+                if (std::abs(existingX - x1) < width) {  // Ensure no overlap (distance >= width)
+                    overlapDetected = true;
+                    break;
+                }
+            }
+
+            maxAttempts--;
+        }
+
+        // If after maxAttempts no valid position was found, spawn at a random position anyway
+        if (maxAttempts == 0) {
+            x1 = std::rand() % static_cast<int>(Global::kScreenWidth);  // Fallback to random position
+        }
+
+        // Add the new x1 position to the set of tracked positions
+        ParallaxBackground::propXPositions.insert(x1);
+
+        rotationAngle = std::rand() % 360; // Random rotation for props
     }
+
+    x2 = x1 + width;
 }
 
 ParallaxLayer::~ParallaxLayer() {
+    if (isProp) {
+        ParallaxBackground::propXPositions.erase(x1);
+    }
     texture.destroy();
 }
 
@@ -51,9 +81,29 @@ void ParallaxLayer::update(float deltaTime) {
             height = static_cast<int>(height * scaleFactor);
             rotationAngle = std::rand() % 360;
 
+            // Ensure the new prop doesn't overlap with any other props
+            bool overlapDetected = true;
+            int maxAttempts = 100; // Maximum number of attempts before giving up
+            while (overlapDetected && maxAttempts > 0) {
+                x1 = Global::kScreenWidth; // Spawn at the right edge
+                overlapDetected = false;
+
+                // Check if this x1 position overlaps with any previously spawned props
+                for (int existingX : ParallaxBackground::propXPositions) {
+                    if (std::abs(existingX - x1) < width) {
+                        overlapDetected = true;
+                        break;
+                    }
+                }
+
+                maxAttempts--;
+            }
+
+            // Add the new x1 position to the set of tracked positions
+            ParallaxBackground::propXPositions.insert(x1);
+
             // Set new y position when prop is out of bounds
             y = std::rand() % static_cast<int>(Global::kScreenHeight);
-            x1 = Global::kScreenWidth; // Spawn at the right edge
         }
     }
     else {
@@ -61,7 +111,7 @@ void ParallaxLayer::update(float deltaTime) {
         x1 -= speed * deltaTime;
         x2 -= speed * deltaTime;
 
-        // Wrap around textures if they go off-screen
+        // Wrap around textures if they go off-screen with 1-pixel overlap
         if (x1 + width <= 0) {
             x1 = x2 + width;
         }
@@ -74,10 +124,10 @@ void ParallaxLayer::update(float deltaTime) {
 
 void ParallaxLayer::render() {
     // Define the rectangle for rendering the first texture
-    SDL_FRect rect1 = { x1, y, width, height };
+    SDL_FRect rect1 = { x1, y, width + 2, height };
 
     // Define the rectangle for rendering the second texture
-    SDL_FRect rect2 = { x2, y, width, height };
+    SDL_FRect rect2 = { x2, y, width + 2, height };
 
     // Render the first texture
     texture.render(rect1.x, rect1.y, nullptr, rect1.w, rect1.h, rotationAngle);

@@ -35,6 +35,8 @@ public:
 
     static Map* currentMap;
     static SDL_FRect mapViewRect;
+
+    static inline constexpr int numberOfProps{ 10 };
 };
 
 /**

@@ -3,6 +3,7 @@
 #include <SDL3/SDL.h>
 #include <string>
 #include <ui/LTexture.h>
+#include <unordered_set>
 
 class ParallaxLayer {
 public:

@@ -25,6 +25,7 @@ public:
     static std::vector<std::string> backgroundImages;
     static std::vector<std::string> starImages;
     static std::vector<std::string> propImages;
+    static std::unordered_set<int> propXPositions;
 private:
     std::vector<ParallaxLayer*> layers;  // Vector to store all the layers
     LTexture backgroundLayer;
