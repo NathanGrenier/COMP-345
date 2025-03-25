@@ -22,6 +22,8 @@ public:
     void handleEvent(SDL_Event& e) override;
     void update() override;
     void render() override;
+    
+    std::string getRandomBackground(const std::string& directory);
 
 private:
     //Static instance
@@ -34,6 +36,8 @@ private:
     LTexture mMessageTexture;
     
     LTexture mCursorPromptTexture;
+
+    ParallaxBackground* bg;
 
     float oscillationOffset = 0.0f;
 };

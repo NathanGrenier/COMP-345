@@ -48,6 +48,7 @@ public:
 	float getWidth() const;
 	float getHeight() const;
 
+	static std::string getRandomBackground(const std::string& directory);
 private:
 	//Contains texture data
 	SDL_Texture* mTexture;

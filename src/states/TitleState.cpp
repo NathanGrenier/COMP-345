@@ -39,6 +39,14 @@ TitleState* TitleState::get() {
  * @return True if successful, false otherwise.
  */
 bool TitleState::enter() {
+	bg = new ParallaxBackground();
+	std::srand(std::time(0));
+
+	for (int i = 0; i < Global::numberOfProps; ++i) {
+		float randomSpeed = 5.0f + std::rand() % 11;
+		bg->addLayer(randomSpeed, Global::kScreenHeight);
+	}
+
 	bool success = true;
 	SDL_Color textColor{ 0x00, 0x00, 0x00, 0xFF };
 
@@ -98,6 +106,8 @@ bool TitleState::exit() {
 	for (int i = 0; i < kButtonCount; ++i) {
 		buttons[i].destroy();
 	}
+	delete bg;
+	bg = nullptr;
 	return true;
 }
 
@@ -118,18 +128,8 @@ void TitleState::handleEvent(SDL_Event& e) {
                 // Transition to the corresponding game state
                 switch (i) {
                 case 0:
-                    setNextState(MapSelectState::get());  // Load main game
+                    setNextState(MapSelectState::get());
                     break;
-    //            case 1:
-    //                setNextState(Part1State::get());  // Load Part 1
-    //                break;
-    //            case 2:
-    //                //setNextState(Part2State::get());  // Load Part 2
-    //                setNextState(UITestState::get());  // Load UI test
-    //                break;
-    //            //case 3:
-				//	setNextState(Part3State::get());  // Load Part 3
-				//	break;
                 }
             }
         }
@@ -139,10 +139,9 @@ void TitleState::handleEvent(SDL_Event& e) {
 /**
  * @brief Updates the title state logic.
  *
- * Currently, this function does not perform any updates.
  */
 void TitleState::update() {
-	// No updates needed for title state
+	bg->update(0.016f);
 }
 
 /**
@@ -151,9 +150,7 @@ void TitleState::update() {
  * Clears the screen, renders the background, title text, and menu buttons.
  */
 void TitleState::render() {
-	// Clear screen
-	SDL_SetRenderDrawColor(gRenderer, 0xFF, 0xFF, 0xFF, 0xFF);
-	SDL_RenderClear(gRenderer);
+	bg->render();
 
 	// Render background
 	mBackgroundTexture.render(0, 0);

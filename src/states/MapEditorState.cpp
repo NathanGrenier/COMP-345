@@ -19,6 +19,14 @@ MapEditorState* MapEditorState::get() {
 }
 
 bool MapEditorState::enter() {
+	bg = new ParallaxBackground();
+	std::srand(std::time(0));
+
+	for (int i = 0; i < Global::numberOfProps; ++i) {
+		float randomSpeed = 5.0f + std::rand() % 11;
+		bg->addLayer(randomSpeed, Global::kScreenHeight);
+	}
+
 	if (Global::currentMap == nullptr) {
 		map = new Map(15, 15, "Default");
 		mMessageTexture.loadFromFile("assets/ui/MapCreation.png");
@@ -47,7 +55,7 @@ bool MapEditorState::enter() {
 
 	saveMapButton.loadFromFile("assets/ui/SaveButton.png");
 	renameButton.loadFromFile("assets/ui/RenameButton.png");
-	textField.loadFromRenderedText("File Name: " + map->getName(), { 0, 0, 0, 255 });
+	textField.loadFromRenderedText("File Name: " + map->getName(), { 255, 255, 255, 255 });
 
 	// Map view calculations
 	float availableWidth = Global::kScreenWidth - Global::viewerWidth;
@@ -101,7 +109,7 @@ bool MapEditorState::enter() {
 	removeRow.setPosition(startX, removeColumn.getPosition().y + removeColumn.kButtonHeight + groupSpacing);
 	addRow.setPosition(removeRow.getPosition().x + removeRow.kButtonWidth + textWidth + buttonSpacing * 9, removeRow.getPosition().y);
 
-	currentMessage.loadFromRenderedText("Selected: Start", { 0, 0, 0, 255 });
+	currentMessage.loadFromRenderedText("Selected: Start", { 255, 255, 255, 255 });
 
 	selectStartPos.setPosition(buttonStartX, addRow.getPosition().y + addRow.kButtonHeight + groupSpacing);
 	selectEndPos.setPosition(buttonStartX, selectStartPos.getPosition().y + selectStartPos.kButtonHeight + buttonSpacing);
@@ -138,6 +146,8 @@ bool MapEditorState::exit() {
 
 	mBackgroundTexture.destroy();
 
+	delete bg;
+
 	mMessageTexture.destroy();
 	return true;
 }
@@ -166,20 +176,20 @@ void MapEditorState::handleEvent(SDL_Event& e) {
 			setNextState(MapSelectState::get());
 		} else if (selectStartPos.isClicked()) {
 			currentSelection = "Start";
-			currentMessage.loadFromRenderedText("Selected: Start", { 0, 0, 0, 255 });
+			currentMessage.loadFromRenderedText("Selected: Start", { 255, 255, 255, 255 });
 		} else if (selectEndPos.isClicked()) {
 			currentSelection = "End";
-			currentMessage.loadFromRenderedText("Selected: End", { 0, 0, 0, 255 });
+			currentMessage.loadFromRenderedText("Selected: End", { 255, 255, 255, 255 });
 		} else if (selectWallCell.isClicked()) {
 			currentSelection = "Wall";
-			currentMessage.loadFromRenderedText("Selected: Edit Wall", { 0, 0, 0, 255 });
+			currentMessage.loadFromRenderedText("Selected: Edit Wall", { 255, 255, 255, 255 });
 		} else if (toggleFlowFieldVisibility.isClicked()) {
 			std::string textToDisplay = "Flow Visibility: " + std::string(map->isFlowFieldVisible ? "On" : "Off");
-			currentMessage.loadFromRenderedText(textToDisplay, { 0, 0, 0, 255 });
+			currentMessage.loadFromRenderedText(textToDisplay, { 255, 255, 255, 255 });
 			map->toggleFlowFieldVisibility();
 		} else if (renameButton.isClicked()) {
 			currentSelection = "Rename";
-			currentMessage.loadFromRenderedText("Selected: Rename", { 0, 0, 0, 255 });
+			currentMessage.loadFromRenderedText("Selected: Rename", { 255, 255, 255, 255 });
 		} else if (addColumn.isClicked() && map->cellCountX < 20) {
 			map->updateMapDimensions(map->cellCountX + 1, map->cellCountY);
 		} else if (removeColumn.isClicked() && map->cellCountX > 8) {
@@ -191,7 +201,7 @@ void MapEditorState::handleEvent(SDL_Event& e) {
 		} else if (saveMapButton.isClicked()) {
 			if (!map->isValidPath())
 			{
-				currentMessage.loadFromRenderedText("Invalid Path!", { 0, 0, 0, 255 });
+				currentMessage.loadFromRenderedText("Invalid Path!", { 255, 255, 255, 255 });
 				return;
 			}
 			// Get the original and current map names
@@ -210,10 +220,10 @@ void MapEditorState::handleEvent(SDL_Event& e) {
 
 			// Save the map as a new JSON file
 			if (map->saveToJson(newMapPath)) {
-				currentMessage.loadFromRenderedText("Save Success!", { 0, 0, 0, 255 });
+				currentMessage.loadFromRenderedText("Save Success!", { 255, 255, 255, 255 });
 			} else {
 				std::cerr << "Failed to save the map." << std::endl;
-				currentMessage.loadFromRenderedText("Save Failure!", { 0, 0, 0, 255 });
+				currentMessage.loadFromRenderedText("Save Failure!", { 255, 255, 255, 255 });
 			}
 		}
 	}
@@ -278,7 +288,7 @@ void MapEditorState::handleEvent(SDL_Event& e) {
 			// Handle "Enter" key to confirm rename
 			else if (e.key.key == SDLK_RETURN) {
 				currentSelection = ""; // Exit rename mode after pressing enter
-				currentMessage.loadFromRenderedText("Rename confirmed", { 0, 0, 0, 255 });
+				currentMessage.loadFromRenderedText("Rename confirmed", { 255, 255, 255, 255 });
 			}
 			// Check for printable characters (alphanumeric and others) and limit to 16 characters
 			else if (e.key.key >= SDLK_SPACE && e.key.key <= SDLK_Z) {
@@ -295,21 +305,25 @@ void MapEditorState::handleEvent(SDL_Event& e) {
 		}
 
 		// Update textField to show the new name
-		textField.loadFromRenderedText("File Name: " + map->getName(), { 0, 0, 0, 255 });
+		textField.loadFromRenderedText("File Name: " + map->getName(), { 255, 255, 255, 255 });
 	}
 }
 
 
 void MapEditorState::update() {
+	bg->update(0.016f);
+
 	// Set color to black and fill the map view
 	SDL_SetRenderDrawColor(gRenderer, 0, 0, 0, 255);  // Black (R=0, G=0, B=0, A=255)
 	SDL_RenderFillRect(gRenderer, &mapView);
 
-	noOfColumnsText.loadFromRenderedText(std::to_string(map->cellCountY), { 0x00, 0x00, 0x00, 0xFF });
-	noOfRowsText.loadFromRenderedText(std::to_string(map->cellCountX), { 0x00, 0x00, 0x00, 0xFF });
+	noOfColumnsText.loadFromRenderedText(std::to_string(map->cellCountY), { 255, 255, 255, 0xFF });
+	noOfRowsText.loadFromRenderedText(std::to_string(map->cellCountX), { 255, 255, 255, 0xFF });
 }
 
 void MapEditorState::render() {
+	bg->render();
+
 	float buttonWidth = Global::viewerWidth * 0.8f;
 	float buttonSpacing = 30.0f;
 	float buttonHeight = 25.0f;

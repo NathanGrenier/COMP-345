@@ -12,6 +12,7 @@
 
 #pragma once
 
+#include <ui/ParallaxBackground.h>
 #include <SDL3/SDL_events.h> 
 
  /**

@@ -44,6 +44,14 @@ bool MainGameState::enter() {
 		return false;
 	}
 
+	bg = new ParallaxBackground();
+	std::srand(std::time(0));
+
+	for (int i = 0; i < Global::numberOfProps; ++i) {
+		float randomSpeed = 5.0f + std::rand() % 11;
+		bg->addLayer(randomSpeed, Global::kScreenHeight);
+	}
+
 	float intButtonHeight = 40.0f;
 
 	pauseButton.loadFromFile("assets/ui/PauseButton.png");
@@ -71,8 +79,8 @@ bool MainGameState::enter() {
 		}
 	}
 
-	detailDisplay = DetailAttributeDisplay();
-	bool success = detailDisplay.initializeComponents();
+	detailDisplay = new DetailAttributeDisplay();
+	bool success = detailDisplay->initializeComponents();
 
 	endlessMode = true;
 	critterGroup = new CritterGroup(waveLevel, playerGold, map->getSpawnerPos(Global::mapViewRect), map->getTargetPos(Global::mapViewRect), map, detailDisplay, endlessMode);
@@ -91,7 +99,7 @@ void MainGameState::handleEvent(SDL_Event& e) {
 	if (!isPaused) {
 		towerGroup->handleEvent(e);
 		critterGroup->handleEvent(e);
-		detailDisplay.handleButtonEvents(e);
+		detailDisplay->handleButtonEvents(e);
 	}
 
 	pauseButton.handleEvent(&e);
@@ -131,6 +139,8 @@ void MainGameState::handleEvent(SDL_Event& e) {
 void MainGameState::update() {
 	if (isPaused) return;
 
+	bg->update(0.016f);
+
 	critterGroup->update(0.016f);
 
 	towerGroup->update(0.016f, critterGroup->getCritters());
@@ -159,9 +169,11 @@ void MainGameState::render() {
 	SDL_SetRenderDrawColor(gRenderer, 202, 202, 202, 255); // Gray color for box
 	SDL_RenderFillRect(gRenderer, &foreRect); // Draw filled box
 
+	bg->render();
+
 	map->drawOnTargetRect(Global::mapViewRect);
 
-	detailDisplay.render();
+	detailDisplay->render();
 
 	critterGroup->render();
 	towerGroup->render();
@@ -206,6 +218,9 @@ bool MainGameState::exit() {
 	delete map;
 	map = nullptr;
 
+	delete bg;
+	bg = nullptr;
+
 	playerGold = 999;
 	waveLevel = 0;
 
@@ -220,7 +235,7 @@ bool MainGameState::exit() {
  * @param y The y-coordinate of the text.
  */
 void MainGameState::renderText(const std::string& text, float x, float y) {
-	SDL_Color textColor = { 0, 0, 0, 255 };
+	SDL_Color textColor = { 255, 255, 255, 255 };
 	LTexture textTexture;
 	textTexture.loadFromRenderedText(text, textColor);
 	textTexture.render(x, y);

@@ -31,8 +31,8 @@ install(
 
 # Always copy assets folder to build directory
 add_custom_target(copy_assets ALL
-    COMMAND ${CMAKE_COMMAND} -E copy_directory
-    ${CMAKE_SOURCE_DIR}/src/assets ${CMAKE_RUNTIME_OUTPUT_DIRECTORY}/assets
+    COMMAND ${CMAKE_COMMAND} -E remove_directory ${CMAKE_RUNTIME_OUTPUT_DIRECTORY}/assets
+    COMMAND ${CMAKE_COMMAND} -E copy_directory ${CMAKE_SOURCE_DIR}/src/assets ${CMAKE_RUNTIME_OUTPUT_DIRECTORY}/assets
     DEPENDS ${CMAKE_SOURCE_DIR}/src/assets
 )
 

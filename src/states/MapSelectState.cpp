@@ -34,6 +34,14 @@ MapSelectState* MapSelectState::get() {
 bool MapSelectState::enter() {
 	loadAvailableMaps();
 
+	bg = new ParallaxBackground();
+	std::srand(std::time(0));
+
+	for (int i = 0; i < Global::numberOfProps; ++i) {
+		float randomSpeed = 5.0f + std::rand() % 11;
+		bg->addLayer(randomSpeed, Global::kScreenHeight);
+	}
+
 	mTitle.loadFromFile("assets/ui/MapSelectionMessage.png");
 
 	// Load button textures
@@ -102,7 +110,8 @@ bool MapSelectState::exit() {
 	selectButton.destroy();
 	mTitle.destroy();
 	mHoveredMapName.destroy();
-
+	delete bg;
+	bg = nullptr;
 
 	return true;
 }
@@ -171,17 +180,21 @@ void MapSelectState::handleEvent(SDL_Event& e) {
 
 
 void MapSelectState::update() {
+	bg->update(0.016f);
+
 	if (!availableMaps.empty()) {
 		auto it = std::next(availableMaps.begin(), selectedIndex);
 		selectedMapFilePath = it->first;
 	}
 
 	if (!selectedMapFilePath.empty() && availableMaps.find(selectedMapFilePath) != availableMaps.end()) {
-		mHoveredMapName.loadFromRenderedText(availableMaps[selectedMapFilePath].name, { 0, 0, 0, 255 });
+		mHoveredMapName.loadFromRenderedText(availableMaps[selectedMapFilePath].name, { 255, 255, 255, 255 });
 	}
 }
 
 void MapSelectState::render() {
+	bg->render();
+
 	float kScreenWidth = Global::kScreenWidth;
 	float kScreenHeight = Global::kScreenHeight;
 

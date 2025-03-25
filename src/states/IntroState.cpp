@@ -44,9 +44,18 @@ bool IntroState::enter() {
         SDL_Log("Failed to render intro text!\n");
         success = false;
     }
-    if (success &= mCursorPromptTexture.loadFromFile("assets/ui/cursor-prompt.jpg"); !success) {
+    if (success &= mCursorPromptTexture.loadFromFile("assets/ui/cursor-prompt.png"); !success) {
         SDL_Log("Failed to render intro text!\n");
         success = false;
+    }
+    
+    bg = new ParallaxBackground();
+
+    std::srand(std::time(0));
+
+    for (int i = 0; i < Global::numberOfProps; ++i) {
+        float randomSpeed = 5.0f + std::rand() % 11;
+        bg->addLayer(randomSpeed, Global::kScreenHeight);
     }
 
     return success;
@@ -63,6 +72,7 @@ bool IntroState::exit() {
     mBackgroundTexture.destroy();
     mMessageTexture.destroy();
     mCursorPromptTexture.destroy();
+    delete bg;
     return true;
 }
 
@@ -91,6 +101,8 @@ void IntroState::update() {
 
     // Calculate the vertical oscillation offset (range of -5 to 5 pixels)
     oscillationOffset = std::sin(mOscillationTime) * 5.0f;
+
+    bg->update(0.016f);
 }
 
 /**
@@ -99,6 +111,7 @@ void IntroState::update() {
  * The message text moves up and down slightly using a sine wave oscillation effect.
  */
 void IntroState::render() {
+    bg->render();
 
     // Render background
     mBackgroundTexture.render(0, 0);
