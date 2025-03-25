@@ -27,7 +27,7 @@ private:
     //Static instance
     static TitleState sTitleState;
 
-    ParallaxBackground bg;
+    ParallaxBackground* bg;
     LTexture mBackgroundTexture;
     LTexture mMessageTexture;
 };

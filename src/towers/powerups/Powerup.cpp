@@ -22,7 +22,7 @@
 Powerup::Powerup(SDL_FRect position, std::string texturePath)
 	: position(position), currentFrame(0), frameTime(0), frameDuration(1.0f / 60.0f),
 	bobbingSpeed(1.0f), bobbingHeight(0.05f), bobbingOffset(0.0f),
-	lifetime(0.5f), elapsedTime(0.0f), flickerStartTime(0.2f), isVisible(true) {
+	lifetime(0.5f), elapsedTime(0.0f), flickerStartTime(0.4f), isVisible(true) {
 	powerupTexture.loadFromFile(texturePath);
 }
 
@@ -61,7 +61,7 @@ bool Powerup::isClicked(float mouseX, float mouseY) const {
  */
 void Powerup::update(float deltaTime) {
 	elapsedTime += deltaTime;
-	std::cout << elapsedTime << std::endl;
+
 	// Flickering effect before despawning
 	if (elapsedTime >= flickerStartTime && elapsedTime < lifetime) {
 		// Toggle visibility every 0.2 seconds

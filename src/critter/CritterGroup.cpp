@@ -219,7 +219,7 @@ void CritterGroup::render() {
 	}
 
 	// Render the alive critters count at the top-left
-	SDL_Color textColor = { 0, 0, 0, 255 };
+	SDL_Color textColor = { 255, 255, 255, 255 };
 	LTexture aliveText;
 	std::string aliveMessage = "Living Critters: " + std::to_string(aliveCritters);
 	aliveText.loadFromRenderedText(aliveMessage, textColor);

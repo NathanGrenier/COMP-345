@@ -39,7 +39,13 @@ TitleState* TitleState::get() {
  * @return True if successful, false otherwise.
  */
 bool TitleState::enter() {
-	bg.loadTexture(gRenderer, LTexture::getRandomBackground("assets/backgrounds"));
+	bg = new ParallaxBackground();
+	std::srand(std::time(0));
+
+	for (int i = 0; i < 15; ++i) {
+		float randomSpeed = 5.0f + std::rand() % 11;
+		bg->addLayer(randomSpeed, Global::kScreenHeight);
+	}
 
 	bool success = true;
 	SDL_Color textColor{ 0x00, 0x00, 0x00, 0xFF };
@@ -100,6 +106,8 @@ bool TitleState::exit() {
 	for (int i = 0; i < kButtonCount; ++i) {
 		buttons[i].destroy();
 	}
+	delete bg;
+	bg = nullptr;
 	return true;
 }
 
@@ -133,7 +141,7 @@ void TitleState::handleEvent(SDL_Event& e) {
  *
  */
 void TitleState::update() {
-	bg.update(0.016f);
+	bg->update(0.016f);
 }
 
 /**
@@ -142,7 +150,7 @@ void TitleState::update() {
  * Clears the screen, renders the background, title text, and menu buttons.
  */
 void TitleState::render() {
-	bg.render(gRenderer);
+	bg->render();
 
 	// Render background
 	mBackgroundTexture.render(0, 0);

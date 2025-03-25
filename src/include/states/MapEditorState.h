@@ -36,7 +36,7 @@ private:
 
 	//Intro background
 	LTexture mBackgroundTexture;
-	ParallaxBackground bg;
+	ParallaxBackground* bg = nullptr;
 	LTexture mMessageTexture;
 
 	LTexture noOfColumnsLabel;

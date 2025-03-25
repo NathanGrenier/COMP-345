@@ -229,12 +229,10 @@ int main(int argc, char* args[]) {
 					gCurrentState->handleEvent(e);
 
 					if (e.type == SDL_EVENT_QUIT) {
-						std::cout << "[DEBUG] Quit event received. Transitioning to ExitState.\n";
 						setNextState(ExitState::get());
 						quit = true;
 					}
 					else if (e.type == SDL_EVENT_KEY_DOWN && e.key.key == SDLK_ESCAPE) {
-						std::cout << "[DEBUG] Escape key pressed. Transitioning to TitleState.\n";
 						setNextState(TitleState::get());
 					}
 				}
@@ -246,12 +244,8 @@ int main(int argc, char* args[]) {
 					float fadeProgress = static_cast<float>(elapsedTime) / static_cast<float>(fadeDuration);
 					fadeAlpha = std::clamp(fadeIn ? (1.0f - fadeProgress) * 255.0f : fadeProgress * 255.0f, 0.0f, 255.0f);
 
-					std::cout << "[DEBUG] Fading " << (fadeIn ? "in" : "out")
-						<< ". Alpha: " << fadeAlpha << " and progress is " << fadeTimer.getTicksNS() << "\n";
-
 					// If fade-out is complete, switch game states
 					if (fadeAlpha >= 255 && !fadeIn) {
-						std::cout << "[DEBUG] Fade-out complete. Switching game state.\n";
 						gCurrentState->exit();
 						gNextState->enter();
 						gCurrentState = gNextState;
@@ -262,7 +256,6 @@ int main(int argc, char* args[]) {
 
 					// If fade-in is complete, stop fading
 					if (fadeAlpha <= 0 && fadeIn) {
-						std::cout << "[DEBUG] Fade-in complete. Transition finished.\n";
 						isFading = false;
 					}
 				}

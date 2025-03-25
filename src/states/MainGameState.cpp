@@ -44,7 +44,13 @@ bool MainGameState::enter() {
 		return false;
 	}
 
-	bg.loadTexture(gRenderer, LTexture::getRandomBackground("assets/backgrounds"));
+	bg = new ParallaxBackground();
+	std::srand(std::time(0));
+
+	for (int i = 0; i < 15; ++i) {
+		float randomSpeed = 5.0f + std::rand() % 11;
+		bg->addLayer(randomSpeed, Global::kScreenHeight);
+	}
 
 	float intButtonHeight = 40.0f;
 
@@ -133,7 +139,7 @@ void MainGameState::handleEvent(SDL_Event& e) {
 void MainGameState::update() {
 	if (isPaused) return;
 
-	bg.update(0.016f);
+	bg->update(0.016f);
 
 	critterGroup->update(0.016f);
 
@@ -163,7 +169,7 @@ void MainGameState::render() {
 	SDL_SetRenderDrawColor(gRenderer, 202, 202, 202, 255); // Gray color for box
 	SDL_RenderFillRect(gRenderer, &foreRect); // Draw filled box
 
-	bg.render(gRenderer);
+	bg->render();
 
 	map->drawOnTargetRect(Global::mapViewRect);
 
@@ -211,6 +217,9 @@ bool MainGameState::exit() {
 
 	delete map;
 	map = nullptr;
+
+	delete bg;
+	bg = nullptr;
 
 	playerGold = 999;
 	waveLevel = 0;
