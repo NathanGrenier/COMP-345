@@ -152,7 +152,7 @@ void EndScreenState::handleEvent(SDL_Event& e) {
 				// Transition to the corresponding game state
 				switch (i) {
 				case 0:
-					setNextState(MapSelectState::get());
+					setNextState(MainGameState::get());
 					break;
 				case 1:
 					setNextState(MapSelectState::get());
