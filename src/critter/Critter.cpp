@@ -41,15 +41,6 @@ Critter::Critter(int level, SDL_FRect start, Map* map)
 	}
 }
 
-Critter::~Critter() {
-	textureWalkUp.destroy();
-	textureWalkDown.destroy();
-	textureWalkSide.destroy();
-	textureDeathUp.destroy();
-	textureDeathDown.destroy();
-	textureDeathSide.destroy();
-}
-
 /**
  * @brief Callback function for when the flow field changes.
  *
@@ -323,7 +314,7 @@ void Critter::render() {
 	float currentCellSize = Global::currentMap->getPixelPerCell();
 	currentRenderRect = { position.x, position.y, currentCellSize * CRITTER_WIDTH_SCALE, currentCellSize * CRITTER_HEIGHT_SCALE };
 
-	LTexture* currentTexture = nullptr;
+	Texture* currentTexture = nullptr;
 	std::vector<SDL_FRect>* currentFrames = nullptr;
 	SDL_FlipMode flip = SDL_FLIP_NONE;
 

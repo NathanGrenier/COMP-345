@@ -8,7 +8,7 @@
 
 #include "GameState.h"
 #include <ui/LButton.h>
-#include <ui/LTexture.h>
+#include <ui/Texture.h>
 #include <map/Map.h>
 #include <string>
 #include <critter/CritterGroup.h>
@@ -43,9 +43,9 @@ private:
 	static MainGameState sMainGameState;
 
 	//Intro background
-	LTexture mBackgroundTexture;
+	Texture mBackgroundTexture;
 	ParallaxBackground* bg;
-	LTexture mMessageTexture;
+	Texture mMessageTexture;
 
 	LButton pauseButton;
 	LButton exitButton;

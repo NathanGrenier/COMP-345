@@ -3,7 +3,6 @@
 #include <cmath>
 #include <iostream>
 #include <Global.h>
-#include <ui/LTexture.h>
 #include <critter/CritterObserver.h>
 #include <critter/CritterGroup.h>
 #include <critter/NormalCritter.h>
@@ -32,9 +31,6 @@
   */
 CritterGroup::CritterGroup(int& waveLevel, int& playerGold, SDL_FRect startPosition, SDL_FRect endPosition, Map* map, DetailAttributeDisplay* detailDisplay, bool endlessMode)
 	: waveLevel(waveLevel), playerGold(playerGold), startPosition(startPosition), endPosition(endPosition), map(map), detailDisplay(detailDisplay), endlessMode(endlessMode), currentSpawnDelay(0.0f), currentSpacing(0.0f) {
-	NormalCritter::loadTextures();
-	FastCritter::loadTextures();
-	TankCritter::loadTextures();
 
 	waveConfigs = {
 		{ {{CritterType::NORMAL, 5}}, 1.0f, 50.0f },
@@ -220,14 +216,14 @@ void CritterGroup::render() {
 
 	// Render the alive critters count at the top-left
 	SDL_Color textColor = { 255, 255, 255, 255 };
-	LTexture aliveText;
+	Texture aliveText;
 	std::string aliveMessage = "Living Critters: " + std::to_string(aliveCritters);
 	aliveText.loadFromRenderedText(aliveMessage, textColor);
 	aliveText.render(210, 10);  // Display text at the top-left
 
 	// Render the countdown message for the next wave
 	if (!waveInProgress) {
-		LTexture countdownText;
+		Texture countdownText;
 		std::string countdownMessage = "Next wave in: " + std::to_string((int)std::ceil(waveCountdown));
 		countdownText.loadFromRenderedText(countdownMessage, textColor);
 		countdownText.render(210, 50);  // Display text at the top-center

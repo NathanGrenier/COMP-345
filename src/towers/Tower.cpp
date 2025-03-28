@@ -15,13 +15,12 @@
 #include <iostream>
 #include <string>
 
-/**
- * @brief Default Constructor, setting all values to 0
- */
+ /**
+  * @brief Default Constructor, setting all values to 0
+  */
 Tower::Tower()
-	: upgradeCost(0), buyingCost(0), refundValue(0), range(0), power(0), rateOfFire(0), level(0), shootingTimer(0), upgradeValues{0, 0, 0}, critterTargettingStrategy(new TargetNearExit())
-{
-	currentRenderRect = {0, 0, 0, 0};
+	: upgradeCost(0), buyingCost(0), refundValue(0), range(0), power(0), rateOfFire(0), level(0), shootingTimer(0), upgradeValues{ 0, 0, 0 }, critterTargettingStrategy(new TargetNearExit()) {
+	currentRenderRect = { 0, 0, 0, 0 };
 }
 
 /**
@@ -38,10 +37,9 @@ Tower::Tower()
  * Uses default refund value ratio in Tower class
  */
 Tower::Tower(float x, float y, float width, int buyingCost, int range, int power, int rateOfFire)
-	: upgradeCost(0), buyingCost(buyingCost), range(range), power(power), rateOfFire(rateOfFire), level(1), shootingTimer(0), upgradeValues{0, 0, 0}, critterTargettingStrategy(new TargetNearExit())
-{
+	: upgradeCost(0), buyingCost(buyingCost), range(range), power(power), rateOfFire(rateOfFire), level(1), shootingTimer(0), upgradeValues{ 0, 0, 0 }, critterTargettingStrategy(new TargetNearExit()) {
 	refundValue = static_cast<int>(REFUND_RATIO * buyingCost);
-	currentRenderRect = {x, y, width, width};
+	currentRenderRect = { x, y, width, width };
 }
 
 /**
@@ -58,9 +56,8 @@ Tower::Tower(float x, float y, float width, int buyingCost, int range, int power
  * Sets Tower level to 1 and shootingTimer to 0 to immediately start firing once placed
  */
 Tower::Tower(float x, float y, float width, int buyingCost, int refundValue, int range, int power, int rateOfFire)
-	: upgradeCost(0), buyingCost(buyingCost), refundValue(refundValue), range(range), power(power), rateOfFire(rateOfFire), level(1), shootingTimer(0), upgradeValues{0, 0, 0}, critterTargettingStrategy(new TargetNearExit())
-{
-	currentRenderRect = {x, y, width, width};
+	: upgradeCost(0), buyingCost(buyingCost), refundValue(refundValue), range(range), power(power), rateOfFire(rateOfFire), level(1), shootingTimer(0), upgradeValues{ 0, 0, 0 }, critterTargettingStrategy(new TargetNearExit()) {
+	currentRenderRect = { x, y, width, width };
 }
 
 /**
@@ -73,8 +70,7 @@ Tower::Tower(float x, float y, float width, int buyingCost, int refundValue, int
  * @return Critter pointer for first Critter that is in range of the Tower
  * @return nullptr if no Critter is in range
  */
-Critter *Tower::findCritter(std::vector<Critter *> critters)
-{
+Critter* Tower::findCritter(std::vector<Critter*> critters) {
 	return critterTargettingStrategy->targetCritter(critters, *this);
 }
 
@@ -83,8 +79,7 @@ Critter *Tower::findCritter(std::vector<Critter *> critters)
  *
  * @details Used when targeted DummyCritter is invalid, usually when DummyCritter dies and target changes
  */
-void Tower::clearProjectiles()
-{
+void Tower::clearProjectiles() {
 	projectiles.clear();
 }
 
@@ -93,8 +88,7 @@ void Tower::clearProjectiles()
  *
  * @details Iterates through the projectiles of a Tower to generate them, simply calling its respective function
  */
-void Tower::generateAllProjectiles()
-{
+void Tower::generateAllProjectiles() {
 	for (int i = 0; i < projectiles.size(); i++)
 	{
 		projectiles[i]->updateAnimation(0.016f);
@@ -105,8 +99,7 @@ void Tower::generateAllProjectiles()
  * @brief Accessor for range
  * @return the range for the Tower
  */
-int Tower::getRange() const
-{
+int Tower::getRange() const {
 	return range;
 }
 
@@ -114,8 +107,7 @@ int Tower::getRange() const
  * @brief Accessor for power
  * @return the power for the Tower
  */
-int Tower::getPower() const
-{
+int Tower::getPower() const {
 	return power;
 }
 
@@ -123,8 +115,7 @@ int Tower::getPower() const
  * @brief Accessor for rate of fire
  * @return the rate of fire for the Tower
  */
-int Tower::getRateOfFire() const
-{
+int Tower::getRateOfFire() const {
 	return rateOfFire;
 }
 
@@ -132,8 +123,7 @@ int Tower::getRateOfFire() const
  * @brief Accessor for level
  * @return the level for the Tower
  */
-int Tower::getLevel() const
-{
+int Tower::getLevel() const {
 	return level;
 }
 
@@ -144,8 +134,7 @@ int Tower::getLevel() const
  * Default refund amount per level is 50 coins
  * @return a refund value of a Tower while considering levels
  */
-int Tower::getRefundValue()
-{
+int Tower::getRefundValue() {
 	return refundValue + (level - 1) * REFUND_PER_UPGRADE;
 }
 
@@ -153,8 +142,7 @@ int Tower::getRefundValue()
  * @brief Accessor for buying cost
  * @return the cost for buying a Tower
  */
-int Tower::getBuyingCost()
-{
+int Tower::getBuyingCost() {
 	return buyingCost;
 }
 
@@ -165,8 +153,7 @@ int Tower::getBuyingCost()
  * Default additional amount per level is 50 coins
  * @return a refund value of a Tower while considering levels
  */
-int Tower::getUpgradeCost()
-{
+int Tower::getUpgradeCost() {
 	return 100 + level * 50;
 }
 
@@ -174,8 +161,7 @@ int Tower::getUpgradeCost()
  * @brief Accessor for the Tower upgrade values
  * @return a struct containing the Tower upgrade values
  */
-Tower::UpgradeValues Tower::getUpgradeValues() const
-{
+Tower::UpgradeValues Tower::getUpgradeValues() const {
 	return upgradeValues;
 }
 
@@ -187,8 +173,7 @@ Tower::UpgradeValues Tower::getUpgradeValues() const
  * @return true if the Tower has been upgraded
  * @return false if the Tower could not have been upgraded
  */
-bool Tower::upgrade()
-{
+bool Tower::upgrade() {
 	if (level < getMaxLevel())
 	{
 		range += upgradeValues.rangeIncrease;
@@ -211,8 +196,7 @@ bool Tower::upgrade()
  * @return true if Tower has been clicked
  * @return false if Tower has not been clicked
  */
-bool Tower::isClicked(float scaleFactor) const
-{
+bool Tower::isClicked(float scaleFactor) const {
 	// Get the current mouse position
 	float mouseXPos, mouseYPos;
 	SDL_GetMouseState(&mouseXPos, &mouseYPos);
@@ -238,8 +222,7 @@ bool Tower::isClicked(float scaleFactor) const
  * @return true if the DummyCritter is in range of the Tower and can be fired a Projectile at
  * @return false if the DummyCritter is out of range of the Tower and cannot be damaged
  */
-bool Tower::isCritterInRange(Critter *critter)
-{
+bool Tower::isCritterInRange(Critter* critter) {
 	float relativeRange = static_cast<float>(range) / Tower::STAT_CELL_RATIO;
 	float relativeDistance = calcDistance(critter) / Global::currentMap->getPixelPerCell();
 
@@ -256,8 +239,7 @@ bool Tower::isCritterInRange(Critter *critter)
  * Takes Tower and DummyCritter size in account for distance
  * @return the absolute distance between the Tower and the DummyCritter
  */
-float Tower::calcDistance(Critter *critter) const
-{
+float Tower::calcDistance(Critter* critter) const {
 	// considers Tower size
 	float halfTowerSize = currentRenderRect.w / 2.0f;
 	float posX = currentRenderRect.x + halfTowerSize;
@@ -282,8 +264,7 @@ float Tower::calcDistance(Critter *critter) const
  * @brief Mutator to sets the rectangle to render the Tower
  * @param targetRect new Rect to render the Tower through
  */
-void Tower::setCurrentRenderRect(float originalX, float originalY, float w, float h)
-{
+void Tower::setCurrentRenderRect(float originalX, float originalY, float w, float h) {
 	// Calculate the center of the original position
 	float centerX = originalX + currentRenderRect.w / 2.0f;
 	float centerY = originalY + currentRenderRect.h / 2.0f;
@@ -297,8 +278,7 @@ void Tower::setCurrentRenderRect(float originalX, float originalY, float w, floa
 	currentRenderRect.y = centerY - h / 2.0f;
 }
 
-SDL_FRect Tower::getCurrentRenderRect() const
-{
+SDL_FRect Tower::getCurrentRenderRect() const {
 	return currentRenderRect;
 }
 
@@ -306,13 +286,11 @@ SDL_FRect Tower::getCurrentRenderRect() const
  * @brief Mutator for rotation
  * @param angle new angle to set the Tower to
  */
-void Tower::setRotation(float angle)
-{
+void Tower::setRotation(float angle) {
 	rotationAngle = angle;
 }
 
-void Tower::setShootingTimer(int newShootingTimer)
-{
+void Tower::setShootingTimer(int newShootingTimer) {
 	shootingTimer = newShootingTimer;
 }
 
@@ -320,8 +298,7 @@ void Tower::setShootingTimer(int newShootingTimer)
  * @brief Mutator for Tower Strategy
  * @param newStrategy the new TowerStrategy to use
  */
-void Tower::setCritterTargettingStrategy(TowerStrategy *newStrategy)
-{
+void Tower::setCritterTargettingStrategy(TowerStrategy* newStrategy) {
 	critterTargettingStrategy = newStrategy;
 	notify();
 }
@@ -329,8 +306,7 @@ void Tower::setCritterTargettingStrategy(TowerStrategy *newStrategy)
 /**
  * @brief Accessor for Tower Strategy
  */
-TowerStrategy *Tower::getCritterTargettingStrategy()
-{
+TowerStrategy* Tower::getCritterTargettingStrategy() {
 	return critterTargettingStrategy;
 }
 
@@ -339,16 +315,14 @@ TowerStrategy *Tower::getCritterTargettingStrategy()
  * @param multiplier multiplier for moving the projectile slower/faster.
  * @param critter The critter that the tower should shoot at.
  */
-void Tower::moveProjectiles(float multiplier, Critter *critter)
-{
-	for (int i = 0; i < projectiles.size(); i++)
-	{
+void Tower::moveProjectiles(float multiplier, Critter* critter) {
+	for (int i = 0; i < projectiles.size(); ) { // Note: no increment here
 		projectiles[i]->move(multiplier / Tower::STAT_CELL_RATIO * Global::currentMap->getPixelPerCell());
-
-		// check if projectile is outside of map
-		if (projectiles[i]->isOutside())
-		{
+		if (!projectiles[i]->isActive() || projectiles[i]->isOutside()) {
+			delete projectiles[i];
 			projectiles.erase(projectiles.begin() + i);
+		} else {
+			++i; // Only increment if no erasure
 		}
 	}
 }
@@ -356,8 +330,7 @@ void Tower::moveProjectiles(float multiplier, Critter *critter)
 /**
  * @brief Renders the Towers as an image
  */
-void Tower::render()
-{
+void Tower::render() {
 	for (int i = 0; i < projectiles.size(); i++)
 	{
 		projectiles[i]->generateProjectile();

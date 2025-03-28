@@ -7,30 +7,25 @@
 #pragma once
 
 #include <SDL3/SDL.h>
-#include <SDL3_image/SDL_image.h>
-#include <SDL3_ttf/SDL_ttf.h>
 #include <string>
-#include <unordered_map>
 
-class LTexture {
+class Texture {
 public:
 	// Constructors
-	LTexture();
-	~LTexture();
+	Texture();
+	~Texture();
 
 	// Static methods for loading and caching
-	static LTexture loadFromFile(std::string path);
-	static void deallocateAllTextures();
-
-	// Instance methods for loading unique textures (e.g., text)
-	bool loadFromRenderedText(std::string textureText, SDL_Color textColor);
+	bool loadFromFile(const std::string& filename, bool loadNew = false);
+	bool loadFromRenderedText(const std::string& text, SDL_Color color);
 
 	std::string getRandomBackground(const std::string& directory);
+	std::string fileName = "";
 
 	// Utility methods
 	void setColor(Uint8 r, Uint8 g, Uint8 b);
 	void setAlpha(Uint8 alpha);
-	void setBlending(SDL_BlendMode blendMode);
+	void setBlendMode(SDL_BlendMode blendMode);
 	void setTextureSize(float newWidth, float newHeight);
 	void render(float x, float y, SDL_FRect* clip = nullptr, float width = 0, float height = 0,
 				double degrees = 0, float sizeMulti = 1.0f, SDL_FPoint* center = nullptr,
@@ -39,28 +34,21 @@ public:
 	// Accessors
 	float getWidth() const;
 	float getHeight() const;
-
-	LTexture(const LTexture&) = delete;
-	LTexture& operator=(const LTexture&) = delete;
-
+	bool isBaseTextureSet() const { return mBaseTexture != nullptr; }
+	bool isModifiedTextureSet() const { return mModifiedTexture != nullptr; }
+	bool isTextureLoaded() const { return isBaseTextureSet(); }
 private:
-	LTexture(SDL_Texture* texture, bool owns = false);
-
-	void destroy();
-
-	// Texture and ownership
-	SDL_Texture* mTexture;
-	bool mOwnsTexture;
+	// Textures
+	SDL_Texture* mBaseTexture = nullptr;  // Cached texture (not owned)
+	SDL_Texture* mModifiedTexture = nullptr;  // Owned by this instance
 
 	// Dimensions
-	float mWidth;
-	float mHeight;
+	float mWidth = 0.0f;;
+	float mHeight = 0.0f;;
 
 	// Per-instance rendering properties
 	Uint8 mR, mG, mB; // Color modulation
 	Uint8 mAlpha;     // Alpha modulation
 
-	// Static cache
-	static std::unordered_map<std::string, SDL_Texture*> sTextureCache;
-	static inline const std::string TEXTURE_PATH = "assets/";
+	void ensureUniqueTexture();
 };

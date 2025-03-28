@@ -13,57 +13,57 @@
 #include <vector>
 #include <map/Map.h>
 #include <string>
-#include <ui/LTexture.h>
+#include <ui/Texture.h>
 #include <ui/LButton.h>
 #include <unordered_map>
 #include <Global.h>
 
 class MapSelectState : public GameState {
 public:
-    MapSelectState();
-    ~MapSelectState() override;
+	MapSelectState();
+	~MapSelectState() override;
 
-    //Static accessor
-    static MapSelectState* get();
+	//Static accessor
+	static MapSelectState* get();
 
-    bool enter() override;
-    bool exit() override;
-    void handleEvent(SDL_Event& e) override;
-    void update() override;
-    void render() override;
+	bool enter() override;
+	bool exit() override;
+	void handleEvent(SDL_Event& e) override;
+	void update() override;
+	void render() override;
 
 private:
-    //Static instance
-    static MapSelectState sMapSelectState;
+	//Static instance
+	static MapSelectState sMapSelectState;
 
-    std::unordered_map<std::string, Map> availableMaps;
+	std::unordered_map<std::string, Map> availableMaps;
 
-    int selectedIndex; ///< Index of the currently selected map
+	int selectedIndex; ///< Index of the currently selected map
 
-    void loadAvailableMaps(); ///< Loads available map names from the map directory
-    std::string formatMapName(const std::string& fileName);
+	void loadAvailableMaps(); ///< Loads available map names from the map directory
+	std::string formatMapName(const std::string& fileName);
 
-    //State title message
-    LTexture mTitle;
-    ParallaxBackground* bg;
-    LTexture mHoveredMapName;
+	//State title message
+	Texture mTitle;
+	ParallaxBackground* bg;
+	Texture mHoveredMapName;
 
-    LButton backButton;
-    
-    LButton leftArrow;
-    LButton rightArrow;
+	LButton backButton;
 
-    LButton createButton;
-    LButton editButton;
-    LButton selectButton;
+	LButton leftArrow;
+	LButton rightArrow;
 
-    float mapWidth = Global::kScreenWidth * 0.6;
-    float mapHeight = Global::kScreenHeight * 0.6;
+	LButton createButton;
+	LButton editButton;
+	LButton selectButton;
 
-    SDL_FRect targetRect = {
-        (Global::kScreenWidth - mapWidth) / 2.0f,
-        (Global::kScreenHeight - mapHeight) / 2.0f - 25,
-        mapWidth,
-        mapHeight
-    };
+	float mapWidth = Global::kScreenWidth * 0.6;
+	float mapHeight = Global::kScreenHeight * 0.6;
+
+	SDL_FRect targetRect = {
+		(Global::kScreenWidth - mapWidth) / 2.0f,
+		(Global::kScreenHeight - mapHeight) / 2.0f - 25,
+		mapWidth,
+		mapHeight
+	};
 };

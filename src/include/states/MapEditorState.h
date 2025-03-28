@@ -7,7 +7,7 @@
 #pragma once
 
 #include "GameState.h"
-#include <ui/LTexture.h>
+#include <ui/Texture.h>
 #include <map/Map.h>
 #include <ui/LButton.h>
 
@@ -31,21 +31,21 @@ private:
 
 	std::string currentSelection = "Start";
 	std::string originalName;
-	
+
 	LButton backButton;
 
 	//Intro background
-	LTexture mBackgroundTexture;
+	Texture mBackgroundTexture;
 	ParallaxBackground* bg = nullptr;
-	LTexture mMessageTexture;
+	Texture mMessageTexture;
 
-	LTexture noOfColumnsLabel;
-	LTexture noOfColumnsText;
+	Texture noOfColumnsLabel;
+	Texture noOfColumnsText;
 	LButton addColumn;
 	LButton removeColumn;
 
-	LTexture noOfRowsLabel;
-	LTexture noOfRowsText;
+	Texture noOfRowsLabel;
+	Texture noOfRowsText;
 	LButton addRow;
 	LButton removeRow;
 
@@ -56,9 +56,9 @@ private:
 
 	LButton saveMapButton;
 	LButton renameButton;
-	LTexture textField;
+	Texture textField;
 
-	LTexture currentMessage;
+	Texture currentMessage;
 
 	int mouseDownStatus = 0;
 	int keyDownStatus = 0;

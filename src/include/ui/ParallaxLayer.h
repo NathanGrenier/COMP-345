@@ -2,7 +2,7 @@
 
 #include <SDL3/SDL.h>
 #include <string>
-#include <ui/LTexture.h>
+#include <ui/Texture.h>
 #include <unordered_set>
 
 class ParallaxLayer {
@@ -20,7 +20,7 @@ public:
 	virtual void render();
 
 protected:
-	LTexture texture;  // Texture for the layer
+	Texture texture;  // Texture for the layer
 	float speed;      // Speed of scrolling
 	float x1, x2;     // X positions for the two textures (for scrolling)
 	float y;

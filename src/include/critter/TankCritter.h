@@ -1,6 +1,7 @@
 #pragma once
 
 #include <critter/Critter.h>
+#include <ui/Texture.h>
 
 class TankCritter : public Critter {
 public:
@@ -17,14 +18,14 @@ public:
 	void setupAnimationFrames() override;
 
 	// Static texture members
-	static inline SDL_Texture* loadedTextureWalkUp = nullptr;
-	static inline SDL_Texture* loadedTextureWalkDown = nullptr;
-	static inline SDL_Texture* loadedTextureWalkSide = nullptr;
-	static inline SDL_Texture* loadedTextureDeathUp = nullptr;
-	static inline SDL_Texture* loadedTextureDeathDown = nullptr;
-	static inline SDL_Texture* loadedTextureDeathSide = nullptr;
+	static inline Texture loadedTextureWalkUp;
+	static inline Texture loadedTextureWalkDown;
+	static inline Texture loadedTextureWalkSide;
+	static inline Texture loadedTextureDeathUp;
+	static inline Texture loadedTextureDeathDown;
+	static inline Texture loadedTextureDeathSide;
 
-	static void loadTextures();
+	void loadTextures();
 
 private:
 	float speed = 30.0f;
