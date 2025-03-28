@@ -9,6 +9,7 @@
 #include <SDL3/SDL_events.h>
 #include <string>
 #include "LTexture.h"
+#include <SDL3_mixer/SDL_mixer.h>
 class LButton {
 public:
 	float kButtonWidth;
@@ -27,10 +28,11 @@ public:
 	void handleEvent(SDL_Event* e);
 
 	bool setText(const std::string& text, SDL_Color textColor);
-	bool loadFromFile(std::string path);
+	bool loadFromFile(std::string path, std::string buttonPressPath="");
 
 	//Shows button sprite
 	void render();
+	void update();
 
 	bool isClicked() const;
 
@@ -54,4 +56,11 @@ private:
 	eButtonSprite mCurrentSprite;
 
 	LTexture gButtonSpriteTexture;
+
+	Mix_Chunk* gButtonPress{ nullptr };
+	Mix_Chunk* gButtonHover{ nullptr };
+
+	Mix_Chunk* currentSound = nullptr;
+	Mix_Chunk* previousSound = nullptr;
+	bool soundPlaying = false;
 };

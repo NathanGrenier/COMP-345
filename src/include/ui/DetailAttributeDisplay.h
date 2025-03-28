@@ -50,6 +50,7 @@ public:
 	bool isDisplayingCritter();
 
 	void render();
+	void update();
 
 protected:
 	std::vector<DetailDisplayComponent*> components; /**< @brief vector of all common components */

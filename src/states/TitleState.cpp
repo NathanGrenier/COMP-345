@@ -141,6 +141,10 @@ void TitleState::handleEvent(SDL_Event& e) {
  *
  */
 void TitleState::update() {
+	for (int i = 0; i < kButtonCount; ++i) {
+		buttons[i].update();
+	}
+
 	bg->update(0.016f);
 }
 

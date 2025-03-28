@@ -27,6 +27,7 @@ public:
 	void handleEvent(SDL_Event* e);
 
 	void render();
+	void update();
 private:
 	LButton buttonTexture;
 };

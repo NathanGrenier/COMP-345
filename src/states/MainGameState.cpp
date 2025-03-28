@@ -54,7 +54,7 @@ bool MainGameState::enter() {
 
 	float intButtonHeight = 40.0f;
 
-	pauseButton.loadFromFile("assets/ui/PauseButton.png");
+	pauseButton.loadFromFile("assets/ui/PauseButton.png", "assets/sfx/PauseButtonPress.wav");
 	exitButton.loadFromFile("assets/ui/ExitButton.png");
 
 	exitButton.setSizeWithAspectRatio(0, intButtonHeight);
@@ -111,18 +111,16 @@ void MainGameState::handleEvent(SDL_Event& e) {
 			float buttonHeight = 40.0f;
 
 			if (isPaused) {
-				pauseButton.loadFromFile("assets/ui/PauseButton.png");
+				pauseButton.loadFromFile("assets/ui/PauseButton.png", "assets/sfx/PauseButtonPress.wav");
 				pauseButton.setSizeWithAspectRatio(0, buttonHeight);
 				pauseButton.setPosition(Global::kScreenWidth - Global::viewerWidth + 30, Global::kScreenHeight - buttonHeight - 20);
 				isPaused = false;
 			} else {
-				pauseButton.loadFromFile("assets/ui/PlayButton.png");
+				pauseButton.loadFromFile("assets/ui/PlayButton.png", "assets/sfx/PauseButtonPress.wav");
 				pauseButton.setSizeWithAspectRatio(0, buttonHeight);
 				pauseButton.setPosition(Global::kScreenWidth - Global::viewerWidth + 30, Global::kScreenHeight - buttonHeight - 20);
 				isPaused = true;
 			}
-
-
 		}
 		if (exitButton.isClicked())
 		{
@@ -137,6 +135,10 @@ void MainGameState::handleEvent(SDL_Event& e) {
  * This function is called every frame to update the game's logic.
  */
 void MainGameState::update() {
+	pauseButton.update();
+	exitButton.update();
+	detailDisplay->update();
+
 	if (isPaused) return;
 
 	bg->update(0.016f);

@@ -71,6 +71,11 @@ void DetailButton::render()
     buttonTexture.render();
 }
 
+void DetailButton::update()
+{
+    buttonTexture.update();
+}
+
 bool DetailButton::isClicked()
 {
     return buttonTexture.isClicked();

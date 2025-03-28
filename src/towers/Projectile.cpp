@@ -9,6 +9,7 @@
 #include <towers/Projectile.h>
 #include <iostream>
 #include <critter/Critter.h>
+#include <SDL3_mixer/SDL_mixer.h>
 
 /**
  * @brief Constructor with position, damage, and if projectile damages an area
@@ -30,6 +31,7 @@ Projectile::Projectile(float x, float y, int damage, bool isArea, float rotation
 {
     currentRenderRect = {};
     projectileTexture.loadFromFile(texturePath);
+    Mix_Chunk* projectileSpawn = nullptr;
 }
 
 /**

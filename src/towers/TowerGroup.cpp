@@ -114,7 +114,7 @@ void TowerGroup::update(float deltaTime, std::vector<Critter *> critters)
 						// Check if critter is dead
 						if (!critter->isAlive())
 						{
-							float spawnChance = 0.02f; // 2% chance to spawn a powerup
+							float spawnChance = 0.2f; // 2% chance to spawn a powerup
 							if (rand() % 100 < spawnChance * 100)
 							{
 								Powerup *powerup = nullptr;
@@ -490,7 +490,6 @@ void TowerGroup::handleEvent(SDL_Event &e)
 					while (auto *decorated = dynamic_cast<TowerDecorator *>(baseTower))
 					{
 						baseTower = decorated->getWrappedTower(); // Get the base tower without the decorator
-																  // Do not delete decorated here; let the new decorator handle it
 					}
 
 					// Apply the new powerup to the base tower (without previous decorators)

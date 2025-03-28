@@ -6,6 +6,7 @@
 #include <ui/LTexture.h>
 #include <map/Map.h>
 #include <towers/powerups/Powerup.h>
+#include <SDL3_mixer/SDL_mixer.h>
 
 /**
  * @file TowerGroup.h
@@ -49,6 +50,9 @@ private:
     const int STANDARD_TOWER_COST = 25; /**< @brief gold cost for standard tower */
     const int CANNON_TOWER_COST = 100; /**< @brief gold cost for cannon tower */
     const int RAPID_FIRE_TOWER_COST = 50; /**< @brief gold cost for rapid fire tower */
+
+    Mix_Chunk* gTowerPurchase{ nullptr };
+    Mix_Chunk* gTowerSell{ nullptr };
 
     /** @brief targetted cell when clicking */
     Cell targetCell;

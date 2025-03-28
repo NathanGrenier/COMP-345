@@ -37,6 +37,18 @@ public:
     static SDL_FRect mapViewRect;
 
     static inline constexpr int numberOfProps{ 10 };
+
+    //Channel constants
+    enum eEffectChannel
+    {
+        eEffectChannelTowerShot = 0,
+        eEffectChannelEnemyDeath = 1,
+        eEffectChannelTowerPurchase = 2,
+        eEffectChannelUI = 3,
+        kEffectChannelTotal = 4,
+    };
+
+    static bool UIChannelPlaying;
 };
 
 /**

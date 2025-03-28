@@ -2,6 +2,7 @@
 #include <SDL3/SDL_main.h>
 #include <SDL3_image/SDL_image.h>
 #include <SDL3_ttf/SDL_ttf.h>
+#include <SDL3_mixer/SDL_mixer.h>
 #include <string>
 #include <sstream>
 
@@ -10,7 +11,7 @@
 #include "States/ExitState.cpp"
 #include "ui/LTexture.cpp"
 #include <LTimer.h>
-#include <iostream>
+#include <iostream>	
 
 /** @file main.cpp
  *  @brief Entry point for the Tower Defense game.
@@ -42,6 +43,16 @@ GameState* gCurrentState{ nullptr };
 /** @brief The next game state to transition to. */
 GameState* gNextState{ nullptr };
 Map* Global::currentMap;
+
+//Playback audio device
+SDL_AudioDeviceID gAudioDeviceId{ 0 };
+
+//Allocated channel count
+int gChannelCount = 0;
+bool Global::UIChannelPlaying = false;
+
+//The music that will be played
+Mix_Music* gMusic{ nullptr };
 
 float Global::viewerWidth = kScreenWidth * 0.3f;
 float Global::headerHeight = kScreenHeight * 0.15f;
@@ -94,7 +105,7 @@ void changeState() {
  */
 bool init() {
 	bool success{ true };
-	if (!SDL_Init(SDL_INIT_VIDEO)) {
+	if (!SDL_Init(SDL_INIT_VIDEO | SDL_INIT_AUDIO)) {
 		SDL_Log("SDL could not initialize! SDL error: %s\n", SDL_GetError());
 		success = false;
 	} else {
@@ -120,6 +131,35 @@ bool init() {
 				SDL_Log("SDL_ttf could not initialize! SDL_ttf error: %s\n", SDL_GetError());
 				success = false;
 			}
+
+			if (!SDL_SetWindowIcon(gWindow, IMG_Load("assets/icon.png"))) {
+				SDL_Log("Window Icon could not be set: %s\n", SDL_GetError());
+				success = false;
+			}
+
+			//Set audio spec
+			SDL_AudioSpec audioSpec;
+			SDL_zero(audioSpec);
+			audioSpec.format = SDL_AUDIO_F32;
+			audioSpec.channels = 2;
+			audioSpec.freq = 44100;
+
+			//Open audio device
+			gAudioDeviceId = SDL_OpenAudioDevice(SDL_AUDIO_DEVICE_DEFAULT_PLAYBACK, &audioSpec);
+			if (gAudioDeviceId == 0)
+			{
+				SDL_Log("Unable to open audio! SDL error: %s\n", SDL_GetError());
+				success = false;
+			}
+			else
+			{
+				//Initialize SDL_mixer
+				if (!Mix_OpenAudio(gAudioDeviceId, nullptr))
+				{
+					printf("SDL_mixer could not initialize! SDL_mixer error: %s\n", SDL_GetError());
+					success = false;
+				}
+			}
 		}
 	}
 
@@ -139,11 +179,20 @@ bool loadMedia() {
 	if (gFont = TTF_OpenFont(fontPath.c_str(), 28); gFont == nullptr) {
 		SDL_Log("Could not load %s! SDL_ttf Error: %s\n", fontPath.c_str(), SDL_GetError());
 		success = false;
-	} else {
-		// Load text
-		SDL_Color textColor = { 0x00, 0x00, 0x00, 0xFF };
-		if (!gFpsTexture.loadFromRenderedText("Enter to start/stop or space to pause/unpause", textColor)) {
-			SDL_Log("Could not load text texture %s! SDL_ttf Error: %s\n", fontPath.c_str(), SDL_GetError());
+	}
+
+	if (gMusic = Mix_LoadMUS("assets/music.wav"); gMusic == nullptr)
+	{
+		SDL_Log("Unable to load music! SDL_mixer error: %s\n", SDL_GetError());
+		success = false;
+	}
+
+	//Allocate channels
+	if (success)
+	{
+		if (gChannelCount = Mix_AllocateChannels(Global::kEffectChannelTotal); gChannelCount != Global::kEffectChannelTotal)
+		{
+			SDL_Log("Unable to allocate channels! SDL_mixer error: %s\n", SDL_GetError());
 			success = false;
 		}
 	}
@@ -155,6 +204,13 @@ bool loadMedia() {
  * @brief Cleans up SDL resources and quits SDL subsystems.
  */
 void close() {
+	//Free music
+	Mix_FreeMusic(gMusic);
+	gMusic = nullptr;
+	Mix_CloseAudio();
+	SDL_CloseAudioDevice(gAudioDeviceId);
+	gAudioDeviceId = 0;
+
 	gFpsTexture.destroy();
 
 	// Free font
@@ -168,6 +224,7 @@ void close() {
 	gWindow = nullptr;
 
 	// Quit SDL subsystems
+	Mix_Quit();
 	TTF_Quit();
 	SDL_Quit();
 }
@@ -218,6 +275,8 @@ int main(int argc, char* args[]) {
 			gCurrentState = IntroState::get();
 			gCurrentState->enter();
 			SDL_SetRenderVSync(gRenderer, 1);
+
+			Mix_PlayMusic(gMusic, -1);
 
 			// Main game loop
 			while (!quit) {

@@ -180,6 +180,13 @@ void MapSelectState::handleEvent(SDL_Event& e) {
 
 
 void MapSelectState::update() {
+	backButton.update();
+	createButton.update();
+	editButton.update();
+	selectButton.update();
+	leftArrow.update();
+	rightArrow.update();
+
 	bg->update(0.016f);
 
 	if (!availableMaps.empty()) {
