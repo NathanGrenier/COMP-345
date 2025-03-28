@@ -19,6 +19,18 @@ Steps:
 | Denmar Ermitano | 40286029   | d_ermita@live.concordia.ca |
 | Nirav Patel     | 40248940   | pa_nir@live.concordia.ca   |
 
+## Attributions
+This section acknowledges and credits third-party assets, resources, or contributions used in the project.
+
+- Map Assets: https://www.funneractic.com/TowerBaseDefenseGame.html
+- Background Texture: https://dinvstudio.itch.io/dynamic-space-background-lite-free
+- Background Texture: https://foozlecc.itch.io/void-environment-pack
+- Background Texture: https://ansimuz.itch.io/space-background
+- Text to UI Texture Generator: https://textcraft.net/
+- Critter Sprites: https://craftpix.net/download/52844/
+- Tower Bullet Effects and Powerup Sprites: https://bdragon1727.itch.io/free-effect-and-bullet-16x16
+- Tower Sprites: https://zintoki.itch.io/ground-shaker
+
 ## Analysis and Design
 
 A document outlining the project's analysis and design considerations can be found at: [`deliverables/Analysis_and_Design.md`](deliverables/Analysis_and_Design.md).
@@ -27,16 +39,16 @@ A document outlining the project's analysis and design considerations can be fou
 
 All assignment documentation can be found in the [`deliverables/`](deliverables/) directory. There will be a markdown file for each assignment.
 
-## Project Documentation
+## Source Code Documentation
 
-The project's documentation can be found online here: https://comp345.ngrenier.com/
+The project's source code documentation can be found online here: https://comp345.ngrenier.com/
 
 # Getting Started
 
 The repo can be cloned at https://github.com/NathanGrenier/COMP-345.
 
 > [!NOTE]
-> The project was tested an ran on VisualStudio v17.3.6+
+> The project was tested on VisualStudio v17.3.6+
 
 > [!TIP]
 >  If you are running the project via a `.zip` file, skip to step 2.
@@ -47,7 +59,7 @@ The repo can be cloned at https://github.com/NathanGrenier/COMP-345.
 <div align="center">
 	<img src="static/select_startup.png" alt="Select Startup" width="500">
 </div>
-3. Compile and run the project by click the green arrow.
+1. Compile and run the project by click the green arrow.
 <div align="center">
 	<img src="static/run_project.png" alt="Select Startup" width="800">
 </div>
