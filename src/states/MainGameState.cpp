@@ -1,7 +1,6 @@
 #include <states/MainGameState.h>
 #include <critter/CritterGroup.h>
 #include <Global.h>
-#include <util/TextureLoader.h>
 #include <towers/CannonTower.h>
 #include <towers/RapidFireTower.h>
 #include <towers/StandardTower.h>
@@ -54,8 +53,8 @@ bool MainGameState::enter() {
 
 	float intButtonHeight = 40.0f;
 
-	pauseButton.loadFromFile("assets/ui/PauseButton.png");
-	exitButton.loadFromFile("assets/ui/ExitButton.png");
+	pauseButton.loadFromFile("ui/PauseButton.png");
+	exitButton.loadFromFile("ui/ExitButton.png");
 
 	exitButton.setSizeWithAspectRatio(0, intButtonHeight);
 	pauseButton.setSizeWithAspectRatio(0, intButtonHeight);
@@ -111,12 +110,12 @@ void MainGameState::handleEvent(SDL_Event& e) {
 			float buttonHeight = 40.0f;
 
 			if (isPaused) {
-				pauseButton.loadFromFile("assets/ui/PauseButton.png");
+				pauseButton.loadFromFile("ui/PauseButton.png");
 				pauseButton.setSizeWithAspectRatio(0, buttonHeight);
 				pauseButton.setPosition(Global::kScreenWidth - Global::viewerWidth + 30, Global::kScreenHeight - buttonHeight - 20);
 				isPaused = false;
 			} else {
-				pauseButton.loadFromFile("assets/ui/PlayButton.png");
+				pauseButton.loadFromFile("ui/PlayButton.png");
 				pauseButton.setSizeWithAspectRatio(0, buttonHeight);
 				pauseButton.setPosition(Global::kScreenWidth - Global::viewerWidth + 30, Global::kScreenHeight - buttonHeight - 20);
 				isPaused = true;
@@ -198,15 +197,6 @@ void MainGameState::render() {
  * @return Always returns true.
  */
 bool MainGameState::exit() {
-	TextureLoader::deallocateTextures();
-
-	mBackgroundTexture.destroy();
-
-	mMessageTexture.destroy();
-
-	pauseButton.destroy();
-	exitButton.destroy();
-
 	isPaused = false;
 
 	delete critterGroup;
@@ -236,7 +226,7 @@ bool MainGameState::exit() {
  */
 void MainGameState::renderText(const std::string& text, float x, float y) {
 	SDL_Color textColor = { 255, 255, 255, 255 };
-	LTexture textTexture;
+	Texture textTexture;
 	textTexture.loadFromRenderedText(text, textColor);
 	textTexture.render(x, y);
 }

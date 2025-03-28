@@ -19,7 +19,7 @@ CritterObserver::CritterObserver(float startingX, float startingY) : currentCrit
 	float componentWidth = DetailAttributeDisplay::ATTRIBUTE_DISPLAY_WIDTH - 2 * DetailDisplayComponent::DETAIL_COMPONENT_PADDING;
 
 	// Label for Critter information
-	critterComponents.push_back(new DetailLabel(componentWidth, "assets/ui/CritterInformation.png"));
+	critterComponents.push_back(new DetailLabel(componentWidth, "ui/CritterInformation.png"));
 
 	// Attributes for Critter
 	critterComponents.push_back(new DetailAttribute(componentWidth));

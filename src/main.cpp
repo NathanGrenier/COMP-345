@@ -8,9 +8,10 @@
 #include "States/TitleState.cpp"
 #include "States/IntroState.cpp"
 #include "States/ExitState.cpp"
-#include "ui/LTexture.cpp"
 #include <LTimer.h>
 #include <iostream>
+#include <util/TextureManager.h>
+#include <algorithm>
 
 /** @file main.cpp
  *  @brief Entry point for the Tower Defense game.
@@ -34,7 +35,7 @@ SDL_Renderer* gRenderer = nullptr;
 TTF_Font* gFont = nullptr;
 
 /** @brief Texture for rendering FPS information. */
-LTexture gFpsTexture;
+Texture gFpsTexture;
 
 /** @brief The current game state. */
 GameState* gCurrentState{ nullptr };
@@ -135,19 +136,12 @@ bool loadMedia() {
 	bool success{ true };
 
 	// Load font
-	std::string fontPath = "./assets/fonts/lazy2.ttf";
-	if (gFont = TTF_OpenFont(fontPath.c_str(), 28); gFont == nullptr) {
-		SDL_Log("Could not load %s! SDL_ttf Error: %s\n", fontPath.c_str(), SDL_GetError());
+	std::string fontPath = "assets/fonts/lazy2.ttf";
+	gFont = TTF_OpenFont(fontPath.c_str(), 28);
+	if (gFont == nullptr) {
+		SDL_Log("Failed to load font %s: %s", fontPath.c_str(), SDL_GetError());
 		success = false;
-	} else {
-		// Load text
-		SDL_Color textColor = { 0x00, 0x00, 0x00, 0xFF };
-		if (!gFpsTexture.loadFromRenderedText("Enter to start/stop or space to pause/unpause", textColor)) {
-			SDL_Log("Could not load text texture %s! SDL_ttf Error: %s\n", fontPath.c_str(), SDL_GetError());
-			success = false;
-		}
 	}
-
 	return success;
 }
 
@@ -155,7 +149,7 @@ bool loadMedia() {
  * @brief Cleans up SDL resources and quits SDL subsystems.
  */
 void close() {
-	gFpsTexture.destroy();
+	TextureManager::getInstance().deallocateAllTextures();
 
 	// Free font
 	TTF_CloseFont(gFont);
@@ -214,6 +208,11 @@ int main(int argc, char* args[]) {
 			// Flag for resetting FPS calculation
 			bool resetFps = true;
 
+			// Create TextureManager Singleton Instance
+			TextureManager::getInstance().init(gRenderer, gFont);
+
+			gFpsTexture.loadFromRenderedText("Enter to start/stop or space to pause/unpause", { 0x00, 0x00, 0x00, 0xFF });
+
 			// Start game state machine
 			gCurrentState = IntroState::get();
 			gCurrentState->enter();
@@ -231,8 +230,7 @@ int main(int argc, char* args[]) {
 					if (e.type == SDL_EVENT_QUIT) {
 						setNextState(ExitState::get());
 						quit = true;
-					}
-					else if (e.type == SDL_EVENT_KEY_DOWN && e.key.key == SDLK_ESCAPE) {
+					} else if (e.type == SDL_EVENT_KEY_DOWN && e.key.key == SDLK_ESCAPE) {
 						setNextState(TitleState::get());
 					}
 				}

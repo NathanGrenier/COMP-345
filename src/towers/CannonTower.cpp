@@ -13,7 +13,7 @@
   * @brief Default Constructor
   */
 CannonTower::CannonTower() : Tower() {
-	getTowerTexture().loadFromFile("assets/tower/CannonTower.png");
+	getTowerTexture().loadFromFile("tower/CannonTower.png");
 	upgradeValues.rangeIncrease = CannonTower::rangeIncreasePerLevel;
 	upgradeValues.powerIncrease = CannonTower::powerIncreasePerLevel;
 	upgradeValues.rateOfFireIncrease = CannonTower::rateOfFireIncreasePerLevel;
@@ -31,7 +31,7 @@ CannonTower::CannonTower() : Tower() {
  */
 CannonTower::CannonTower(float x, float y, float width, int buyingCost)
 	: Tower(x, y, width, buyingCost, CANNON_RANGE, CANNON_POWER, CANNON_RATE_OF_FIRE) {
-	getTowerTexture().loadFromFile("assets/tower/CannonTower.png");
+	getTowerTexture().loadFromFile("tower/CannonTower.png");
 	upgradeValues.rangeIncrease = CannonTower::rangeIncreasePerLevel;
 	upgradeValues.powerIncrease = CannonTower::powerIncreasePerLevel;
 	upgradeValues.rateOfFireIncrease = CannonTower::rateOfFireIncreasePerLevel;
@@ -49,7 +49,7 @@ CannonTower::CannonTower(float x, float y, float width, int buyingCost)
  */
 CannonTower::CannonTower(float x, float y, float width, int buyingCost, int refundValue)
 	: Tower(x, y, width, buyingCost, refundValue, CANNON_RANGE, CANNON_POWER, CANNON_RATE_OF_FIRE) {
-	getTowerTexture().loadFromFile("assets/tower/CannonTower.png");
+	getTowerTexture().loadFromFile("tower/CannonTower.png");
 	upgradeValues.rangeIncrease = CannonTower::rangeIncreasePerLevel;
 	upgradeValues.powerIncrease = CannonTower::powerIncreasePerLevel;
 	upgradeValues.rateOfFireIncrease = CannonTower::rateOfFireIncreasePerLevel;
@@ -138,7 +138,7 @@ void CannonTower::shootProjectile(Critter* targettedCritter) {
 			float speedY = (critterPosY - posY) / distance;
 
 			// fires a big sized projectile, resets shooting timer
-			projectiles.push_back(new Projectile(posX, posY, getPower(), false, 10, getRotation(), speedX, speedY, "assets/tower/CannonProjectile.png"));
+			projectiles.push_back(new Projectile(posX, posY, getPower(), false, 10, getRotation(), speedX, speedY, "tower/CannonProjectile.png"));
 			setShootingTimer(MAX_SHOOTING_TIMER);
 		}
 	} else // decreases shooting timer

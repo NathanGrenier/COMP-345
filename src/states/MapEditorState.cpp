@@ -29,32 +29,31 @@ bool MapEditorState::enter() {
 
 	if (Global::currentMap == nullptr) {
 		map = new Map(15, 15, "Default");
-		mMessageTexture.loadFromFile("assets/ui/MapCreation.png");
-	}
-	else {
+		mMessageTexture.loadFromFile("ui/MapCreation.png");
+	} else {
 		map = Global::currentMap;
-		mMessageTexture.loadFromFile("assets/ui/MapEditing.png");
+		mMessageTexture.loadFromFile("ui/MapEditing.png");
 	}
 	originalName = map->getName();
 	map->setFlowFieldVisibility(true);
 	map->setCurrentRenderRect(Global::mapViewRect);
 
-	backButton.loadFromFile("assets/ui/LeftArrow.png");
+	backButton.loadFromFile("ui/LeftArrow.png");
 
-	noOfColumnsLabel.loadFromFile("assets/ui/Columns.png");
-	noOfRowsLabel.loadFromFile("assets/ui/Rows.png");
-	addColumn.loadFromFile("assets/ui/AddButton.png");
-	removeColumn.loadFromFile("assets/ui/RemoveButton.png");
-	addRow.loadFromFile("assets/ui/AddButton.png");
-	removeRow.loadFromFile("assets/ui/RemoveButton.png");
+	noOfColumnsLabel.loadFromFile("ui/Columns.png");
+	noOfRowsLabel.loadFromFile("ui/Rows.png");
+	addColumn.loadFromFile("ui/AddButton.png");
+	removeColumn.loadFromFile("ui/RemoveButton.png");
+	addRow.loadFromFile("ui/AddButton.png");
+	removeRow.loadFromFile("ui/RemoveButton.png");
 
-	selectStartPos.loadFromFile("assets/ui/SetStartPositionButton.png");
-	selectEndPos.loadFromFile("assets/ui/SetEndPositionButton.png");
-	selectWallCell.loadFromFile("assets/ui/EditWallButton.png");
-	toggleFlowFieldVisibility.loadFromFile("assets/ui/ToggleFlowVisibilityButton.png");
+	selectStartPos.loadFromFile("ui/SetStartPositionButton.png");
+	selectEndPos.loadFromFile("ui/SetEndPositionButton.png");
+	selectWallCell.loadFromFile("ui/EditWallButton.png");
+	toggleFlowFieldVisibility.loadFromFile("ui/ToggleFlowVisibilityButton.png");
 
-	saveMapButton.loadFromFile("assets/ui/SaveButton.png");
-	renameButton.loadFromFile("assets/ui/RenameButton.png");
+	saveMapButton.loadFromFile("ui/SaveButton.png");
+	renameButton.loadFromFile("ui/RenameButton.png");
 	textField.loadFromRenderedText("File Name: " + map->getName(), { 255, 255, 255, 255 });
 
 	// Map view calculations
@@ -125,30 +124,8 @@ bool MapEditorState::enter() {
 
 bool MapEditorState::exit() {
 	map = nullptr;
-
-	backButton.destroy();
-
-	noOfColumnsLabel.destroy();
-	noOfRowsLabel.destroy();
-
-	addColumn.destroy();
-	removeColumn.destroy();
-	addRow.destroy();
-	removeRow.destroy();
-
-	selectStartPos.destroy();
-	selectEndPos.destroy();
-	selectWallCell.destroy();
-	toggleFlowFieldVisibility.destroy();
-
-	saveMapButton.destroy();
-	renameButton.destroy();
-
-	mBackgroundTexture.destroy();
-
 	delete bg;
 
-	mMessageTexture.destroy();
 	return true;
 }
 

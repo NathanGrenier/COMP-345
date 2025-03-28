@@ -8,7 +8,8 @@
 
 #include <SDL3/SDL_events.h>
 #include <string>
-#include "LTexture.h"
+#include <ui/Texture.h>
+
 class LButton {
 public:
 	float kButtonWidth;
@@ -16,7 +17,6 @@ public:
 
 	//Initializes internal variables
 	LButton();
-	void destroy();
 
 	//Sets top left position
 	void setPosition(float x, float y);
@@ -53,5 +53,5 @@ private:
 	//Currently used global sprite
 	eButtonSprite mCurrentSprite;
 
-	LTexture gButtonSpriteTexture;
+	Texture gButtonSpriteTexture;
 };

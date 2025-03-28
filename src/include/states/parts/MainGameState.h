@@ -40,9 +40,6 @@ private:
 	//Static instance
 	static MainGameState sMainGameState;
 
-	//Intro background
-	LTexture mBackgroundTexture;
-
 	//Intro message
 	LTexture mMessageTexture;
 
