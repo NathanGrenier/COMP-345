@@ -16,6 +16,7 @@ add_subdirectory(SDL_ttf EXCLUDE_FROM_ALL)
 # json
 add_subdirectory(json)
 # SDL_mixer
+set(SDLMIXER_VENDORED ON)
 add_subdirectory(SDL_mixer EXCLUDE_FROM_ALL)
 
 add_library(vendor INTERFACE)

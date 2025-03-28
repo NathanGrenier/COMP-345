@@ -313,6 +313,7 @@ int main(int argc, char* args[]) {
 						gCurrentState->exit();
 						gNextState->enter();
 						gCurrentState = gNextState;
+						gCurrentState->update();
 						gNextState = nullptr;
 						fadeIn = true;
 						fadeTimer.start();
@@ -321,13 +322,13 @@ int main(int argc, char* args[]) {
 					// If fade-in is complete, stop fading
 					if (fadeAlpha <= 0 && fadeIn) {
 						isFading = false;
+						gCurrentState->update();
 					}
 				}
 
 				// Update the current state if not transitioning
-				gCurrentState->update();
-
 				if (!isFading) {
+					gCurrentState->update();
 					changeState();
 				}
 
