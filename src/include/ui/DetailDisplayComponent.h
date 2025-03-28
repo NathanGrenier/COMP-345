@@ -3,7 +3,7 @@
  * @brief The header file for the DetailDisplayComponent class.
  * @author Denmar Ermitano
  * @date 2025-03-02
- * 
+ *
  * @details Wrapper class for the UI elements in a DetailDisplay
  * Wraps up buttons, labels, and aggregate UI (DetailAttribute has 2 labels for instance)
  * Allows for DetailDisplayComponent objects to be placed within a single array/vector
@@ -11,7 +11,6 @@
 #pragma once
 
 #include <Global.h>
-#include <ui/LTexture.h>
 
 class DetailDisplayComponent {
 public:

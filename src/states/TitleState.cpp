@@ -50,7 +50,7 @@ bool TitleState::enter() {
 	bool success = true;
 	SDL_Color textColor{ 0x00, 0x00, 0x00, 0xFF };
 
-	if (!(success &= mMessageTexture.loadFromFile("assets/ui/TitleMessage.png"))) {
+	if (!(success &= mMessageTexture.loadFromFile("ui/TitleMessage.png"))) {
 		printf("Failed to render title text!\n");
 	}
 
@@ -60,10 +60,10 @@ bool TitleState::enter() {
 	};
 
 	// Initialize buttons
-	buttons[0].loadFromFile("assets/ui/Start.png");
+	buttons[0].loadFromFile("ui/Start.png");
 
 	for (int i = 1; i < kButtonCount; ++i) {
-		if (!buttons[i].loadFromFile("assets/ui/LoadPart" + std::to_string(i) + ".png")) {
+		if (!buttons[i].loadFromFile("ui/LoadPart" + std::to_string(i) + ".png")) {
 			printf("Failed to set button text: %s\n", buttonLabels[i]);
 			success = false;
 		} else {
@@ -101,11 +101,6 @@ bool TitleState::enter() {
  * @return Always returns true.
  */
 bool TitleState::exit() {
-	mBackgroundTexture.destroy();
-	mMessageTexture.destroy();
-	for (int i = 0; i < kButtonCount; ++i) {
-		buttons[i].destroy();
-	}
 	delete bg;
 	bg = nullptr;
 	return true;
@@ -119,21 +114,21 @@ bool TitleState::exit() {
  * @param e The SDL_Event object containing input data.
  */
 void TitleState::handleEvent(SDL_Event& e) {
-    for (int i = 0; i < kButtonCount; ++i) {
-        buttons[i].handleEvent(&e);
+	for (int i = 0; i < kButtonCount; ++i) {
+		buttons[i].handleEvent(&e);
 
-        // Check if a button is clicked
-        if (e.type == SDL_EVENT_MOUSE_BUTTON_DOWN && e.button.button == SDL_BUTTON_LEFT) {
-            if (buttons[i].isClicked()) {
-                // Transition to the corresponding game state
-                switch (i) {
-                case 0:
-                    setNextState(MapSelectState::get());
-                    break;
-                }
-            }
-        }
-    }
+		// Check if a button is clicked
+		if (e.type == SDL_EVENT_MOUSE_BUTTON_DOWN && e.button.button == SDL_BUTTON_LEFT) {
+			if (buttons[i].isClicked()) {
+				// Transition to the corresponding game state
+				switch (i) {
+					case 0:
+						setNextState(MapSelectState::get());
+						break;
+				}
+			}
+		}
+	}
 }
 
 /**
@@ -151,9 +146,6 @@ void TitleState::update() {
  */
 void TitleState::render() {
 	bg->render();
-
-	// Render background
-	mBackgroundTexture.render(0, 0);
 
 	// Render title text centered at the top
 	mMessageTexture.render((Global::kScreenWidth - Global::kScreenWidth * 0.9) / 2.f, 40, nullptr, Global::kScreenWidth * 0.9, -1);

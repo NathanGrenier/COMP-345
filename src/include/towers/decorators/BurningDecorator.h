@@ -37,7 +37,7 @@ public:
 	BurningDecorator(Tower* tower, SDL_FRect towerPosition, std::string indicatorPath)
 		: TowerDecorator(tower, towerPosition, indicatorPath), wrappedTower(tower), currentFrame(0), frameTime(0),
 		burnDuration(1.0f) {  // Initialize burn timer and burn duration
-		burningTexture.loadFromFile("assets/tower/fire-4f.png");
+		burningTexture.loadFromFile("tower/fire-4f.png");
 		indicatorTexture.loadFromFile(indicatorPath);  // Load indicator texture
 
 		// Calculate individual frame dimensions for the fire sprite sheet
@@ -48,15 +48,6 @@ public:
 		for (int i = 0; i < 4; ++i) {
 			spriteClips[i] = { i * frameWidth, 0.f, frameWidth, frameHeight };
 		}
-	}
-
-	/**
-	 * @brief Destructor for BurningDecorator.
-	 *
-	 * Cleans up any resources, including the indicator texture.
-	 */
-	~BurningDecorator() {
-		indicatorTexture.destroy();
 	}
 
 	/**
@@ -207,8 +198,8 @@ public:
 
 private:
 	Tower* wrappedTower; /**< The tower that this decorator enhances */
-	LTexture burningTexture; /**< The texture for the burn effect animation (fire effect) */
-	LTexture indicatorTexture; /**< The texture for the fire indicator above the tower */
+	Texture burningTexture; /**< The texture for the burn effect animation (fire effect) */
+	Texture indicatorTexture; /**< The texture for the fire indicator above the tower */
 	SDL_FRect spriteClips[4]; /**< The frames for the burn effect animation */
 	int currentFrame; /**< The current frame in the burn animation */
 	float frameTime; /**< Time accumulator for animation frame updates */

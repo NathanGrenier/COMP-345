@@ -29,8 +29,7 @@
   * @param detailDisplay Reference to the UI detail display.
   */
 TowerGroup::TowerGroup(int& playerGold, Map* map, DetailAttributeDisplay* detailDisplay)
-	: playerGold(playerGold), map(map), detailDisplay(detailDisplay)
-{
+	: playerGold(playerGold), map(map), detailDisplay(detailDisplay) {
 	// creating dummy Towers
 	dummyStandardTower = new StandardTower(0, 0, 0, STANDARD_TOWER_COST);
 	dummyRapidFireTower = new RapidFireTower(0, 0, 0, RAPID_FIRE_TOWER_COST);
@@ -61,8 +60,7 @@ TowerGroup::TowerGroup(int& playerGold, Map* map, DetailAttributeDisplay* detail
  *
  * Cleans up dynamically allocated towers and power-ups.
  */
-TowerGroup::~TowerGroup()
-{
+TowerGroup::~TowerGroup() {
 	// Clean up dynamically allocated towers
 	for (Tower* tower : towers)
 	{
@@ -86,8 +84,7 @@ TowerGroup::~TowerGroup()
  * @param deltaTime The time elapsed since the last update.
  * @param critters List of critters in the game.
  */
-void TowerGroup::update(float deltaTime, std::vector<Critter*> critters)
-{
+void TowerGroup::update(float deltaTime, std::vector<Critter*> critters) {
 	for (int i = 0; i < towers.size(); i++)
 	{
 		towers[i]->generateAllProjectiles();
@@ -109,21 +106,19 @@ void TowerGroup::update(float deltaTime, std::vector<Critter*> critters)
 					{
 						critter->takeDamage(static_cast<float>(projectile->getDamage()));
 						critter->notify();
-						projectile->destroy();
+						projectile->setIsActive(false);
 
 						// Check if critter is dead
 						if (!critter->isAlive())
 						{
-							float spawnChance = 0.02f; // 2% chance to spawn a powerup
-							if (rand() % 100 < spawnChance * 100)
+							if (rand() % 100 < POWERUP_SPAWN_CHANCE * 100)
 							{
 								Powerup* powerup = nullptr;
 								int powerupType = rand() % 2; // Randomly choose between fire or ice
 								if (powerupType == 0)
 								{
 									powerup = new FirePowerup(critter->getCurrentRenderRect());
-								}
-								else
+								} else
 								{
 									powerup = new IcePowerup(critter->getCurrentRenderRect());
 								}
@@ -143,8 +138,7 @@ void TowerGroup::update(float deltaTime, std::vector<Critter*> critters)
 		if (powerup->markForDespawn) {
 			delete powerup;  // Free memory
 			it = activePowerups.erase(it);  // Remove from list and move iterator
-		}
-		else {
+		} else {
 			++it;
 		}
 	}
@@ -153,8 +147,7 @@ void TowerGroup::update(float deltaTime, std::vector<Critter*> critters)
 /**
  * @brief Renders all towers and active powerups.
  */
-void TowerGroup::render()
-{
+void TowerGroup::render() {
 	for (auto& tower : towers)
 	{
 		tower->render();
@@ -170,8 +163,7 @@ void TowerGroup::render()
  * @brief Retrieves the list of towers.
  * @return A reference to the vector containing all towers.
  */
-std::vector<Tower*>& TowerGroup::getTowers()
-{
+std::vector<Tower*>& TowerGroup::getTowers() {
 	return towers;
 }
 
@@ -192,8 +184,7 @@ int TowerGroup::getTotalTowersPlaced()
  * @param scaleFactor The scaling factor for grid positioning.
  * @return A pointer to the tower at the specified position, or nullptr if none exists.
  */
-Tower* TowerGroup::getTowerAtPosition(float x, float y, float scaleFactor)
-{
+Tower* TowerGroup::getTowerAtPosition(float x, float y, float scaleFactor) {
 	return nullptr;
 }
 
@@ -207,26 +198,21 @@ void TowerGroup::upgradeTower(Tower* tower) {}
 /**
  * @brief Converts the TowerStrategy of a Tower to match the index in the strategies array
  */
-int TowerGroup::getStrategyIndex(Tower* tower)
-{
+int TowerGroup::getStrategyIndex(Tower* tower) {
 	TowerStrategy* critterTargettingStrategy = tower->getCritterTargettingStrategy();
 	if (dynamic_cast<TargetNearExit*>(critterTargettingStrategy))
 	{
 		return 0;
-	}
-	else if (dynamic_cast<TargetNearTower*>(critterTargettingStrategy))
+	} else if (dynamic_cast<TargetNearTower*>(critterTargettingStrategy))
 	{
 		return 1;
-	}
-	else if (dynamic_cast<TargetStrongest*>(critterTargettingStrategy))
+	} else if (dynamic_cast<TargetStrongest*>(critterTargettingStrategy))
 	{
 		return 2;
-	}
-	else if (dynamic_cast<TargetWeakest*>(critterTargettingStrategy))
+	} else if (dynamic_cast<TargetWeakest*>(critterTargettingStrategy))
 	{
 		return 3;
-	}
-	else
+	} else
 	{
 		return -1;
 	}
@@ -239,8 +225,7 @@ int TowerGroup::getStrategyIndex(Tower* tower)
  *
  * @param e The SDL event structure representing user input.
  */
-void TowerGroup::handleEvent(SDL_Event& e)
-{
+void TowerGroup::handleEvent(SDL_Event& e) {
 	// resets tower buy selection
 	bool buttonClick = false;
 	bool correctCell = false;
@@ -304,8 +289,7 @@ void TowerGroup::handleEvent(SDL_Event& e)
 		if (cellX < 0 || cellX >= map->cellCountX || cellY < 0 || cellY >= map->cellCountY)
 		{
 			correctCell = false;
-		}
-		else
+		} else
 		{
 			// Compute the index for accessing the cell
 			int index = cellX + cellY * map->cellCountX;
@@ -328,18 +312,18 @@ void TowerGroup::handleEvent(SDL_Event& e)
 					// displays different values from dummy Towers
 					switch (i)
 					{
-					case 1:
-						detailDisplay->selectTower(dummyStandardTower);
-						dummyStandardTower->notify();
-						return;
-					case 2:
-						detailDisplay->selectTower(dummyRapidFireTower);
-						dummyRapidFireTower->notify();
-						return;
-					case 3:
-						detailDisplay->selectTower(dummyCannonTower);
-						dummyCannonTower->notify();
-						return;
+						case 1:
+							detailDisplay->selectTower(dummyStandardTower);
+							dummyStandardTower->notify();
+							return;
+						case 2:
+							detailDisplay->selectTower(dummyRapidFireTower);
+							dummyRapidFireTower->notify();
+							return;
+						case 3:
+							detailDisplay->selectTower(dummyCannonTower);
+							dummyCannonTower->notify();
+							return;
 					}
 				}
 			}
@@ -428,32 +412,32 @@ void TowerGroup::handleEvent(SDL_Event& e)
 				// Checks for currently selected tower
 				switch (towerBuySelect)
 				{
-				case 0: // Buy standard tower
-					if (playerGold >= STANDARD_TOWER_COST)
-					{
-						playerGold -= STANDARD_TOWER_COST;
-						newTower = new StandardTower(targetX, targetY, map->getPixelPerCell(), STANDARD_TOWER_COST);
-					}
-					towerBuySelect = -1;
-					break;
+					case 0: // Buy standard tower
+						if (playerGold >= STANDARD_TOWER_COST)
+						{
+							playerGold -= STANDARD_TOWER_COST;
+							newTower = new StandardTower(targetX, targetY, map->getPixelPerCell(), STANDARD_TOWER_COST);
+						}
+						towerBuySelect = -1;
+						break;
 
-				case 1: // Buy rapid fire tower
-					if (playerGold >= RAPID_FIRE_TOWER_COST)
-					{
-						playerGold -= RAPID_FIRE_TOWER_COST;
-						newTower = new RapidFireTower(targetX, targetY, map->getPixelPerCell(), RAPID_FIRE_TOWER_COST);
-					}
-					towerBuySelect = -1;
-					break;
+					case 1: // Buy rapid fire tower
+						if (playerGold >= RAPID_FIRE_TOWER_COST)
+						{
+							playerGold -= RAPID_FIRE_TOWER_COST;
+							newTower = new RapidFireTower(targetX, targetY, map->getPixelPerCell(), RAPID_FIRE_TOWER_COST);
+						}
+						towerBuySelect = -1;
+						break;
 
-				case 2: // Buy cannon tower
-					if (playerGold >= CANNON_TOWER_COST)
-					{
-						playerGold -= CANNON_TOWER_COST;
-						newTower = new CannonTower(targetX, targetY, map->getPixelPerCell(), CANNON_TOWER_COST);
-					}
-					towerBuySelect = -1;
-					break;
+					case 2: // Buy cannon tower
+						if (playerGold >= CANNON_TOWER_COST)
+						{
+							playerGold -= CANNON_TOWER_COST;
+							newTower = new CannonTower(targetX, targetY, map->getPixelPerCell(), CANNON_TOWER_COST);
+						}
+						towerBuySelect = -1;
+						break;
 				}
 
 				// If a new tower was successfully created, place it in the towers list
@@ -473,8 +457,7 @@ void TowerGroup::handleEvent(SDL_Event& e)
 
 					map->wallCellDict[targetCell] = true;
 				}
-			}
-			else
+			} else
 			{
 				towerBuySelect = -1;
 				detailDisplay->selectTower(nullptr);

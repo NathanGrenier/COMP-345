@@ -7,37 +7,30 @@
 #pragma once
 
 #include "GameState.h"
-#include "../UI/LTexture.h"
+#include <ui/Texture.h>
 
 class IntroState : public GameState {
 public:
-    //Static accessor
-    static IntroState* get();
+	//Static accessor
+	static IntroState* get();
 
-    //Transitions
-    bool enter() override;
-    bool exit() override;
+	//Transitions
+	bool enter() override;
+	bool exit() override;
 
-    //Main loop functions
-    void handleEvent(SDL_Event& e) override;
-    void update() override;
-    void render() override;
-    
-    std::string getRandomBackground(const std::string& directory);
-
+	//Main loop functions
+	void handleEvent(SDL_Event& e) override;
+	void update() override;
+	void render() override;
 private:
-    //Static instance
-    static IntroState sIntroState;
+	//Static instance
+	static IntroState sIntroState;
 
-    //Intro background
-    LTexture mBackgroundTexture;
+	//Intro message
+	Texture mMessageTexture;
+	Texture mCursorPromptTexture;
 
-    //Intro message
-    LTexture mMessageTexture;
-    
-    LTexture mCursorPromptTexture;
+	ParallaxBackground* bg;
 
-    ParallaxBackground* bg;
-
-    float oscillationOffset = 0.0f;
+	float oscillationOffset = 0.0f;
 };

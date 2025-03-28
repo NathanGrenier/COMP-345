@@ -3,9 +3,9 @@
  * @brief The header file for the DetailAttribute class.
  * @author Denmar Ermitano
  * @date 2025-03-02
- * 
+ *
  * @details DetailDisplayComponent superclass.
- * Used for displaying an attribute. 
+ * Used for displaying an attribute.
  * Consists of a label and a value.
  */
 #pragma once
@@ -14,8 +14,7 @@
 #include <ui/DetailDisplayComponent.h>
 #include <string>
 
-class DetailAttribute : public DetailDisplayComponent
-{
+class DetailAttribute : public DetailDisplayComponent {
 public:
 	static const float DETAIL_ATTRIBUTE_SPACING; /**< @brief padding for detail components, used on sides */
 	static const float DETAIL_VALUE_PADDING;	/**< @brief spacing for detail components, used vertically */
@@ -29,7 +28,7 @@ public:
 	void render();
 
 protected:
-	LTexture detailAttributeTexture; /**< @brief LTexture for labelling an attribute */
-	LTexture detailValueTexture; /**< @brief LTexture for the value an attribute */
+	Texture detailAttributeTexture; /**< @brief LTexture for labelling an attribute */
+	Texture detailValueTexture; /**< @brief LTexture for the value an attribute */
 };
 
