@@ -12,6 +12,7 @@
 #include <LTimer.h>
 #include <iostream>
 #include <util/TextureManager.h>
+#include <util/AudioManager.h>
 #include <algorithm>
 
 /** @file main.cpp
@@ -47,10 +48,6 @@ Map* Global::currentMap;
 
 //Playback audio device
 SDL_AudioDeviceID gAudioDeviceId{ 0 };
-
-//Allocated channel count
-int gChannelCount = 0;
-bool Global::UIChannelPlaying = false;
 
 //The music that will be played
 Mix_Music* gMusic{ nullptr };
@@ -109,12 +106,14 @@ bool init() {
 	if (!SDL_Init(SDL_INIT_VIDEO | SDL_INIT_AUDIO)) {
 		SDL_Log("SDL could not initialize! SDL error: %s\n", SDL_GetError());
 		success = false;
-	} else {
+	}
+	else {
 		// Create window and renderer
 		if (!SDL_CreateWindowAndRenderer("Tower Defense - NullTerminators", static_cast<int>(Global::kScreenWidth), static_cast<int>(Global::kScreenHeight), 0, &gWindow, &gRenderer)) {
 			SDL_Log("Window could not be created! SDL error: %s\n", SDL_GetError());
 			success = false;
-		} else {
+		}
+		else {
 			// Enable VSync
 			if (!SDL_SetRenderVSync(gRenderer, 1)) {
 				SDL_Log("Could not enable VSync! SDL error: %s\n", SDL_GetError());
@@ -181,23 +180,6 @@ bool loadMedia() {
 		SDL_Log("Could not load %s! SDL_ttf Error: %s\n", fontPath.c_str(), SDL_GetError());
 		success = false;
 	}
-
-	if (gMusic = Mix_LoadMUS("assets/music.wav"); gMusic == nullptr)
-	{
-		SDL_Log("Unable to load music! SDL_mixer error: %s\n", SDL_GetError());
-		success = false;
-	}
-
-	//Allocate channels
-	if (success)
-	{
-		if (gChannelCount = Mix_AllocateChannels(Global::kEffectChannelTotal); gChannelCount != Global::kEffectChannelTotal)
-		{
-			SDL_Log("Unable to allocate channels! SDL_mixer error: %s\n", SDL_GetError());
-			success = false;
-		}
-	}
-
 	return success;
 }
 
@@ -206,8 +188,6 @@ bool loadMedia() {
  */
 void close() {
 	//Free music
-	Mix_FreeMusic(gMusic);
-	gMusic = nullptr;
 	Mix_CloseAudio();
 	SDL_CloseAudioDevice(gAudioDeviceId);
 	gAudioDeviceId = 0;
@@ -247,12 +227,14 @@ int main(int argc, char* args[]) {
 	if (!init()) {
 		SDL_Log("Unable to initialize program!\n");
 		exitCode = 1;
-	} else {
+	}
+	else {
 		// Load media
 		if (!loadMedia()) {
 			SDL_Log("Unable to load media!\n");
 			exitCode = 2;
-		} else {
+		}
+		else {
 			// Quit flag
 			bool quit{ false };
 
@@ -274,8 +256,12 @@ int main(int argc, char* args[]) {
 
 			// Create TextureManager Singleton Instance
 			TextureManager::getInstance().init(gRenderer, gFont);
-
 			gFpsTexture.loadFromRenderedText("Enter to start/stop or space to pause/unpause", { 0x00, 0x00, 0x00, 0xFF });
+
+			AudioManager::getInstance().init(AudioManager::MAX_VOLUME / 4);
+			gMusic = AudioManager::getInstance().loadMusic("music.wav");
+
+			std::cout << AudioManager::getInstance().getGlobalVolumeLevel() << std::endl;
 
 			// Start game state machine
 			gCurrentState = IntroState::get();
@@ -296,7 +282,8 @@ int main(int argc, char* args[]) {
 					if (e.type == SDL_EVENT_QUIT) {
 						setNextState(ExitState::get());
 						quit = true;
-					} else if (e.type == SDL_EVENT_KEY_DOWN && e.key.key == SDLK_ESCAPE) {
+					}
+					else if (e.type == SDL_EVENT_KEY_DOWN && e.key.key == SDLK_ESCAPE) {
 						setNextState(TitleState::get());
 					}
 				}

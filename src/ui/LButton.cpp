@@ -1,5 +1,6 @@
 #include <ui/LButton.h>
 #include <Global.h>
+#include <util/AudioManager.h>
 
 /**
  * @class LButton
@@ -20,10 +21,8 @@ LButton::LButton() :
 }
 
 LButton::~LButton() {
-	Mix_FreeChunk(gButtonPress);
-	gButtonPress = nullptr;
-	Mix_FreeChunk(gButtonHover);
-	gButtonHover = nullptr;
+	mButtonPress = nullptr;
+	mButtonHover = nullptr;
 }
 
 /**
@@ -78,19 +77,19 @@ void LButton::handleEvent(SDL_Event* e) {
 		// Update button state based on mouse position
 		if (!inside) {
 			mCurrentSprite = eButtonSpriteMouseOut;
-			gButtonSpriteTexture.setAlpha(255);
+			mButtonSpriteTexture.setAlpha(255);
 			currentSound = nullptr;
 		}
 		else {
 			switch (e->type) {
 			case SDL_EVENT_MOUSE_MOTION:
 				if (mCurrentSprite != eButtonSpriteMouseOverMotion && currentSound == nullptr) {
-					currentSound = gButtonHover;
+					currentSound = mButtonHover;
 				}
 				mCurrentSprite = eButtonSpriteMouseOverMotion;
 				break;
 			case SDL_EVENT_MOUSE_BUTTON_DOWN:
-				currentSound = gButtonPress;
+				currentSound = mButtonPress;
 				mCurrentSprite = eButtonSpriteMouseDown;
 				break;
 			case SDL_EVENT_MOUSE_BUTTON_UP:
@@ -102,20 +101,6 @@ void LButton::handleEvent(SDL_Event* e) {
 
 }
 
-void LButton::update()
-{
-	if (currentSound != previousSound) {
-		if (currentSound != nullptr) {
-			Mix_PlayChannel(Global::eEffectChannelUI, currentSound, 0);
-		}
-		previousSound = currentSound;
-	}
-
-	if (!Mix_Playing(Global::eEffectChannelUI)) {
-		currentSound = nullptr;
-	}
-}
-
 /**
  * @brief Sets the text on the button.
  *
@@ -124,34 +109,49 @@ void LButton::update()
  * @return True if the text texture was successfully created, false otherwise.
  */
 bool LButton::setText(const std::string& text, SDL_Color textColor) {
-	bool result = gButtonSpriteTexture.loadFromRenderedText(text, textColor);
+	bool result = mButtonSpriteTexture.loadFromRenderedText(text, textColor);
 	if (result) {
-		kButtonWidth = gButtonSpriteTexture.getWidth();
-		kButtonHeight = gButtonSpriteTexture.getHeight();
+		kButtonWidth = mButtonSpriteTexture.getWidth();
+		kButtonHeight = mButtonSpriteTexture.getHeight();
 		originalWidth = kButtonWidth;
 		originalHeight = kButtonHeight;
 	}
 	return result;
 }
 
-bool LButton::loadFromFile(std::string path, std::string buttonPressPath) {
-	bool result = gButtonSpriteTexture.loadFromFile(path);
+bool LButton::loadFromFile(std::string path, std::string buttonPressPath, std::string buttonHoverPath, bool noSound) {
+	bool result = mButtonSpriteTexture.loadFromFile(path);
 	if (result) {
-		kButtonWidth = gButtonSpriteTexture.getWidth();
-		kButtonHeight = gButtonSpriteTexture.getHeight() / static_cast<float>(eButtonSpriteCount);
+		kButtonWidth = mButtonSpriteTexture.getWidth();
+		kButtonHeight = mButtonSpriteTexture.getHeight() / static_cast<float>(eButtonSpriteCount);
 		originalWidth = kButtonWidth;
 		originalHeight = kButtonHeight;
-
-		gButtonHover = Mix_LoadWAV("assets/sfx/ButtonHover.wav");
-
-		if (!buttonPressPath.empty()) {
-			gButtonPress = Mix_LoadWAV(buttonPressPath.c_str());
-		}
-		else {
-			gButtonPress = Mix_LoadWAV("assets/sfx/DefaultButtonPress.wav");
-		}
 	}
+
+	if (!noSound) {
+		AudioManager& audioManager = AudioManager::getInstance();
+		mButtonPress = audioManager.loadAudio(buttonPressPath.empty() ? "sfx/DefaultButtonPress.wav" : buttonPressPath);
+		mButtonHover = audioManager.loadAudio(buttonHoverPath.empty() ? "sfx/ButtonHover.wav" : buttonHoverPath);
+	} else {
+		mButtonPress = nullptr;
+		mButtonHover = nullptr;
+	}
+
 	return result;
+}
+
+void LButton::update()
+{
+	if (currentSound != previousSound) {
+		if (currentSound != nullptr) {
+			Mix_PlayChannel(AudioManager::eEffectChannelUI, currentSound, 0);
+		}
+		previousSound = currentSound;
+	}
+
+	if (!Mix_Playing(AudioManager::eEffectChannelUI)) {
+		currentSound = nullptr;
+	}
 }
 
 /**
@@ -167,7 +167,7 @@ void LButton::render() {
 
 
 	// Render the button using the current sprite state
-	gButtonSpriteTexture.render(mPosition.x, mPosition.y, &spriteClips[mCurrentSprite], kButtonWidth, kButtonHeight);
+	mButtonSpriteTexture.render(mPosition.x, mPosition.y, &spriteClips[mCurrentSprite], kButtonWidth, kButtonHeight);
 }
 
 /**

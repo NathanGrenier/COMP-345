@@ -27,28 +27,16 @@ extern TTF_Font* gFont; ///< Global pointer to the font used for rendering text.
  */
 class Global {
 public:
-    static inline const float kScreenWidth{ 800 };  // Constant, set at compile-time
-    static inline const float kScreenHeight{ 600 }; // Constant, set at compile-time
+	static inline const float kScreenWidth{ 800 };  // Constant, set at compile-time
+	static inline const float kScreenHeight{ 600 }; // Constant, set at compile-time
 
-    static float viewerWidth;  // This will now be settable
-    static float headerHeight;  // Constant value
+	static float viewerWidth;  // This will now be settable
+	static float headerHeight;  // Constant value
 
-    static Map* currentMap;
-    static SDL_FRect mapViewRect;
+	static Map* currentMap;
+	static SDL_FRect mapViewRect;
 
-    static inline constexpr int numberOfProps{ 10 };
-
-    //Channel constants
-    enum eEffectChannel
-    {
-        eEffectChannelTowerShot = 0,
-        eEffectChannelEnemyDeath = 1,
-        eEffectChannelTowerPurchase = 2,
-        eEffectChannelUI = 3,
-        kEffectChannelTotal = 4,
-    };
-
-    static bool UIChannelPlaying;
+	static inline constexpr int numberOfProps{ 10 };
 };
 
 /**

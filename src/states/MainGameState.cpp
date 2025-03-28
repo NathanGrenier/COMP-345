@@ -53,7 +53,7 @@ bool MainGameState::enter() {
 
 	float intButtonHeight = 40.0f;
 
-	pauseButton.loadFromFile("ui/PauseButton.png", "assets/sfx/PauseButtonPress.wav");
+	pauseButton.loadFromFile("ui/PauseButton.png", "sfx/PauseButtonPress.wav");
 	exitButton.loadFromFile("ui/ExitButton.png");
 
 	exitButton.setSizeWithAspectRatio(0, intButtonHeight);
@@ -110,12 +110,12 @@ void MainGameState::handleEvent(SDL_Event& e) {
 			float buttonHeight = 40.0f;
 
 			if (isPaused) {
-				pauseButton.loadFromFile("ui/PauseButton.png", "assets/sfx/PauseButtonPress.wav");
+				pauseButton.loadFromFile("ui/PauseButton.png", "sfx/PauseButtonPress.wav");
 				pauseButton.setSizeWithAspectRatio(0, buttonHeight);
 				pauseButton.setPosition(Global::kScreenWidth - Global::viewerWidth + 30, Global::kScreenHeight - buttonHeight - 20);
 				isPaused = false;
 			} else {
-				pauseButton.loadFromFile("ui/PlayButton.png", "assets/sfx/PauseButtonPress.wav");
+				pauseButton.loadFromFile("ui/PlayButton.png", "sfx/PauseButtonPress.wav");
 				pauseButton.setSizeWithAspectRatio(0, buttonHeight);
 				pauseButton.setPosition(Global::kScreenWidth - Global::viewerWidth + 30, Global::kScreenHeight - buttonHeight - 20);
 				isPaused = true;
