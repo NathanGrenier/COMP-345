@@ -6,12 +6,17 @@
  */
 #pragma once
 
-#include "EndScreenState.h"
-#include "../UI/LTexture.h"
+#include <states/EndScreenState.h>
+#include <UI/Texture.h>
 #include <string>
 
 class GameOverState : public EndScreenState {
 public:
+    const static std::string FAST_CRITTER_TYPE;
+    const static std::string TANK_CRITTER_TYPE;
+    const static std::string NORMAL_CRITTER_TYPE;
+    const static int CRITTER_ANIMATION_WIDTH = 320;
+
     //Transitions
     bool enter() override;
     bool exit() override;
@@ -28,9 +33,13 @@ private:
     static GameOverState sGameOverState;
 
     //Critter animation
+    Texture textureWalkDown;
+    std::vector<SDL_FRect> animationFramesWalkDown;
 
+    void generateCritterSprite();
+    void animateCritterSprite(float deltaTime);
 
-    //Critter taunt message
-    LTexture killedByMessage;
-    LTexture mMessageTexture;
+    //Critter animation timings
+    float animationTimer = 0.0f;
+    int currentFrame = 0;
 };

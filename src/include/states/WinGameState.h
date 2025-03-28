@@ -6,18 +6,19 @@
  */
 #pragma once
 
-#include "EndScreenState.h"
-#include "../UI/LTexture.h"
+#include <states/EndScreenState.h>
+#include <UI/Texture.h>
 #include <string>
+#include <nlohmann/json.hpp>
 
 class WinGameState : public EndScreenState {
 public:
+    const static std::string QUOTE_FILE_PATH;
+    
     //Transitions
     bool enter() override;
-    bool exit() override;
 
     //Main loop functions
-    void update() override;
     void render() override;
 
     //Static accessor
@@ -27,6 +28,9 @@ private:
     //Static instance
     static WinGameState sWinGameState;
 
-    //Win animation
-    LTexture winAnimation;
+    std::string pickQuote(const std::string& filePath);
+    nlohmann::json loadQuoteData(const std::string& filePath);
+    
+    //Win quote
+    Texture winQuote;
 };

@@ -10,6 +10,7 @@
 #include <states/MapSelectState.h>
 #include <Global.h>
 #include <ui/LButton.h>
+#include <ui/Texture.h>
 #include <string>
 #include <critter/Critter.h>
 #include <states/ExitState.h>
@@ -36,8 +37,8 @@ EndScreenState* EndScreenState::get() {
  */
 bool EndScreenState::enter() {
 	buttons = new LButton[BUTTON_COUNT];
-	statLabels = new LTexture[STAT_COUNT];
-	stats = new LTexture[STAT_COUNT];
+	statLabels = new Texture[STAT_COUNT];
+	stats = new Texture[STAT_COUNT];
 
 	bg = new ParallaxBackground();
 	std::srand(std::time(0));
@@ -59,8 +60,8 @@ bool EndScreenState::enter() {
 	}
 
 	for (int i = 0; i < STAT_COUNT; ++i) {
-		stats[i] = LTexture();
-		statLabels[i] = LTexture();
+		stats[i] = Texture();
+		statLabels[i] = Texture();
 	}
 
 	statLabels[0].loadFromRenderedText("Killed by:", textColor);
@@ -75,22 +76,22 @@ bool EndScreenState::enter() {
 	if (!killedBy.compare(EndScreenState::DEFAULT_KILLER_CRITTER_STR))
 	{
 		stats[0].loadFromRenderedText("None", textColor);
-		buttons[0].loadFromFile("assets/ui/PlayAgain.png");
-		titlePath = "assets/ui/YouWin.png";
+		buttons[0].loadFromFile("ui/PlayAgain.png");
+		titlePath = "ui/YouWin.png";
 	}
 	else
 	{
 		stats[0].loadFromRenderedText(killedBy, textColor);
-		buttons[0].loadFromFile("assets/ui/Retry.png");
-		titlePath = "assets/ui/GameOver.png";
+		buttons[0].loadFromFile("ui/Retry.png");
+		titlePath = "ui/GameOver.png";
 	}
 
 	if (!(success &= messageTexture.loadFromFile(titlePath))) {
 		printf("Failed to render title text!\n");
 	}
 
-	buttons[1].loadFromFile("assets/ui/MapSelect.png");
-	buttons[2].loadFromFile("assets/ui/Quit.png");
+	buttons[1].loadFromFile("ui/MapSelect.png");
+	buttons[2].loadFromFile("ui/Quit.png");
 
 	float buttonHeight = (2.0f / 3.0f) * Global::kScreenHeight;
 
@@ -114,8 +115,6 @@ bool EndScreenState::enter() {
  */
 bool EndScreenState::exit()
 {
-	messageTexture.destroy();
-
 	/*for (int i = 0; i < BUTTON_COUNT; ++i) {
 		buttons[i].destroy();
 	}
@@ -221,21 +220,37 @@ void EndScreenState::render() {
 	}
 }
 
+/**
+ * @brief Mutator for wave number
+ * @param wave new wave number
+ */
 void EndScreenState::setWave(int wave)
 {
 	EndScreenState::wave = wave;
 }
 
+/**
+ * @brief Mutator for number of towers bought
+ * @param towersBought new number of towers that were bought
+ */
 void EndScreenState::setTowersBought(int towersBought)
 {
 	EndScreenState::towersBought = towersBought;
 }
 
+/**
+ * @brief Mutator for number of critters killed
+ * @param crittersKilled new number of critters killed
+ */
 void EndScreenState::setCrittersKilled(int crittersKilled)
 {
 	EndScreenState::crittersKilled = crittersKilled;
 }
 
+/**
+ * @brief Mutator for killedBy
+ * @param killedBy Critter that killed the player during game
+ */
 void EndScreenState::setKilledBy(std::string killedBy)
 {
 	EndScreenState::killedBy = killedBy;

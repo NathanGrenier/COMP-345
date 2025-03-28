@@ -6,9 +6,9 @@
  */
 #pragma once
 
-#include "GameState.h"
-#include "../UI/LTexture.h"
-#include "../UI/LButton.h"
+#include <states/GameState.h>
+#include <UI/Texture.h>
+#include <UI/LButton.h>
 #include <critter/Critter.h>
 #include <string>
 
@@ -46,24 +46,27 @@ public:
     void setCrittersKilled(int crittersKilled);
     void setKilledBy(std::string killedBy);
 
+
+protected:
+    std::string killedBy = DEFAULT_KILLER_CRITTER_STR;
+
 private:
     //Static instance
     static EndScreenState sEndScreenState;
 
-    LTexture messageTexture;
+    Texture messageTexture;
 
     ParallaxBackground* bg;
     int wave = -1;
     int towersBought = -1;
     int crittersKilled = -1;
-    std::string killedBy = DEFAULT_KILLER_CRITTER_STR;
 
     /// @brief Array of main menu buttons.
     LButton* buttons;
 
     /// @brief Array of statistic labels.
-    LTexture* statLabels;
+    Texture* statLabels;
 
     /// @brief Array of statistics.
-    LTexture* stats;
+    Texture* stats;
 };
