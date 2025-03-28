@@ -98,12 +98,14 @@ bool init() {
 	if (!SDL_Init(SDL_INIT_VIDEO)) {
 		SDL_Log("SDL could not initialize! SDL error: %s\n", SDL_GetError());
 		success = false;
-	} else {
+	}
+	else {
 		// Create window and renderer
 		if (!SDL_CreateWindowAndRenderer("Tower Defense - NullTerminators", static_cast<int>(Global::kScreenWidth), static_cast<int>(Global::kScreenHeight), 0, &gWindow, &gRenderer)) {
 			SDL_Log("Window could not be created! SDL error: %s\n", SDL_GetError());
 			success = false;
-		} else {
+		}
+		else {
 			// Enable VSync
 			if (!SDL_SetRenderVSync(gRenderer, 1)) {
 				SDL_Log("Could not enable VSync! SDL error: %s\n", SDL_GetError());
@@ -183,12 +185,14 @@ int main(int argc, char* args[]) {
 	if (!init()) {
 		SDL_Log("Unable to initialize program!\n");
 		exitCode = 1;
-	} else {
+	}
+	else {
 		// Load media
 		if (!loadMedia()) {
 			SDL_Log("Unable to load media!\n");
 			exitCode = 2;
-		} else {
+		}
+		else {
 			// Quit flag
 			bool quit{ false };
 
@@ -230,7 +234,8 @@ int main(int argc, char* args[]) {
 					if (e.type == SDL_EVENT_QUIT) {
 						setNextState(ExitState::get());
 						quit = true;
-					} else if (e.type == SDL_EVENT_KEY_DOWN && e.key.key == SDLK_ESCAPE) {
+					}
+					else if (e.type == SDL_EVENT_KEY_DOWN && e.key.key == SDLK_ESCAPE) {
 						setNextState(TitleState::get());
 					}
 				}
