@@ -13,7 +13,7 @@
  * @brief Default constructor.
  */
 DetailButton::DetailButton()
-    : DetailDisplayComponent::DetailDisplayComponent(), LButton::LButton()
+    : DetailDisplayComponent::DetailDisplayComponent()
 {
     
 }
@@ -24,10 +24,10 @@ DetailButton::DetailButton()
  * @param path the path of the LButton image
  */
 DetailButton::DetailButton(float width, std::string path)
-    : DetailDisplayComponent::DetailDisplayComponent(width), LButton::LButton()
+    : DetailDisplayComponent::DetailDisplayComponent(width)
 {
-    LButton::loadFromFile(path);
-    LButton::setSizeWithAspectRatio(width, 0.f);
+    buttonTexture.loadFromFile(path);
+    buttonTexture.setSizeWithAspectRatio(width, 0.f);
 }
 
 /**
@@ -41,7 +41,7 @@ DetailButton::DetailButton(float width, std::string path)
  */
 void DetailButton::setComponentPosition(float x, float y) 
 {
-    LButton::setPosition(x, y);
+    buttonTexture.setPosition(x, y);
     xPosition = x;
     yPosition = y;
 }
@@ -55,9 +55,9 @@ void DetailButton::setComponentPosition(float x, float y)
  */
 void DetailButton::setComponentImagePath(std::string path)
 {
-    LButton::loadFromFile(path);
-    LButton::setSizeWithAspectRatio(width, 0);
-    LButton::setPosition(xPosition, yPosition);
+    buttonTexture.loadFromFile(path);
+    buttonTexture.setSizeWithAspectRatio(width, 0);
+    buttonTexture.setPosition(xPosition, yPosition);
 }
 
 /**
@@ -68,6 +68,20 @@ void DetailButton::setComponentImagePath(std::string path)
  */
 void DetailButton::render()
 {
-    LButton::render();
+    buttonTexture.render();
 }
 
+void DetailButton::update()
+{
+    buttonTexture.update();
+}
+
+bool DetailButton::isClicked()
+{
+    return buttonTexture.isClicked();
+}
+
+void DetailButton::handleEvent(SDL_Event* e)
+{
+    return buttonTexture.handleEvent(e);
+}

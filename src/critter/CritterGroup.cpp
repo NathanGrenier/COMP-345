@@ -3,7 +3,6 @@
 #include <cmath>
 #include <iostream>
 #include <Global.h>
-#include <ui/LTexture.h>
 #include <critter/CritterObserver.h>
 #include <critter/CritterGroup.h>
 #include <critter/NormalCritter.h>
@@ -30,11 +29,8 @@
   * @param map Pointer to the game map.
   * @param detailDisplay Reference to the DetailAttributeDisplay for critter details.
   */
-CritterGroup::CritterGroup(int& waveLevel, int& playerGold, SDL_FRect startPosition, SDL_FRect endPosition, Map* map, DetailAttributeDisplay& detailDisplay, bool endlessMode)
+CritterGroup::CritterGroup(int& waveLevel, int& playerGold, SDL_FRect startPosition, SDL_FRect endPosition, Map* map, DetailAttributeDisplay* detailDisplay, bool endlessMode)
 	: waveLevel(waveLevel), playerGold(playerGold), startPosition(startPosition), endPosition(endPosition), map(map), detailDisplay(detailDisplay), endlessMode(endlessMode), currentSpawnDelay(0.0f), currentSpacing(0.0f) {
-	NormalCritter::loadTextures();
-	FastCritter::loadTextures();
-	TankCritter::loadTextures();
 
 	waveConfigs = {
 		{ {{CritterType::NORMAL, 5}}, 1.0f, 50.0f },
@@ -107,7 +103,7 @@ void CritterGroup::generateCritters(float deltaTime) {
 			critters.push_back(newCritter);
 			aliveCritters++;
 			crittersSpawned++;
-			newCritter->attach(detailDisplay.getCritterObserver());
+			newCritter->attach(detailDisplay->getCritterObserver());
 			timeSinceLastSpawn = 0.0f;
 		}
 	}
@@ -124,7 +120,7 @@ void CritterGroup::handleEvent(SDL_Event& e) {
 			Critter* critter = critters[i];
 			if (critter->isClicked())
 			{
-				detailDisplay.selectCritter(critter);
+				detailDisplay->selectCritter(critter);
 				critter->notify();
 				break;
 			}
@@ -178,12 +174,12 @@ void CritterGroup::update(float deltaTime) {
 		critter->update(deltaTime);
 		if (critter->atExit()) {
 			critter->stealGold(playerGold);
-			critter->detach(detailDisplay.getCritterObserver());
+			critter->detach(detailDisplay->getCritterObserver());
 			it = critters.erase(it);
 			--aliveCritters;
 		} else if (!critter->isAlive() && !critter->isDying()) {
 			playerGold += critter->getReward();
-			critter->detach(detailDisplay.getCritterObserver());
+			critter->detach(detailDisplay->getCritterObserver());
 			it = critters.erase(it);
 			--aliveCritters;
 		} else {
@@ -219,15 +215,15 @@ void CritterGroup::render() {
 	}
 
 	// Render the alive critters count at the top-left
-	SDL_Color textColor = { 0, 0, 0, 255 };
-	LTexture aliveText;
+	SDL_Color textColor = { 255, 255, 255, 255 };
+	Texture aliveText;
 	std::string aliveMessage = "Living Critters: " + std::to_string(aliveCritters);
 	aliveText.loadFromRenderedText(aliveMessage, textColor);
 	aliveText.render(210, 10);  // Display text at the top-left
 
 	// Render the countdown message for the next wave
 	if (!waveInProgress) {
-		LTexture countdownText;
+		Texture countdownText;
 		std::string countdownMessage = "Next wave in: " + std::to_string((int)std::ceil(waveCountdown));
 		countdownText.loadFromRenderedText(countdownMessage, textColor);
 		countdownText.render(210, 50);  // Display text at the top-center

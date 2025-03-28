@@ -1,7 +1,6 @@
 #include <states/MainGameState.h>
 #include <critter/CritterGroup.h>
 #include <Global.h>
-#include <util/TextureLoader.h>
 #include <towers/CannonTower.h>
 #include <towers/RapidFireTower.h>
 #include <towers/StandardTower.h>
@@ -44,10 +43,18 @@ bool MainGameState::enter() {
 		return false;
 	}
 
+	bg = new ParallaxBackground();
+	std::srand(std::time(0));
+
+	for (int i = 0; i < Global::numberOfProps; ++i) {
+		float randomSpeed = 5.0f + std::rand() % 11;
+		bg->addLayer(randomSpeed, Global::kScreenHeight);
+	}
+
 	float intButtonHeight = 40.0f;
 
-	pauseButton.loadFromFile("assets/ui/PauseButton.png");
-	exitButton.loadFromFile("assets/ui/ExitButton.png");
+	pauseButton.loadFromFile("ui/PauseButton.png", "assets/sfx/PauseButtonPress.wav");
+	exitButton.loadFromFile("ui/ExitButton.png");
 
 	exitButton.setSizeWithAspectRatio(0, intButtonHeight);
 	pauseButton.setSizeWithAspectRatio(0, intButtonHeight);
@@ -71,8 +78,8 @@ bool MainGameState::enter() {
 		}
 	}
 
-	detailDisplay = DetailAttributeDisplay();
-	bool success = detailDisplay.initializeComponents();
+	detailDisplay = new DetailAttributeDisplay();
+	bool success = detailDisplay->initializeComponents();
 
 	endlessMode = true;
 	critterGroup = new CritterGroup(waveLevel, playerGold, map->getSpawnerPos(Global::mapViewRect), map->getTargetPos(Global::mapViewRect), map, detailDisplay, endlessMode);
@@ -91,7 +98,7 @@ void MainGameState::handleEvent(SDL_Event& e) {
 	if (!isPaused) {
 		towerGroup->handleEvent(e);
 		critterGroup->handleEvent(e);
-		detailDisplay.handleButtonEvents(e);
+		detailDisplay->handleButtonEvents(e);
 	}
 
 	pauseButton.handleEvent(&e);
@@ -103,18 +110,16 @@ void MainGameState::handleEvent(SDL_Event& e) {
 			float buttonHeight = 40.0f;
 
 			if (isPaused) {
-				pauseButton.loadFromFile("assets/ui/PauseButton.png");
+				pauseButton.loadFromFile("ui/PauseButton.png", "assets/sfx/PauseButtonPress.wav");
 				pauseButton.setSizeWithAspectRatio(0, buttonHeight);
 				pauseButton.setPosition(Global::kScreenWidth - Global::viewerWidth + 30, Global::kScreenHeight - buttonHeight - 20);
 				isPaused = false;
 			} else {
-				pauseButton.loadFromFile("assets/ui/PlayButton.png");
+				pauseButton.loadFromFile("ui/PlayButton.png", "assets/sfx/PauseButtonPress.wav");
 				pauseButton.setSizeWithAspectRatio(0, buttonHeight);
 				pauseButton.setPosition(Global::kScreenWidth - Global::viewerWidth + 30, Global::kScreenHeight - buttonHeight - 20);
 				isPaused = true;
 			}
-
-
 		}
 		if (exitButton.isClicked())
 		{
@@ -129,7 +134,13 @@ void MainGameState::handleEvent(SDL_Event& e) {
  * This function is called every frame to update the game's logic.
  */
 void MainGameState::update() {
+	pauseButton.update();
+	exitButton.update();
+	detailDisplay->update();
+
 	if (isPaused) return;
+
+	bg->update(0.016f);
 
 	critterGroup->update(0.016f);
 
@@ -159,9 +170,11 @@ void MainGameState::render() {
 	SDL_SetRenderDrawColor(gRenderer, 202, 202, 202, 255); // Gray color for box
 	SDL_RenderFillRect(gRenderer, &foreRect); // Draw filled box
 
+	bg->render();
+
 	map->drawOnTargetRect(Global::mapViewRect);
 
-	detailDisplay.render();
+	detailDisplay->render();
 
 	critterGroup->render();
 	towerGroup->render();
@@ -186,15 +199,6 @@ void MainGameState::render() {
  * @return Always returns true.
  */
 bool MainGameState::exit() {
-	TextureLoader::deallocateTextures();
-
-	mBackgroundTexture.destroy();
-
-	mMessageTexture.destroy();
-
-	pauseButton.destroy();
-	exitButton.destroy();
-
 	isPaused = false;
 
 	delete critterGroup;
@@ -205,6 +209,9 @@ bool MainGameState::exit() {
 
 	delete map;
 	map = nullptr;
+
+	delete bg;
+	bg = nullptr;
 
 	playerGold = 999;
 	waveLevel = 0;
@@ -220,8 +227,8 @@ bool MainGameState::exit() {
  * @param y The y-coordinate of the text.
  */
 void MainGameState::renderText(const std::string& text, float x, float y) {
-	SDL_Color textColor = { 0, 0, 0, 255 };
-	LTexture textTexture;
+	SDL_Color textColor = { 255, 255, 255, 255 };
+	Texture textTexture;
 	textTexture.loadFromRenderedText(text, textColor);
 	textTexture.render(x, y);
 }

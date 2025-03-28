@@ -92,9 +92,9 @@ void DetailDisplay::render()
 {
     // draws border
     SDL_FRect borderRect = { mPosition.x, mPosition.y, static_cast<float>(width), static_cast<float>(height) };
-    SDL_SetRenderDrawColor(gRenderer, 0xAA, 0xAA, 0xAA, 0xFF);
+    SDL_SetRenderDrawColor(gRenderer, 0xAA, 0xAA, 0xAA, 75);
     SDL_RenderFillRect(gRenderer, &borderRect);
-
+        
     // draws inside of the display
     SDL_FRect innerRect = {
         mPosition.x + DETAIL_BORDER_WIDTH,
@@ -102,7 +102,7 @@ void DetailDisplay::render()
         static_cast<float>(width - (2 * DETAIL_BORDER_WIDTH)),
         static_cast<float>(height - (2 * DETAIL_BORDER_WIDTH))
     };
-    SDL_SetRenderDrawColor(gRenderer, 0xCC, 0xCC, 0xCC, 0xFF);
+    SDL_SetRenderDrawColor(gRenderer, 0xCC, 0xCC, 0xCC, 75);
     SDL_RenderFillRect(gRenderer, &innerRect);
 }
 

@@ -8,7 +8,7 @@
 
 #include "GameState.h"
 #include <ui/LButton.h>
-#include <ui/LTexture.h>
+#include <ui/Texture.h>
 #include <map/Map.h>
 #include <string>
 #include <critter/CritterGroup.h>
@@ -43,10 +43,8 @@ private:
 	static MainGameState sMainGameState;
 
 	//Intro background
-	LTexture mBackgroundTexture;
-
-	//Intro message
-	LTexture mMessageTexture;
+	ParallaxBackground* bg;
+	Texture mMessageTexture;
 
 	LButton pauseButton;
 	LButton exitButton;
@@ -63,6 +61,6 @@ private:
 	CritterGroup* critterGroup = nullptr;
 	TowerGroup* towerGroup = nullptr;
 
-	DetailAttributeDisplay detailDisplay; /** @brief ui display for details */
+	DetailAttributeDisplay* detailDisplay; /** @brief ui display for details */
 	int towerBuySelect = 0; /** @brief selected Tower as index */
 };

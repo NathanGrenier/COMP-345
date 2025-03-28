@@ -8,7 +8,7 @@
 #include <states/MapEditorState.h>
 #include <states/MainGameState.h>
 #include <ui/LButton.h>
-#include <ui/LTexture.h>
+#include <ui/Texture.h>
 #include <map/Map.h>
 #include <states/TitleState.h>
 
@@ -34,15 +34,23 @@ MapSelectState* MapSelectState::get() {
 bool MapSelectState::enter() {
 	loadAvailableMaps();
 
-	mTitle.loadFromFile("assets/ui/MapSelectionMessage.png");
+	bg = new ParallaxBackground();
+	std::srand(std::time(0));
+
+	for (int i = 0; i < Global::numberOfProps; ++i) {
+		float randomSpeed = 5.0f + std::rand() % 11;
+		bg->addLayer(randomSpeed, Global::kScreenHeight);
+	}
+
+	mTitle.loadFromFile("ui/MapSelectionMessage.png");
 
 	// Load button textures
-	backButton.loadFromFile("assets/ui/LeftArrow.png");
-	createButton.loadFromFile("assets/ui/CreateMap.png");
-	editButton.loadFromFile("assets/ui/EditMap.png");
-	selectButton.loadFromFile("assets/ui/SelectMap.png");
-	leftArrow.loadFromFile("assets/ui/LeftArrow.png");
-	rightArrow.loadFromFile("assets/ui/RightArrow.png");
+	backButton.loadFromFile("ui/LeftArrow.png");
+	createButton.loadFromFile("ui/CreateMap.png");
+	editButton.loadFromFile("ui/EditMap.png");
+	selectButton.loadFromFile("ui/SelectMap.png");
+	leftArrow.loadFromFile("ui/LeftArrow.png");
+	rightArrow.loadFromFile("ui/RightArrow.png");
 
 	// Set sizes dynamically based on screen width
 	constexpr int buttonCount = 3;
@@ -85,8 +93,8 @@ bool MapSelectState::enter() {
 	float centerX = (Global::kScreenWidth - totalArrowsWidth) / 2;
 
 	// Set the positions for the arrows
-	leftArrow.setPosition(centerX, ((Global::kScreenHeight) - mHoveredMapName.getHeight()) / 2 - 75);
-	rightArrow.setPosition(centerX + leftArrow.kButtonWidth + distanceBetweenArrows, ((Global::kScreenHeight) - mHoveredMapName.getHeight()) / 2 - 75);
+	leftArrow.setPosition(centerX, ((Global::kScreenHeight)-mHoveredMapName.getHeight()) / 2 - 75);
+	rightArrow.setPosition(centerX + leftArrow.kButtonWidth + distanceBetweenArrows, ((Global::kScreenHeight)-mHoveredMapName.getHeight()) / 2 - 75);
 
 	for (auto& [mapName, map] : availableMaps) {
 		map.setCurrentRenderRect(targetRect);
@@ -96,19 +104,14 @@ bool MapSelectState::enter() {
 }
 
 bool MapSelectState::exit() {
-	backButton.destroy();
-	createButton.destroy();
-	editButton.destroy();
-	selectButton.destroy();
-	mTitle.destroy();
-	mHoveredMapName.destroy();
-
+	delete bg;
+	bg = nullptr;
 
 	return true;
 }
 
 
-void MapSelectState::handleEvent(SDL_Event& e) { 
+void MapSelectState::handleEvent(SDL_Event& e) {
 	backButton.handleEvent(&e);
 	createButton.handleEvent(&e);
 	editButton.handleEvent(&e);
@@ -121,12 +124,10 @@ void MapSelectState::handleEvent(SDL_Event& e) {
 		if (leftArrow.isClicked()) {
 			if (selectedIndex > 0) {
 				selectedIndex--;
-			}
-			else {
+			} else {
 				selectedIndex = static_cast<int>(availableMaps.size()) - 1;
 			}
-		}
-		else if (rightArrow.isClicked()) {
+		} else if (rightArrow.isClicked()) {
 			selectedIndex = (selectedIndex + 1) % static_cast<int>(availableMaps.size());
 		}
 
@@ -134,17 +135,16 @@ void MapSelectState::handleEvent(SDL_Event& e) {
 
 	if (e.type == SDL_EVENT_KEY_DOWN) {
 		switch (e.key.key) {
-		case SDLK_LEFT:
-			if (selectedIndex > 0) {
-				selectedIndex--;
-			}
-			else {
-				selectedIndex = static_cast<int>(availableMaps.size()) - 1;
-			}
-			break;
-		case SDLK_RIGHT:
-			selectedIndex = (selectedIndex + 1) % static_cast<int>(availableMaps.size());
-			break;
+			case SDLK_LEFT:
+				if (selectedIndex > 0) {
+					selectedIndex--;
+				} else {
+					selectedIndex = static_cast<int>(availableMaps.size()) - 1;
+				}
+				break;
+			case SDLK_RIGHT:
+				selectedIndex = (selectedIndex + 1) % static_cast<int>(availableMaps.size());
+				break;
 		}
 	}
 
@@ -154,16 +154,13 @@ void MapSelectState::handleEvent(SDL_Event& e) {
 		if (createButton.isClicked()) {
 			Global::currentMap = nullptr;  // Assign a new empty map (default constructor)
 			setNextState(MapEditorState::get());
-		}
-		else if (editButton.isClicked()) {
+		} else if (editButton.isClicked()) {
 			Global::currentMap = &availableMaps[selectedMapFilePath];
 			setNextState(MapEditorState::get());
-		}
-		else if (selectButton.isClicked()) {
+		} else if (selectButton.isClicked()) {
 			Global::currentMap = &availableMaps[selectedMapFilePath];
 			setNextState(MainGameState::get());
-		}
-		else if (backButton.isClicked()) {
+		} else if (backButton.isClicked()) {
 			setNextState(TitleState::get());
 		}
 	}
@@ -171,17 +168,28 @@ void MapSelectState::handleEvent(SDL_Event& e) {
 
 
 void MapSelectState::update() {
+	backButton.update();
+	createButton.update();
+	editButton.update();
+	selectButton.update();
+	leftArrow.update();
+	rightArrow.update();
+
+	bg->update(0.016f);
+
 	if (!availableMaps.empty()) {
 		auto it = std::next(availableMaps.begin(), selectedIndex);
 		selectedMapFilePath = it->first;
 	}
 
 	if (!selectedMapFilePath.empty() && availableMaps.find(selectedMapFilePath) != availableMaps.end()) {
-		mHoveredMapName.loadFromRenderedText(availableMaps[selectedMapFilePath].name, { 0, 0, 0, 255 });
+		mHoveredMapName.loadFromRenderedText(availableMaps[selectedMapFilePath].name, { 255, 255, 255, 255 });
 	}
 }
 
 void MapSelectState::render() {
+	bg->render();
+
 	float kScreenWidth = Global::kScreenWidth;
 	float kScreenHeight = Global::kScreenHeight;
 
@@ -200,12 +208,10 @@ void MapSelectState::render() {
 		if (mapIter != availableMaps.end()) {
 			mapIter->second.setCurrentRenderRect(targetRect);
 			mapIter->second.drawOnTargetRect(targetRect);
-		}
-		else {
+		} else {
 			std::cerr << "Error: Map '" << selectedMapFilePath << "' not found in available maps." << std::endl;
 		}
-	}
-	else {
+	} else {
 		std::cerr << "Error: selectedMapName is empty." << std::endl;
 	}
 

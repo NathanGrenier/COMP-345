@@ -2,15 +2,17 @@
 #include <SDL3/SDL_main.h>
 #include <SDL3_image/SDL_image.h>
 #include <SDL3_ttf/SDL_ttf.h>
+#include <SDL3_mixer/SDL_mixer.h>
 #include <string>
 #include <sstream>
 
 #include "States/TitleState.cpp"
 #include "States/IntroState.cpp"
 #include "States/ExitState.cpp"
-#include "ui/LTexture.cpp"
 #include <LTimer.h>
 #include <iostream>
+#include <util/TextureManager.h>
+#include <algorithm>
 
 /** @file main.cpp
  *  @brief Entry point for the Tower Defense game.
@@ -34,7 +36,7 @@ SDL_Renderer* gRenderer = nullptr;
 TTF_Font* gFont = nullptr;
 
 /** @brief Texture for rendering FPS information. */
-LTexture gFpsTexture;
+Texture gFpsTexture;
 
 /** @brief The current game state. */
 GameState* gCurrentState{ nullptr };
@@ -42,6 +44,16 @@ GameState* gCurrentState{ nullptr };
 /** @brief The next game state to transition to. */
 GameState* gNextState{ nullptr };
 Map* Global::currentMap;
+
+//Playback audio device
+SDL_AudioDeviceID gAudioDeviceId{ 0 };
+
+//Allocated channel count
+int gChannelCount = 0;
+bool Global::UIChannelPlaying = false;
+
+//The music that will be played
+Mix_Music* gMusic{ nullptr };
 
 float Global::viewerWidth = kScreenWidth * 0.3f;
 float Global::headerHeight = kScreenHeight * 0.15f;
@@ -52,6 +64,12 @@ SDL_FRect Global::mapViewRect = {
 	static_cast<float>(Global::kScreenWidth - Global::viewerWidth) - 2 * Global::kScreenWidth * 0.02f,
 	static_cast<float>(Global::kScreenHeight - Global::headerHeight) - 2 * Global::kScreenHeight * 0.02f
 };
+
+bool isFading = false; // Controls when fading occurs
+float fadeAlpha = 0.0f; // Alpha value (0 = fully visible, 255 = fully black)
+bool fadeIn = false; // Determines fade direction
+LTimer fadeTimer; // Timer for tracking fade duration
+constexpr Uint64 fadeDuration = 500'000'000;
 
 /**
  * @brief Sets the next game state.
@@ -73,10 +91,11 @@ void setNextState(GameState* newState) {
  */
 void changeState() {
 	if (gNextState != nullptr) {
-		gCurrentState->exit();
-		gNextState->enter();
-		gCurrentState = gNextState;
-		gNextState = nullptr;
+		// Start fading
+		isFading = true;
+		fadeIn = false; // Start with fade-out effect
+		fadeAlpha = 0.0f;
+		fadeTimer.start();
 	}
 }
 
@@ -87,7 +106,7 @@ void changeState() {
  */
 bool init() {
 	bool success{ true };
-	if (!SDL_Init(SDL_INIT_VIDEO)) {
+	if (!SDL_Init(SDL_INIT_VIDEO | SDL_INIT_AUDIO)) {
 		SDL_Log("SDL could not initialize! SDL error: %s\n", SDL_GetError());
 		success = false;
 	} else {
@@ -113,6 +132,35 @@ bool init() {
 				SDL_Log("SDL_ttf could not initialize! SDL_ttf error: %s\n", SDL_GetError());
 				success = false;
 			}
+
+			if (!SDL_SetWindowIcon(gWindow, IMG_Load("assets/icon.png"))) {
+				SDL_Log("Window Icon could not be set: %s\n", SDL_GetError());
+				success = false;
+			}
+
+			//Set audio spec
+			SDL_AudioSpec audioSpec;
+			SDL_zero(audioSpec);
+			audioSpec.format = SDL_AUDIO_F32;
+			audioSpec.channels = 2;
+			audioSpec.freq = 44100;
+
+			//Open audio device
+			gAudioDeviceId = SDL_OpenAudioDevice(SDL_AUDIO_DEVICE_DEFAULT_PLAYBACK, &audioSpec);
+			if (gAudioDeviceId == 0)
+			{
+				SDL_Log("Unable to open audio! SDL error: %s\n", SDL_GetError());
+				success = false;
+			}
+			else
+			{
+				//Initialize SDL_mixer
+				if (!Mix_OpenAudio(gAudioDeviceId, nullptr))
+				{
+					printf("SDL_mixer could not initialize! SDL_mixer error: %s\n", SDL_GetError());
+					success = false;
+				}
+			}
 		}
 	}
 
@@ -132,11 +180,20 @@ bool loadMedia() {
 	if (gFont = TTF_OpenFont(fontPath.c_str(), 28); gFont == nullptr) {
 		SDL_Log("Could not load %s! SDL_ttf Error: %s\n", fontPath.c_str(), SDL_GetError());
 		success = false;
-	} else {
-		// Load text
-		SDL_Color textColor = { 0x00, 0x00, 0x00, 0xFF };
-		if (!gFpsTexture.loadFromRenderedText("Enter to start/stop or space to pause/unpause", textColor)) {
-			SDL_Log("Could not load text texture %s! SDL_ttf Error: %s\n", fontPath.c_str(), SDL_GetError());
+	}
+
+	if (gMusic = Mix_LoadMUS("assets/music.wav"); gMusic == nullptr)
+	{
+		SDL_Log("Unable to load music! SDL_mixer error: %s\n", SDL_GetError());
+		success = false;
+	}
+
+	//Allocate channels
+	if (success)
+	{
+		if (gChannelCount = Mix_AllocateChannels(Global::kEffectChannelTotal); gChannelCount != Global::kEffectChannelTotal)
+		{
+			SDL_Log("Unable to allocate channels! SDL_mixer error: %s\n", SDL_GetError());
 			success = false;
 		}
 	}
@@ -148,7 +205,14 @@ bool loadMedia() {
  * @brief Cleans up SDL resources and quits SDL subsystems.
  */
 void close() {
-	gFpsTexture.destroy();
+	//Free music
+	Mix_FreeMusic(gMusic);
+	gMusic = nullptr;
+	Mix_CloseAudio();
+	SDL_CloseAudioDevice(gAudioDeviceId);
+	gAudioDeviceId = 0;
+
+	TextureManager::getInstance().deallocateAllTextures();
 
 	// Free font
 	TTF_CloseFont(gFont);
@@ -161,6 +225,7 @@ void close() {
 	gWindow = nullptr;
 
 	// Quit SDL subsystems
+	Mix_Quit();
 	TTF_Quit();
 	SDL_Quit();
 }
@@ -207,30 +272,27 @@ int main(int argc, char* args[]) {
 			// Flag for resetting FPS calculation
 			bool resetFps = true;
 
+			// Create TextureManager Singleton Instance
+			TextureManager::getInstance().init(gRenderer, gFont);
+
+			gFpsTexture.loadFromRenderedText("Enter to start/stop or space to pause/unpause", { 0x00, 0x00, 0x00, 0xFF });
+
 			// Start game state machine
 			gCurrentState = IntroState::get();
 			gCurrentState->enter();
 			SDL_SetRenderVSync(gRenderer, 1);
 
+			Mix_PlayMusic(gMusic, -1);
+
 			// Main game loop
 			while (!quit) {
-				// Reset FPS calculations if needed
-				if (resetFps) {
-					fpsTimer.start();
-					renderedFrames = 0;
-					renderingNS = 0;
-					resetFps = false;
-				}
-
 				// Start frame timer
 				capTimer.start();
 
 				// Process events
 				while (SDL_PollEvent(&e)) {
-					// Handle events in the current state
 					gCurrentState->handleEvent(e);
 
-					// Handle quit event
 					if (e.type == SDL_EVENT_QUIT) {
 						setNextState(ExitState::get());
 						quit = true;
@@ -239,23 +301,53 @@ int main(int argc, char* args[]) {
 					}
 				}
 
-				// Update the current state
+				// Handle fading transition
+				if (isFading) {
+					// Correct fadeProgress calculation (scaled from 0 to 1)
+					Uint64 elapsedTime = fadeTimer.getTicksNS();
+					float fadeProgress = static_cast<float>(elapsedTime) / static_cast<float>(fadeDuration);
+					fadeAlpha = std::clamp(fadeIn ? (1.0f - fadeProgress) * 255.0f : fadeProgress * 255.0f, 0.0f, 255.0f);
+
+					// If fade-out is complete, switch game states
+					if (fadeAlpha >= 255 && !fadeIn) {
+						gCurrentState->exit();
+						gNextState->enter();
+						gCurrentState = gNextState;
+						gNextState = nullptr;
+						fadeIn = true;
+						fadeTimer.start();
+					}
+
+					// If fade-in is complete, stop fading
+					if (fadeAlpha <= 0 && fadeIn) {
+						isFading = false;
+					}
+				}
+
+				// Update the current state if not transitioning
 				gCurrentState->update();
 
-				// Change state if needed
-				changeState();
+				if (!isFading) {
+					changeState();
+				}
 
 				// Clear the screen
-				SDL_SetRenderDrawColor(gRenderer, 0xFF, 0xFF, 0xFF, 0xFF);
+				SDL_SetRenderDrawColor(gRenderer, 0, 0, 0, 0);
 				SDL_RenderClear(gRenderer);
 
 				// Render the current state
 				gCurrentState->render();
 
+				// Apply fade effect if needed
+				if (isFading) {
+					SDL_SetRenderDrawColor(gRenderer, 0, 0, 0, static_cast<Uint8>(fadeAlpha));
+					SDL_RenderFillRect(gRenderer, nullptr);
+				}
+
 				// Present the updated frame
 				SDL_RenderPresent(gRenderer);
 
-				// Cap frame rate to maintain 60 FPS
+				// Cap frame rate
 				constexpr Uint64 nsPerFrame = 1000000000 / kScreenFps;
 				Uint64 frameNs = capTimer.getTicksNS();
 				if (frameNs < nsPerFrame) {

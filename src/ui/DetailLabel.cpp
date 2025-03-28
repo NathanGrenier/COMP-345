@@ -25,7 +25,7 @@ DetailLabel::DetailLabel()
 DetailLabel::DetailLabel(float width, std::string path)
 	: DetailDisplayComponent::DetailDisplayComponent(width)
 {
-	LTexture::loadFromFile(path);
+	labelTexture.loadFromFile(path);
 }
 
 /**
@@ -34,6 +34,6 @@ DetailLabel::DetailLabel(float width, std::string path)
 void DetailLabel::render()
 {
 	// sets height to 0, leaving height to be calculated with width and aspect ratio of image
-	LTexture::render(xPosition, yPosition, nullptr, width, 0);
+	labelTexture.render(xPosition, yPosition, nullptr, width, 0);
 }
 

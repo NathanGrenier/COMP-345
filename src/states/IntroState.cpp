@@ -25,7 +25,7 @@ float mOscillationTime = 0.0f;
  * @return Pointer to the IntroState instance.
  */
 IntroState* IntroState::get() {
-    return &sIntroState;
+	return &sIntroState;
 }
 
 /**
@@ -36,20 +36,30 @@ IntroState* IntroState::get() {
  * @return True if successful, false otherwise.
  */
 bool IntroState::enter() {
-    bool success = true;
+	bool success = true;
 
-    // Load intro text
-    SDL_Color textColor{ 0x00, 0x00, 0x00, 0xFF };
-    if (success &= mMessageTexture.loadFromFile("assets/ui/IntroMessage.png"); !success) {
-        SDL_Log("Failed to render intro text!\n");
-        success = false;
-    }
-    if (success &= mCursorPromptTexture.loadFromFile("assets/ui/cursor-prompt.jpg"); !success) {
-        SDL_Log("Failed to render intro text!\n");
-        success = false;
-    }
+	// Load intro text
+	success = mMessageTexture.loadFromFile("ui/IntroMessage.png");
+	if (!success) {
+		SDL_Log("Failed to render intro text!\n");
+		success = false;
+	}
+	success = mCursorPromptTexture.loadFromFile("ui/cursor-prompt.png");
+	if (!success) {
+		SDL_Log("Failed to render intro text!\n");
+		success = false;
+	}
 
-    return success;
+	bg = new ParallaxBackground();
+
+	std::srand(std::time(0));
+
+	for (int i = 0; i < Global::numberOfProps; ++i) {
+		float randomSpeed = 5.0f + std::rand() % 11;
+		bg->addLayer(randomSpeed, Global::kScreenHeight);
+	}
+
+	return success;
 }
 
 /**
@@ -60,10 +70,8 @@ bool IntroState::enter() {
  * @return Always returns true.
  */
 bool IntroState::exit() {
-    mBackgroundTexture.destroy();
-    mMessageTexture.destroy();
-    mCursorPromptTexture.destroy();
-    return true;
+	delete bg;
+	return true;
 }
 
 /**
@@ -74,10 +82,10 @@ bool IntroState::exit() {
  * @param e The SDL_Event object containing input data.
  */
 void IntroState::handleEvent(SDL_Event& e) {
-    if (e.type == SDL_EVENT_MOUSE_BUTTON_DOWN) {
-        // Transition to the title state
-        setNextState(TitleState::get());
-    }
+	if (e.type == SDL_EVENT_MOUSE_BUTTON_DOWN) {
+		// Transition to the title state
+		setNextState(TitleState::get());
+	}
 }
 
 /**
@@ -86,11 +94,13 @@ void IntroState::handleEvent(SDL_Event& e) {
  * Currently, no updates are required for this state.
  */
 void IntroState::update() {
-    // Update oscillation time
-    mOscillationTime += 0.05f;  // Adjust speed of oscillation
+	// Update oscillation time
+	mOscillationTime += 0.05f;  // Adjust speed of oscillation
 
-    // Calculate the vertical oscillation offset (range of -5 to 5 pixels)
-    oscillationOffset = std::sin(mOscillationTime) * 5.0f;
+	// Calculate the vertical oscillation offset (range of -5 to 5 pixels)
+	oscillationOffset = std::sin(mOscillationTime) * 5.0f;
+
+	bg->update(0.016f);
 }
 
 /**
@@ -99,16 +109,14 @@ void IntroState::update() {
  * The message text moves up and down slightly using a sine wave oscillation effect.
  */
 void IntroState::render() {
+	bg->render();
 
-    // Render background
-    mBackgroundTexture.render(0, 0);
+	// Render message text with oscillation effect
+	mMessageTexture.render(
+		(Global::kScreenWidth - Global::kScreenWidth * 0.9) / 2.f,
+		((Global::kScreenHeight - mMessageTexture.getHeight()) / 2.f + oscillationOffset), nullptr, Global::kScreenWidth * 0.9, -1);
 
-    // Render message text with oscillation effect
-    mMessageTexture.render(
-        (Global::kScreenWidth - Global::kScreenWidth * 0.9) / 2.f,
-        ((Global::kScreenHeight - mMessageTexture.getHeight()) / 2.f + oscillationOffset), nullptr, Global::kScreenWidth * 0.9, -1);
-
-    mCursorPromptTexture.render(
-        Global::kScreenWidth - Global::kScreenWidth * 0.1,
-        Global::kScreenHeight - Global::kScreenWidth * 0.1, nullptr, Global::kScreenWidth * 0.1, -1);
+	mCursorPromptTexture.render(
+		Global::kScreenWidth - Global::kScreenWidth * 0.1,
+		Global::kScreenHeight - Global::kScreenWidth * 0.1, nullptr, Global::kScreenWidth * 0.1, -1);
 }

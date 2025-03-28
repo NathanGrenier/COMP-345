@@ -39,10 +39,18 @@ TitleState* TitleState::get() {
  * @return True if successful, false otherwise.
  */
 bool TitleState::enter() {
+	bg = new ParallaxBackground();
+	std::srand(std::time(0));
+
+	for (int i = 0; i < Global::numberOfProps; ++i) {
+		float randomSpeed = 5.0f + std::rand() % 11;
+		bg->addLayer(randomSpeed, Global::kScreenHeight);
+	}
+
 	bool success = true;
 	SDL_Color textColor{ 0x00, 0x00, 0x00, 0xFF };
 
-	if (!(success &= mMessageTexture.loadFromFile("assets/ui/TitleMessage.png"))) {
+	if (!(success &= mMessageTexture.loadFromFile("ui/TitleMessage.png"))) {
 		printf("Failed to render title text!\n");
 	}
 
@@ -52,10 +60,10 @@ bool TitleState::enter() {
 	};
 
 	// Initialize buttons
-	buttons[0].loadFromFile("assets/ui/Start.png");
+	buttons[0].loadFromFile("ui/Start.png");
 
 	for (int i = 1; i < kButtonCount; ++i) {
-		if (!buttons[i].loadFromFile("assets/ui/LoadPart" + std::to_string(i) + ".png")) {
+		if (!buttons[i].loadFromFile("ui/LoadPart" + std::to_string(i) + ".png")) {
 			printf("Failed to set button text: %s\n", buttonLabels[i]);
 			success = false;
 		} else {
@@ -93,11 +101,8 @@ bool TitleState::enter() {
  * @return Always returns true.
  */
 bool TitleState::exit() {
-	mBackgroundTexture.destroy();
-	mMessageTexture.destroy();
-	for (int i = 0; i < kButtonCount; ++i) {
-		buttons[i].destroy();
-	}
+	delete bg;
+	bg = nullptr;
 	return true;
 }
 
@@ -109,40 +114,33 @@ bool TitleState::exit() {
  * @param e The SDL_Event object containing input data.
  */
 void TitleState::handleEvent(SDL_Event& e) {
-    for (int i = 0; i < kButtonCount; ++i) {
-        buttons[i].handleEvent(&e);
+	for (int i = 0; i < kButtonCount; ++i) {
+		buttons[i].handleEvent(&e);
 
-        // Check if a button is clicked
-        if (e.type == SDL_EVENT_MOUSE_BUTTON_DOWN && e.button.button == SDL_BUTTON_LEFT) {
-            if (buttons[i].isClicked()) {
-                // Transition to the corresponding game state
-                switch (i) {
-                case 0:
-                    setNextState(MapSelectState::get());  // Load main game
-                    break;
-    //            case 1:
-    //                setNextState(Part1State::get());  // Load Part 1
-    //                break;
-    //            case 2:
-    //                //setNextState(Part2State::get());  // Load Part 2
-    //                setNextState(UITestState::get());  // Load UI test
-    //                break;
-    //            //case 3:
-				//	setNextState(Part3State::get());  // Load Part 3
-				//	break;
-                }
-            }
-        }
-    }
+		// Check if a button is clicked
+		if (e.type == SDL_EVENT_MOUSE_BUTTON_DOWN && e.button.button == SDL_BUTTON_LEFT) {
+			if (buttons[i].isClicked()) {
+				// Transition to the corresponding game state
+				switch (i) {
+					case 0:
+						setNextState(MapSelectState::get());
+						break;
+				}
+			}
+		}
+	}
 }
 
 /**
  * @brief Updates the title state logic.
  *
- * Currently, this function does not perform any updates.
  */
 void TitleState::update() {
-	// No updates needed for title state
+	for (int i = 0; i < kButtonCount; ++i) {
+		buttons[i].update();
+	}
+
+	bg->update(0.016f);
 }
 
 /**
@@ -151,12 +149,7 @@ void TitleState::update() {
  * Clears the screen, renders the background, title text, and menu buttons.
  */
 void TitleState::render() {
-	// Clear screen
-	SDL_SetRenderDrawColor(gRenderer, 0xFF, 0xFF, 0xFF, 0xFF);
-	SDL_RenderClear(gRenderer);
-
-	// Render background
-	mBackgroundTexture.render(0, 0);
+	bg->render();
 
 	// Render title text centered at the top
 	mMessageTexture.render((Global::kScreenWidth - Global::kScreenWidth * 0.9) / 2.f, 40, nullptr, Global::kScreenWidth * 0.9, -1);

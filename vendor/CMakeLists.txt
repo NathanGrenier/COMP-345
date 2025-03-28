@@ -15,6 +15,8 @@ set(SDL_TTF_SVG OFF)
 add_subdirectory(SDL_ttf EXCLUDE_FROM_ALL)
 # json
 add_subdirectory(json)
+# SDL_mixer
+add_subdirectory(SDL_mixer EXCLUDE_FROM_ALL)
 
 add_library(vendor INTERFACE)
-target_link_libraries(vendor INTERFACE SDL3::SDL3 SDL3_image::SDL3_image SDL3_ttf::SDL3_ttf nlohmann_json::nlohmann_json)
+target_link_libraries(vendor INTERFACE SDL3::SDL3 SDL3_image::SDL3_image SDL3_ttf::SDL3_ttf nlohmann_json::nlohmann_json SDL3_mixer::SDL3_mixer)
