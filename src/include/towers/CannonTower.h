@@ -26,10 +26,10 @@ public:
 	static const int rangeIncreasePerLevel = 50;
 	static const int powerIncreasePerLevel = 15;
 	static const int rateOfFireIncreasePerLevel = 1;
+	static const int upgradeCosts[CANNON_MAX_LEVEL - 1];
 
 	CannonTower();
 	CannonTower(float x, float y, float width, int buyingCost);
-	CannonTower(float x, float y, float width, int buyingCost, int refundValue);
 
 	int getMaxLevel();
 	void shootProjectile(Critter* targettedCritter);

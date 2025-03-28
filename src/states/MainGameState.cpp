@@ -81,6 +81,7 @@ bool MainGameState::enter() {
 	detailDisplay = new DetailAttributeDisplay();
 	bool success = detailDisplay->initializeComponents();
 
+	playerGold = STARTING_PLAYER_GOLD;
 	endlessMode = true;
 	critterGroup = new CritterGroup(waveLevel, playerGold, map->getSpawnerPos(Global::mapViewRect), map->getTargetPos(Global::mapViewRect), map, detailDisplay, endlessMode);
 	towerGroup = new TowerGroup(playerGold, map, detailDisplay);
@@ -114,7 +115,8 @@ void MainGameState::handleEvent(SDL_Event& e) {
 				pauseButton.setSizeWithAspectRatio(0, buttonHeight);
 				pauseButton.setPosition(Global::kScreenWidth - Global::viewerWidth + 30, Global::kScreenHeight - buttonHeight - 20);
 				isPaused = false;
-			} else {
+			}
+			else {
 				pauseButton.loadFromFile("ui/PlayButton.png");
 				pauseButton.setSizeWithAspectRatio(0, buttonHeight);
 				pauseButton.setPosition(Global::kScreenWidth - Global::viewerWidth + 30, Global::kScreenHeight - buttonHeight - 20);
@@ -211,7 +213,6 @@ bool MainGameState::exit() {
 	delete bg;
 	bg = nullptr;
 
-	playerGold = 999;
 	waveLevel = 0;
 
 	return true;

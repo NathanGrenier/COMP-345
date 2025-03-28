@@ -25,10 +25,10 @@ public:
 
 	static const int rangeIncreasePerLevel = 10;
 	static const int rateOfFireIncreasePerLevel = 3;
+	static const int upgradeCosts[RAPID_MAX_LEVEL - 1];
 
 	RapidFireTower();
 	RapidFireTower(float x, float y, float width, int buyingCost);
-	RapidFireTower(float x, float y, float width, int buyingCost, int refundValue);
 
 	bool upgrade();
 	int getMaxLevel();

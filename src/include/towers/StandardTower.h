@@ -23,10 +23,10 @@ public:
 	static const int rangeIncreasePerLevel = 20;
 	static const int powerIncreasePerLevel = 1;
 	static const int rateOfFireIncreasePerLevel = 1;
+	static const int upgradeCosts[STANDARD_MAX_LEVEL - 1];
 
 	StandardTower();
 	StandardTower(float x, float y, float width, int buyingCost);
-	StandardTower(float x, float y, float width, int buyingCost, int refundValue);
 
 	int getMaxLevel();
 	void shootProjectile(Critter* targettedCritter) override;

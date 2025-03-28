@@ -9,13 +9,16 @@
 #include <towers/RapidFireTower.h>
 #include <towers/Projectile.h>
 
- /**
-  * @brief Default Constructor
-  */
+const int RapidFireTower::upgradeCosts[] = { 50, 100 };
+
+/**
+ * @brief Default Constructor
+ */
 RapidFireTower::RapidFireTower() : Tower(), fireBreak(0), fireBreakRate(0), burstSize(0), burstCount(0) {
 	getTowerTexture().loadFromFile("tower/RapidFireTower.png");
 	upgradeValues.rangeIncrease = RapidFireTower::rangeIncreasePerLevel;
 	upgradeValues.rateOfFireIncrease = RapidFireTower::rateOfFireIncreasePerLevel;
+	upgradeValues.upgradeCosts = std::vector<int>(upgradeCosts, upgradeCosts + RAPID_MAX_LEVEL - 1);
 }
 
 /**
@@ -35,26 +38,7 @@ RapidFireTower::RapidFireTower(float x, float y, float width, int buyingCost)
 	getTowerTexture().loadFromFile("tower/RapidFireTower.png");
 	upgradeValues.rangeIncrease = RapidFireTower::rangeIncreasePerLevel;
 	upgradeValues.rateOfFireIncrease = RapidFireTower::rateOfFireIncreasePerLevel;
-}
-
-/**
- * @brief Constructor with position buying cost, and refund value
- *
- * @param x Horizontal position using pixels
- * @param y Vertical position using pixels
- * @param buyingCost Cost of buying RapidFireTower
- * @param refundValue Amount of coins refunded when selling a RapidFireTower
- * @details Constructor for RapidFireTower with x, y position, buying cost, and refund value
- * Uses default range, power, and rate of fire for RapidFireTower
- * Uses default refund value ratio in Tower class
- * Sets the fireBreak to 0 to start shooting immediately and fireBreakRate to 5
- * Sets the burstSize to 50 for the interval for shooting, and the burstCount to 0
- */
-RapidFireTower::RapidFireTower(float x, float y, float width, int buyingCost, int refundValue)
-	: fireBreak(0), fireBreakRate(5), burstSize(50), burstCount(0), Tower(x, y, width, buyingCost, refundValue, RAPID_RANGE, RAPID_POWER, RAPID_RATE_OF_FIRE) {
-	getTowerTexture().loadFromFile("tower/RapidFireTower.png");
-	upgradeValues.rangeIncrease = RapidFireTower::rangeIncreasePerLevel;
-	upgradeValues.rateOfFireIncrease = RapidFireTower::rateOfFireIncreasePerLevel;
+	upgradeValues.upgradeCosts = std::vector<int>(upgradeCosts, upgradeCosts + RAPID_MAX_LEVEL - 1);
 }
 
 /**
@@ -172,7 +156,8 @@ void RapidFireTower::shootProjectile(Critter* targettedCritter) {
 				projectiles.push_back(new Projectile(posX, posY, getPower(), false, 6, getRotation(), speedX, speedY, "tower/RapidFireProjectile.png"));
 				setShootingTimer(MAX_SHOOTING_TIMER);
 			}
-		} else
+		}
+		else
 		{
 			setShootingTimer(shootingTimer - getRateOfFire());
 		}
@@ -187,7 +172,8 @@ void RapidFireTower::shootProjectile(Critter* targettedCritter) {
 		{
 			burstCount++;
 		}
-	} else // break from firing interval, no Projectiles to be fired
+	}
+	else // break from firing interval, no Projectiles to be fired
 	{
 		burstCount = 0;
 		fireBreak -= fireBreakRate;

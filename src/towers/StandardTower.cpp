@@ -9,14 +9,17 @@
 #include <towers/StandardTower.h>
 #include <towers/Projectile.h>
 
- /**
-  * @brief Default Constructor
-  */
+const int StandardTower::upgradeCosts[] = { 25, 50, 75, 100 };
+
+/**
+ * @brief Default Constructor
+ */
 StandardTower::StandardTower() : Tower() {
 	getTowerTexture().loadFromFile("tower/StandardTower.png");
 	upgradeValues.rangeIncrease = StandardTower::rangeIncreasePerLevel;
 	upgradeValues.powerIncrease = StandardTower::powerIncreasePerLevel;
 	upgradeValues.rateOfFireIncrease = StandardTower::rateOfFireIncreasePerLevel;
+	upgradeValues.upgradeCosts = std::vector<int>(upgradeCosts, upgradeCosts + STANDARD_MAX_LEVEL - 1);
 }
 
 /**
@@ -35,24 +38,7 @@ StandardTower::StandardTower(float x, float y, float width, int buyingCost)
 	upgradeValues.rangeIncrease = StandardTower::rangeIncreasePerLevel;
 	upgradeValues.powerIncrease = StandardTower::powerIncreasePerLevel;
 	upgradeValues.rateOfFireIncrease = StandardTower::rateOfFireIncreasePerLevel;
-}
-
-/**
- * @brief Constructor with position, buying cost, and refund value
- *
- * @param x Horizontal position using pixels
- * @param y Vertical position using pixels
- * @param buyingCost Cost of buying StandardTower
- * @param refundValue Amount of coins refunded when selling a StandardTower
- * @details Constructor for StandardTower with x, y position, buying cost, and refund value
- * Uses default range, power, and rate of fire for StandardTower
- */
-StandardTower::StandardTower(float x, float y, float width, int buyingCost, int refundValue)
-	: Tower(x, y, width, buyingCost, refundValue, STANDARD_RANGE, STANDARD_POWER, STANDARD_RATE_OF_FIRE) {
-	getTowerTexture().loadFromFile("tower/StandardTower.png");
-	upgradeValues.rangeIncrease = StandardTower::rangeIncreasePerLevel;
-	upgradeValues.powerIncrease = StandardTower::powerIncreasePerLevel;
-	upgradeValues.rateOfFireIncrease = StandardTower::rateOfFireIncreasePerLevel;
+	upgradeValues.upgradeCosts = std::vector<int>(upgradeCosts, upgradeCosts + STANDARD_MAX_LEVEL - 1);
 }
 
 /**
@@ -142,7 +128,8 @@ void StandardTower::shootProjectile(Critter* targettedCritter) {
 			projectiles.push_back(new Projectile(posX, posY, getPower(), false, 6, getRotation(), speedX, speedY, "tower/StandardProjectile.png"));
 			setShootingTimer(MAX_SHOOTING_TIMER);
 		}
-	} else // decreases shooting timer
+	}
+	else // decreases shooting timer
 	{
 		setShootingTimer(getShootingTimer() - getRateOfFire());
 	}

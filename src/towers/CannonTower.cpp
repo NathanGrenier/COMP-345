@@ -9,14 +9,17 @@
 #include <towers/CannonTower.h>
 #include <towers/Projectile.h>
 
- /**
-  * @brief Default Constructor
-  */
+const int CannonTower::upgradeCosts[] = { 50, 100 };
+
+/**
+ * @brief Default Constructor
+ */
 CannonTower::CannonTower() : Tower() {
 	getTowerTexture().loadFromFile("tower/CannonTower.png");
 	upgradeValues.rangeIncrease = CannonTower::rangeIncreasePerLevel;
 	upgradeValues.powerIncrease = CannonTower::powerIncreasePerLevel;
 	upgradeValues.rateOfFireIncrease = CannonTower::rateOfFireIncreasePerLevel;
+	upgradeValues.upgradeCosts = std::vector<int>(upgradeCosts, upgradeCosts + CANNON_MAX_LEVEL - 1);
 }
 
 /**
@@ -35,24 +38,7 @@ CannonTower::CannonTower(float x, float y, float width, int buyingCost)
 	upgradeValues.rangeIncrease = CannonTower::rangeIncreasePerLevel;
 	upgradeValues.powerIncrease = CannonTower::powerIncreasePerLevel;
 	upgradeValues.rateOfFireIncrease = CannonTower::rateOfFireIncreasePerLevel;
-}
-
-/**
- * @brief Constructor with position, buying cost, and refund value
- *
- * @param x Horizontal position using pixels
- * @param y Vertical position using pixels
- * @param buyingCost Cost of buying CannonTower
- * @param refundValue Amount of coins refunded when selling a CannonTower
- * @details Constructor for CannonTower with x, y position, buying cost, and refund value
- * Uses default range, power, and rate of fire for CannonTower
- */
-CannonTower::CannonTower(float x, float y, float width, int buyingCost, int refundValue)
-	: Tower(x, y, width, buyingCost, refundValue, CANNON_RANGE, CANNON_POWER, CANNON_RATE_OF_FIRE) {
-	getTowerTexture().loadFromFile("tower/CannonTower.png");
-	upgradeValues.rangeIncrease = CannonTower::rangeIncreasePerLevel;
-	upgradeValues.powerIncrease = CannonTower::powerIncreasePerLevel;
-	upgradeValues.rateOfFireIncrease = CannonTower::rateOfFireIncreasePerLevel;
+	upgradeValues.upgradeCosts = std::vector<int>(upgradeCosts, upgradeCosts + CANNON_MAX_LEVEL - 1);
 }
 
 /**
@@ -141,7 +127,8 @@ void CannonTower::shootProjectile(Critter* targettedCritter) {
 			projectiles.push_back(new Projectile(posX, posY, getPower(), false, 10, getRotation(), speedX, speedY, "tower/CannonProjectile.png"));
 			setShootingTimer(MAX_SHOOTING_TIMER);
 		}
-	} else // decreases shooting timer
+	}
+	else // decreases shooting timer
 	{
 		setShootingTimer(getShootingTimer() - getRateOfFire());
 	}
