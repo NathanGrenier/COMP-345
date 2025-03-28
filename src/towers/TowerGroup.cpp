@@ -18,17 +18,17 @@
 #include <towers/powerups/FirePowerup.h>
 #include <towers/powerups/IcePowerup.h>
 
-/**
- * @brief Constructs a TowerGroup object.
- *
- * Initializes dummy towers for display and attaches them to the observer pattern.
- * Initializes TowerStrategy objects for Towers to use.
- *
- * @param playerGold Reference to player's gold amount.
- * @param map Pointer to the game map.
- * @param detailDisplay Reference to the UI detail display.
- */
-TowerGroup::TowerGroup(int &playerGold, Map *map, DetailAttributeDisplay* detailDisplay)
+ /**
+  * @brief Constructs a TowerGroup object.
+  *
+  * Initializes dummy towers for display and attaches them to the observer pattern.
+  * Initializes TowerStrategy objects for Towers to use.
+  *
+  * @param playerGold Reference to player's gold amount.
+  * @param map Pointer to the game map.
+  * @param detailDisplay Reference to the UI detail display.
+  */
+TowerGroup::TowerGroup(int& playerGold, Map* map, DetailAttributeDisplay* detailDisplay)
 	: playerGold(playerGold), map(map), detailDisplay(detailDisplay)
 {
 	// creating dummy Towers
@@ -36,7 +36,7 @@ TowerGroup::TowerGroup(int &playerGold, Map *map, DetailAttributeDisplay* detail
 	dummyRapidFireTower = new RapidFireTower(0, 0, 0, RAPID_FIRE_TOWER_COST);
 	dummyCannonTower = new CannonTower(0, 0, 0, CANNON_TOWER_COST);
 
-	TowerObserver *towerObserver = detailDisplay->getTowerObserver();
+	TowerObserver* towerObserver = detailDisplay->getTowerObserver();
 
 	// adding dummy Towers to display values before buying Towers
 	towerObserver->addToBuyTowers(dummyStandardTower);
@@ -49,7 +49,7 @@ TowerGroup::TowerGroup(int &playerGold, Map *map, DetailAttributeDisplay* detail
 	dummyCannonTower->attach(towerObserver);
 
 	// initializing TowerStrategy objects
-	strategies = new TowerStrategy *[TowerObserver::STRATEGY_COUNT];
+	strategies = new TowerStrategy * [TowerObserver::STRATEGY_COUNT];
 	strategies[0] = new TargetNearExit;
 	strategies[1] = new TargetNearTower;
 	strategies[2] = new TargetStrongest;
@@ -64,13 +64,13 @@ TowerGroup::TowerGroup(int &playerGold, Map *map, DetailAttributeDisplay* detail
 TowerGroup::~TowerGroup()
 {
 	// Clean up dynamically allocated towers
-	for (Tower *tower : towers)
+	for (Tower* tower : towers)
 	{
 		delete tower;
 	}
 	towers.clear();
 
-	for (Powerup *powerup : activePowerups)
+	for (Powerup* powerup : activePowerups)
 	{
 		delete powerup;
 	}
@@ -86,14 +86,14 @@ TowerGroup::~TowerGroup()
  * @param deltaTime The time elapsed since the last update.
  * @param critters List of critters in the game.
  */
-void TowerGroup::update(float deltaTime, std::vector<Critter *> critters)
+void TowerGroup::update(float deltaTime, std::vector<Critter*> critters)
 {
 	for (int i = 0; i < towers.size(); i++)
 	{
 		towers[i]->generateAllProjectiles();
 
 		// Find the target critter for the current tower
-		Critter *targettedCritter = towers[i]->findCritter(critters);
+		Critter* targettedCritter = towers[i]->findCritter(critters);
 
 		// Have the tower shoot a projectile at the targeted critter
 		towers[i]->shootProjectile(targettedCritter);
@@ -101,7 +101,7 @@ void TowerGroup::update(float deltaTime, std::vector<Critter *> critters)
 		if (critters.size())
 		{
 			// Now, check the projectiles fired by this tower for collisions
-			for (auto *projectile : towers[i]->getProjectiles())
+			for (auto* projectile : towers[i]->getProjectiles())
 			{
 				for (auto critter : critters)
 				{
@@ -117,7 +117,7 @@ void TowerGroup::update(float deltaTime, std::vector<Critter *> critters)
 							float spawnChance = 0.02f; // 2% chance to spawn a powerup
 							if (rand() % 100 < spawnChance * 100)
 							{
-								Powerup *powerup = nullptr;
+								Powerup* powerup = nullptr;
 								int powerupType = rand() % 2; // Randomly choose between fire or ice
 								if (powerupType == 0)
 								{
@@ -155,12 +155,12 @@ void TowerGroup::update(float deltaTime, std::vector<Critter *> critters)
  */
 void TowerGroup::render()
 {
-	for (auto &tower : towers)
+	for (auto& tower : towers)
 	{
 		tower->render();
 	}
 
-	for (Powerup *powerup : activePowerups)
+	for (Powerup* powerup : activePowerups)
 	{
 		powerup->render();
 	}
@@ -170,9 +170,18 @@ void TowerGroup::render()
  * @brief Retrieves the list of towers.
  * @return A reference to the vector containing all towers.
  */
-std::vector<Tower *> &TowerGroup::getTowers()
+std::vector<Tower*>& TowerGroup::getTowers()
 {
 	return towers;
+}
+
+/**
+ * @brief Accessor for total number of towers placed.
+ * @return The total number of towers placed.
+ */
+int TowerGroup::getTotalTowersPlaced()
+{
+	return totalTowersPlaced;
 }
 
 /**
@@ -183,7 +192,7 @@ std::vector<Tower *> &TowerGroup::getTowers()
  * @param scaleFactor The scaling factor for grid positioning.
  * @return A pointer to the tower at the specified position, or nullptr if none exists.
  */
-Tower *TowerGroup::getTowerAtPosition(float x, float y, float scaleFactor)
+Tower* TowerGroup::getTowerAtPosition(float x, float y, float scaleFactor)
 {
 	return nullptr;
 }
@@ -193,27 +202,27 @@ Tower *TowerGroup::getTowerAtPosition(float x, float y, float scaleFactor)
  *
  * @param tower The tower to upgrade.
  */
-void TowerGroup::upgradeTower(Tower *tower) {}
+void TowerGroup::upgradeTower(Tower* tower) {}
 
 /**
  * @brief Converts the TowerStrategy of a Tower to match the index in the strategies array
  */
-int TowerGroup::getStrategyIndex(Tower *tower)
+int TowerGroup::getStrategyIndex(Tower* tower)
 {
-	TowerStrategy *critterTargettingStrategy = tower->getCritterTargettingStrategy();
-	if (dynamic_cast<TargetNearExit *>(critterTargettingStrategy))
+	TowerStrategy* critterTargettingStrategy = tower->getCritterTargettingStrategy();
+	if (dynamic_cast<TargetNearExit*>(critterTargettingStrategy))
 	{
 		return 0;
 	}
-	else if (dynamic_cast<TargetNearTower *>(critterTargettingStrategy))
+	else if (dynamic_cast<TargetNearTower*>(critterTargettingStrategy))
 	{
 		return 1;
 	}
-	else if (dynamic_cast<TargetStrongest *>(critterTargettingStrategy))
+	else if (dynamic_cast<TargetStrongest*>(critterTargettingStrategy))
 	{
 		return 2;
 	}
-	else if (dynamic_cast<TargetWeakest *>(critterTargettingStrategy))
+	else if (dynamic_cast<TargetWeakest*>(critterTargettingStrategy))
 	{
 		return 3;
 	}
@@ -230,13 +239,13 @@ int TowerGroup::getStrategyIndex(Tower *tower)
  *
  * @param e The SDL event structure representing user input.
  */
-void TowerGroup::handleEvent(SDL_Event &e)
+void TowerGroup::handleEvent(SDL_Event& e)
 {
 	// resets tower buy selection
 	bool buttonClick = false;
 	bool correctCell = false;
 
-	static Powerup *draggedPowerup = nullptr;
+	static Powerup* draggedPowerup = nullptr;
 	static bool dragging = false;
 
 	float mouseX, mouseY;
@@ -280,7 +289,7 @@ void TowerGroup::handleEvent(SDL_Event &e)
 	// if click happens
 	if (e.type == SDL_EVENT_MOUSE_BUTTON_DOWN && e.button.button == SDL_BUTTON_LEFT)
 	{
-		for (Powerup *powerup : activePowerups)
+		for (Powerup* powerup : activePowerups)
 		{
 			if (powerup->isClicked(mouseX, mouseY))
 			{
@@ -305,13 +314,13 @@ void TowerGroup::handleEvent(SDL_Event &e)
 		}
 
 		// checking if buying tower
-		std::vector<DetailDisplayComponent *> components = detailDisplay->getComponents();
+		std::vector<DetailDisplayComponent*> components = detailDisplay->getComponents();
 
 		for (int i = 0; i < components.size(); i++)
 		{
-			if (dynamic_cast<DetailButton *>(components[i]) != nullptr)
+			if (dynamic_cast<DetailButton*>(components[i]) != nullptr)
 			{
-				if (dynamic_cast<DetailButton *>(components[i])->isClicked())
+				if (dynamic_cast<DetailButton*>(components[i])->isClicked())
 				{
 					towerBuySelect = i - 1;
 					buttonClick = true;
@@ -337,7 +346,7 @@ void TowerGroup::handleEvent(SDL_Event &e)
 		}
 
 		// checking if upgrading tower
-		if (detailDisplay->getTowerObserver()->getCurrentTower() != nullptr && (dynamic_cast<DetailButton *>(detailDisplay->getTowerComponents()[7]))->isClicked())
+		if (detailDisplay->getTowerObserver()->getCurrentTower() != nullptr && (dynamic_cast<DetailButton*>(detailDisplay->getTowerComponents()[7]))->isClicked())
 		{
 			buttonClick = true;
 			int upgradeCost = detailDisplay->getTowerObserver()->getCurrentTower()->getUpgradeCost();
@@ -358,8 +367,8 @@ void TowerGroup::handleEvent(SDL_Event &e)
 
 		// checking if changing TowerStrategy
 		int startingIndex = TowerObserver::TOWER_COMPONENT_COUNT - TowerObserver::STRATEGY_COUNT + 1;
-		Tower *currentTower = detailDisplay->getTowerObserver()->getCurrentTower();
-		if (currentTower != nullptr && (dynamic_cast<DetailButton *>(detailDisplay->getTowerComponents()[10]))->isClicked())
+		Tower* currentTower = detailDisplay->getTowerObserver()->getCurrentTower();
+		if (currentTower != nullptr && (dynamic_cast<DetailButton*>(detailDisplay->getTowerComponents()[10]))->isClicked())
 		{
 			buttonClick = true;
 
@@ -372,7 +381,7 @@ void TowerGroup::handleEvent(SDL_Event &e)
 		}
 
 		// checking if selling tower
-		if (detailDisplay->getTowerObserver()->getCurrentTower() != nullptr && (dynamic_cast<DetailButton *>(detailDisplay->getTowerComponents()[8]))->isClicked())
+		if (detailDisplay->getTowerObserver()->getCurrentTower() != nullptr && (dynamic_cast<DetailButton*>(detailDisplay->getTowerComponents()[8]))->isClicked())
 		{
 			buttonClick = true;
 			playerGold += detailDisplay->getTowerObserver()->getCurrentTower()->getRefundValue();
@@ -414,7 +423,7 @@ void TowerGroup::handleEvent(SDL_Event &e)
 		{
 			if (correctCell && towerBuySelect >= 0 && map->wallCellDict.find(targetCell) != map->wallCellDict.end() && !map->wallCellDict[targetCell])
 			{
-				Tower *newTower = nullptr;
+				Tower* newTower = nullptr;
 
 				// Checks for currently selected tower
 				switch (towerBuySelect)
@@ -460,6 +469,8 @@ void TowerGroup::handleEvent(SDL_Event &e)
 					newTower->attach(detailDisplay->getTowerObserver());
 					newTower->notify();
 
+					++totalTowersPlaced;
+
 					map->wallCellDict[targetCell] = true;
 				}
 			}
@@ -484,17 +495,17 @@ void TowerGroup::handleEvent(SDL_Event &e)
 				if (towers[i]->isClicked(1))
 				{
 					// Unwrap the tower if it is already wrapped with a powerup
-					Tower *baseTower = towers[i];
+					Tower* baseTower = towers[i];
 
 					// Unwrap all decorators (powerups) applied to the tower
-					while (auto *decorated = dynamic_cast<TowerDecorator *>(baseTower))
+					while (auto* decorated = dynamic_cast<TowerDecorator*>(baseTower))
 					{
 						baseTower = decorated->getWrappedTower(); // Get the base tower without the decorator
-																  // Do not delete decorated here; let the new decorator handle it
+						// Do not delete decorated here; let the new decorator handle it
 					}
 
 					// Apply the new powerup to the base tower (without previous decorators)
-					Tower *upgradedTower = draggedPowerup->applyPowerupToTower(baseTower, towers[i]->getCurrentRenderRect());
+					Tower* upgradedTower = draggedPowerup->applyPowerupToTower(baseTower, towers[i]->getCurrentRenderRect());
 
 					// Ensure the position of the tower is retained
 					SDL_FRect towerRect = towers[i]->getCurrentRenderRect();

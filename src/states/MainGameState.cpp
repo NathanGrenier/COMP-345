@@ -8,6 +8,9 @@
 #include <ui/DetailButton.h>
 #include <towers/TowerGroup.h>
 #include <states/TitleState.h>
+#include <states/EndScreenState.h>
+#include <states/WinGameState.h>
+#include <states/GameOverState.h>
 
 
 /** @class MainGameState
@@ -82,7 +85,7 @@ bool MainGameState::enter() {
 	detailDisplay = new DetailAttributeDisplay();
 	bool success = detailDisplay->initializeComponents();
 
-	endlessMode = true;
+	endlessMode = false;
 	critterGroup = new CritterGroup(waveLevel, playerGold, map->getSpawnerPos(Global::mapViewRect), map->getTargetPos(Global::mapViewRect), map, detailDisplay, endlessMode);
 	towerGroup = new TowerGroup(playerGold, map, detailDisplay);
 
@@ -145,9 +148,24 @@ void MainGameState::update() {
 
 	towerGroup->update(0.016f, critterGroup->getCritters());
 
-	if (critterGroup->isGameWon()) {
-		std::cout << "Game was Won!" << std::endl;
-		setNextState(TitleState::get());
+	if (critterGroup->isGameFinished()) {
+		EndScreenState* endScreen;
+
+		if (critterGroup->isGameWon())
+		{
+			endScreen = WinGameState::get();
+		}
+		else 
+		{
+			endScreen = GameOverState::get();
+			endScreen->setKilledBy(critterGroup->getKillerCritterType());
+		}
+
+		endScreen->setCrittersKilled(critterGroup->getTotalCrittersKilled());
+		endScreen->setTowersBought(towerGroup->getTotalTowersPlaced());
+		endScreen->setWave(waveLevel);
+
+		setNextState(endScreen);
 	}
 }
 

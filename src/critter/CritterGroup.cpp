@@ -10,6 +10,7 @@
 #include <critter/FastCritter.h>
 #include <critter/TankCritter.h>
 #include <critter/CritterFactory.h>
+#include <states/EndScreenState.h>
 
 /**
  * @class CritterGroup
@@ -177,15 +178,29 @@ void CritterGroup::update(float deltaTime) {
 		Critter* critter = *it;
 		critter->update(deltaTime);
 		if (critter->atExit()) {
-			critter->stealGold(playerGold);
+			if (critter->getHitPoints() > playerGold)
+			{
+				playerGold = 0;
+				killerCritterType = critter->getType();
+				gameLost = true;
+			}
+			else
+			{
+				critter->stealGold(playerGold);
+			}
+
 			critter->detach(detailDisplay->getCritterObserver());
 			it = critters.erase(it);
 			--aliveCritters;
+
 		} else if (!critter->isAlive() && !critter->isDying()) {
 			playerGold += critter->getReward();
 			critter->detach(detailDisplay->getCritterObserver());
 			it = critters.erase(it);
 			--aliveCritters;
+
+			++totalCrittersKilled;
+
 		} else {
 			critter->move(deltaTime, critters);
 			++it;
@@ -197,7 +212,10 @@ void CritterGroup::update(float deltaTime) {
 		waveInProgress = false;
 		// Check if this is the last wave in non-endless mode
 		if (!endlessMode && waveLevel == static_cast<int>(waveConfigs.size())) {
-			gameWon = true;
+			if (!gameLost)
+			{
+				gameWon = true;
+			}
 		} else {
 			waveCountdown = 3.0f; // Set countdown for the next wave
 		}
@@ -234,6 +252,44 @@ void CritterGroup::render() {
 	}
 }
 
+/**
+ * @brief Accessor for isGameWon bool
+ * @return true if game has been won, false if it has not (yet)
+ */
 bool CritterGroup::isGameWon() const {
 	return gameWon;
+}
+
+/**
+ * @brief Accessor for isGameLost bool
+ * @return true if game has been lost, false if it has not (yet)
+ */
+bool CritterGroup::isGameLost() const {
+	return gameLost;
+}
+
+/**
+ * @brief Checks if game is currently finished
+ * @return true if game has either been won or lost
+ */
+bool CritterGroup::isGameFinished() const {
+	return gameWon || gameLost;
+}
+
+/**
+ * @brief Accessor for total number of critters killed
+ * @return the number of critters that have been killed
+ */
+int CritterGroup::getTotalCrittersKilled() const
+{
+	return totalCrittersKilled;
+}
+
+/**
+ * @brief Accessor for total number of critters killed
+ * @return the number of critters that have been killed
+ */
+std::string CritterGroup::getKillerCritterType() const
+{
+	return killerCritterType;
 }

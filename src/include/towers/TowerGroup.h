@@ -26,6 +26,7 @@ public:
     void render();            // Render all towers
 
     std::vector<Tower*>& getTowers();               // Access all towers (modifiable)
+    int getTotalTowersPlaced();                     // Access number of towers
     Tower* getTowerAtPosition(float x, float y, float scaleFactor); // Get a tower at a specific position (for selecting/upgrading)
 
     void upgradeTower(Tower* tower);                // Upgrade a selected tower, if possible
@@ -39,6 +40,7 @@ private:
     std::vector<Tower*> towers;                    // Vector containing all tower instances
     std::vector<Powerup*> activePowerups;
     int towerBuySelect = -1;
+    int totalTowersPlaced = 0;
 
     Tower* dummyStandardTower; /**< @brief dummy StandardTower for details before buying Tower */
     Tower* dummyRapidFireTower; /**< @brief dummy RapidFireTower for details before buying Tower */
