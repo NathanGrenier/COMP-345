@@ -1,5 +1,4 @@
 add_library(util STATIC
-    TextureLoader.cpp 
     Vector2D.cpp
     Observable.cpp
     Observer.cpp

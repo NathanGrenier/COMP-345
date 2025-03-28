@@ -155,7 +155,7 @@ bool loadMedia() {
  * @brief Cleans up SDL resources and quits SDL subsystems.
  */
 void close() {
-	gFpsTexture.destroy();
+	LTexture::deallocateAllTextures();
 
 	// Free font
 	TTF_CloseFont(gFont);
@@ -231,8 +231,7 @@ int main(int argc, char* args[]) {
 					if (e.type == SDL_EVENT_QUIT) {
 						setNextState(ExitState::get());
 						quit = true;
-					}
-					else if (e.type == SDL_EVENT_KEY_DOWN && e.key.key == SDLK_ESCAPE) {
+					} else if (e.type == SDL_EVENT_KEY_DOWN && e.key.key == SDLK_ESCAPE) {
 						setNextState(TitleState::get());
 					}
 				}

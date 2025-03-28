@@ -198,7 +198,7 @@ void MainGameState::render() {
  * @return Always returns true.
  */
 bool MainGameState::exit() {
-	TextureLoader::deallocateTextures();
+	TextureLoader::deallocateAllTextures();
 
 	mBackgroundTexture.destroy();
 

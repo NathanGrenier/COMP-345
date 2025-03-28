@@ -13,7 +13,7 @@
 class TextureLoader {
 public:
 	static SDL_Texture* loadTexture(SDL_Renderer* renderer, std::string filename);
-	static void deallocateTextures();
+	static void deallocateAllTextures();
 
 private:
 	static std::unordered_map<std::string, SDL_Texture*> loadedTextures;

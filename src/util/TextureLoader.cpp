@@ -91,7 +91,7 @@ SDL_Texture* TextureLoader::loadTexture(SDL_Renderer* renderer, std::string file
  * @warning After calling this function, any existing pointers to previously loaded
  * textures will be invalid
  */
-void TextureLoader::deallocateTextures() {
+void TextureLoader::deallocateAllTextures() {
 	auto& textures = getLoadedTextures();
 
 	while (textures.empty() == false) {
