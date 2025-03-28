@@ -30,6 +30,9 @@ public:
 	void render();
 	void update();
 
+	float getXPos() const { return xPosition; };
+	float getYPos() const { return yPosition; };
+
 private:
 	LButton buttonTexture;
 };

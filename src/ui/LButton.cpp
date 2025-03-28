@@ -149,7 +149,7 @@ bool LButton::setText(const std::string &text, SDL_Color textColor)
 
 bool LButton::loadFromFile(std::string path, std::string buttonPressPath)
 {
-	bool result = gButtonSpriteTexture.loadFromFile(path);
+	bool result = gButtonSpriteTexture.loadFromFile(path, true);
 	if (result)
 	{
 		kButtonWidth = gButtonSpriteTexture.getWidth();

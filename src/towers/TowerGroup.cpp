@@ -114,7 +114,7 @@ void TowerGroup::update(float deltaTime, std::vector<Critter *> critters)
 						// Check if critter is dead
 						if (!critter->isAlive())
 						{
-							if (rand() % 100 < POWERUP_SPAWN_CHANCE * 100)
+							if (rand() % 100 < static_cast<int>(POWERUP_SPAWN_CHANCE * 100))
 							{
 								Powerup *powerup = nullptr;
 								int powerupType = rand() % 2; // Randomly choose between fire or ice
@@ -364,13 +364,9 @@ void TowerGroup::handleEvent(SDL_Event &e)
 		if (currentTower != nullptr && (dynamic_cast<DetailButton *>(detailDisplay->getTowerComponents()[10]))->isClicked())
 		{
 			buttonClick = true;
-
 			int strategyIndex = getStrategyIndex(currentTower);
 			++strategyIndex %= TowerObserver::STRATEGY_COUNT;
 			currentTower->setCritterTargettingStrategy(strategies[strategyIndex]);
-			currentTower->notify();
-
-			return;
 		}
 
 		// checking if selling tower

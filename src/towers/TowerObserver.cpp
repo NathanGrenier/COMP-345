@@ -140,6 +140,9 @@ void TowerObserver::render() {
 	for (int i = 0; i < componentChangeNum; i++) {
 		if (!(towerAtMaxLevel && i == 5))
 		{
+			if (i == 10) {
+				dynamic_cast<DetailButton*>(towerComponents[i])->render();
+			}
 			towerComponents[i]->render();
 		}
 	}
@@ -249,6 +252,9 @@ void TowerObserver::handleButtonEvents(SDL_Event& e) {
 	(dynamic_cast<DetailButton*>(towerComponents[7]))->handleEvent(&e);
 	(dynamic_cast<DetailButton*>(towerComponents[8]))->handleEvent(&e);
 
+	(dynamic_cast<DetailButton*>(towerComponents[7]))->update();
+	(dynamic_cast<DetailButton*>(towerComponents[8]))->update();
+	(dynamic_cast<DetailButton*>(towerComponents[10]))->update();
 	if (towerStrategyIndex >= 0)
 	{
 		(dynamic_cast<DetailButton*>(towerComponents[10]))->handleEvent(&e);
@@ -312,8 +318,28 @@ void TowerObserver::updateAttributes() {
 void TowerObserver::updateStrategyButton() {
 	towerStrategyIndex = TowerGroup::getStrategyIndex(currentTower);
 
-	(dynamic_cast<DetailButton*>(towerComponents[10]))->setComponentImagePath(towerStrategyPaths[towerStrategyIndex]);
+	try {
+		DetailButton* oldButton = dynamic_cast<DetailButton*>(towerComponents[10]);
+
+		float xPosition = oldButton->getXPos();
+		float yPosition = oldButton->getYPos();
+
+		if (oldButton) {
+			delete oldButton;
+		}
+
+		float componentWidth = DetailAttributeDisplay::ATTRIBUTE_DISPLAY_WIDTH - 2 * DetailDisplayComponent::DETAIL_COMPONENT_PADDING;
+
+		DetailButton* newButton = new DetailButton(componentWidth, towerStrategyPaths[towerStrategyIndex]);
+		newButton->setComponentPosition(xPosition, yPosition);
+
+		towerComponents[10] = newButton;
+	}
+	catch (const std::bad_cast&) {
+		std::cerr << "Error: towerComponents[10] is not a DetailButton!" << std::endl;
+	}
 }
+
 
 /**
  * @brief Formats string to be displayed in DetailAttribute
