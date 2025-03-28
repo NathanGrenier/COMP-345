@@ -26,16 +26,6 @@ Powerup::Powerup(SDL_FRect position, std::string texturePath)
 	powerupTexture.loadFromFile(texturePath);
 }
 
-
-/**
- * @brief Destructor for the Powerup class.
- *
- * Cleans up any resources used by the powerup, such as the powerup texture.
- */
-Powerup::~Powerup() {
-	powerupTexture.destroy();
-}
-
 /**
  * @brief Checks if the powerup was clicked by the player.
  *
@@ -66,8 +56,7 @@ void Powerup::update(float deltaTime) {
 	if (elapsedTime >= flickerStartTime && elapsedTime < lifetime) {
 		// Toggle visibility every 0.2 seconds
 		isVisible = (static_cast<int>(elapsedTime * 100) % 2 == 0);
-	}
-	else if (elapsedTime >= lifetime) {
+	} else if (elapsedTime >= lifetime) {
 		markForDespawn = true;
 		return;
 	}

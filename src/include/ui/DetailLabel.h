@@ -12,9 +12,9 @@
 #include <Global.h>
 #include <ui/DetailDisplayComponent.h>
 #include <string>
+#include <ui/Texture.h>
 
-class DetailLabel : public DetailDisplayComponent
-{
+class DetailLabel : public DetailDisplayComponent {
 public:
 	// constructors
 	DetailLabel();
@@ -22,6 +22,6 @@ public:
 
 	void render();
 private:
-	LTexture labelTexture;
+	Texture labelTexture;
 };
 

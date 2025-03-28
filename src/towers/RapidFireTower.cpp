@@ -13,7 +13,7 @@
   * @brief Default Constructor
   */
 RapidFireTower::RapidFireTower() : Tower(), fireBreak(0), fireBreakRate(0), burstSize(0), burstCount(0) {
-	getTowerTexture().loadFromFile("assets/tower/RapidFireTower.png");
+	getTowerTexture().loadFromFile("tower/RapidFireTower.png");
 	upgradeValues.rangeIncrease = RapidFireTower::rangeIncreasePerLevel;
 	upgradeValues.rateOfFireIncrease = RapidFireTower::rateOfFireIncreasePerLevel;
 }
@@ -32,7 +32,7 @@ RapidFireTower::RapidFireTower() : Tower(), fireBreak(0), fireBreakRate(0), burs
  */
 RapidFireTower::RapidFireTower(float x, float y, float width, int buyingCost)
 	: fireBreak(0), fireBreakRate(5), burstSize(50), burstCount(0), Tower(x, y, width, buyingCost, RAPID_RANGE, RAPID_POWER, RAPID_RATE_OF_FIRE) {
-	getTowerTexture().loadFromFile("assets/tower/RapidFireTower.png");
+	getTowerTexture().loadFromFile("tower/RapidFireTower.png");
 	upgradeValues.rangeIncrease = RapidFireTower::rangeIncreasePerLevel;
 	upgradeValues.rateOfFireIncrease = RapidFireTower::rateOfFireIncreasePerLevel;
 }
@@ -52,7 +52,7 @@ RapidFireTower::RapidFireTower(float x, float y, float width, int buyingCost)
  */
 RapidFireTower::RapidFireTower(float x, float y, float width, int buyingCost, int refundValue)
 	: fireBreak(0), fireBreakRate(5), burstSize(50), burstCount(0), Tower(x, y, width, buyingCost, refundValue, RAPID_RANGE, RAPID_POWER, RAPID_RATE_OF_FIRE) {
-	getTowerTexture().loadFromFile("assets/tower/RapidFireTower.png");
+	getTowerTexture().loadFromFile("tower/RapidFireTower.png");
 	upgradeValues.rangeIncrease = RapidFireTower::rangeIncreasePerLevel;
 	upgradeValues.rateOfFireIncrease = RapidFireTower::rateOfFireIncreasePerLevel;
 }
@@ -169,7 +169,7 @@ void RapidFireTower::shootProjectile(Critter* targettedCritter) {
 				float speedY = (critterPosY - posY) / distance;
 
 				// fires a projectile, resets shooting timer
-				projectiles.push_back(new Projectile(posX, posY, getPower(), false, 6, getRotation(), speedX, speedY, "assets/tower/RapidFireProjectile.png"));
+				projectiles.push_back(new Projectile(posX, posY, getPower(), false, 6, getRotation(), speedX, speedY, "tower/RapidFireProjectile.png"));
 				setShootingTimer(MAX_SHOOTING_TIMER);
 			}
 		} else

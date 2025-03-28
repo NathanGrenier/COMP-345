@@ -8,8 +8,9 @@
 
 #include <SDL3/SDL_events.h>
 #include <string>
-#include "LTexture.h"
+#include <ui/Texture.h>
 #include <SDL3_mixer/SDL_mixer.h>
+
 class LButton {
 public:
 	float kButtonWidth;
@@ -17,7 +18,7 @@ public:
 
 	//Initializes internal variables
 	LButton();
-	void destroy();
+	~LButton();
 
 	//Sets top left position
 	void setPosition(float x, float y);
@@ -28,7 +29,7 @@ public:
 	void handleEvent(SDL_Event* e);
 
 	bool setText(const std::string& text, SDL_Color textColor);
-	bool loadFromFile(std::string path, std::string buttonPressPath="");
+	bool loadFromFile(std::string path, std::string buttonPressPath = "");
 
 	//Shows button sprite
 	void render();
@@ -55,7 +56,7 @@ private:
 	//Currently used global sprite
 	eButtonSprite mCurrentSprite;
 
-	LTexture gButtonSpriteTexture;
+	Texture gButtonSpriteTexture;
 
 	Mix_Chunk* gButtonPress{ nullptr };
 	Mix_Chunk* gButtonHover{ nullptr };

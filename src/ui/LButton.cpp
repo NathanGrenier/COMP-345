@@ -19,6 +19,12 @@ LButton::LButton() :
 	kButtonWidth{ 0 } {
 }
 
+LButton::~LButton() {
+	Mix_FreeChunk(gButtonPress);
+	gButtonPress = nullptr;
+	Mix_FreeChunk(gButtonHover);
+	gButtonHover = nullptr;
+}
 
 /**
  * @brief Sets the button's position.
@@ -110,15 +116,6 @@ void LButton::update()
 	}
 }
 
-void LButton::destroy() {
-	gButtonSpriteTexture.destroy(); // Free the texture
-
-	Mix_FreeChunk(gButtonPress);
-	gButtonPress = nullptr;
-	Mix_FreeChunk(gButtonHover);
-	gButtonHover = nullptr;
-}
-
 /**
  * @brief Sets the text on the button.
  *
@@ -203,16 +200,19 @@ void LButton::setSizeWithAspectRatio(float newWidth, float newHeight) {
 
 	if (newWidth == 0) {
 		adjustedWidth = newHeight * aspectRatio;
-	} else if (newHeight == 0) {
+	}
+	else if (newHeight == 0) {
 		adjustedHeight = newWidth / aspectRatio;
-	} else {
+	}
+	else {
 		// Maintain aspect ratio based on the closest fit
 		float widthRatio = newWidth / kButtonWidth;
 		float heightRatio = newHeight / kButtonHeight;
 
 		if (widthRatio < heightRatio) {
 			adjustedHeight = kButtonHeight * widthRatio;
-		} else {
+		}
+		else {
 			adjustedWidth = kButtonWidth * heightRatio;
 		}
 	}

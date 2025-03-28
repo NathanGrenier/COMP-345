@@ -13,7 +13,7 @@
   * @brief Default Constructor
   */
 StandardTower::StandardTower() : Tower() {
-	getTowerTexture().loadFromFile("assets/tower/StandardTower.png");
+	getTowerTexture().loadFromFile("tower/StandardTower.png");
 	upgradeValues.rangeIncrease = StandardTower::rangeIncreasePerLevel;
 	upgradeValues.powerIncrease = StandardTower::powerIncreasePerLevel;
 	upgradeValues.rateOfFireIncrease = StandardTower::rateOfFireIncreasePerLevel;
@@ -31,7 +31,7 @@ StandardTower::StandardTower() : Tower() {
  */
 StandardTower::StandardTower(float x, float y, float width, int buyingCost)
 	: Tower(x, y, width, buyingCost, STANDARD_RANGE, STANDARD_POWER, STANDARD_RATE_OF_FIRE) {
-	getTowerTexture().loadFromFile("assets/tower/StandardTower.png");
+	getTowerTexture().loadFromFile("tower/StandardTower.png");
 	upgradeValues.rangeIncrease = StandardTower::rangeIncreasePerLevel;
 	upgradeValues.powerIncrease = StandardTower::powerIncreasePerLevel;
 	upgradeValues.rateOfFireIncrease = StandardTower::rateOfFireIncreasePerLevel;
@@ -49,7 +49,7 @@ StandardTower::StandardTower(float x, float y, float width, int buyingCost)
  */
 StandardTower::StandardTower(float x, float y, float width, int buyingCost, int refundValue)
 	: Tower(x, y, width, buyingCost, refundValue, STANDARD_RANGE, STANDARD_POWER, STANDARD_RATE_OF_FIRE) {
-	getTowerTexture().loadFromFile("assets/tower/StandardTower.png");
+	getTowerTexture().loadFromFile("tower/StandardTower.png");
 	upgradeValues.rangeIncrease = StandardTower::rangeIncreasePerLevel;
 	upgradeValues.powerIncrease = StandardTower::powerIncreasePerLevel;
 	upgradeValues.rateOfFireIncrease = StandardTower::rateOfFireIncreasePerLevel;
@@ -139,7 +139,7 @@ void StandardTower::shootProjectile(Critter* targettedCritter) {
 			float speedY = (critterPosY - posY) / distance;
 
 			// fires a projectile with the default size, resets shooting timer
-			projectiles.push_back(new Projectile(posX, posY, getPower(), false, 6, getRotation(), speedX, speedY, "assets/tower/StandardProjectile.png"));
+			projectiles.push_back(new Projectile(posX, posY, getPower(), false, 6, getRotation(), speedX, speedY, "tower/StandardProjectile.png"));
 			setShootingTimer(MAX_SHOOTING_TIMER);
 		}
 	} else // decreases shooting timer

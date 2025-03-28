@@ -14,7 +14,7 @@
 #include <towers/Tower.h>
 #include <Global.h>
 #include <cmath>
-#include <ui/LTexture.h>
+#include <ui/Texture.h>
 
  /**
   * @class Powerup
@@ -32,12 +32,6 @@ public:
 	 * @param powerupPath The file path to the texture of the powerup.
 	 */
 	Powerup(SDL_FRect position, std::string powerupPath);
-
-	/**
-	 * @brief Destructor for the Powerup class.
-	 * Cleans up any allocated resources, such as textures.
-	 */
-	virtual ~Powerup();
 
 	/**
 	 * @brief Checks if the powerup was clicked by the player.
@@ -76,8 +70,8 @@ public:
 	bool markForDespawn = false;
 
 protected:
-	LTexture powerupTexture; /**< @brief The texture used for displaying the powerup */
-	LTexture indicatorTexture; /**< @brief The texture used for displaying the powerup's indicator */
+	Texture powerupTexture; /**< @brief The texture used for displaying the powerup */
+	Texture indicatorTexture; /**< @brief The texture used for displaying the powerup's indicator */
 
 	// Frame cycling variables for animation
 	int currentFrame; /**< @brief The current frame of the powerup's animation (0-3) */
