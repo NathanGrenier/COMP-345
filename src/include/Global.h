@@ -15,9 +15,9 @@
 #include <map/Map.h>
 #include <string>
 
- // External SDL variables
-extern SDL_Renderer* gRenderer; ///< Global pointer to the SDL renderer.
-extern TTF_Font* gFont; ///< Global pointer to the font used for rendering text.
+// External SDL variables
+extern SDL_Renderer *gRenderer; ///< Global pointer to the SDL renderer.
+extern TTF_Font *gFont;         ///< Global pointer to the font used for rendering text.
 
 /**
  * @class Global
@@ -25,20 +25,21 @@ extern TTF_Font* gFont; ///< Global pointer to the font used for rendering text.
  * @author Nirav Patel
  * @date 2025-02-16
  */
-class Global {
+class Global
+{
 public:
-    static inline const float kScreenWidth{ 800 };  // Constant, set at compile-time
-    static inline const float kScreenHeight{ 600 }; // Constant, set at compile-time
+    static inline const float kScreenWidth{800};  // Constant, set at compile-time
+    static inline const float kScreenHeight{600}; // Constant, set at compile-time
 
     static float viewerWidth;  // This will now be settable
-    static float headerHeight;  // Constant value
+    static float headerHeight; // Constant value
 
-    static Map* currentMap;
+    static Map *currentMap;
     static SDL_FRect mapViewRect;
 
-    static inline constexpr int numberOfProps{ 10 };
+    static inline constexpr int numberOfProps{10};
 
-    //Channel constants
+    // Channel constants
     enum eEffectChannel
     {
         eEffectChannelTowerShot = 0,
@@ -86,7 +87,7 @@ void close();
  *
  * @param nextState A pointer to the new game state.
  */
-void setNextState(GameState* nextState);
+void setNextState(GameState *nextState);
 
 /**
  * @brief Changes the current game state to the next state.

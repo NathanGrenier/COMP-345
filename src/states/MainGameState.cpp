@@ -8,7 +8,6 @@
 #include <towers/TowerGroup.h>
 #include <states/TitleState.h>
 
-
 /** @class MainGameState
  *  @brief Implementation of the main game state.
  *
@@ -17,7 +16,7 @@
  *
  */
 
- /// Static instance of MainGameState
+/// Static instance of MainGameState
 MainGameState MainGameState::sMainGameState;
 
 /**
@@ -25,7 +24,8 @@ MainGameState MainGameState::sMainGameState;
  *
  * @return Pointer to the MainGameState instance.
  */
-MainGameState* MainGameState::get() {
+MainGameState *MainGameState::get()
+{
 	return &sMainGameState;
 }
 
@@ -36,7 +36,8 @@ MainGameState* MainGameState::get() {
  *
  * @return Always returns true.
  */
-bool MainGameState::enter() {
+bool MainGameState::enter()
+{
 	if (Global::currentMap == nullptr)
 	{
 		std::cerr << "Global::currentMap was null" << std::endl;
@@ -46,7 +47,8 @@ bool MainGameState::enter() {
 	bg = new ParallaxBackground();
 	std::srand(std::time(0));
 
-	for (int i = 0; i < Global::numberOfProps; ++i) {
+	for (int i = 0; i < Global::numberOfProps; ++i)
+	{
 		float randomSpeed = 5.0f + std::rand() % 11;
 		bg->addLayer(randomSpeed, Global::kScreenHeight);
 	}
@@ -65,7 +67,7 @@ bool MainGameState::enter() {
 	map = new Map(*Global::currentMap);
 	map->setFlowFieldVisibility(false);
 
-	for (auto& cell : map->cells)
+	for (auto &cell : map->cells)
 	{
 		if (cell.isWall)
 		{
@@ -93,9 +95,11 @@ bool MainGameState::enter() {
  *
  * @param e The SDL_Event object containing input data.
  */
-void MainGameState::handleEvent(SDL_Event& e) {
+void MainGameState::handleEvent(SDL_Event &e)
+{
 	// handles hovering, clicking of buttons
-	if (!isPaused) {
+	if (!isPaused)
+	{
 		towerGroup->handleEvent(e);
 		critterGroup->handleEvent(e);
 		detailDisplay->handleButtonEvents(e);
@@ -104,17 +108,21 @@ void MainGameState::handleEvent(SDL_Event& e) {
 	pauseButton.handleEvent(&e);
 	exitButton.handleEvent(&e);
 
-	if (e.type == SDL_EVENT_MOUSE_BUTTON_DOWN && e.button.button == SDL_BUTTON_LEFT) {
+	if (e.type == SDL_EVENT_MOUSE_BUTTON_DOWN && e.button.button == SDL_BUTTON_LEFT)
+	{
 		if (pauseButton.isClicked())
 		{
 			float buttonHeight = 40.0f;
 
-			if (isPaused) {
+			if (isPaused)
+			{
 				pauseButton.loadFromFile("ui/PauseButton.png", "assets/sfx/PauseButtonPress.wav");
 				pauseButton.setSizeWithAspectRatio(0, buttonHeight);
 				pauseButton.setPosition(Global::kScreenWidth - Global::viewerWidth + 30, Global::kScreenHeight - buttonHeight - 20);
 				isPaused = false;
-			} else {
+			}
+			else
+			{
 				pauseButton.loadFromFile("ui/PlayButton.png", "assets/sfx/PauseButtonPress.wav");
 				pauseButton.setSizeWithAspectRatio(0, buttonHeight);
 				pauseButton.setPosition(Global::kScreenWidth - Global::viewerWidth + 30, Global::kScreenHeight - buttonHeight - 20);
@@ -133,12 +141,14 @@ void MainGameState::handleEvent(SDL_Event& e) {
  *
  * This function is called every frame to update the game's logic.
  */
-void MainGameState::update() {
+void MainGameState::update()
+{
 	pauseButton.update();
 	exitButton.update();
 	detailDisplay->update();
 
-	if (isPaused) return;
+	if (isPaused)
+		return;
 
 	bg->update(0.016f);
 
@@ -146,7 +156,8 @@ void MainGameState::update() {
 
 	towerGroup->update(0.016f, critterGroup->getCritters());
 
-	if (critterGroup->isGameWon()) {
+	if (critterGroup->isGameWon())
+	{
 		std::cout << "Game was Won!" << std::endl;
 		setNextState(TitleState::get());
 	}
@@ -157,18 +168,19 @@ void MainGameState::update() {
  *
  * This function is called every frame to render the game's visuals.
  */
-void MainGameState::render() {
-	SDL_FRect backRect = { 0, 0, Global::kScreenWidth - Global::viewerWidth, Global::headerHeight };
+void MainGameState::render()
+{
+	SDL_FRect backRect = {0, 0, Global::kScreenWidth - Global::viewerWidth, Global::headerHeight};
 
 	// Set the renderer color for the outline
 	SDL_SetRenderDrawColor(gRenderer, 168, 168, 168, 255); // Gray color for outline
-	SDL_RenderFillRect(gRenderer, &backRect); // Draw box outline
+	SDL_RenderFillRect(gRenderer, &backRect);			   // Draw box outline
 
-	SDL_FRect foreRect = { 4, 4, Global::kScreenWidth - Global::viewerWidth - 5, Global::headerHeight - 8 };
+	SDL_FRect foreRect = {4, 4, Global::kScreenWidth - Global::viewerWidth - 5, Global::headerHeight - 8};
 
 	// Set the renderer color for the gray box
 	SDL_SetRenderDrawColor(gRenderer, 202, 202, 202, 255); // Gray color for box
-	SDL_RenderFillRect(gRenderer, &foreRect); // Draw filled box
+	SDL_RenderFillRect(gRenderer, &foreRect);			   // Draw filled box
 
 	bg->render();
 
@@ -198,7 +210,8 @@ void MainGameState::render() {
  *
  * @return Always returns true.
  */
-bool MainGameState::exit() {
+bool MainGameState::exit()
+{
 	isPaused = false;
 
 	delete critterGroup;
@@ -226,8 +239,9 @@ bool MainGameState::exit() {
  * @param x The x-coordinate of the text.
  * @param y The y-coordinate of the text.
  */
-void MainGameState::renderText(const std::string& text, float x, float y) {
-	SDL_Color textColor = { 255, 255, 255, 255 };
+void MainGameState::renderText(const std::string &text, float x, float y)
+{
+	SDL_Color textColor = {255, 255, 255, 255};
 	Texture textTexture;
 	textTexture.loadFromRenderedText(text, textColor);
 	textTexture.render(x, y);
