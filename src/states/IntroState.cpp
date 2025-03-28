@@ -39,12 +39,13 @@ bool IntroState::enter() {
 	bool success = true;
 
 	// Load intro text
-	SDL_Color textColor{ 0x00, 0x00, 0x00, 0xFF };
-	if (success &= mMessageTexture.loadFromFile("ui/IntroMessage.png"); !success) {
+	success = mMessageTexture.loadFromFile("ui/IntroMessage.png");
+	if (!success) {
 		SDL_Log("Failed to render intro text!\n");
 		success = false;
 	}
-	if (success &= mCursorPromptTexture.loadFromFile("ui/cursor-prompt.png"); !success) {
+	success = mCursorPromptTexture.loadFromFile("ui/cursor-prompt.png");
+	if (!success) {
 		SDL_Log("Failed to render intro text!\n");
 		success = false;
 	}
@@ -109,9 +110,6 @@ void IntroState::update() {
  */
 void IntroState::render() {
 	bg->render();
-
-	// Render background
-	mBackgroundTexture.render(0, 0);
 
 	// Render message text with oscillation effect
 	mMessageTexture.render(

@@ -147,9 +147,6 @@ void TitleState::update() {
 void TitleState::render() {
 	bg->render();
 
-	// Render background
-	mBackgroundTexture.render(0, 0);
-
 	// Render title text centered at the top
 	mMessageTexture.render((Global::kScreenWidth - Global::kScreenWidth * 0.9) / 2.f, 40, nullptr, Global::kScreenWidth * 0.9, -1);
 

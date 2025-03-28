@@ -28,13 +28,17 @@ Texture::~Texture() {
 
 bool Texture::loadFromFile(const std::string& filePath, bool loadNew) {
 	if (!loadNew && isTextureLoaded()) {
+		//std::cout << "Already Loaded: " << filePath<< std::endl;
 		return true;
 	}
+	//std::cout << "[LOAD]: " << filePath << std::endl;
 
 	mBaseTexture = TextureManager::getInstance().loadTexture(filePath);
 	if (mBaseTexture) {
 		SDL_GetTextureSize(mBaseTexture, &mWidth, &mHeight);
-		fileName = filePath;
+		if (loadNew || fileName.empty()) {
+			fileName = filePath;
+		}
 		return true;
 	} else {
 		std::cout << "Texture Failed to Load: " << filePath << std::endl;
@@ -121,8 +125,7 @@ void Texture::render(float x, float y, SDL_FRect* clip, float width, float heigh
 					 double degrees, float sizeMulti, SDL_FPoint* center, SDL_FlipMode flipMode) {
 	SDL_Texture* textureToRender = mModifiedTexture ? mModifiedTexture : mBaseTexture;
 	if (!textureToRender) {
-		std::cout << "No texture to render for: " << fileName << std::endl;
-		//SDL_Log("No texture to render.\n");
+		SDL_Log("No texture to render for file: %s.\n", fileName.c_str());
 		return;
 	}
 

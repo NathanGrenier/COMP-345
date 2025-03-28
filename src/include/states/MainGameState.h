@@ -43,7 +43,6 @@ private:
 	static MainGameState sMainGameState;
 
 	//Intro background
-	Texture mBackgroundTexture;
 	ParallaxBackground* bg;
 	Texture mMessageTexture;
 

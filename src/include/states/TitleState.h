@@ -28,6 +28,5 @@ private:
 	static TitleState sTitleState;
 
 	ParallaxBackground* bg;
-	Texture mBackgroundTexture;
 	Texture mMessageTexture;
 };

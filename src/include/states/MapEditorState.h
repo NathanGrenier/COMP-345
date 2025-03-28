@@ -35,7 +35,6 @@ private:
 	LButton backButton;
 
 	//Intro background
-	Texture mBackgroundTexture;
 	ParallaxBackground* bg = nullptr;
 	Texture mMessageTexture;
 

@@ -26,12 +26,8 @@ private:
 	//Static instance
 	static IntroState sIntroState;
 
-	//Intro background
-	Texture mBackgroundTexture;
-
 	//Intro message
 	Texture mMessageTexture;
-
 	Texture mCursorPromptTexture;
 
 	ParallaxBackground* bg;
