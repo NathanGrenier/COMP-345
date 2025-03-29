@@ -59,14 +59,15 @@ SDL_FRect Global::mapViewRect = {
 	Global::kScreenWidth * 0.02f,
 	Global::headerHeight + Global::kScreenHeight * 0.02f,
 	static_cast<float>(Global::kScreenWidth - Global::viewerWidth) - 2 * Global::kScreenWidth * 0.02f,
-	static_cast<float>(Global::kScreenHeight - Global::headerHeight) - 2 * Global::kScreenHeight * 0.02f
-};
+	static_cast<float>(Global::kScreenHeight - Global::headerHeight) - 2 * Global::kScreenHeight * 0.02f };
 
-bool isFading = false; // Controls when fading occurs
+bool isFading = false;	// Controls when fading occurs
 float fadeAlpha = 0.0f; // Alpha value (0 = fully visible, 255 = fully black)
 bool fadeIn = false; // Determines fade direction
 LTimer fadeTimer; // Timer for tracking fade duration
-constexpr Uint64 fadeDuration = 500'000'000;
+constexpr Uint64 FADE_DURATION = 350'000'000;
+
+std::ofstream outFile;
 
 /**
  * @brief Sets the next game state.
@@ -76,7 +77,8 @@ constexpr Uint64 fadeDuration = 500'000'000;
  * @param newState The new state to transition to.
  */
 void setNextState(GameState* newState) {
-	if (gNextState != ExitState::get()) {
+	if (gNextState != ExitState::get())
+	{
 		gNextState = newState;
 	}
 }
@@ -87,7 +89,8 @@ void setNextState(GameState* newState) {
  * Exits the current state, enters the new state, and updates the game state pointer.
  */
 void changeState() {
-	if (gNextState != nullptr) {
+	if (gNextState != nullptr)
+	{
 		// Start fading
 		isFading = true;
 		fadeIn = false; // Start with fade-out effect
@@ -102,30 +105,58 @@ void changeState() {
  * @return True if initialization was successful, false otherwise.
  */
 bool init() {
+	// Get current time and format it as HH:MM:SS
+	std::time_t currentTime = std::time(nullptr);  // Get the current time
+	std::tm* timeInfo = std::localtime(&currentTime);  // Convert to local time
+
+	char timestamp[20];  // Buffer to store formatted time (YYYYMMDD_HHMMSS format)
+	std::strftime(timestamp, sizeof(timestamp), "%Y%m%d_%H%M%S", timeInfo);  // Format time
+
+	// Construct the filename with the timestamp
+	std::stringstream filenameStream;
+	filenameStream << "LOG_" << timestamp << ".txt";  // Example: LOG_20250328_123045.txt
+	std::string filename = filenameStream.str();  // Convert the stream to a string
+
+	// Create and open the text file for writing (Append mode)
+	outFile.open(filename, std::ios::app);
+
+	if (!outFile) {  // Check if the file is opened successfully
+		std::cerr << "Error: Could not create the file!" << std::endl;
+	} else {
+		outFile << "Log started at: " << timestamp << std::endl;  // Write log start time
+	}
+
 	bool success{ true };
-	if (!SDL_Init(SDL_INIT_VIDEO | SDL_INIT_AUDIO)) {
+	if (!SDL_Init(SDL_INIT_VIDEO | SDL_INIT_AUDIO))
+	{
 		SDL_Log("SDL could not initialize! SDL error: %s\n", SDL_GetError());
 		success = false;
-	} else {
+	} else
+	{
 		// Create window and renderer
-		if (!SDL_CreateWindowAndRenderer("Tower Defense - NullTerminators", static_cast<int>(Global::kScreenWidth), static_cast<int>(Global::kScreenHeight), 0, &gWindow, &gRenderer)) {
+		if (!SDL_CreateWindowAndRenderer("Tower Defense - NullTerminators", static_cast<int>(Global::kScreenWidth), static_cast<int>(Global::kScreenHeight), 0, &gWindow, &gRenderer))
+		{
 			SDL_Log("Window could not be created! SDL error: %s\n", SDL_GetError());
 			success = false;
-		} else {
+		} else
+		{
 			// Enable VSync
-			if (!SDL_SetRenderVSync(gRenderer, 1)) {
+			if (!SDL_SetRenderVSync(gRenderer, 1))
+			{
 				SDL_Log("Could not enable VSync! SDL error: %s\n", SDL_GetError());
 				success = false;
 			}
 
 			// Set blending mode
-			if (!SDL_SetRenderDrawBlendMode(gRenderer, SDL_BLENDMODE_BLEND)) {
+			if (!SDL_SetRenderDrawBlendMode(gRenderer, SDL_BLENDMODE_BLEND))
+			{
 				SDL_Log("Could not set blend mode! SDL error: %s\n", SDL_GetError());
 				success = false;
 			}
 
 			// Initialize SDL_ttf
-			if (!TTF_Init()) {
+			if (!TTF_Init())
+			{
 				SDL_Log("SDL_ttf could not initialize! SDL_ttf error: %s\n", SDL_GetError());
 				success = false;
 			}
@@ -172,11 +203,20 @@ bool loadMedia() {
 	bool success{ true };
 
 	// Load font
-	std::string fontPath = "./assets/fonts/lazy2.ttf";
-	if (gFont = TTF_OpenFont(fontPath.c_str(), 28); gFont == nullptr) {
-		SDL_Log("Could not load %s! SDL_ttf Error: %s\n", fontPath.c_str(), SDL_GetError());
+	std::string fontPath = "assets/fonts/lazy2.ttf";
+	gFont = TTF_OpenFont(fontPath.c_str(), 28);
+	if (gFont == nullptr)
+	{
+		SDL_Log("Failed to load font %s: %s", fontPath.c_str(), SDL_GetError());
 		success = false;
 	}
+
+	if (gMusic = Mix_LoadMUS("assets/music.wav"); gMusic == nullptr)
+	{
+		SDL_Log("Unable to load music! SDL_mixer error: %s\n", SDL_GetError());
+		success = false;
+	}
+
 	return success;
 }
 
@@ -221,15 +261,19 @@ int main(int argc, char* args[]) {
 	int exitCode{ 0 };
 
 	// Initialize SDL
-	if (!init()) {
+	if (!init())
+	{
 		SDL_Log("Unable to initialize program!\n");
 		exitCode = 1;
-	} else {
+	} else
+	{
 		// Load media
-		if (!loadMedia()) {
+		if (!loadMedia())
+		{
 			SDL_Log("Unable to load media!\n");
 			exitCode = 2;
-		} else {
+		} else
+		{
 			// Quit flag
 			bool quit{ false };
 
@@ -264,49 +308,58 @@ int main(int argc, char* args[]) {
 			Mix_PlayMusic(gMusic, -1);
 
 			// Main game loop
-			while (!quit) {
+			while (!quit)
+			{
 				// Start frame timer
 				capTimer.start();
 
 				// Process events
-				while (SDL_PollEvent(&e)) {
+				while (SDL_PollEvent(&e))
+				{
 					gCurrentState->handleEvent(e);
 
-					if (e.type == SDL_EVENT_QUIT) {
+					if (e.type == SDL_EVENT_QUIT)
+					{
 						setNextState(ExitState::get());
 						quit = true;
-					} else if (e.type == SDL_EVENT_KEY_DOWN && e.key.key == SDLK_ESCAPE) {
+					} else if (e.type == SDL_EVENT_KEY_DOWN && e.key.key == SDLK_ESCAPE)
+					{
 						setNextState(TitleState::get());
 					}
 				}
 
 				// Handle fading transition
-				if (isFading) {
+				if (isFading)
+				{
 					// Correct fadeProgress calculation (scaled from 0 to 1)
 					Uint64 elapsedTime = fadeTimer.getTicksNS();
-					float fadeProgress = static_cast<float>(elapsedTime) / static_cast<float>(fadeDuration);
+					float fadeProgress = static_cast<float>(elapsedTime) / static_cast<float>(FADE_DURATION);
 					fadeAlpha = std::clamp(fadeIn ? (1.0f - fadeProgress) * 255.0f : fadeProgress * 255.0f, 0.0f, 255.0f);
 
 					// If fade-out is complete, switch game states
-					if (fadeAlpha >= 255 && !fadeIn) {
+					if (fadeAlpha >= 255 && !fadeIn)
+					{
 						gCurrentState->exit();
 						gNextState->enter();
 						gCurrentState = gNextState;
+						gCurrentState->update();
 						gNextState = nullptr;
 						fadeIn = true;
 						fadeTimer.start();
 					}
 
 					// If fade-in is complete, stop fading
-					if (fadeAlpha <= 0 && fadeIn) {
+					if (fadeAlpha <= 0 && fadeIn)
+					{
 						isFading = false;
+						gCurrentState->update();
 					}
 				}
 
 				// Update the current state if not transitioning
-				gCurrentState->update();
-
-				if (!isFading) {
+				if (!isFading)
+				{
+					gCurrentState->update();
 					changeState();
 				}
 
@@ -318,7 +371,8 @@ int main(int argc, char* args[]) {
 				gCurrentState->render();
 
 				// Apply fade effect if needed
-				if (isFading) {
+				if (isFading)
+				{
 					SDL_SetRenderDrawColor(gRenderer, 0, 0, 0, static_cast<Uint8>(fadeAlpha));
 					SDL_RenderFillRect(gRenderer, nullptr);
 				}
@@ -329,11 +383,16 @@ int main(int argc, char* args[]) {
 				// Cap frame rate
 				constexpr Uint64 nsPerFrame = 1000000000 / kScreenFps;
 				Uint64 frameNs = capTimer.getTicksNS();
-				if (frameNs < nsPerFrame) {
+				if (frameNs < nsPerFrame)
+				{
 					SDL_DelayNS(nsPerFrame - frameNs);
 				}
 			}
 		}
+	}
+
+	if (outFile.is_open()) {
+		outFile.close();
 	}
 
 	// Cleanup and exit

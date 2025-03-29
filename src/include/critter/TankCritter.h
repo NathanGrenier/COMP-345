@@ -28,9 +28,16 @@ public:
 	void loadTextures();
 
 private:
-	float speed = 30.0f;
-	float hitPoints;
-	float maxHitPoints = 40.0f;
-	int reward = 20;
+	static constexpr float INITIAL_SPEED = 30.0f;
+	static constexpr float INITIAL_HITPOINTS = 30.0f;
+	static constexpr int INITIAL_REWARD = 20;
+	float speed = INITIAL_SPEED;
+	float maxHitPoints = INITIAL_HITPOINTS;
+	int reward = INITIAL_REWARD;
+
+	static constexpr float SPEED_SCALE_AMOUNT = INITIAL_SPEED * Critter::SPEED_SCALE_FACTOR;
+	static constexpr float HITPOINT_SCALE_AMOUNT = INITIAL_HITPOINTS * Critter::HITPOINT_SCALE_FACTOR;
+	static constexpr float REWARD_SCALE_AMOUNT = INITIAL_REWARD * Critter::REWARD_SCALE_FACTOR;
+
 	static inline const std::string baseTexturePath = "critters/ogre";
 };

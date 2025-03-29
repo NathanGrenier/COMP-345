@@ -3,12 +3,13 @@
 
 NormalCritter::NormalCritter(int level, SDL_FRect start, Map* map)
 	: Critter(level, start, map) {
-	maxHitPoints += level * 2.0f;
+	speed += level * SPEED_SCALE_AMOUNT;
+	maxHitPoints += level * HITPOINT_SCALE_AMOUNT;
 	hitPoints = maxHitPoints;
-	reward += level * reward;
+	reward += level * REWARD_SCALE_AMOUNT;
 
 	setupAnimationFrames();
-	frameTime = (1.0f / animationFramesWalkSide.size()) * 0.8;
+	frameTime = (1.0f / animationFramesWalkSide.size()) * (0.8 * (1 + Critter::SPEED_SCALE_FACTOR));
 	//std::cout << std::fixed << "Normal Critter Frame Time: " << frameTime << std::endl;
 }
 

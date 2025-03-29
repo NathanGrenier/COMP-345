@@ -14,10 +14,12 @@
 #include <SDL3_ttf/SDL_ttf.h>
 #include <map/Map.h>
 #include <string>
+#include <fstream>
 
  // External SDL variables
 extern SDL_Renderer* gRenderer; ///< Global pointer to the SDL renderer.
-extern TTF_Font* gFont; ///< Global pointer to the font used for rendering text.
+extern TTF_Font* gFont;         ///< Global pointer to the font used for rendering text.
+extern std::ofstream outFile;
 
 /**
  * @class Global
@@ -37,6 +39,20 @@ public:
 	static SDL_FRect mapViewRect;
 
 	static inline constexpr int numberOfProps{ 10 };
+
+	static void logMessage(std::string message) {
+		// Get current time for the log entry
+		std::time_t currentTime = std::time(nullptr);  // Get the current time
+		std::tm* timeInfo = std::localtime(&currentTime);  // Convert to local time
+
+		// Create a timestamp string in HH:MM:SS format
+		char timestamp[9];  // Buffer to store formatted time
+		std::strftime(timestamp, sizeof(timestamp), "%H:%M:%S", timeInfo);  // Format time
+
+		// Log the purchase with timestamp
+		outFile << "[" << timestamp << "] " << message << std::endl;
+	};
+
 };
 
 /**
@@ -83,3 +99,4 @@ void setNextState(GameState* nextState);
  * to the next state is executed properly.
  */
 void changeState();
+

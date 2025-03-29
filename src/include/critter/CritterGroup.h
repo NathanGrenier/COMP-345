@@ -39,6 +39,11 @@ public:
 	void handleEvent(SDL_Event& e);
 	std::vector<Critter*> getCritters() { return critters; }
 	bool isGameWon() const;
+	bool isGameLost() const;
+	bool isGameFinished() const;
+	int getTotalCrittersKilled() const;
+	std::string getKillerCritterType() const;
+
 private:
 	int& waveLevel;
 	int& playerGold;
@@ -48,10 +53,13 @@ private:
 	SDL_FRect endPosition;
 	bool endlessMode;
 	bool gameWon = false;
+	bool gameLost = false;
+	std::string killerCritterType;
 
 	DetailAttributeDisplay* detailDisplay;
 	int crittersSpawned = 0;
 	int aliveCritters = 0;
+	int totalCrittersKilled = 0;
 	bool waveInProgress = true;
 	float waveCountdown = 3.0f;
 

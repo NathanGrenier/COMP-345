@@ -20,6 +20,8 @@
 
 class MainGameState : public GameState {
 public:
+	static const int STARTING_GOLD_AMT = 200;
+
 	//Static accessor
 	static MainGameState* get();
 
@@ -32,7 +34,8 @@ public:
 	void update() override;
 	void render() override;
 
-	int playerGold = 1000;
+	int STARTING_PLAYER_GOLD = 100;
+	int playerGold;
 	int waveLevel = 0;
 
 	// Helper functions
@@ -48,10 +51,11 @@ private:
 
 	LButton pauseButton;
 	LButton exitButton;
+	LButton* currentButton;
 	LButton playButton;
 
 	bool isPaused = false;
-	bool endlessMode;
+	bool endlessMode = false;
 
 	/** @brief Pointer to the map being edited
 	 *  @details nullptr if no map is currently loaded

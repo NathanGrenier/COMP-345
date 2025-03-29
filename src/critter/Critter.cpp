@@ -82,8 +82,11 @@ void Critter::move(float deltaTime, const std::vector<Critter*> critters) {
 
 	if (distanceToTarget > 0) {
 		direction = direction.normalize();
-		float deltaX = direction.x * getSpeed() * deltaTime;
-		float deltaY = direction.y * getSpeed() * deltaTime;
+
+		float scaledSpeed = getSpeed() / Critter::SPEED_PER_CELL * deltaTime * Global::currentMap->getPixelPerCell();
+
+		float deltaX = direction.x * scaledSpeed;
+		float deltaY = direction.y * scaledSpeed;
 
 		float addedDistance = static_cast<float>(sqrt(pow(deltaX, 2) + pow(deltaY, 2)));
 		distanceTravelled += addedDistance;
@@ -250,9 +253,11 @@ void Critter::update(float deltaTime) {
 	textureWalkUp.setColor((Uint8)redTintAlpha, (Uint8)greenTintAlpha, (Uint8)blueTintAlpha);
 	textureWalkDown.setColor((Uint8)redTintAlpha, (Uint8)greenTintAlpha, (Uint8)blueTintAlpha);
 	textureWalkSide.setColor((Uint8)redTintAlpha, (Uint8)greenTintAlpha, (Uint8)blueTintAlpha);
-	textureDeathUp.setColor((Uint8)redTintAlpha, (Uint8)greenTintAlpha, (Uint8)blueTintAlpha);
-	textureDeathDown.setColor((Uint8)redTintAlpha, (Uint8)greenTintAlpha, (Uint8)blueTintAlpha);
-	textureDeathSide.setColor((Uint8)redTintAlpha, (Uint8)greenTintAlpha, (Uint8)blueTintAlpha);
+
+	// TODO: check if we need to set the texture's color for death animations
+	//textureDeathUp.setColor((Uint8)redTintAlpha, (Uint8)greenTintAlpha, (Uint8)blueTintAlpha);
+	//textureDeathDown.setColor((Uint8)redTintAlpha, (Uint8)greenTintAlpha, (Uint8)blueTintAlpha);
+	//textureDeathSide.setColor((Uint8)redTintAlpha, (Uint8)greenTintAlpha, (Uint8)blueTintAlpha);
 }
 
 bool Critter::isAlive() const {

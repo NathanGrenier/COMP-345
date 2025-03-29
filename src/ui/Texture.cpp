@@ -41,7 +41,7 @@ bool Texture::loadFromFile(const std::string& filePath, bool loadNew) {
 		}
 		return true;
 	} else {
-		std::cout << "Texture Failed to Load: " << filePath << std::endl;
+		SDL_Log("Texture Failed to Load: %s", filePath.c_str());
 	}
 	return false;
 }

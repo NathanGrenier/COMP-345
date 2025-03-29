@@ -83,7 +83,7 @@ protected:
 	float bobbingHeight; /**< @brief The height of the bobbing movement */
 	float bobbingOffset; /**< @brief The current vertical offset for the bobbing effect */
 
-	float lifetime;      // Total lifetime before despawning
+	const float TOTAL_LIFETIME = 1.0f;      // Total lifetime before despawning
 	float elapsedTime;   // Tracks how long the powerup has existed
 	float flickerStartTime; // When the flickering should begin
 	bool isVisible;

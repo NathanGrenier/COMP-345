@@ -186,9 +186,7 @@ void MapEditorState::handleEvent(SDL_Event& e) {
 			std::string newMapPath = "assets/mapPresets/" + map->getName() + ".json";
 
 			// Attempt to delete the original map file
-			if (std::remove(originalMapPath.c_str()) != 0) {
-				std::cerr << "Error: Failed to delete the original map file: " << originalMapPath << std::endl;
-			}
+			std::remove(originalMapPath.c_str());
 
 			// Attempt to delete the current map file (if it exists)
 			if (originalMapPath != newMapPath && std::remove(newMapPath.c_str()) != 0) {

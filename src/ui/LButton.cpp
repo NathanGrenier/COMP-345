@@ -17,8 +17,7 @@ LButton::LButton() :
 	originalWidth{ 0.f },
 	mCurrentSprite{ eButtonSpriteMouseOut },
 	kButtonHeight{ 0 },
-	kButtonWidth{ 0 } {
-}
+	kButtonWidth{ 0 } {}
 
 LButton::~LButton() {
 	mButtonPress = nullptr;
@@ -55,16 +54,17 @@ void LButton::handleEvent(SDL_Event* e) {
 	const Uint32 soundDuration = 2000; // 2 seconds (change as needed)
 
 	// If mouse event happened
-	if (e->type == SDL_EVENT_MOUSE_MOTION || e->type == SDL_EVENT_MOUSE_BUTTON_DOWN || e->type == SDL_EVENT_MOUSE_BUTTON_UP) {
+	if (e->type == SDL_EVENT_MOUSE_MOTION || e->type == SDL_EVENT_MOUSE_BUTTON_DOWN || e->type == SDL_EVENT_MOUSE_BUTTON_UP)
+	{
 		// Get mouse position
 		float x = -1.f, y = -1.f;
 		SDL_GetMouseState(&x, &y);
 
 		SDL_FRect spriteClips[] = {
-			{ 0.f, static_cast<float>(0 * kButtonHeight), static_cast<float>(kButtonWidth), static_cast<float>(kButtonHeight)},
-			{ 0.f, static_cast<float>(1 * kButtonHeight), static_cast<float>(kButtonWidth), static_cast<float>(kButtonHeight)},
-			{ 0.f, static_cast<float>(2 * kButtonHeight), static_cast<float>(kButtonWidth), static_cast<float>(kButtonHeight)},
-			{ 0.f, static_cast<float>(3 * kButtonHeight), static_cast<float>(kButtonWidth), static_cast<float>(kButtonHeight)},
+			{0.f, static_cast<float>(0 * kButtonHeight), static_cast<float>(kButtonWidth), static_cast<float>(kButtonHeight)},
+			{0.f, static_cast<float>(1 * kButtonHeight), static_cast<float>(kButtonWidth), static_cast<float>(kButtonHeight)},
+			{0.f, static_cast<float>(2 * kButtonHeight), static_cast<float>(kButtonWidth), static_cast<float>(kButtonHeight)},
+			{0.f, static_cast<float>(3 * kButtonHeight), static_cast<float>(kButtonWidth), static_cast<float>(kButtonHeight)},
 		};
 
 		// Calculate the clip's width and height based on the current sprite
@@ -72,33 +72,32 @@ void LButton::handleEvent(SDL_Event* e) {
 
 		// Check if mouse is inside the button's clipped area
 		bool inside = (x >= mPosition.x && x <= mPosition.x + currentClip.w &&
-			y >= mPosition.y && y <= mPosition.y + currentClip.h);
+					   y >= mPosition.y && y <= mPosition.y + currentClip.h);
 
 		// Update button state based on mouse position
-		if (!inside) {
+		if (!inside)
+		{
 			mCurrentSprite = eButtonSpriteMouseOut;
 			mButtonSpriteTexture.setAlpha(255);
 			currentSound = nullptr;
-		}
-		else {
+		} else {
 			switch (e->type) {
-			case SDL_EVENT_MOUSE_MOTION:
-				if (mCurrentSprite != eButtonSpriteMouseOverMotion && currentSound == nullptr) {
-					currentSound = mButtonHover;
-				}
-				mCurrentSprite = eButtonSpriteMouseOverMotion;
-				break;
-			case SDL_EVENT_MOUSE_BUTTON_DOWN:
-				currentSound = mButtonPress;
-				mCurrentSprite = eButtonSpriteMouseDown;
-				break;
-			case SDL_EVENT_MOUSE_BUTTON_UP:
-				mCurrentSprite = eButtonSpriteMouseUp;
-				break;
+				case SDL_EVENT_MOUSE_MOTION:
+					if (mCurrentSprite != eButtonSpriteMouseOverMotion && currentSound == nullptr) {
+						currentSound = mButtonHover;
+					}
+					mCurrentSprite = eButtonSpriteMouseOverMotion;
+					break;
+				case SDL_EVENT_MOUSE_BUTTON_DOWN:
+					currentSound = mButtonPress;
+					mCurrentSprite = eButtonSpriteMouseDown;
+					break;
+				case SDL_EVENT_MOUSE_BUTTON_UP:
+					mCurrentSprite = eButtonSpriteMouseUp;
+					break;
 			}
 		}
 	}
-
 }
 
 /**
@@ -140,8 +139,7 @@ bool LButton::loadFromFile(std::string path, std::string buttonPressPath, std::s
 	return result;
 }
 
-void LButton::update()
-{
+void LButton::update() {
 	if (currentSound != previousSound) {
 		if (currentSound != nullptr) {
 			Mix_PlayChannel(AudioManager::eEffectChannelUI, currentSound, 0);
@@ -159,12 +157,11 @@ void LButton::update()
  */
 void LButton::render() {
 	SDL_FRect spriteClips[] = {
-	{ 0.f, static_cast<float>(0 * originalHeight), static_cast<float>(originalWidth), static_cast<float>(originalHeight) },
-	{ 0.f, static_cast<float>(1 * originalHeight), static_cast<float>(originalWidth), static_cast<float>(originalHeight) },
-	{ 0.f, static_cast<float>(2 * originalHeight), static_cast<float>(originalWidth), static_cast<float>(originalHeight) },
-	{ 0.f, static_cast<float>(3 * originalHeight), static_cast<float>(originalWidth), static_cast<float>(originalHeight) },
+		{0.f, static_cast<float>(0 * originalHeight), static_cast<float>(originalWidth), static_cast<float>(originalHeight)},
+		{0.f, static_cast<float>(1 * originalHeight), static_cast<float>(originalWidth), static_cast<float>(originalHeight)},
+		{0.f, static_cast<float>(2 * originalHeight), static_cast<float>(originalWidth), static_cast<float>(originalHeight)},
+		{0.f, static_cast<float>(3 * originalHeight), static_cast<float>(originalWidth), static_cast<float>(originalHeight)},
 	};
-
 
 	// Render the button using the current sprite state
 	mButtonSpriteTexture.render(mPosition.x, mPosition.y, &spriteClips[mCurrentSprite], kButtonWidth, kButtonHeight);
@@ -188,7 +185,8 @@ bool LButton::isClicked() const {
 }
 
 void LButton::setSizeWithAspectRatio(float newWidth, float newHeight) {
-	if (kButtonWidth == 0 || kButtonHeight == 0) {
+	if (kButtonWidth == 0 || kButtonHeight == 0)
+	{
 		return; // Avoid division by zero
 	}
 
@@ -198,21 +196,20 @@ void LButton::setSizeWithAspectRatio(float newWidth, float newHeight) {
 	float adjustedWidth = newWidth;
 	float adjustedHeight = newHeight;
 
-	if (newWidth == 0) {
+	if (newWidth == 0)
+	{
 		adjustedWidth = newHeight * aspectRatio;
-	}
-	else if (newHeight == 0) {
+	} else if (newHeight == 0) {
 		adjustedHeight = newWidth / aspectRatio;
-	}
-	else {
+	} else {
 		// Maintain aspect ratio based on the closest fit
 		float widthRatio = newWidth / kButtonWidth;
 		float heightRatio = newHeight / kButtonHeight;
 
-		if (widthRatio < heightRatio) {
+		if (widthRatio < heightRatio)
+		{
 			adjustedHeight = kButtonHeight * widthRatio;
-		}
-		else {
+		} else {
 			adjustedWidth = kButtonWidth * heightRatio;
 		}
 	}
