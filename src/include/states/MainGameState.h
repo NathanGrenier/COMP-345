@@ -48,6 +48,7 @@ private:
 
 	LButton pauseButton;
 	LButton exitButton;
+	LButton* currentButton;
 	LButton playButton;
 
 	bool isPaused = false;

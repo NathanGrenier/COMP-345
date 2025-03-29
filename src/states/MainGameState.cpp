@@ -38,11 +38,23 @@ MainGameState *MainGameState::get()
  */
 bool MainGameState::enter()
 {
+	float buttonHeight = 40.0f;
+
 	if (Global::currentMap == nullptr)
 	{
 		std::cerr << "Global::currentMap was null" << std::endl;
 		return false;
 	}
+
+	pauseButton.loadFromFile("ui/PauseButton.png", "assets/sfx/PauseButtonPress.wav");
+	pauseButton.setSizeWithAspectRatio(0, buttonHeight);
+	pauseButton.setPosition(Global::kScreenWidth - Global::viewerWidth + 30, Global::kScreenHeight - buttonHeight - 20);
+
+	playButton.loadFromFile("ui/PlayButton.png", "assets/sfx/PauseButtonPress.wav");
+	playButton.setSizeWithAspectRatio(0, buttonHeight);
+	playButton.setPosition(Global::kScreenWidth - Global::viewerWidth + 30, Global::kScreenHeight - buttonHeight - 20);
+
+	currentButton = &pauseButton;
 
 	bg = new ParallaxBackground();
 	std::srand(std::time(0));
@@ -53,16 +65,9 @@ bool MainGameState::enter()
 		bg->addLayer(randomSpeed, Global::kScreenHeight);
 	}
 
-	float intButtonHeight = 40.0f;
-
-	pauseButton.loadFromFile("ui/PauseButton.png", "assets/sfx/PauseButtonPress.wav");
 	exitButton.loadFromFile("ui/ExitButton.png");
-
-	exitButton.setSizeWithAspectRatio(0, intButtonHeight);
-	pauseButton.setSizeWithAspectRatio(0, intButtonHeight);
-
-	exitButton.setPosition(Global::kScreenWidth - Global::viewerWidth + 30 + pauseButton.kButtonWidth + 30, Global::kScreenHeight - intButtonHeight - 20);
-	pauseButton.setPosition(Global::kScreenWidth - Global::viewerWidth + 30, Global::kScreenHeight - intButtonHeight - 20);
+	exitButton.setSizeWithAspectRatio(0, buttonHeight);
+	exitButton.setPosition(Global::kScreenWidth - Global::viewerWidth + 30 + pauseButton.kButtonWidth + 30, Global::kScreenHeight - buttonHeight - 20);
 
 	map = new Map(*Global::currentMap);
 	map->setFlowFieldVisibility(false);
@@ -105,29 +110,26 @@ void MainGameState::handleEvent(SDL_Event &e)
 		detailDisplay->handleButtonEvents(e);
 	}
 
-	pauseButton.handleEvent(&e);
+	currentButton->handleEvent(&e);
 	exitButton.handleEvent(&e);
 
 	if (e.type == SDL_EVENT_MOUSE_BUTTON_DOWN && e.button.button == SDL_BUTTON_LEFT)
 	{
 		if (pauseButton.isClicked())
 		{
-			float buttonHeight = 40.0f;
+
+			Global::logMessage(std::format("Game {}paused", isPaused ? "un" : ""));
 
 			if (isPaused)
 			{
-				pauseButton.loadFromFile("ui/PauseButton.png", "assets/sfx/PauseButtonPress.wav");
-				pauseButton.setSizeWithAspectRatio(0, buttonHeight);
-				pauseButton.setPosition(Global::kScreenWidth - Global::viewerWidth + 30, Global::kScreenHeight - buttonHeight - 20);
-				isPaused = false;
+				currentButton = &pauseButton;
 			}
 			else
 			{
-				pauseButton.loadFromFile("ui/PlayButton.png", "assets/sfx/PauseButtonPress.wav");
-				pauseButton.setSizeWithAspectRatio(0, buttonHeight);
-				pauseButton.setPosition(Global::kScreenWidth - Global::viewerWidth + 30, Global::kScreenHeight - buttonHeight - 20);
-				isPaused = true;
+				currentButton = &playButton;
 			}
+			isPaused = !isPaused;
+
 		}
 		if (exitButton.isClicked())
 		{
@@ -143,7 +145,7 @@ void MainGameState::handleEvent(SDL_Event &e)
  */
 void MainGameState::update()
 {
-	pauseButton.update();
+	currentButton->update();
 	exitButton.update();
 	detailDisplay->update();
 
@@ -191,7 +193,7 @@ void MainGameState::render()
 	critterGroup->render();
 	towerGroup->render();
 
-	pauseButton.render();
+	currentButton->render();
 	exitButton.render();
 
 	// Render player gold
@@ -213,6 +215,8 @@ void MainGameState::render()
 bool MainGameState::exit()
 {
 	isPaused = false;
+
+	currentButton = &pauseButton;
 
 	delete critterGroup;
 	critterGroup = nullptr;

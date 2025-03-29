@@ -352,6 +352,7 @@ void TowerGroup::handleEvent(SDL_Event &e)
 				{
 					detailDisplay->getTowerObserver()->getCurrentTower()->notify();
 					playerGold -= upgradeCost;
+					Global::logMessage("Tower upgraded. ");
 				}
 
 				return;
@@ -367,6 +368,7 @@ void TowerGroup::handleEvent(SDL_Event &e)
 			int strategyIndex = getStrategyIndex(currentTower);
 			++strategyIndex %= TowerObserver::STRATEGY_COUNT;
 			currentTower->setCritterTargettingStrategy(strategies[strategyIndex]);
+			Global::logMessage("Tower strategy changed. ");
 		}
 
 		// checking if selling tower
@@ -383,6 +385,8 @@ void TowerGroup::handleEvent(SDL_Event &e)
 					towers.erase(towers.begin() + i);
 
 					map->wallCellDict[targetCell] = false;
+
+					Global::logMessage("Tower sold. ");
 				}
 			}
 			detailDisplay->selectTower(nullptr);
@@ -459,6 +463,8 @@ void TowerGroup::handleEvent(SDL_Event &e)
 					newTower->notify();
 
 					map->wallCellDict[targetCell] = true;
+
+					Global::logMessage("Purchased new tower. ");
 				}
 			}
 			else
@@ -499,7 +505,7 @@ void TowerGroup::handleEvent(SDL_Event &e)
 
 					// Replace the old tower with the new upgraded tower
 					towers[i] = upgradedTower; // Replace the tower reference in the array
-
+					Global::logMessage("Added power up to tower. ");
 					// reattaches the tower observer
 					baseTower->detach(detailDisplay->getTowerObserver());
 					upgradedTower->attach(detailDisplay->getTowerObserver());

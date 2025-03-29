@@ -70,6 +70,8 @@ bool fadeIn = false;	// Determines fade direction
 LTimer fadeTimer;		// Timer for tracking fade duration
 constexpr Uint64 fadeDuration = 500'000'000;
 
+std::ofstream outFile;
+
 /**
  * @brief Sets the next game state.
  *
@@ -109,6 +111,28 @@ void changeState()
  */
 bool init()
 {
+	// Get current time and format it as HH:MM:SS
+	std::time_t currentTime = std::time(nullptr);  // Get the current time
+	std::tm* timeInfo = std::localtime(&currentTime);  // Convert to local time
+
+	char timestamp[20];  // Buffer to store formatted time (YYYYMMDD_HHMMSS format)
+    std::strftime(timestamp, sizeof(timestamp), "%Y%m%d_%H%M%S", timeInfo);  // Format time
+
+    // Construct the filename with the timestamp
+    std::stringstream filenameStream;
+    filenameStream << "LOG_" << timestamp << ".txt";  // Example: LOG_20250328_123045.txt
+    std::string filename = filenameStream.str();  // Convert the stream to a string
+
+    // Create and open the text file for writing (Append mode)
+    outFile.open(filename, std::ios::app); 
+
+	if (!outFile) {  // Check if the file is opened successfully
+		std::cerr << "Error: Could not create the file!" << std::endl;
+	}
+	else {
+		outFile << "Log started at: " << timestamp << std::endl;  // Write log start time
+	}
+
 	bool success{true};
 	if (!SDL_Init(SDL_INIT_VIDEO | SDL_INIT_AUDIO))
 	{
@@ -391,6 +415,10 @@ int main(int argc, char *args[])
 				}
 			}
 		}
+	}
+
+	if (outFile.is_open()) {
+		outFile.close();
 	}
 
 	// Cleanup and exit
