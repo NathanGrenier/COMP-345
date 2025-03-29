@@ -20,16 +20,7 @@ Steps:
 | Nirav Patel     | 40248940   | pa_nir@live.concordia.ca   |
 
 ## Attributions
-This section acknowledges and credits third-party assets, resources, or contributions used in the project.
-
-- Map Assets: https://www.funneractic.com/TowerBaseDefenseGame.html
-- Background Texture: https://dinvstudio.itch.io/dynamic-space-background-lite-free
-- Background Texture: https://foozlecc.itch.io/void-environment-pack
-- Background Texture: https://ansimuz.itch.io/space-background
-- Text to UI Texture Generator: https://textcraft.net/
-- Critter Sprites: https://craftpix.net/download/52844/
-- Tower Bullet Effects and Powerup Sprites: https://bdragon1727.itch.io/free-effect-and-bullet-16x16
-- Tower Sprites: https://zintoki.itch.io/ground-shaker
+Any and all attributions to third-party assets, resources, or contributions used in the project can be found on the [Attributions Wiki](https://github.com/NathanGrenier/COMP-345/wiki/Credits-&-Attributions).
 
 ## Analysis and Design
 
