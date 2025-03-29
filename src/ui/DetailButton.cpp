@@ -15,7 +15,6 @@
 DetailButton::DetailButton()
     : DetailDisplayComponent::DetailDisplayComponent()
 {
-    
 }
 
 /**
@@ -39,7 +38,7 @@ DetailButton::DetailButton(float width, std::string path)
  * @param x The x-coordinate of the DetailButton.
  * @param y The y-coordinate of the DetailButton.
  */
-void DetailButton::setComponentPosition(float x, float y) 
+void DetailButton::setComponentPosition(float x, float y)
 {
     buttonTexture.setPosition(x, y);
     xPosition = x;
@@ -71,12 +70,17 @@ void DetailButton::render()
     buttonTexture.render();
 }
 
+void DetailButton::update()
+{
+    buttonTexture.update();
+}
+
 bool DetailButton::isClicked()
 {
     return buttonTexture.isClicked();
 }
 
-void DetailButton::handleEvent(SDL_Event* e)
+void DetailButton::handleEvent(SDL_Event *e)
 {
     return buttonTexture.handleEvent(e);
 }

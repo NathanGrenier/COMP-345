@@ -9,24 +9,26 @@
 #include <towers/Projectile.h>
 #include <iostream>
 #include <critter/Critter.h>
+#include <SDL3_mixer/SDL_mixer.h>
 
- /**
-  * @brief Constructor with position, damage, and if projectile damages an area
-  *
-  * Initializes the projectile's position, damage, speed, rotation angle,
-  * and texture for rendering. This version does not take size into account.
-  *
-  * @param x The x position of the projectile.
-  * @param y The y position of the projectile.
-  * @param damage The amount of damage the projectile does to critters.
-  * @param isArea Whether the projectile has an area of effect (not yet implemented).
-  * @param rotationAngle The rotation angle of the projectile.
-  * @param xSpeed The horizontal speed of the projectile.
-  * @param ySpeed The vertical speed of the projectile.
-  * @param texturePath The file path to the texture for the projectile.
-  */
+/**
+ * @brief Constructor with position, damage, and if projectile damages an area
+ *
+ * Initializes the projectile's position, damage, speed, rotation angle,
+ * and texture for rendering. This version does not take size into account.
+ *
+ * @param x The x position of the projectile.
+ * @param y The y position of the projectile.
+ * @param damage The amount of damage the projectile does to critters.
+ * @param isArea Whether the projectile has an area of effect (not yet implemented).
+ * @param rotationAngle The rotation angle of the projectile.
+ * @param xSpeed The horizontal speed of the projectile.
+ * @param ySpeed The vertical speed of the projectile.
+ * @param texturePath The file path to the texture for the projectile.
+ */
 Projectile::Projectile(float x, float y, int damage, bool isArea, float rotationAngle, float xSpeed, float ySpeed, std::string texturePath)
-	: x(x), y(y), damage(damage), isArea(isArea), projectileSize(3), rotationAngle(rotationAngle), xSpeed(xSpeed), ySpeed(ySpeed), targettedCritter(nullptr), active(true) {
+	: x(x), y(y), damage(damage), isArea(isArea), projectileSize(3), rotationAngle(rotationAngle), xSpeed(xSpeed), ySpeed(ySpeed), targettedCritter(nullptr), active(true)
+{
 	currentRenderRect = {};
 	projectileTexture.loadFromFile(texturePath);
 }
@@ -45,7 +47,8 @@ Projectile::Projectile(float x, float y, int damage, bool isArea, float rotation
  * @param texturePath The file path to the texture for the projectile.
  */
 Projectile::Projectile(float x, float y, int damage, bool isArea, int projectileSize, float rotationAngle, float xSpeed, float ySpeed, std::string texturePath)
-	: x(x), y(y), damage(damage), isArea(isArea), projectileSize(projectileSize), rotationAngle(rotationAngle), xSpeed(xSpeed), ySpeed(ySpeed), targettedCritter(nullptr), active(true) {
+	: x(x), y(y), damage(damage), isArea(isArea), projectileSize(projectileSize), rotationAngle(rotationAngle), xSpeed(xSpeed), ySpeed(ySpeed), targettedCritter(nullptr), active(true)
+{
 	currentRenderRect = {};
 	projectileTexture.loadFromFile(texturePath);
 }
@@ -64,8 +67,9 @@ Projectile::Projectile(float x, float y, int damage, bool isArea, int projectile
  * @param speed The speed of the projectile.
  * @param texturePath The file path to the texture for the projectile.
  */
-Projectile::Projectile(float x, float y, int damage, bool isArea, int projectileSize, float rotationAngle, float speed, Critter* targettedCritter, std::string texturePath)
-	: x(x), y(y), damage(damage), isArea(isArea), speed(speed), projectileSize(3), rotationAngle(rotationAngle), targettedCritter(targettedCritter), active(true) {
+Projectile::Projectile(float x, float y, int damage, bool isArea, int projectileSize, float rotationAngle, float speed, Critter *targettedCritter, std::string texturePath)
+	: x(x), y(y), damage(damage), isArea(isArea), speed(speed), projectileSize(3), rotationAngle(rotationAngle), targettedCritter(targettedCritter), active(true)
+{
 	projectileTexture.loadFromFile(texturePath);
 }
 
@@ -84,8 +88,9 @@ Projectile::Projectile(float x, float y, int damage, bool isArea, int projectile
  * @param speed The speed of the projectile.
  * @param texturePath The file path to the texture for the projectile.
  */
-Projectile::Projectile(float x, float y, int damage, bool isArea, float rotationAngle, float speed, Critter* targettedCritter, std::string texturePath)
-	: x(x), y(y), damage(damage), isArea(isArea), speed(speed), projectileSize(projectileSize), rotationAngle(rotationAngle), targettedCritter(targettedCritter), active(true) {
+Projectile::Projectile(float x, float y, int damage, bool isArea, float rotationAngle, float speed, Critter *targettedCritter, std::string texturePath)
+	: x(x), y(y), damage(damage), isArea(isArea), speed(speed), projectileSize(projectileSize), rotationAngle(rotationAngle), targettedCritter(targettedCritter), active(true)
+{
 	projectileTexture.loadFromFile(texturePath);
 }
 
@@ -94,15 +99,18 @@ Projectile::Projectile(float x, float y, int damage, bool isArea, float rotation
  *
  * @return The damage the Projectile will do to a critter
  */
-int Projectile::getDamage() const {
+int Projectile::getDamage() const
+{
 	return damage;
 }
 
-bool Projectile::isActive() {
+bool Projectile::isActive()
+{
 	return active;
 };
 
-void Projectile::setIsActive(bool expr) {
+void Projectile::setIsActive(bool expr)
+{
 	active = expr;
 };
 
@@ -114,7 +122,8 @@ void Projectile::setIsActive(bool expr) {
  *
  * @param multiplier The multiplier that adjusts the movement speed.
  */
-void Projectile::move(float multiplier) {
+void Projectile::move(float multiplier)
+{
 	if (targettedCritter == nullptr)
 	{
 		x += xSpeed * multiplier;
@@ -127,7 +136,8 @@ void Projectile::move(float multiplier) {
 /**
  * @brief Generates the projectile by loading the texture and preparing it for rendering.
  */
-void Projectile::generateProjectile() {
+void Projectile::generateProjectile()
+{
 	// Define the sprite clips for each frame (horizontal sprite sheet)
 	float frameWidth = projectileTexture.getWidth() / static_cast<float>(4);
 	float frameHeight = projectileTexture.getHeight();
@@ -136,7 +146,7 @@ void Projectile::generateProjectile() {
 		{0.f * frameWidth, 0.f, frameWidth, frameHeight},
 		{1.f * frameWidth, 0.f, frameWidth, frameHeight},
 		{2.f * frameWidth, 0.f, frameWidth, frameHeight},
-		{3.f * frameWidth, 0.f, frameWidth, frameHeight} };
+		{3.f * frameWidth, 0.f, frameWidth, frameHeight}};
 
 	float targetHeight = Global::currentMap->getPixelPerCell() * 0.8f;
 
@@ -149,7 +159,7 @@ void Projectile::generateProjectile() {
 	float renderY = y - targetHeight / 2.0f;
 
 	// Save the rect for collision detection
-	currentRenderRect = { renderX, renderY, targetWidth, targetHeight };
+	currentRenderRect = {renderX, renderY, targetWidth, targetHeight};
 
 	// Render the projectile using the saved rect
 	projectileTexture.render(currentRenderRect.x, currentRenderRect.y, &spriteClips[currentFrame], currentRenderRect.w, currentRenderRect.h, rotationAngle - 90);
@@ -163,7 +173,8 @@ void Projectile::generateProjectile() {
  *
  * @param deltaTime The time difference between frames, used to update animation.
  */
-void Projectile::updateAnimation(float deltaTime) {
+void Projectile::updateAnimation(float deltaTime)
+{
 	frameTimer += deltaTime;
 	if (frameTimer >= frameDuration)
 	{
@@ -182,7 +193,8 @@ void Projectile::updateAnimation(float deltaTime) {
  * @return true if the Projectile is out of bounds
  * @return false if the Projectile is positioned correctly within the map
  */
-bool Projectile::isOutside() const {
+bool Projectile::isOutside() const
+{
 	int buffer = 20;
 	return ((x < 0 || x > Global::mapViewRect.w + buffer) || (y < Global::headerHeight || y > Global::kScreenHeight + buffer));
 }
@@ -196,7 +208,8 @@ bool Projectile::isOutside() const {
  * @param critter The critter to check for collision with.
  * @return A boolean indicating whether a collision occurred.
  */
-bool Projectile::checkCollision(Critter* critter) const {
+bool Projectile::checkCollision(Critter *critter) const
+{
 	// Midpoint collision tolerance (you can adjust this if you want a small margin of error)
 	float tolerance = 0.0f;
 
@@ -227,6 +240,7 @@ bool Projectile::checkCollision(Critter* critter) const {
 	return false;
 }
 
-Critter* Projectile::getTargettedCritter() {
-	return const_cast<Critter*>(targettedCritter);
+Critter *Projectile::getTargettedCritter()
+{
+	return const_cast<Critter *>(targettedCritter);
 }
