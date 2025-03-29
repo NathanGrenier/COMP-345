@@ -9,7 +9,9 @@
 #include <towers/CannonTower.h>
 #include <towers/Projectile.h>
 
-const int CannonTower::upgradeCosts[] = { 50, 100 };
+ // Initial Cost: 100
+ // Max Cost: 600
+const int CannonTower::upgradeCosts[] = { 200, 300 };
 
 /**
  * @brief Default Constructor
@@ -19,7 +21,7 @@ CannonTower::CannonTower() : Tower() {
 	upgradeValues.rangeIncrease = CannonTower::rangeIncreasePerLevel;
 	upgradeValues.powerIncrease = CannonTower::powerIncreasePerLevel;
 	upgradeValues.rateOfFireIncrease = CannonTower::rateOfFireIncreasePerLevel;
-	upgradeValues.upgradeCosts = std::vector<int>(upgradeCosts, upgradeCosts + CANNON_MAX_LEVEL - 1);
+	upgradeValues.upgradeCosts = std::vector<int>(upgradeCosts, upgradeCosts + MAX_LEVEL - 1);
 }
 
 /**
@@ -33,12 +35,12 @@ CannonTower::CannonTower() : Tower() {
  * Uses default refund value ratio in Tower class
  */
 CannonTower::CannonTower(float x, float y, float width, int buyingCost)
-	: Tower(x, y, width, buyingCost, CANNON_RANGE, CANNON_POWER, CANNON_RATE_OF_FIRE) {
+	: Tower(x, y, width, buyingCost, RANGE, POWER, RATE_OF_FIRE) {
 	getTowerTexture().loadFromFile("tower/CannonTower.png");
 	upgradeValues.rangeIncrease = CannonTower::rangeIncreasePerLevel;
 	upgradeValues.powerIncrease = CannonTower::powerIncreasePerLevel;
 	upgradeValues.rateOfFireIncrease = CannonTower::rateOfFireIncreasePerLevel;
-	upgradeValues.upgradeCosts = std::vector<int>(upgradeCosts, upgradeCosts + CANNON_MAX_LEVEL - 1);
+	upgradeValues.upgradeCosts = std::vector<int>(upgradeCosts, upgradeCosts + MAX_LEVEL - 1);
 }
 
 /**
@@ -47,7 +49,7 @@ CannonTower::CannonTower(float x, float y, float width, int buyingCost)
  * @return The maximum level for CannonTower upgrades
  */
 int CannonTower::getMaxLevel() {
-	return CANNON_MAX_LEVEL;
+	return MAX_LEVEL;
 }
 
 /**
@@ -86,7 +88,7 @@ void CannonTower::shootProjectile(Critter* targettedCritter) {
 		while (deltaAngle < -180.0f) deltaAngle += 360.0f;
 
 		// Calculate max rotation step this frame
-		float maxRotationStep = 180.0f * 0.016f;
+		float maxRotationStep = DEFAULT_TURN_SPEED * TURN_SPEED_FACTOR;
 
 		// Clamp rotation delta to avoid sudden jumps
 		if (deltaAngle > maxRotationStep) deltaAngle = maxRotationStep;
@@ -127,8 +129,7 @@ void CannonTower::shootProjectile(Critter* targettedCritter) {
 			projectiles.push_back(new Projectile(posX, posY, getPower(), false, 10, getRotation(), speedX, speedY, "tower/CannonProjectile.png"));
 			setShootingTimer(MAX_SHOOTING_TIMER);
 		}
-	}
-	else // decreases shooting timer
+	} else // decreases shooting timer
 	{
 		setShootingTimer(getShootingTimer() - getRateOfFire());
 	}

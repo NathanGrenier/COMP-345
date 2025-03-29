@@ -44,11 +44,6 @@ private:
 	Tower* dummyCannonTower; /**< @brief dummy CannonTower for details before buying Tower */
 	TowerStrategy** strategies; /**< @brief Tower Strategies for targetting Critters */
 
-
-	const int STANDARD_TOWER_COST = 50;
-	const int CANNON_TOWER_COST = 100;
-	const int RAPID_FIRE_TOWER_COST = 75;
-
 	const float POWERUP_SPAWN_CHANCE = 0.01;
 
 	/** @brief targetted cell when clicking */

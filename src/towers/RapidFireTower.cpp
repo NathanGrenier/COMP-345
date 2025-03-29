@@ -9,7 +9,9 @@
 #include <towers/RapidFireTower.h>
 #include <towers/Projectile.h>
 
-const int RapidFireTower::upgradeCosts[] = { 50, 100 };
+ // Initial Cost: 75
+ // Max Cost: 375
+const int RapidFireTower::upgradeCosts[] = { 100, 200 };
 
 /**
  * @brief Default Constructor
@@ -18,7 +20,7 @@ RapidFireTower::RapidFireTower() : Tower(), fireBreak(0), fireBreakRate(0), burs
 	getTowerTexture().loadFromFile("tower/RapidFireTower.png");
 	upgradeValues.rangeIncrease = RapidFireTower::rangeIncreasePerLevel;
 	upgradeValues.rateOfFireIncrease = RapidFireTower::rateOfFireIncreasePerLevel;
-	upgradeValues.upgradeCosts = std::vector<int>(upgradeCosts, upgradeCosts + RAPID_MAX_LEVEL - 1);
+	upgradeValues.upgradeCosts = std::vector<int>(upgradeCosts, upgradeCosts + MAX_LEVEL - 1);
 }
 
 /**
@@ -34,11 +36,11 @@ RapidFireTower::RapidFireTower() : Tower(), fireBreak(0), fireBreakRate(0), burs
  * Sets the burstSize to 50 for the interval for shooting, and the burstCount to 0
  */
 RapidFireTower::RapidFireTower(float x, float y, float width, int buyingCost)
-	: fireBreak(0), fireBreakRate(5), burstSize(50), burstCount(0), Tower(x, y, width, buyingCost, RAPID_RANGE, RAPID_POWER, RAPID_RATE_OF_FIRE) {
+	: fireBreak(0), fireBreakRate(5), burstSize(50), burstCount(0), Tower(x, y, width, buyingCost, RANGE, POWER, RATE_OF_FIRE) {
 	getTowerTexture().loadFromFile("tower/RapidFireTower.png");
 	upgradeValues.rangeIncrease = RapidFireTower::rangeIncreasePerLevel;
 	upgradeValues.rateOfFireIncrease = RapidFireTower::rateOfFireIncreasePerLevel;
-	upgradeValues.upgradeCosts = std::vector<int>(upgradeCosts, upgradeCosts + RAPID_MAX_LEVEL - 1);
+	upgradeValues.upgradeCosts = std::vector<int>(upgradeCosts, upgradeCosts + MAX_LEVEL - 1);
 }
 
 /**
@@ -69,7 +71,7 @@ bool RapidFireTower::upgrade() {
  * @return The maximum level for RapidFireTower upgrades
  */
 int RapidFireTower::getMaxLevel() {
-	return RAPID_MAX_LEVEL;
+	return MAX_LEVEL;
 }
 
 /**
@@ -111,7 +113,7 @@ void RapidFireTower::shootProjectile(Critter* targettedCritter) {
 		while (deltaAngle < -180.0f) deltaAngle += 360.0f;
 
 		// Calculate max rotation step this frame
-		float maxRotationStep = 180.0f * 0.016f;
+		float maxRotationStep = DEFAULT_TURN_SPEED * TURN_SPEED_FACTOR;
 
 		// Clamp rotation delta to avoid sudden jumps
 		if (deltaAngle > maxRotationStep) deltaAngle = maxRotationStep;
@@ -156,8 +158,7 @@ void RapidFireTower::shootProjectile(Critter* targettedCritter) {
 				projectiles.push_back(new Projectile(posX, posY, getPower(), false, 6, getRotation(), speedX, speedY, "tower/RapidFireProjectile.png"));
 				setShootingTimer(MAX_SHOOTING_TIMER);
 			}
-		}
-		else
+		} else
 		{
 			setShootingTimer(shootingTimer - getRateOfFire());
 		}
@@ -165,15 +166,14 @@ void RapidFireTower::shootProjectile(Critter* targettedCritter) {
 		// if maximum interval time is reached
 		if (burstCount == burstSize)
 		{
-			fireBreak = MAX_RAPID_FIRE_BREAK;
+			fireBreak = MAX_BREAK;
 		}
 
 		if (targettedCritter != nullptr)
 		{
 			burstCount++;
 		}
-	}
-	else // break from firing interval, no Projectiles to be fired
+	} else // break from firing interval, no Projectiles to be fired
 	{
 		burstCount = 0;
 		fireBreak -= fireBreakRate;

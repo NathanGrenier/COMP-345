@@ -32,7 +32,7 @@ public:
 	void update() override;
 	void render() override;
 
-	int STARTING_PLAYER_GOLD = 500;
+	int STARTING_PLAYER_GOLD = 100;
 	int playerGold;
 	int waveLevel = 0;
 
@@ -52,7 +52,7 @@ private:
 	LButton playButton;
 
 	bool isPaused = false;
-	bool endlessMode;
+	bool endlessMode = false;
 
 	/** @brief Pointer to the map being edited
 	 *  @details nullptr if no map is currently loaded

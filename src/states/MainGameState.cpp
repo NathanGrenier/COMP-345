@@ -82,7 +82,6 @@ bool MainGameState::enter() {
 	bool success = detailDisplay->initializeComponents();
 
 	playerGold = STARTING_PLAYER_GOLD;
-	endlessMode = true;
 	critterGroup = new CritterGroup(waveLevel, playerGold, map->getSpawnerPos(Global::mapViewRect), map->getTargetPos(Global::mapViewRect), map, detailDisplay, endlessMode);
 	towerGroup = new TowerGroup(playerGold, map, detailDisplay);
 

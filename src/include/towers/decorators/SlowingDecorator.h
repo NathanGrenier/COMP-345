@@ -24,6 +24,21 @@
   * as an ice animation, and the critters' speed is reduced as long as the slow timer is active.
   */
 class SlowingDecorator : public TowerDecorator {
+private:
+	Tower* wrappedTower; /**< The tower that this decorator enhances */
+	Texture iceTexture; /**< The texture for the slow effect animation (ice effect) */
+	Texture indicatorTexture; /**< The texture for the ice indicator above the tower */
+	SDL_FRect spriteClips[4]; /**< The frames for the slow effect animation */
+	int currentFrame; /**< The current frame in the slow animation */
+	float frameTime; /**< Time accumulator for animation frame updates */
+	float frameWidth, frameHeight; /**< Dimensions of each animation frame */
+
+	std::unordered_map<Critter*, float> slowTimers; /**< A map of critters with active slow timers */
+	std::unordered_map<Critter*, float> originalSpeeds; /**< A map of critters with their original speeds */
+
+	const float SLOW_DURATION = 1.0f; /**< The duration the slow effect lasts for each critter */
+	const float SLOW_FACTOR = 0.2f;   /**< The factor by which the critter's speed is reduced */
+
 public:
 	/**
 	 * @brief Constructs a SlowingDecorator that adds a slow effect to the tower.
@@ -36,8 +51,7 @@ public:
 	 * @param indicatorPath The file path for the ice indicator texture.
 	 */
 	SlowingDecorator(Tower* tower, SDL_FRect towerPosition, std::string indicatorPath)
-		: TowerDecorator(tower, towerPosition, indicatorPath), wrappedTower(tower), currentFrame(0), frameTime(0),
-		slowDuration(4.0f), slowFactor(0.5f) {
+		: TowerDecorator(tower, towerPosition, indicatorPath), wrappedTower(tower), currentFrame(0), frameTime(0) {
 		iceTexture.loadFromFile("tower/ice-4f.png");
 		indicatorTexture.loadFromFile(indicatorPath);
 
@@ -76,10 +90,10 @@ public:
 			if (slowTimers.find(critter) == slowTimers.end()) {
 				// Store the original speed and apply the slow factor
 				originalSpeeds[critter] = critter->getSpeed();
-				critter->setSpeed(critter->getSpeed() * slowFactor);
+				critter->setSpeed(critter->getSpeed() - (critter->getSpeed() * SLOW_FACTOR));
 
 				// Initialize the slow timer
-				slowTimers[critter] = slowDuration;  // Set the slow duration
+				slowTimers[critter] = SLOW_DURATION;  // Set the slow duration
 			}
 		} else {
 			// If the critter is not alive or not damaged, reset its slow effect
@@ -201,19 +215,4 @@ public:
 		// Render the indicator texture
 		indicatorTexture.render(indicatorDestRect.x, indicatorDestRect.y, &srcRect, indicatorDestRect.w, indicatorDestRect.h);
 	}
-
-private:
-	Tower* wrappedTower; /**< The tower that this decorator enhances */
-	Texture iceTexture; /**< The texture for the slow effect animation (ice effect) */
-	Texture indicatorTexture; /**< The texture for the ice indicator above the tower */
-	SDL_FRect spriteClips[4]; /**< The frames for the slow effect animation */
-	int currentFrame; /**< The current frame in the slow animation */
-	float frameTime; /**< Time accumulator for animation frame updates */
-	float frameWidth, frameHeight; /**< Dimensions of each animation frame */
-
-	std::unordered_map<Critter*, float> slowTimers; /**< A map of critters with active slow timers */
-	std::unordered_map<Critter*, float> originalSpeeds; /**< A map of critters with their original speeds */
-
-	const float slowDuration; /**< The duration the slow effect lasts for each critter */
-	const float slowFactor;   /**< The factor by which the critter's speed is reduced */
 };

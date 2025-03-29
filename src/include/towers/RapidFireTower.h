@@ -17,15 +17,21 @@
 
 class RapidFireTower : public Tower {
 public:
-	static const int RAPID_RANGE = 75; /**< @brief default range for RapidFireTower */
-	static const int RAPID_POWER = 2; /**< @brief default projectile damage for RapidFireTower */
-	static const int RAPID_RATE_OF_FIRE = 10; /**< @brief default rate of fire for RapidFireTower */
-	static const int RAPID_MAX_LEVEL = 3; /**< @brief default max level for RapidFireTower */
-	static const int MAX_RAPID_FIRE_BREAK = 200; /**< @brief break maximum for no shooting intervals */
+	// Initial DPS: 24
+	// Max DPS: 42
+	static const int TOWER_COST = 75;
+	static const int RANGE = 50; /**< @brief default range for RapidFireTower */
+	static const int POWER = 3; /**< @brief default projectile damage for RapidFireTower */
+	static const int RATE_OF_FIRE = 8; /**< @brief default rate of fire for RapidFireTower */
+	static const int MAX_LEVEL = 3; /**< @brief default max level for RapidFireTower */
+	static const int MAX_BREAK = 200; /**< @brief break maximum for no shooting intervals */
 
+	static constexpr float TURN_SPEED_FACTOR = 1.2f;
+
+	// Range: 50 - 60 - 70
 	static const int rangeIncreasePerLevel = 10;
 	static const int rateOfFireIncreasePerLevel = 3;
-	static const int upgradeCosts[RAPID_MAX_LEVEL - 1];
+	static const int upgradeCosts[MAX_LEVEL - 1];
 
 	RapidFireTower();
 	RapidFireTower(float x, float y, float width, int buyingCost);

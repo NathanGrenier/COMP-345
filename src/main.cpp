@@ -58,7 +58,7 @@ bool isFading = false; // Controls when fading occurs
 float fadeAlpha = 0.0f; // Alpha value (0 = fully visible, 255 = fully black)
 bool fadeIn = false; // Determines fade direction
 LTimer fadeTimer; // Timer for tracking fade duration
-constexpr Uint64 fadeDuration = 500'000'000;
+constexpr Uint64 FADE_DURATION = 350'000'000;
 
 /**
  * @brief Sets the next game state.
@@ -98,14 +98,12 @@ bool init() {
 	if (!SDL_Init(SDL_INIT_VIDEO)) {
 		SDL_Log("SDL could not initialize! SDL error: %s\n", SDL_GetError());
 		success = false;
-	}
-	else {
+	} else {
 		// Create window and renderer
 		if (!SDL_CreateWindowAndRenderer("Tower Defense - NullTerminators", static_cast<int>(Global::kScreenWidth), static_cast<int>(Global::kScreenHeight), 0, &gWindow, &gRenderer)) {
 			SDL_Log("Window could not be created! SDL error: %s\n", SDL_GetError());
 			success = false;
-		}
-		else {
+		} else {
 			// Enable VSync
 			if (!SDL_SetRenderVSync(gRenderer, 1)) {
 				SDL_Log("Could not enable VSync! SDL error: %s\n", SDL_GetError());
@@ -185,14 +183,12 @@ int main(int argc, char* args[]) {
 	if (!init()) {
 		SDL_Log("Unable to initialize program!\n");
 		exitCode = 1;
-	}
-	else {
+	} else {
 		// Load media
 		if (!loadMedia()) {
 			SDL_Log("Unable to load media!\n");
 			exitCode = 2;
-		}
-		else {
+		} else {
 			// Quit flag
 			bool quit{ false };
 
@@ -234,8 +230,7 @@ int main(int argc, char* args[]) {
 					if (e.type == SDL_EVENT_QUIT) {
 						setNextState(ExitState::get());
 						quit = true;
-					}
-					else if (e.type == SDL_EVENT_KEY_DOWN && e.key.key == SDLK_ESCAPE) {
+					} else if (e.type == SDL_EVENT_KEY_DOWN && e.key.key == SDLK_ESCAPE) {
 						setNextState(TitleState::get());
 					}
 				}
@@ -244,7 +239,7 @@ int main(int argc, char* args[]) {
 				if (isFading) {
 					// Correct fadeProgress calculation (scaled from 0 to 1)
 					Uint64 elapsedTime = fadeTimer.getTicksNS();
-					float fadeProgress = static_cast<float>(elapsedTime) / static_cast<float>(fadeDuration);
+					float fadeProgress = static_cast<float>(elapsedTime) / static_cast<float>(FADE_DURATION);
 					fadeAlpha = std::clamp(fadeIn ? (1.0f - fadeProgress) * 255.0f : fadeProgress * 255.0f, 0.0f, 255.0f);
 
 					// If fade-out is complete, switch game states

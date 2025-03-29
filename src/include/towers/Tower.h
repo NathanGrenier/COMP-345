@@ -28,6 +28,8 @@ public:
 	static constexpr float PI_CONSTANT = 3.14159265358979323846f; /**< @brief The constant PI for tower calculations */
 	const double REFUND_RATIO = 0.7; /**< @brief Ratio between original tower cost and refund value */
 
+	const float DEFAULT_TURN_SPEED = 180.0f * 0.016f;
+
 	/**
 	 * @brief Default constructor for Tower.
 	 * Initializes a tower with default attributes.
