@@ -43,6 +43,7 @@ enum class State {
 class Critter : public Observable, public FlowFieldObserver {
 public:
 	Critter(int level, SDL_FRect start, Map* map);
+	~Critter();
 
 	// Pure virtual functions for subclass-specific attributes
 	virtual std::string getType() const = 0;
