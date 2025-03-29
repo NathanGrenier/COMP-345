@@ -211,12 +211,6 @@ bool loadMedia() {
 		success = false;
 	}
 
-	if (gMusic = Mix_LoadMUS("assets/music.wav"); gMusic == nullptr)
-	{
-		SDL_Log("Unable to load music! SDL_mixer error: %s\n", SDL_GetError());
-		success = false;
-	}
-
 	return success;
 }
 
