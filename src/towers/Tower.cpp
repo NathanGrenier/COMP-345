@@ -256,8 +256,6 @@ float Tower::calcDistance(Critter* critter) const {
 	float differenceX = posX - critterPosX;
 	float differenceY = posY - critterPosY;
 
-	 std::cout << differenceX << std::endl;
-
 	// distance formula
 	return static_cast<float>(sqrt(pow(differenceX, 2) + pow(differenceY, 2)));
 }

@@ -15,10 +15,9 @@
  /// Static instance of the GameOverState
 GameOverState GameOverState::sGameOverState;
 
-
-const std::string GameOverState::FAST_CRITTER_TYPE = "Bee";
-const std::string GameOverState::TANK_CRITTER_TYPE = "Ogre";
-const std::string GameOverState::NORMAL_CRITTER_TYPE = "Slime";
+const std::string GameOverState::FAST_CRITTER_TYPE = "Bee"; /**< @brief string of FastCritter class **/
+const std::string GameOverState::TANK_CRITTER_TYPE = "Ogre"; /**< @brief string of TankCritter class **/
+const std::string GameOverState::NORMAL_CRITTER_TYPE = "Slime"; /**< @brief string of NormalCritter class **/
 
 /**
  * @brief Gets the singleton instance of GameOverState.
@@ -83,7 +82,7 @@ void GameOverState::render() {
 
 	EndScreenState::render();
 	
-	float critterAnimationHeight = (1.0f / 13.0f) * Global::kScreenHeight;
+	float critterAnimationHeight = (1.0f / 15.0f) * Global::kScreenHeight;
 	
 	textureWalkDown.render((Global::kScreenWidth - CRITTER_ANIMATION_WIDTH) / 2.0f, critterAnimationHeight, clip, CRITTER_ANIMATION_WIDTH, CRITTER_ANIMATION_WIDTH);
 }

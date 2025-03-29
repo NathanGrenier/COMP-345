@@ -20,6 +20,8 @@
 
 class MainGameState : public GameState {
 public:
+	static const int STARTING_GOLD_AMT = 200;
+
 	//Static accessor
 	static MainGameState* get();
 
@@ -32,7 +34,7 @@ public:
 	void update() override;
 	void render() override;
 
-	int playerGold = 1000;
+	int playerGold = STARTING_GOLD_AMT;
 	int waveLevel = 0;
 
 	// Helper functions

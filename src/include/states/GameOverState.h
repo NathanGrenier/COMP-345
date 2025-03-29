@@ -15,7 +15,7 @@ public:
     const static std::string FAST_CRITTER_TYPE;
     const static std::string TANK_CRITTER_TYPE;
     const static std::string NORMAL_CRITTER_TYPE;
-    const static int CRITTER_ANIMATION_WIDTH = 320;
+    const static int CRITTER_ANIMATION_WIDTH = 320;  /** @brief width of critter animation on endscreen. */
 
     //Transitions
     bool enter() override;
@@ -33,13 +33,13 @@ private:
     static GameOverState sGameOverState;
 
     //Critter animation
-    Texture textureWalkDown;
-    std::vector<SDL_FRect> animationFramesWalkDown;
+    Texture textureWalkDown; /**< @brief currently shown texture */
+    std::vector<SDL_FRect> animationFramesWalkDown; /**< @brief all frames for critter */
 
     void generateCritterSprite();
     void animateCritterSprite(float deltaTime);
 
     //Critter animation timings
-    float animationTimer = 0.0f;
-    int currentFrame = 0;
+    float animationTimer = 0.0f;  /**< @brief timer for the animation */
+    int currentFrame = 0;  /**< @brief index of currently shown frame */
 };

@@ -229,7 +229,7 @@ bool MainGameState::exit() {
 	delete bg;
 	bg = nullptr;
 
-	playerGold = 999;
+	playerGold = STARTING_GOLD_AMT;
 	waveLevel = 0;
 
 	return true;

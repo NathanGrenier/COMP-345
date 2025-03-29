@@ -12,7 +12,7 @@
  /// Static instance of the WinGameState
 WinGameState WinGameState::sWinGameState;
 
-const std::string WinGameState::QUOTE_FILE_PATH = "assets/winQuotes/Quotes.json";
+const std::string WinGameState::QUOTE_FILE_PATH = "assets/winQuotes/Quotes.json"; /**< @brief Path of randomized quotes */
 
 /**
  * @brief Gets the singleton instance of WinGameState.
@@ -81,7 +81,6 @@ std::string WinGameState::pickQuote(const std::string& filePath)
 		int quoteIndex = std::rand() % quoteData["count"];
 
 		// selects a quote
-		std::cout << quoteData["quotes"][quoteIndex]["text"] << std::endl;
 		return quoteData["quotes"][quoteIndex]["text"];
 	}
 	

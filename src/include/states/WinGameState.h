@@ -32,5 +32,5 @@ private:
     nlohmann::json loadQuoteData(const std::string& filePath);
     
     //Win quote
-    Texture winQuote;
+    Texture winQuote; /**< @brief randomized quote when a game has been won */
 };
