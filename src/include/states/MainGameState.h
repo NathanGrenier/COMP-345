@@ -20,6 +20,8 @@
 
 class MainGameState : public GameState {
 public:
+	static const int STARTING_GOLD_AMT = 200;
+
 	//Static accessor
 	static MainGameState* get();
 
@@ -49,6 +51,7 @@ private:
 
 	LButton pauseButton;
 	LButton exitButton;
+	LButton* currentButton;
 	LButton playButton;
 
 	bool isPaused = false;

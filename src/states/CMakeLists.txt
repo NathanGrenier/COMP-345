@@ -5,7 +5,9 @@ add_library(states STATIC
     "MainGameState.cpp"
     "MapSelectState.cpp" 
     "MapEditorState.cpp"
-    )
+    "EndScreenState.cpp" 
+    "GameOverState.cpp" 
+    "WinGameState.cpp" )
 
 target_include_directories(states PUBLIC ${CMAKE_SOURCE_DIR}/src/include)
 

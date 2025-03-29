@@ -24,7 +24,7 @@
 class Tower : public Observable {
 public:
 	static const int MAX_SHOOTING_TIMER = 100; /**< @brief Shooting timer to be decremented */
-	static const int STAT_CELL_RATIO = 20; /**< @brief Ratio of Tower stat unit (range) per map cell */
+	static const int STAT_CELL_RATIO = 30; /**< @brief Ratio of Tower stat unit (range) per map cell */
 	static constexpr float PI_CONSTANT = 3.14159265358979323846f; /**< @brief The constant PI for tower calculations */
 	const double REFUND_RATIO = 0.7; /**< @brief Ratio between original tower cost and refund value */
 
