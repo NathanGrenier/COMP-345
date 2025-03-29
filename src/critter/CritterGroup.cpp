@@ -187,12 +187,14 @@ void CritterGroup::update(float deltaTime) {
 
 			critter->detach(detailDisplay->getCritterObserver());
 			it = critters.erase(it);
+			Global::logMessage("Critter reached exit. Decreasing gold. ");
 			--aliveCritters;
 
 		} else if (!critter->isAlive() && !critter->isDying()) {
 			playerGold += critter->getReward();
 			critter->detach(detailDisplay->getCritterObserver());
 			it = critters.erase(it);
+			Global::logMessage("A critter was killed. ");
 			--aliveCritters;
 
 			++totalCrittersKilled;
@@ -214,6 +216,7 @@ void CritterGroup::update(float deltaTime) {
 			}
 		} else {
 			waveCountdown = 3.0f; // Set countdown for the next wave
+			Global::logMessage(std::format("Beginning critter wave {}.", waveLevel + 1));
 		}
 	}
 }
