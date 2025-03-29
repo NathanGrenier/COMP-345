@@ -82,8 +82,11 @@ void Critter::move(float deltaTime, const std::vector<Critter*> critters) {
 
 	if (distanceToTarget > 0) {
 		direction = direction.normalize();
-		float deltaX = direction.x * getSpeed() * deltaTime;
-		float deltaY = direction.y * getSpeed() * deltaTime;
+
+		float scaledSpeed = getSpeed() / Critter::SPEED_PER_CELL * deltaTime * Global::currentMap->getPixelPerCell();
+
+		float deltaX = direction.x * scaledSpeed;
+		float deltaY = direction.y * scaledSpeed;
 
 		float addedDistance = static_cast<float>(sqrt(pow(deltaX, 2) + pow(deltaY, 2)));
 		distanceTravelled += addedDistance;
