@@ -149,10 +149,8 @@ void TitleState::handleEvent(SDL_Event &e)
  * @brief Updates the title state logic.
  *
  */
-void TitleState::update()
-{
-	for (int i = 0; i < kButtonCount; ++i)
-	{
+void TitleState::update() {
+	for (int i = 0; i < kButtonCount; ++i) {
 		buttons[i].update();
 	}
 

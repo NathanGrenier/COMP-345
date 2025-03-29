@@ -27,13 +27,11 @@ MapSelectState MapSelectState::sMapSelectState;
  * @brief Get the singleton instance of MapSelectState
  * @return Pointer to the MapSelectState singleton
  */
-MapSelectState *MapSelectState::get()
-{
+MapSelectState* MapSelectState::get() {
 	return &sMapSelectState;
 }
 
-bool MapSelectState::enter()
-{
+bool MapSelectState::enter() {
 	loadAvailableMaps();
 
 	bg = new ParallaxBackground();
@@ -71,7 +69,7 @@ bool MapSelectState::enter()
 	rightArrow.setSizeWithAspectRatio(50, 0);
 
 	// Get max button height (assuming they have the same aspect ratio)
-	float maxButtonHeight = std::max({createButton.kButtonHeight, editButton.kButtonHeight, selectButton.kButtonHeight});
+	float maxButtonHeight = std::max({ createButton.kButtonHeight, editButton.kButtonHeight, selectButton.kButtonHeight });
 
 	// Calculate start positions
 	float startX = static_cast<float>((Global::kScreenWidth - (buttonCount * maxButtonWidth + (buttonCount - 1) * buttonSpacing))) / 2;
@@ -99,7 +97,7 @@ bool MapSelectState::enter()
 	leftArrow.setPosition(centerX, ((Global::kScreenHeight)-mHoveredMapName.getHeight()) / 2 - 75);
 	rightArrow.setPosition(centerX + leftArrow.kButtonWidth + distanceBetweenArrows, ((Global::kScreenHeight)-mHoveredMapName.getHeight()) / 2 - 75);
 
-	for (auto &[mapName, map] : availableMaps)
+	for (auto& [mapName, map] : availableMaps)
 	{
 		map.setCurrentRenderRect(targetRect);
 	}
@@ -107,16 +105,14 @@ bool MapSelectState::enter()
 	return true;
 }
 
-bool MapSelectState::exit()
-{
+bool MapSelectState::exit() {
 	delete bg;
 	bg = nullptr;
 
 	return true;
 }
 
-void MapSelectState::handleEvent(SDL_Event &e)
-{
+void MapSelectState::handleEvent(SDL_Event& e) {
 	backButton.handleEvent(&e);
 	createButton.handleEvent(&e);
 	editButton.handleEvent(&e);
@@ -132,13 +128,11 @@ void MapSelectState::handleEvent(SDL_Event &e)
 			if (selectedIndex > 0)
 			{
 				selectedIndex--;
-			}
-			else
+			} else
 			{
 				selectedIndex = static_cast<int>(availableMaps.size()) - 1;
 			}
-		}
-		else if (rightArrow.isClicked())
+		} else if (rightArrow.isClicked())
 		{
 			selectedIndex = (selectedIndex + 1) % static_cast<int>(availableMaps.size());
 		}
@@ -148,19 +142,18 @@ void MapSelectState::handleEvent(SDL_Event &e)
 	{
 		switch (e.key.key)
 		{
-		case SDLK_LEFT:
-			if (selectedIndex > 0)
-			{
-				selectedIndex--;
-			}
-			else
-			{
-				selectedIndex = static_cast<int>(availableMaps.size()) - 1;
-			}
-			break;
-		case SDLK_RIGHT:
-			selectedIndex = (selectedIndex + 1) % static_cast<int>(availableMaps.size());
-			break;
+			case SDLK_LEFT:
+				if (selectedIndex > 0)
+				{
+					selectedIndex--;
+				} else
+				{
+					selectedIndex = static_cast<int>(availableMaps.size()) - 1;
+				}
+				break;
+			case SDLK_RIGHT:
+				selectedIndex = (selectedIndex + 1) % static_cast<int>(availableMaps.size());
+				break;
 		}
 	}
 
@@ -172,26 +165,22 @@ void MapSelectState::handleEvent(SDL_Event &e)
 		{
 			Global::currentMap = nullptr; // Assign a new empty map (default constructor)
 			setNextState(MapEditorState::get());
-		}
-		else if (editButton.isClicked())
+		} else if (editButton.isClicked())
 		{
 			Global::currentMap = &availableMaps[selectedMapFilePath];
 			setNextState(MapEditorState::get());
-		}
-		else if (selectButton.isClicked())
+		} else if (selectButton.isClicked())
 		{
 			Global::currentMap = &availableMaps[selectedMapFilePath];
 			setNextState(MainGameState::get());
-		}
-		else if (backButton.isClicked())
+		} else if (backButton.isClicked())
 		{
 			setNextState(TitleState::get());
 		}
 	}
 }
 
-void MapSelectState::update()
-{
+void MapSelectState::update() {
 	backButton.update();
 	createButton.update();
 	editButton.update();
@@ -209,12 +198,11 @@ void MapSelectState::update()
 
 	if (!selectedMapFilePath.empty() && availableMaps.find(selectedMapFilePath) != availableMaps.end())
 	{
-		mHoveredMapName.loadFromRenderedText(availableMaps[selectedMapFilePath].name, {255, 255, 255, 255});
+		mHoveredMapName.loadFromRenderedText(availableMaps[selectedMapFilePath].name, { 255, 255, 255, 255 });
 	}
 }
 
-void MapSelectState::render()
-{
+void MapSelectState::render() {
 	bg->render();
 
 	float kScreenWidth = Global::kScreenWidth;
@@ -236,13 +224,11 @@ void MapSelectState::render()
 		{
 			mapIter->second.setCurrentRenderRect(targetRect);
 			mapIter->second.drawOnTargetRect(targetRect);
-		}
-		else
+		} else
 		{
 			std::cerr << "Error: Map '" << selectedMapFilePath << "' not found in available maps." << std::endl;
 		}
-	}
-	else
+	} else
 	{
 		std::cerr << "Error: selectedMapName is empty." << std::endl;
 	}
@@ -277,8 +263,7 @@ void MapSelectState::render()
  *
  * @note The first map found is set as the selected map.
  */
-void MapSelectState::loadAvailableMaps()
-{
+void MapSelectState::loadAvailableMaps() {
 	availableMaps.clear(); // Clear existing list
 
 	std::string mapsDirectory = "assets/mapPresets"; // Folder containing map files
@@ -291,7 +276,7 @@ void MapSelectState::loadAvailableMaps()
 			return;
 		}
 
-		for (const auto &entry : fs::directory_iterator(mapsDirectory))
+		for (const auto& entry : fs::directory_iterator(mapsDirectory))
 		{
 			if (entry.is_regular_file() && entry.path().extension() == ".json")
 			{
@@ -310,12 +295,10 @@ void MapSelectState::loadAvailableMaps()
 				availableMaps[mapFileName].setFlowFieldVisibility(false);
 			}
 		}
-	}
-	catch (const fs::filesystem_error &e)
+	} catch (const fs::filesystem_error& e)
 	{
 		std::cerr << "Filesystem error: " << e.what() << std::endl;
-	}
-	catch (const std::exception &e)
+	} catch (const std::exception& e)
 	{
 		std::cerr << "Error loading maps: " << e.what() << std::endl;
 	}
@@ -336,8 +319,7 @@ void MapSelectState::loadAvailableMaps()
  * @param fileName The name of the file to format.
  * @return std::string The formatted map name.
  */
-std::string MapSelectState::formatMapName(const std::string &fileName)
-{
+std::string MapSelectState::formatMapName(const std::string& fileName) {
 	std::string formattedName = fileName;
 	// Remove extension and convert to sentence case
 	formattedName = formattedName.substr(0, formattedName.find_last_of('.'));
@@ -347,8 +329,7 @@ std::string MapSelectState::formatMapName(const std::string &fileName)
 		if (formattedName[i - 1] == '_')
 		{
 			formattedName[i] = toupper(formattedName[i]);
-		}
-		else
+		} else
 		{
 			formattedName[i] = tolower(formattedName[i]);
 		}

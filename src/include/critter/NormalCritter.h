@@ -29,7 +29,7 @@ private:
 
 	static constexpr float INITIAL_SPEED = 50.0f;
 	static constexpr float INITIAL_HITPOINTS = 10.0f;
-	static constexpr int INITIAL_REWARD = 10;
+	static constexpr int INITIAL_REWARD = 5;
 	float speed = INITIAL_SPEED;
 	float maxHitPoints = INITIAL_HITPOINTS;
 	int reward = INITIAL_REWARD;

@@ -49,11 +49,11 @@ bool MainGameState::enter()
 		return false;
 	}
 
-	pauseButton.loadFromFile("ui/PauseButton.png", "assets/sfx/PauseButtonPress.wav");
+	pauseButton.loadFromFile("ui/PauseButton.png", "sfx/PauseButtonPress.wav");
 	pauseButton.setSizeWithAspectRatio(0, buttonHeight);
 	pauseButton.setPosition(Global::kScreenWidth - Global::viewerWidth + 30, Global::kScreenHeight - buttonHeight - 20);
 
-	playButton.loadFromFile("ui/PlayButton.png", "assets/sfx/PauseButtonPress.wav");
+	playButton.loadFromFile("ui/PlayButton.png", "sfx/PauseButtonPress.wav");
 	playButton.setSizeWithAspectRatio(0, buttonHeight);
 	playButton.setPosition(Global::kScreenWidth - Global::viewerWidth + 30, Global::kScreenHeight - buttonHeight - 20);
 

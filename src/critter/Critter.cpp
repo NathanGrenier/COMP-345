@@ -41,6 +41,10 @@ Critter::Critter(int level, SDL_FRect start, Map* map)
 	}
 }
 
+Critter::~Critter() {
+	map = nullptr;
+}
+
 /**
  * @brief Callback function for when the flow field changes.
  *

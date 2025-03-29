@@ -16,37 +16,36 @@
  * @details Handles creation, rendering, and upgrading of towers.
  */
 
-class TowerGroup
-{
+class TowerGroup {
 public:
 	// Constructor with parameters
-	TowerGroup(int &playerGold, Map *map, DetailAttributeDisplay *detailDisplay);
+	TowerGroup(int& playerGold, Map* map, DetailAttributeDisplay* detailDisplay);
 	~TowerGroup();
 
-	void update(float deltaTime, std::vector<Critter *> critters); // Update towers to attack critters
+	void update(float deltaTime, std::vector<Critter*> critters); // Update towers to attack critters
 	void render();												   // Render all towers
 
-    std::vector<Tower*>& getTowers();               // Access all towers (modifiable)
-    int getTotalTowersPlaced();                     // Access number of towers
-    Tower* getTowerAtPosition(float x, float y, float scaleFactor); // Get a tower at a specific position (for selecting/upgrading)
+	std::vector<Tower*>& getTowers();               // Access all towers (modifiable)
+	int getTotalTowersPlaced();                     // Access number of towers
+	Tower* getTowerAtPosition(float x, float y, float scaleFactor); // Get a tower at a specific position (for selecting/upgrading)
 
-	void upgradeTower(Tower *tower); // Upgrade a selected tower, if possible
-	void handleEvent(SDL_Event &e);
+	void upgradeTower(Tower* tower); // Upgrade a selected tower, if possible
+	void handleEvent(SDL_Event& e);
 
-	static int getStrategyIndex(Tower *tower); /** @brief index for the strategy of a Tower */
+	static int getStrategyIndex(Tower* tower); /** @brief index for the strategy of a Tower */
 private:
-    int& playerGold;                               // Reference to player's gold for buying/upgrading towers
-    Map* map;                                      // Pointer to the map for tower placement validation
-    DetailAttributeDisplay* detailDisplay;         // UI detail display for selected tower information
-    std::vector<Tower*> towers;                    // Vector containing all tower instances
-    std::vector<Powerup*> activePowerups;
-    int towerBuySelect = -1;
-    int totalTowersPlaced = 0;
+	int& playerGold;                               // Reference to player's gold for buying/upgrading towers
+	Map* map;                                      // Pointer to the map for tower placement validation
+	DetailAttributeDisplay* detailDisplay;         // UI detail display for selected tower information
+	std::vector<Tower*> towers;                    // Vector containing all tower instances
+	std::vector<Powerup*> activePowerups;
+	int towerBuySelect = -1;
+	int totalTowersPlaced = 0;
 
-	Tower *dummyStandardTower;	/**< @brief dummy StandardTower for details before buying Tower */
-	Tower *dummyRapidFireTower; /**< @brief dummy RapidFireTower for details before buying Tower */
-	Tower *dummyCannonTower;	/**< @brief dummy CannonTower for details before buying Tower */
-	TowerStrategy **strategies; /**< @brief Tower Strategies for targetting Critters */
+	Tower* dummyStandardTower;	/**< @brief dummy StandardTower for details before buying Tower */
+	Tower* dummyRapidFireTower; /**< @brief dummy RapidFireTower for details before buying Tower */
+	Tower* dummyCannonTower;	/**< @brief dummy CannonTower for details before buying Tower */
+	TowerStrategy** strategies; /**< @brief Tower Strategies for targetting Critters */
 
 
 	const float POWERUP_SPAWN_CHANCE = 0.01;
@@ -54,6 +53,7 @@ private:
 	/** @brief targetted cell when clicking */
 	Cell targetCell;
 
-	Mix_Chunk *gTowerPurchase{nullptr};
-	Mix_Chunk *gTowerSell{nullptr};
+	Mix_Chunk* gTowerPurchase{ nullptr };
+	Mix_Chunk* gTowerSell{ nullptr };
+
 };

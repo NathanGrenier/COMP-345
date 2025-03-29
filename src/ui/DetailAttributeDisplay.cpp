@@ -199,12 +199,11 @@ void DetailAttributeDisplay::render()
 
 void DetailAttributeDisplay::update()
 {
-	for (auto *component : components)
-	{
-		// Attempt a dynamic cast to DetailButton
-		if (DetailButton *button = dynamic_cast<DetailButton *>(component))
-		{
-			button->update();
-		}
-	}
+    for (auto* component : components) {
+        // Attempt a dynamic cast to DetailButton
+        if (DetailButton* button = dynamic_cast<DetailButton*>(component)) {
+            button->update();
+        }
+    }
 }
+
