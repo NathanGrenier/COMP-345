@@ -223,9 +223,11 @@ bool Tower::isClicked(float scaleFactor) const {
  * @return false if the DummyCritter is out of range of the Tower and cannot be damaged
  */
 bool Tower::isCritterInRange(Critter* critter) {
-	float relativeRange = static_cast<float>(range) / Tower::STAT_CELL_RATIO;
-	float relativeDistance = calcDistance(critter) / Global::currentMap->getPixelPerCell();
-
+	float rangeInCells = static_cast<float>(getRange()) / Tower::STAT_CELL_RATIO;
+	
+	float relativeRange = rangeInCells * Global::currentMap->getPixelPerCell();
+	float relativeDistance = calcDistance(critter);
+	
 	return relativeRange >= relativeDistance;
 }
 
@@ -253,8 +255,6 @@ float Tower::calcDistance(Critter* critter) const {
 	// distance in each direction
 	float differenceX = posX - critterPosX;
 	float differenceY = posY - critterPosY;
-
-	// std::cout << differenceY << std::endl;
 
 	// distance formula
 	return static_cast<float>(sqrt(pow(differenceX, 2) + pow(differenceY, 2)));

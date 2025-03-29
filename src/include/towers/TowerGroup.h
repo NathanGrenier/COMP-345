@@ -26,20 +26,22 @@ public:
 	void update(float deltaTime, std::vector<Critter *> critters); // Update towers to attack critters
 	void render();												   // Render all towers
 
-	std::vector<Tower *> &getTowers();								// Access all towers (modifiable)
-	Tower *getTowerAtPosition(float x, float y, float scaleFactor); // Get a tower at a specific position (for selecting/upgrading)
+    std::vector<Tower*>& getTowers();               // Access all towers (modifiable)
+    int getTotalTowersPlaced();                     // Access number of towers
+    Tower* getTowerAtPosition(float x, float y, float scaleFactor); // Get a tower at a specific position (for selecting/upgrading)
 
 	void upgradeTower(Tower *tower); // Upgrade a selected tower, if possible
 	void handleEvent(SDL_Event &e);
 
 	static int getStrategyIndex(Tower *tower); /** @brief index for the strategy of a Tower */
 private:
-	int &playerGold;					   // Reference to player's gold for buying/upgrading towers
-	Map *map;							   // Pointer to the map for tower placement validation
-	DetailAttributeDisplay *detailDisplay; // UI detail display for selected tower information
-	std::vector<Tower *> towers;		   // Vector containing all tower instances
-	std::vector<Powerup *> activePowerups;
-	int towerBuySelect = -1;
+    int& playerGold;                               // Reference to player's gold for buying/upgrading towers
+    Map* map;                                      // Pointer to the map for tower placement validation
+    DetailAttributeDisplay* detailDisplay;         // UI detail display for selected tower information
+    std::vector<Tower*> towers;                    // Vector containing all tower instances
+    std::vector<Powerup*> activePowerups;
+    int towerBuySelect = -1;
+    int totalTowersPlaced = 0;
 
 	Tower *dummyStandardTower;	/**< @brief dummy StandardTower for details before buying Tower */
 	Tower *dummyRapidFireTower; /**< @brief dummy RapidFireTower for details before buying Tower */

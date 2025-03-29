@@ -178,6 +178,15 @@ std::vector<Tower *> &TowerGroup::getTowers()
 }
 
 /**
+ * @brief Accessor for total number of towers placed.
+ * @return The total number of towers placed.
+ */
+int TowerGroup::getTotalTowersPlaced()
+{
+	return totalTowersPlaced;
+}
+
+/**
  * @brief Finds and returns a tower at a given position.
  *
  * @param x The x-coordinate to check.
@@ -461,6 +470,8 @@ void TowerGroup::handleEvent(SDL_Event &e)
 
 					newTower->attach(detailDisplay->getTowerObserver());
 					newTower->notify();
+
+					++totalTowersPlaced;
 
 					map->wallCellDict[targetCell] = true;
 
