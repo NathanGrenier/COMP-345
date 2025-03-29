@@ -29,8 +29,8 @@ public:
 	// Handles mouse event
 	void handleEvent(SDL_Event *e);
 
-	bool setText(const std::string &text, SDL_Color textColor);
-	bool loadFromFile(std::string path, std::string buttonPressPath = "");
+	bool setText(const std::string& text, SDL_Color textColor);
+	bool loadFromFile(std::string path, std::string buttonPressPath = "", std::string buttonHoverPath = "", bool noSound = false);
 
 	// Shows button sprite
 	void render();
@@ -59,12 +59,12 @@ private:
 	// Currently used global sprite
 	eButtonSprite mCurrentSprite;
 
-	Texture gButtonSpriteTexture;
+	Texture mButtonSpriteTexture;
 
-	Mix_Chunk *gButtonPress{nullptr};
-	Mix_Chunk *gButtonHover{nullptr};
+	Mix_Chunk* mButtonPress{ nullptr };
+	Mix_Chunk* mButtonHover{ nullptr };
 
-	Mix_Chunk *currentSound = nullptr;
-	Mix_Chunk *previousSound = nullptr;
+	Mix_Chunk* currentSound = nullptr;
+	Mix_Chunk* previousSound = nullptr;
 	bool soundPlaying = false;
 };

@@ -16,40 +16,25 @@ ParallaxBackground::ParallaxBackground() {
 	// Seed the random number generator
 	std::srand(std::time(0));
 
+
 	// Get the list of star images from assets/backgrounds/stars
-	for (const auto& entry : fs::directory_iterator("assets/backgrounds/stars")) {
-		if (entry.is_regular_file() && entry.path().extension() == ".png") {
-			std::string relativePath = fs::relative(entry.path(), basePath).string();
-			starImages.push_back(relativePath);
-		}
-	}
+	populateAssetPaths("assets/backgrounds/stars", starImages);
 
 	// Get the list of prop images from assets/backgrounds/props
-	for (const auto& entry : fs::directory_iterator("assets/backgrounds/props")) {
-		if (entry.is_regular_file() && entry.path().extension() == ".png") {
-			std::string relativePath = fs::relative(entry.path(), basePath).string();
-			propImages.push_back(relativePath);
-		}
-	}
+	populateAssetPaths("assets/backgrounds/props", propImages);
 
 	// Add the background image (as before, it could be selected randomly from assets/backgrounds)
-	for (const auto& entry : fs::directory_iterator("assets/backgrounds")) {
-		if (entry.is_regular_file() && entry.path().extension() == ".png") {
-			std::string relativePath = fs::relative(entry.path(), basePath).string();
-			backgroundImages.push_back(relativePath);
-		}
-	}
+	populateAssetPaths("assets/backgrounds", backgroundImages);
 
 	// Add stars with random selection
-	if (!starImages.empty()) {
-		int randomStarIndex = std::rand() % starImages.size();
-		std::string randomStarImage = starImages[randomStarIndex];
-		ParallaxLayer* newLayer = new ParallaxLayer(10.0f, 0, randomStarImage);
-		layers.push_back(newLayer);
-	} else {
-		SDL_Log("No star images found in the assets/backgrounds/stars directory.\n");
-	}
-
+	//if (!starImages.empty()) {
+	//	int randomStarIndex = std::rand() % starImages.size();
+	//	std::string randomStarImage = starImages[randomStarIndex];
+	//	ParallaxLayer* newLayer = new ParallaxLayer(10.0f, 0, randomStarImage);
+	//	layers.push_back(newLayer);
+	//} else {
+	//	SDL_Log("No star images found in the assets/backgrounds/stars directory.\n");
+	//}
 
 	if (!backgroundImages.empty()) {
 		int randomIndex = std::rand() % backgroundImages.size();
@@ -87,3 +72,13 @@ void ParallaxBackground::render() {
 	}
 }
 
+void ParallaxBackground::populateAssetPaths(const std::string& directory, std::vector<std::string>& array) {
+	if (array.empty()) {
+		for (const auto& entry : fs::directory_iterator(directory)) {
+			if (entry.is_regular_file() && entry.path().extension() == ".png") {
+				std::string relativePath = fs::relative(entry.path(), basePath).string();
+				array.push_back(relativePath);
+			}
+		}
+	}
+}

@@ -22,6 +22,7 @@ Texture::Texture() : mR(255), mG(255), mB(255), mAlpha(255) {}
 Texture::~Texture() {
 	if (mModifiedTexture) {
 		SDL_DestroyTexture(mModifiedTexture);
+		mModifiedTexture = nullptr;
 	}
 	mBaseTexture = nullptr;
 }

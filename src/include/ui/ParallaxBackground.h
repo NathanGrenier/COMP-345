@@ -23,6 +23,8 @@ public:
 	// Render all layers
 	void render();
 
+	void populateAssetPaths(const std::string& directory, std::vector<std::string>& array);
+
 	static std::vector<std::string> backgroundImages;
 	static std::vector<std::string> starImages;
 	static std::vector<std::string> propImages;

@@ -1,5 +1,6 @@
 #include <ui/LButton.h>
 #include <Global.h>
+#include <util/AudioManager.h>
 
 /**
  * @class LButton
@@ -10,21 +11,17 @@
  *
  * @author Nirav Patel
  */
-LButton::LButton() : mPosition{0.f, 0.f},
-					 originalHeight{0.f},
-					 originalWidth{0.f},
-					 mCurrentSprite{eButtonSpriteMouseOut},
-					 kButtonHeight{0},
-					 kButtonWidth{0}
-{
-}
+LButton::LButton() :
+	mPosition{ 0.f, 0.f },
+	originalHeight{ 0.f },
+	originalWidth{ 0.f },
+	mCurrentSprite{ eButtonSpriteMouseOut },
+	kButtonHeight{ 0 },
+	kButtonWidth{ 0 } {}
 
-LButton::~LButton()
-{
-	Mix_FreeChunk(gButtonPress);
-	gButtonPress = nullptr;
-	Mix_FreeChunk(gButtonHover);
-	gButtonHover = nullptr;
+LButton::~LButton() {
+	mButtonPress = nullptr;
+	mButtonHover = nullptr;
 }
 
 /**
@@ -33,8 +30,7 @@ LButton::~LButton()
  * @param x The x-coordinate of the button.
  * @param y The y-coordinate of the button.
  */
-void LButton::setPosition(float x, float y)
-{
+void LButton::setPosition(float x, float y) {
 	mPosition.x = x;
 	mPosition.y = y;
 }
@@ -44,8 +40,7 @@ void LButton::setPosition(float x, float y)
  *
  * @return The SDL_FPoint representing the button's position.
  */
-SDL_FPoint LButton::getPosition() const
-{
+SDL_FPoint LButton::getPosition() const {
 	return mPosition;
 }
 
@@ -54,8 +49,7 @@ SDL_FPoint LButton::getPosition() const
  *
  * @param e Pointer to an SDL_Event containing mouse event data.
  */
-void LButton::handleEvent(SDL_Event *e)
-{
+void LButton::handleEvent(SDL_Event* e) {
 	// Define the duration for how long the sound should play (in milliseconds)
 	const Uint32 soundDuration = 2000; // 2 seconds (change as needed)
 
@@ -84,46 +78,25 @@ void LButton::handleEvent(SDL_Event *e)
 		if (!inside)
 		{
 			mCurrentSprite = eButtonSpriteMouseOut;
-			gButtonSpriteTexture.setAlpha(255);
+			mButtonSpriteTexture.setAlpha(255);
 			currentSound = nullptr;
-		}
-		else
-		{
-			switch (e->type)
-			{
-			case SDL_EVENT_MOUSE_MOTION:
-				if (mCurrentSprite != eButtonSpriteMouseOverMotion && currentSound == nullptr)
-				{
-					currentSound = gButtonHover;
-				}
-				mCurrentSprite = eButtonSpriteMouseOverMotion;
-				break;
-			case SDL_EVENT_MOUSE_BUTTON_DOWN:
-				currentSound = gButtonPress;
-				mCurrentSprite = eButtonSpriteMouseDown;
-				break;
-			case SDL_EVENT_MOUSE_BUTTON_UP:
-				mCurrentSprite = eButtonSpriteMouseUp;
-				break;
+		} else {
+			switch (e->type) {
+				case SDL_EVENT_MOUSE_MOTION:
+					if (mCurrentSprite != eButtonSpriteMouseOverMotion && currentSound == nullptr) {
+						currentSound = mButtonHover;
+					}
+					mCurrentSprite = eButtonSpriteMouseOverMotion;
+					break;
+				case SDL_EVENT_MOUSE_BUTTON_DOWN:
+					currentSound = mButtonPress;
+					mCurrentSprite = eButtonSpriteMouseDown;
+					break;
+				case SDL_EVENT_MOUSE_BUTTON_UP:
+					mCurrentSprite = eButtonSpriteMouseUp;
+					break;
 			}
 		}
-	}
-}
-
-void LButton::update()
-{
-	if (currentSound != previousSound)
-	{
-		if (currentSound != nullptr)
-		{
-			Mix_PlayChannel(Global::eEffectChannelUI, currentSound, 0);
-		}
-		previousSound = currentSound;
-	}
-
-	if (!Mix_Playing(Global::eEffectChannelUI))
-	{
-		currentSound = nullptr;
 	}
 }
 
@@ -134,48 +107,55 @@ void LButton::update()
  * @param textColor The color of the text.
  * @return True if the text texture was successfully created, false otherwise.
  */
-bool LButton::setText(const std::string &text, SDL_Color textColor)
-{
-	bool result = gButtonSpriteTexture.loadFromRenderedText(text, textColor);
-	if (result)
-	{
-		kButtonWidth = gButtonSpriteTexture.getWidth();
-		kButtonHeight = gButtonSpriteTexture.getHeight();
+bool LButton::setText(const std::string& text, SDL_Color textColor) {
+	bool result = mButtonSpriteTexture.loadFromRenderedText(text, textColor);
+	if (result) {
+		kButtonWidth = mButtonSpriteTexture.getWidth();
+		kButtonHeight = mButtonSpriteTexture.getHeight();
 		originalWidth = kButtonWidth;
 		originalHeight = kButtonHeight;
 	}
 	return result;
 }
 
-bool LButton::loadFromFile(std::string path, std::string buttonPressPath)
-{
-	bool result = gButtonSpriteTexture.loadFromFile(path, true);
-	if (result)
-	{
-		kButtonWidth = gButtonSpriteTexture.getWidth();
-		kButtonHeight = gButtonSpriteTexture.getHeight() / static_cast<float>(eButtonSpriteCount);
+bool LButton::loadFromFile(std::string path, std::string buttonPressPath, std::string buttonHoverPath, bool noSound) {
+	bool result = mButtonSpriteTexture.loadFromFile(path);
+	if (result) {
+		kButtonWidth = mButtonSpriteTexture.getWidth();
+		kButtonHeight = mButtonSpriteTexture.getHeight() / static_cast<float>(eButtonSpriteCount);
 		originalWidth = kButtonWidth;
 		originalHeight = kButtonHeight;
-
-		gButtonHover = Mix_LoadWAV("assets/sfx/ButtonHover.wav");
-
-		if (!buttonPressPath.empty())
-		{
-			gButtonPress = Mix_LoadWAV(buttonPressPath.c_str());
-		}
-		else
-		{
-			gButtonPress = Mix_LoadWAV("assets/sfx/DefaultButtonPress.wav");
-		}
 	}
+
+	if (!noSound) {
+		AudioManager& audioManager = AudioManager::getInstance();
+		mButtonPress = audioManager.loadAudio(buttonPressPath.empty() ? "sfx/DefaultButtonPress.wav" : buttonPressPath);
+		mButtonHover = audioManager.loadAudio(buttonHoverPath.empty() ? "sfx/ButtonHover.wav" : buttonHoverPath);
+	} else {
+		mButtonPress = nullptr;
+		mButtonHover = nullptr;
+	}
+
 	return result;
+}
+
+void LButton::update() {
+	if (currentSound != previousSound) {
+		if (currentSound != nullptr) {
+			Mix_PlayChannel(AudioManager::eEffectChannelUI, currentSound, 0);
+		}
+		previousSound = currentSound;
+	}
+
+	if (!Mix_Playing(AudioManager::eEffectChannelUI)) {
+		currentSound = nullptr;
+	}
 }
 
 /**
  * @brief Renders the button on the screen.
  */
-void LButton::render()
-{
+void LButton::render() {
 	SDL_FRect spriteClips[] = {
 		{0.f, static_cast<float>(0 * originalHeight), static_cast<float>(originalWidth), static_cast<float>(originalHeight)},
 		{0.f, static_cast<float>(1 * originalHeight), static_cast<float>(originalWidth), static_cast<float>(originalHeight)},
@@ -184,7 +164,7 @@ void LButton::render()
 	};
 
 	// Render the button using the current sprite state
-	gButtonSpriteTexture.render(mPosition.x, mPosition.y, &spriteClips[mCurrentSprite], kButtonWidth, kButtonHeight);
+	mButtonSpriteTexture.render(mPosition.x, mPosition.y, &spriteClips[mCurrentSprite], kButtonWidth, kButtonHeight);
 }
 
 /**
@@ -192,21 +172,19 @@ void LButton::render()
  *
  * @return True if the button is clicked, false otherwise.
  */
-bool LButton::isClicked() const
-{
+bool LButton::isClicked() const {
 	// Get the current mouse position
 	float x, y;
 	SDL_GetMouseState(&x, &y);
 
 	// Check if the mouse position is inside the button's area
 	bool result = x >= mPosition.x && x <= mPosition.x + kButtonWidth &&
-				  y >= mPosition.y && y <= mPosition.y + kButtonHeight;
+		y >= mPosition.y && y <= mPosition.y + kButtonHeight;
 
 	return result;
 }
 
-void LButton::setSizeWithAspectRatio(float newWidth, float newHeight)
-{
+void LButton::setSizeWithAspectRatio(float newWidth, float newHeight) {
 	if (kButtonWidth == 0 || kButtonHeight == 0)
 	{
 		return; // Avoid division by zero
@@ -221,13 +199,9 @@ void LButton::setSizeWithAspectRatio(float newWidth, float newHeight)
 	if (newWidth == 0)
 	{
 		adjustedWidth = newHeight * aspectRatio;
-	}
-	else if (newHeight == 0)
-	{
+	} else if (newHeight == 0) {
 		adjustedHeight = newWidth / aspectRatio;
-	}
-	else
-	{
+	} else {
 		// Maintain aspect ratio based on the closest fit
 		float widthRatio = newWidth / kButtonWidth;
 		float heightRatio = newHeight / kButtonHeight;
@@ -235,9 +209,7 @@ void LButton::setSizeWithAspectRatio(float newWidth, float newHeight)
 		if (widthRatio < heightRatio)
 		{
 			adjustedHeight = kButtonHeight * widthRatio;
-		}
-		else
-		{
+		} else {
 			adjustedWidth = kButtonWidth * heightRatio;
 		}
 	}

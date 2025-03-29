@@ -12,6 +12,7 @@
 #include <LTimer.h>
 #include <iostream>
 #include <util/TextureManager.h>
+#include <util/AudioManager.h>
 #include <algorithm>
 
 /** @file main.cpp
@@ -23,37 +24,33 @@
  *  @author Nirav Patel
  */
 
-/** @brief The target frames per second. */
-constexpr int kScreenFps{60};
+ /** @brief The target frames per second. */
+constexpr int kScreenFps{ 60 };
 
 /** @brief The main application window. */
-SDL_Window *gWindow{nullptr};
+SDL_Window* gWindow{ nullptr };
 
 /** @brief The renderer for drawing to the window. */
-SDL_Renderer *gRenderer = nullptr;
+SDL_Renderer* gRenderer = nullptr;
 
 /** @brief The global font for rendering text. */
-TTF_Font *gFont = nullptr;
+TTF_Font* gFont = nullptr;
 
 /** @brief Texture for rendering FPS information. */
 Texture gFpsTexture;
 
 /** @brief The current game state. */
-GameState *gCurrentState{nullptr};
+GameState* gCurrentState{ nullptr };
 
 /** @brief The next game state to transition to. */
-GameState *gNextState{nullptr};
-Map *Global::currentMap;
+GameState* gNextState{ nullptr };
+Map* Global::currentMap;
 
-// Playback audio device
-SDL_AudioDeviceID gAudioDeviceId{0};
+//Playback audio device
+SDL_AudioDeviceID gAudioDeviceId{ 0 };
 
-// Allocated channel count
-int gChannelCount = 0;
-bool Global::UIChannelPlaying = false;
-
-// The music that will be played
-Mix_Music *gMusic{nullptr};
+//The music that will be played
+Mix_Music* gMusic{ nullptr };
 
 float Global::viewerWidth = kScreenWidth * 0.3f;
 float Global::headerHeight = kScreenHeight * 0.15f;
@@ -62,7 +59,7 @@ SDL_FRect Global::mapViewRect = {
 	Global::kScreenWidth * 0.02f,
 	Global::headerHeight + Global::kScreenHeight * 0.02f,
 	static_cast<float>(Global::kScreenWidth - Global::viewerWidth) - 2 * Global::kScreenWidth * 0.02f,
-	static_cast<float>(Global::kScreenHeight - Global::headerHeight) - 2 * Global::kScreenHeight * 0.02f};
+	static_cast<float>(Global::kScreenHeight - Global::headerHeight) - 2 * Global::kScreenHeight * 0.02f };
 
 bool isFading = false;	// Controls when fading occurs
 float fadeAlpha = 0.0f; // Alpha value (0 = fully visible, 255 = fully black)
@@ -79,8 +76,7 @@ std::ofstream outFile;
  *
  * @param newState The new state to transition to.
  */
-void setNextState(GameState *newState)
-{
+void setNextState(GameState* newState) {
 	if (gNextState != ExitState::get())
 	{
 		gNextState = newState;
@@ -92,8 +88,7 @@ void setNextState(GameState *newState)
  *
  * Exits the current state, enters the new state, and updates the game state pointer.
  */
-void changeState()
-{
+void changeState() {
 	if (gNextState != nullptr)
 	{
 		// Start fading
@@ -109,45 +104,41 @@ void changeState()
  *
  * @return True if initialization was successful, false otherwise.
  */
-bool init()
-{
+bool init() {
 	// Get current time and format it as HH:MM:SS
 	std::time_t currentTime = std::time(nullptr);  // Get the current time
 	std::tm* timeInfo = std::localtime(&currentTime);  // Convert to local time
 
 	char timestamp[20];  // Buffer to store formatted time (YYYYMMDD_HHMMSS format)
-    std::strftime(timestamp, sizeof(timestamp), "%Y%m%d_%H%M%S", timeInfo);  // Format time
+	std::strftime(timestamp, sizeof(timestamp), "%Y%m%d_%H%M%S", timeInfo);  // Format time
 
-    // Construct the filename with the timestamp
-    std::stringstream filenameStream;
-    filenameStream << "LOG_" << timestamp << ".txt";  // Example: LOG_20250328_123045.txt
-    std::string filename = filenameStream.str();  // Convert the stream to a string
+	// Construct the filename with the timestamp
+	std::stringstream filenameStream;
+	filenameStream << "LOG_" << timestamp << ".txt";  // Example: LOG_20250328_123045.txt
+	std::string filename = filenameStream.str();  // Convert the stream to a string
 
-    // Create and open the text file for writing (Append mode)
-    outFile.open(filename, std::ios::app); 
+	// Create and open the text file for writing (Append mode)
+	outFile.open(filename, std::ios::app);
 
 	if (!outFile) {  // Check if the file is opened successfully
 		std::cerr << "Error: Could not create the file!" << std::endl;
-	}
-	else {
+	} else {
 		outFile << "Log started at: " << timestamp << std::endl;  // Write log start time
 	}
 
-	bool success{true};
+	bool success{ true };
 	if (!SDL_Init(SDL_INIT_VIDEO | SDL_INIT_AUDIO))
 	{
 		SDL_Log("SDL could not initialize! SDL error: %s\n", SDL_GetError());
 		success = false;
-	}
-	else
+	} else
 	{
 		// Create window and renderer
 		if (!SDL_CreateWindowAndRenderer("Tower Defense - NullTerminators", static_cast<int>(Global::kScreenWidth), static_cast<int>(Global::kScreenHeight), 0, &gWindow, &gRenderer))
 		{
 			SDL_Log("Window could not be created! SDL error: %s\n", SDL_GetError());
 			success = false;
-		}
-		else
+		} else
 		{
 			// Enable VSync
 			if (!SDL_SetRenderVSync(gRenderer, 1))
@@ -170,29 +161,27 @@ bool init()
 				success = false;
 			}
 
-			if (!SDL_SetWindowIcon(gWindow, IMG_Load("assets/icon.png")))
-			{
+			if (!SDL_SetWindowIcon(gWindow, IMG_Load("assets/icon.png"))) {
 				SDL_Log("Window Icon could not be set: %s\n", SDL_GetError());
 				success = false;
 			}
 
-			// Set audio spec
+			//Set audio spec
 			SDL_AudioSpec audioSpec;
 			SDL_zero(audioSpec);
 			audioSpec.format = SDL_AUDIO_F32;
 			audioSpec.channels = 2;
 			audioSpec.freq = 44100;
 
-			// Open audio device
+			//Open audio device
 			gAudioDeviceId = SDL_OpenAudioDevice(SDL_AUDIO_DEVICE_DEFAULT_PLAYBACK, &audioSpec);
 			if (gAudioDeviceId == 0)
 			{
 				SDL_Log("Unable to open audio! SDL error: %s\n", SDL_GetError());
 				success = false;
-			}
-			else
+			} else
 			{
-				// Initialize SDL_mixer
+				//Initialize SDL_mixer
 				if (!Mix_OpenAudio(gAudioDeviceId, nullptr))
 				{
 					printf("SDL_mixer could not initialize! SDL_mixer error: %s\n", SDL_GetError());
@@ -210,9 +199,8 @@ bool init()
  *
  * @return True if all media loaded successfully, false otherwise.
  */
-bool loadMedia()
-{
-	bool success{true};
+bool loadMedia() {
+	bool success{ true };
 
 	// Load font
 	std::string fontPath = "assets/fonts/lazy2.ttf";
@@ -223,32 +211,14 @@ bool loadMedia()
 		success = false;
 	}
 
-	if (gMusic = Mix_LoadMUS("assets/music.wav"); gMusic == nullptr)
-	{
-		SDL_Log("Unable to load music! SDL_mixer error: %s\n", SDL_GetError());
-		success = false;
-	}
-
-	// Allocate channels
-	if (success)
-	{
-		if (gChannelCount = Mix_AllocateChannels(Global::kEffectChannelTotal); gChannelCount != Global::kEffectChannelTotal)
-		{
-			SDL_Log("Unable to allocate channels! SDL_mixer error: %s\n", SDL_GetError());
-			success = false;
-		}
-	}
 	return success;
 }
 
 /**
  * @brief Cleans up SDL resources and quits SDL subsystems.
  */
-void close()
-{
-	// Free music
-	Mix_FreeMusic(gMusic);
-	gMusic = nullptr;
+void close() {
+	//Free music
 	Mix_CloseAudio();
 	SDL_CloseAudioDevice(gAudioDeviceId);
 	gAudioDeviceId = 0;
@@ -281,28 +251,25 @@ void close()
  * @param args Argument values (unused).
  * @return Exit code (0 if successful).
  */
-int main(int argc, char *args[])
-{
-	int exitCode{0};
+int main(int argc, char* args[]) {
+	int exitCode{ 0 };
 
 	// Initialize SDL
 	if (!init())
 	{
 		SDL_Log("Unable to initialize program!\n");
 		exitCode = 1;
-	}
-	else
+	} else
 	{
 		// Load media
 		if (!loadMedia())
 		{
 			SDL_Log("Unable to load media!\n");
 			exitCode = 2;
-		}
-		else
+		} else
 		{
 			// Quit flag
-			bool quit{false};
+			bool quit{ false };
 
 			// SDL event storage
 			SDL_Event e;
@@ -322,8 +289,10 @@ int main(int argc, char *args[])
 
 			// Create TextureManager Singleton Instance
 			TextureManager::getInstance().init(gRenderer, gFont);
+			gFpsTexture.loadFromRenderedText("Enter to start/stop or space to pause/unpause", { 0x00, 0x00, 0x00, 0xFF });
 
-			gFpsTexture.loadFromRenderedText("Enter to start/stop or space to pause/unpause", {0x00, 0x00, 0x00, 0xFF});
+			AudioManager::getInstance().init(AudioManager::MAX_VOLUME / 4);
+			gMusic = AudioManager::getInstance().loadMusic("music.wav");
 
 			// Start game state machine
 			gCurrentState = IntroState::get();
@@ -347,8 +316,7 @@ int main(int argc, char *args[])
 					{
 						setNextState(ExitState::get());
 						quit = true;
-					}
-					else if (e.type == SDL_EVENT_KEY_DOWN && e.key.key == SDLK_ESCAPE)
+					} else if (e.type == SDL_EVENT_KEY_DOWN && e.key.key == SDLK_ESCAPE)
 					{
 						setNextState(TitleState::get());
 					}

@@ -16,9 +16,9 @@
 #include <string>
 #include <fstream>
 
-// External SDL variables
-extern SDL_Renderer *gRenderer; ///< Global pointer to the SDL renderer.
-extern TTF_Font *gFont;         ///< Global pointer to the font used for rendering text.
+ // External SDL variables
+extern SDL_Renderer* gRenderer; ///< Global pointer to the SDL renderer.
+extern TTF_Font* gFont;         ///< Global pointer to the font used for rendering text.
 extern std::ofstream outFile;
 
 /**
@@ -27,45 +27,32 @@ extern std::ofstream outFile;
  * @author Nirav Patel
  * @date 2025-02-16
  */
-class Global
-{
+class Global {
 public:
-    static inline const float kScreenWidth{800};  // Constant, set at compile-time
-    static inline const float kScreenHeight{600}; // Constant, set at compile-time
+	static inline const float kScreenWidth{ 800 };  // Constant, set at compile-time
+	static inline const float kScreenHeight{ 600 }; // Constant, set at compile-time
 
-    static float viewerWidth;  // This will now be settable
-    static float headerHeight; // Constant value
+	static float viewerWidth;  // This will now be settable
+	static float headerHeight;  // Constant value
 
-    static Map *currentMap;
-    static SDL_FRect mapViewRect;
+	static Map* currentMap;
+	static SDL_FRect mapViewRect;
 
-    static inline constexpr int numberOfProps{10};
+	static inline constexpr int numberOfProps{ 10 };
 
-    static void logMessage(std::string message)
-    {
-        // Get current time for the log entry
-        std::time_t currentTime = std::time(nullptr);  // Get the current time
-        std::tm* timeInfo = std::localtime(&currentTime);  // Convert to local time
+	static void logMessage(std::string message) {
+		// Get current time for the log entry
+		std::time_t currentTime = std::time(nullptr);  // Get the current time
+		std::tm* timeInfo = std::localtime(&currentTime);  // Convert to local time
 
-        // Create a timestamp string in HH:MM:SS format
-        char timestamp[9];  // Buffer to store formatted time
-        std::strftime(timestamp, sizeof(timestamp), "%H:%M:%S", timeInfo);  // Format time
+		// Create a timestamp string in HH:MM:SS format
+		char timestamp[9];  // Buffer to store formatted time
+		std::strftime(timestamp, sizeof(timestamp), "%H:%M:%S", timeInfo);  // Format time
 
-        // Log the purchase with timestamp
-        outFile << "[" << timestamp << "] " << message << std::endl;
-    };
+		// Log the purchase with timestamp
+		outFile << "[" << timestamp << "] " << message << std::endl;
+	};
 
-    // Channel constants
-    enum eEffectChannel
-    {
-        eEffectChannelTowerShot = 0,
-        eEffectChannelEnemyDeath = 1,
-        eEffectChannelTowerPurchase = 2,
-        eEffectChannelUI = 3,
-        kEffectChannelTotal = 4,
-    };
-
-    static bool UIChannelPlaying;
 };
 
 /**
@@ -103,7 +90,7 @@ void close();
  *
  * @param nextState A pointer to the new game state.
  */
-void setNextState(GameState *nextState);
+void setNextState(GameState* nextState);
 
 /**
  * @brief Changes the current game state to the next state.
