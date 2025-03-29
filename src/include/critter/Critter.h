@@ -96,6 +96,10 @@ protected:
 	Direction currentDirection;
 	float distanceTravelled; /**< The distanced travelled by the critter, away from the spawn point*/
 
+	static constexpr float SPEED_SCALE_FACTOR = 0.01f;
+	static constexpr float HITPOINT_SCALE_FACTOR = 0.2f;
+	static constexpr float REWARD_SCALE_FACTOR = 0.01f;
+
 	// Health bar damage effect
 	bool isHurt = false;
 	Uint64 damageTimer = 0;

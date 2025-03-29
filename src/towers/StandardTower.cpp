@@ -9,14 +9,19 @@
 #include <towers/StandardTower.h>
 #include <towers/Projectile.h>
 
- /**
-  * @brief Default Constructor
-  */
+ // Initial Cost: 50
+ // Max Cost: 400
+const int StandardTower::upgradeCosts[] = { 50, 75, 100, 125 };
+
+/**
+ * @brief Default Constructor
+ */
 StandardTower::StandardTower() : Tower() {
 	getTowerTexture().loadFromFile("tower/StandardTower.png");
 	upgradeValues.rangeIncrease = StandardTower::rangeIncreasePerLevel;
 	upgradeValues.powerIncrease = StandardTower::powerIncreasePerLevel;
 	upgradeValues.rateOfFireIncrease = StandardTower::rateOfFireIncreasePerLevel;
+	upgradeValues.upgradeCosts = std::vector<int>(upgradeCosts, upgradeCosts + MAX_LEVEL - 1);
 }
 
 /**
@@ -30,29 +35,12 @@ StandardTower::StandardTower() : Tower() {
  * Uses default refund value ratio in Tower class
  */
 StandardTower::StandardTower(float x, float y, float width, int buyingCost)
-	: Tower(x, y, width, buyingCost, STANDARD_RANGE, STANDARD_POWER, STANDARD_RATE_OF_FIRE) {
+	: Tower(x, y, width, buyingCost, RANGE, POWER, RATE_OF_FIRE) {
 	getTowerTexture().loadFromFile("tower/StandardTower.png");
 	upgradeValues.rangeIncrease = StandardTower::rangeIncreasePerLevel;
 	upgradeValues.powerIncrease = StandardTower::powerIncreasePerLevel;
 	upgradeValues.rateOfFireIncrease = StandardTower::rateOfFireIncreasePerLevel;
-}
-
-/**
- * @brief Constructor with position, buying cost, and refund value
- *
- * @param x Horizontal position using pixels
- * @param y Vertical position using pixels
- * @param buyingCost Cost of buying StandardTower
- * @param refundValue Amount of coins refunded when selling a StandardTower
- * @details Constructor for StandardTower with x, y position, buying cost, and refund value
- * Uses default range, power, and rate of fire for StandardTower
- */
-StandardTower::StandardTower(float x, float y, float width, int buyingCost, int refundValue)
-	: Tower(x, y, width, buyingCost, refundValue, STANDARD_RANGE, STANDARD_POWER, STANDARD_RATE_OF_FIRE) {
-	getTowerTexture().loadFromFile("tower/StandardTower.png");
-	upgradeValues.rangeIncrease = StandardTower::rangeIncreasePerLevel;
-	upgradeValues.powerIncrease = StandardTower::powerIncreasePerLevel;
-	upgradeValues.rateOfFireIncrease = StandardTower::rateOfFireIncreasePerLevel;
+	upgradeValues.upgradeCosts = std::vector<int>(upgradeCosts, upgradeCosts + MAX_LEVEL - 1);
 }
 
 /**
@@ -61,7 +49,7 @@ StandardTower::StandardTower(float x, float y, float width, int buyingCost, int 
  * @return The maximum level for StandardTower upgrades
  */
 int StandardTower::getMaxLevel() {
-	return STANDARD_MAX_LEVEL;
+	return MAX_LEVEL;
 }
 
 
@@ -101,7 +89,7 @@ void StandardTower::shootProjectile(Critter* targettedCritter) {
 		while (deltaAngle < -180.0f) deltaAngle += 360.0f;
 
 		// Calculate max rotation step this frame
-		float maxRotationStep = 180.0f * 0.016f;
+		float maxRotationStep = DEFAULT_TURN_SPEED * TURN_SPEED_FACTOR;
 
 		// Clamp rotation delta to avoid sudden jumps
 		if (deltaAngle > maxRotationStep) deltaAngle = maxRotationStep;

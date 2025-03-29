@@ -15,18 +15,24 @@
 
 class StandardTower : public Tower {
 public:
-	static const int STANDARD_RANGE = 125; /**< @brief default range for StandardTower */
-	static const int STANDARD_POWER = 3; /**< @brief default projectile damage for StandardTower */
-	static const int STANDARD_RATE_OF_FIRE = 4; /**< @brief default rate of fire for StandardTower */
-	static const int STANDARD_MAX_LEVEL = 5; /**< @brief default max level for StandardTower */
+	// Initial DPS: 10
+	// Max DPS: 54
+	static const int TOWER_COST = 50;
+	static const int RANGE = 100; /**< @brief default range for StandardTower */
+	static const int POWER = 5; /**< @brief default projectile damage for StandardTower */
+	static const int RATE_OF_FIRE = 2; /**< @brief default rate of fire for StandardTower */
+	static const int MAX_LEVEL = 5; /**< @brief default max level for StandardTower */
 
-	static const int rangeIncreasePerLevel = 20;
+	static constexpr float TURN_SPEED_FACTOR = 1.0f;
+
+	// Range: 100 - 110 - 120 - 130 - 140
+	static const int rangeIncreasePerLevel = 10;
 	static const int powerIncreasePerLevel = 1;
 	static const int rateOfFireIncreasePerLevel = 1;
+	static const int upgradeCosts[MAX_LEVEL - 1];
 
 	StandardTower();
 	StandardTower(float x, float y, float width, int buyingCost);
-	StandardTower(float x, float y, float width, int buyingCost, int refundValue);
 
 	int getMaxLevel();
 	void shootProjectile(Critter* targettedCritter) override;

@@ -27,8 +27,16 @@ public:
 private:
 	void loadTextures();
 
-	float speed = 50.0f;
-	float maxHitPoints = 20.0f;
-	int reward = 10;
+	static constexpr float INITIAL_SPEED = 50.0f;
+	static constexpr float INITIAL_HITPOINTS = 10.0f;
+	static constexpr int INITIAL_REWARD = 10;
+	float speed = INITIAL_SPEED;
+	float maxHitPoints = INITIAL_HITPOINTS;
+	int reward = INITIAL_REWARD;
+
+	static constexpr float SPEED_SCALE_AMOUNT = INITIAL_SPEED * Critter::SPEED_SCALE_FACTOR;
+	static constexpr float HITPOINT_SCALE_AMOUNT = INITIAL_HITPOINTS * Critter::HITPOINT_SCALE_FACTOR;
+	static constexpr float REWARD_SCALE_AMOUNT = INITIAL_REWARD * Critter::REWARD_SCALE_FACTOR;
+
 	static inline const std::string baseTexturePath = "critters/slime";
 };

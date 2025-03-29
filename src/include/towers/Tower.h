@@ -17,19 +17,18 @@
 #include <towers/TowerStrategy.h>
 #include <string>
 
- /** @brief Ratio between original tower cost and refund value */
-const double REFUND_RATIO = 0.8;
-
-/**
- * @brief The Tower class is the parent class for all tower types that can shoot at critters.
- * It provides common functionality for tower attributes like range, power, rate of fire, and the ability to shoot projectiles.
- */
+ /**
+  * @brief The Tower class is the parent class for all tower types that can shoot at critters.
+  * It provides common functionality for tower attributes like range, power, rate of fire, and the ability to shoot projectiles.
+  */
 class Tower : public Observable {
 public:
 	static const int MAX_SHOOTING_TIMER = 100; /**< @brief Shooting timer to be decremented */
-	static const int REFUND_PER_UPGRADE = 50; /**< @brief Additional gold refunded per level */
 	static const int STAT_CELL_RATIO = 30; /**< @brief Ratio of Tower stat unit (range) per map cell */
 	static constexpr float PI_CONSTANT = 3.14159265358979323846f; /**< @brief The constant PI for tower calculations */
+	const double REFUND_RATIO = 0.7; /**< @brief Ratio between original tower cost and refund value */
+
+	const float DEFAULT_TURN_SPEED = 180.0f * 0.016f;
 
 	/**
 	 * @brief Default constructor for Tower.
@@ -48,19 +47,6 @@ public:
 	 * @param rateOfFire The rate of fire of the tower.
 	 */
 	Tower(float x, float y, float width, int buyingCost, int range, int power, int rateOfFire);
-
-	/**
-	 * @brief Constructs a Tower with specific position, size, cost, refund value, range, power, and rate of fire.
-	 * @param x The X-coordinate of the tower's position.
-	 * @param y The Y-coordinate of the tower's position.
-	 * @param width The width of the tower.
-	 * @param buyingCost The cost to buy the tower.
-	 * @param refundValue The refund value when the tower is sold.
-	 * @param range The range of the tower.
-	 * @param power The power of the tower.
-	 * @param rateOfFire The rate of fire of the tower.
-	 */
-	Tower(float x, float y, float width, int buyingCost, int refundValue, int range, int power, int rateOfFire);
 
 	/**
 	 * @brief Retrieves the projectiles fired by the tower.
@@ -83,6 +69,7 @@ public:
 		int rangeIncrease; /**< @brief The amount of range to increase upon upgrade */
 		int powerIncrease; /**< @brief The amount of power to increase upon upgrade */
 		int rateOfFireIncrease; /**< @brief The amount of rate of fire to increase upon upgrade */
+		std::vector<int> upgradeCosts; /**< @brief The cost of upgrading the tower */
 	};
 
 	UpgradeValues upgradeValues; /**< @brief The upgrade values for the tower */
@@ -259,7 +246,6 @@ private:
 	SDL_FRect currentRenderRect; /**< @brief The current render rectangle for the tower */
 	int buyingCost; /**< @brief The cost to purchase the tower */
 	int upgradeCost; /**< @brief The cost to upgrade the tower */
-	int refundValue; /**< @brief The refund value when selling the tower */
 	float rotationAngle = 0.0f; /**< @brief The rotation angle of the tower */
 	int range; /**< @brief The range of the tower */
 	int power; /**< @brief The power of the tower */

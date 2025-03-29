@@ -19,7 +19,7 @@
   * @brief Default Constructor, setting all values to 0
   */
 Tower::Tower()
-	: upgradeCost(0), buyingCost(0), refundValue(0), range(0), power(0), rateOfFire(0), level(0), shootingTimer(0), upgradeValues{ 0, 0, 0 }, critterTargettingStrategy(new TargetNearExit()) {
+	: upgradeCost(0), buyingCost(0), range(0), power(0), rateOfFire(0), level(0), shootingTimer(0), upgradeValues{ 0, 0, 0 }, critterTargettingStrategy(new TargetNearExit()) {
 	currentRenderRect = { 0, 0, 0, 0 };
 }
 
@@ -38,25 +38,6 @@ Tower::Tower()
  */
 Tower::Tower(float x, float y, float width, int buyingCost, int range, int power, int rateOfFire)
 	: upgradeCost(0), buyingCost(buyingCost), range(range), power(power), rateOfFire(rateOfFire), level(1), shootingTimer(0), upgradeValues{ 0, 0, 0 }, critterTargettingStrategy(new TargetNearExit()) {
-	refundValue = static_cast<int>(REFUND_RATIO * buyingCost);
-	currentRenderRect = { x, y, width, width };
-}
-
-/**
- * @brief Constructor with position, buying cost, refund value, range, power, and rate of fire
- *
- * @param x Horizontal position using pixels
- * @param y Vertical position using pixels
- * @param buyingCost Cost of buying Tower
- * @param refundValue Amount of coins refunded when selling a StandardTower
- * @param range maximum distance for Tower to target a Critter
- * @param power damage passed on to Projectiles to remove from a Critter's health
- * @param rateOfFire value to indicate how fast a Tower shoots projectile: the greater the value, the faster it shoots
- * @details Constructor for Tower with x, y position, buying cost, refund value, range, power, and rate of fire
- * Sets Tower level to 1 and shootingTimer to 0 to immediately start firing once placed
- */
-Tower::Tower(float x, float y, float width, int buyingCost, int refundValue, int range, int power, int rateOfFire)
-	: upgradeCost(0), buyingCost(buyingCost), refundValue(refundValue), range(range), power(power), rateOfFire(rateOfFire), level(1), shootingTimer(0), upgradeValues{ 0, 0, 0 }, critterTargettingStrategy(new TargetNearExit()) {
 	currentRenderRect = { x, y, width, width };
 }
 
@@ -130,12 +111,16 @@ int Tower::getLevel() const {
 /**
  * @brief Calculates the refund value of a Tower with levels in consideration
  *
- * @details Sums the initial refund value along with a refund amount per each level upgraded
- * Default refund amount per level is 50 coins
- * @return a refund value of a Tower while considering levels
+ * @details Sums the initial cost of the tower plus all upgrades. Multiplied by the refund factor.
+ * @return refund value of the tower
  */
 int Tower::getRefundValue() {
-	return refundValue + (level - 1) * REFUND_PER_UPGRADE;
+	int upgradeCost = 0;
+	for (int i = 0; i < level - 1; i++)
+	{
+		upgradeCost += upgradeValues.upgradeCosts[i];
+	}
+	return (buyingCost + upgradeCost) * REFUND_RATIO;
 }
 
 /**
@@ -146,15 +131,11 @@ int Tower::getBuyingCost() {
 	return buyingCost;
 }
 
-/**
- * @brief Calculates the upgrade cost of a Tower with current level in consideration
- *
- * @details Adds 100 on top of an additional amount of coins as the cost of upgrading a Tower
- * Default additional amount per level is 50 coins
- * @return a refund value of a Tower while considering levels
- */
 int Tower::getUpgradeCost() {
-	return 100 + level * 50;
+	if (level < getMaxLevel()) {
+		return upgradeValues.upgradeCosts[level - 1];
+	}
+	return 0; // No cost if at max level
 }
 
 /**
@@ -321,7 +302,8 @@ void Tower::moveProjectiles(float multiplier, Critter* critter) {
 		if (!projectiles[i]->isActive() || projectiles[i]->isOutside()) {
 			delete projectiles[i];
 			projectiles.erase(projectiles.begin() + i);
-		} else {
+		}
+		else {
 			++i; // Only increment if no erasure
 		}
 	}

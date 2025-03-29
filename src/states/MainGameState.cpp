@@ -91,7 +91,7 @@ bool MainGameState::enter()
 	detailDisplay = new DetailAttributeDisplay();
 	bool success = detailDisplay->initializeComponents();
 
-	endlessMode = false;
+	playerGold = STARTING_PLAYER_GOLD;
 	critterGroup = new CritterGroup(waveLevel, playerGold, map->getSpawnerPos(Global::mapViewRect), map->getTargetPos(Global::mapViewRect), map, detailDisplay, endlessMode);
 	towerGroup = new TowerGroup(playerGold, map, detailDisplay);
 
@@ -247,7 +247,6 @@ bool MainGameState::exit()
 	delete bg;
 	bg = nullptr;
 
-	playerGold = STARTING_GOLD_AMT;
 	waveLevel = 0;
 
 	return true;

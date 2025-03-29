@@ -66,9 +66,9 @@ SDL_FRect Global::mapViewRect = {
 
 bool isFading = false;	// Controls when fading occurs
 float fadeAlpha = 0.0f; // Alpha value (0 = fully visible, 255 = fully black)
-bool fadeIn = false;	// Determines fade direction
-LTimer fadeTimer;		// Timer for tracking fade duration
-constexpr Uint64 fadeDuration = 500'000'000;
+bool fadeIn = false; // Determines fade direction
+LTimer fadeTimer; // Timer for tracking fade duration
+constexpr Uint64 FADE_DURATION = 350'000'000;
 
 std::ofstream outFile;
 
@@ -359,7 +359,7 @@ int main(int argc, char *args[])
 				{
 					// Correct fadeProgress calculation (scaled from 0 to 1)
 					Uint64 elapsedTime = fadeTimer.getTicksNS();
-					float fadeProgress = static_cast<float>(elapsedTime) / static_cast<float>(fadeDuration);
+					float fadeProgress = static_cast<float>(elapsedTime) / static_cast<float>(FADE_DURATION);
 					fadeAlpha = std::clamp(fadeIn ? (1.0f - fadeProgress) * 255.0f : fadeProgress * 255.0f, 0.0f, 255.0f);
 
 					// If fade-out is complete, switch game states

@@ -33,11 +33,37 @@
 CritterGroup::CritterGroup(int& waveLevel, int& playerGold, SDL_FRect startPosition, SDL_FRect endPosition, Map* map, DetailAttributeDisplay* detailDisplay, bool endlessMode)
 	: waveLevel(waveLevel), playerGold(playerGold), startPosition(startPosition), endPosition(endPosition), map(map), detailDisplay(detailDisplay), endlessMode(endlessMode), currentSpawnDelay(0.0f), currentSpacing(0.0f) {
 
+	float INITIAL_SPAWN_DELAY = 0.1f;
+	float INITIAL_SPACING = 50.0f;
+	float SPACING_DECREMENT = 5.0f;
+	// (std::vector<CritterSpawnInfo>, float spawnDelay, float spacing)
+	// CritterSpawnInfo = (CritterType, int count)
+	// Every 5 waves, mini boss wave
+	// Every 10 waves, boss wave
 	waveConfigs = {
-		{ {{CritterType::NORMAL, 5}}, 1.0f, 50.0f },
-		{ {{CritterType::FAST, 3}}, 0.5f, 60.0f },
-		{ {{CritterType::TANK, 5}}, 0.5f, 75.0f },
-		{ {{CritterType::NORMAL, 10}, {CritterType::TANK, 2}, {CritterType::FAST, 5}}, 0.75f, 25.0f }
+		{ {{CritterType::NORMAL, 5}}, INITIAL_SPAWN_DELAY, INITIAL_SPACING },
+		{ {{CritterType::NORMAL, 5}, {CritterType::FAST, 3}}, INITIAL_SPAWN_DELAY, INITIAL_SPACING },
+		{ {{CritterType::NORMAL, 5}, {CritterType::FAST, 2}, {CritterType::TANK, 1}}, INITIAL_SPAWN_DELAY, INITIAL_SPACING },
+		{ {{CritterType::NORMAL, 8}, {CritterType::FAST, 4}, {CritterType::TANK, 2}}, INITIAL_SPAWN_DELAY, INITIAL_SPACING },
+		{ {{CritterType::TANK, 5}, {CritterType::FAST, 10}}, INITIAL_SPAWN_DELAY, INITIAL_SPACING },
+
+		{ {{CritterType::NORMAL, 15}}, 1.0f, INITIAL_SPACING - (SPACING_DECREMENT * 1)},
+		{ {{CritterType::NORMAL, 15}, {CritterType::FAST, 9}}, INITIAL_SPAWN_DELAY, INITIAL_SPACING - (SPACING_DECREMENT * 1) },
+		{ {{CritterType::NORMAL, 15}, {CritterType::FAST, 6}, {CritterType::TANK, 3}}, INITIAL_SPAWN_DELAY, INITIAL_SPACING - (SPACING_DECREMENT * 1) },
+		{ {{CritterType::NORMAL, 24}, {CritterType::FAST, 12}, {CritterType::TANK, 6}}, INITIAL_SPAWN_DELAY, INITIAL_SPACING - (SPACING_DECREMENT * 1) },
+		{ {{CritterType::NORMAL, 15},  {CritterType::TANK, 12}, { CritterType::FAST, 15 },  { CritterType::TANK, 12 }, {CritterType::NORMAL, 15}}, INITIAL_SPAWN_DELAY, INITIAL_SPACING - (SPACING_DECREMENT * 1) },
+
+		{ {{CritterType::NORMAL, 25}}, 1.0f, INITIAL_SPACING - (SPACING_DECREMENT * 2) },
+		{ {{CritterType::NORMAL, 25}, {CritterType::FAST, 15}}, INITIAL_SPAWN_DELAY, INITIAL_SPACING - (SPACING_DECREMENT * 2) },
+		{ {{CritterType::NORMAL, 25}, {CritterType::FAST, 10}, {CritterType::TANK, 5}}, INITIAL_SPAWN_DELAY, INITIAL_SPACING - (SPACING_DECREMENT * 2) },
+		{ {{CritterType::NORMAL, 40}, {CritterType::FAST, 20}, {CritterType::TANK, 10}}, INITIAL_SPAWN_DELAY, INITIAL_SPACING - (SPACING_DECREMENT * 2) },
+		{ {{CritterType::NORMAL, 25},  {CritterType::TANK, 20}, { CritterType::FAST, 25 },  { CritterType::TANK, 20 }, {CritterType::NORMAL, 25}}, INITIAL_SPAWN_DELAY, INITIAL_SPACING - (SPACING_DECREMENT * 2) },
+
+		{ {{CritterType::NORMAL, 50}}, 1.0f, INITIAL_SPACING - (SPACING_DECREMENT * 3) },
+		{ {{CritterType::NORMAL, 50}, {CritterType::FAST, 30}}, INITIAL_SPAWN_DELAY, INITIAL_SPACING - (SPACING_DECREMENT * 3) },
+		{ {{CritterType::NORMAL, 50}, {CritterType::FAST, 20}, {CritterType::TANK, 10}}, INITIAL_SPAWN_DELAY, INITIAL_SPACING - (SPACING_DECREMENT * 3) },
+		{ {{CritterType::NORMAL, 80}, {CritterType::FAST, 40}, {CritterType::TANK, 20}}, INITIAL_SPAWN_DELAY, INITIAL_SPACING - (SPACING_DECREMENT * 3) },
+		{ {{CritterType::NORMAL, 50},  {CritterType::TANK, 40}, { CritterType::FAST, 50 },  { CritterType::TANK, 40 }, {CritterType::NORMAL, 50}}, INITIAL_SPAWN_DELAY, INITIAL_SPACING - (SPACING_DECREMENT * 3) },
 	};
 }
 

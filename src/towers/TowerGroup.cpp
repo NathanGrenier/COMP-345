@@ -32,9 +32,9 @@ TowerGroup::TowerGroup(int &playerGold, Map *map, DetailAttributeDisplay *detail
 	: playerGold(playerGold), map(map), detailDisplay(detailDisplay)
 {
 	// creating dummy Towers
-	dummyStandardTower = new StandardTower(0, 0, 0, STANDARD_TOWER_COST);
-	dummyRapidFireTower = new RapidFireTower(0, 0, 0, RAPID_FIRE_TOWER_COST);
-	dummyCannonTower = new CannonTower(0, 0, 0, CANNON_TOWER_COST);
+	dummyStandardTower = new StandardTower(0, 0, 0, StandardTower::TOWER_COST);
+	dummyRapidFireTower = new RapidFireTower(0, 0, 0, RapidFireTower::TOWER_COST);
+	dummyCannonTower = new CannonTower(0, 0, 0, CannonTower::TOWER_COST);
 
 	TowerObserver *towerObserver = detailDisplay->getTowerObserver();
 
@@ -430,32 +430,32 @@ void TowerGroup::handleEvent(SDL_Event &e)
 				// Checks for currently selected tower
 				switch (towerBuySelect)
 				{
-				case 0: // Buy standard tower
-					if (playerGold >= STANDARD_TOWER_COST)
-					{
-						playerGold -= STANDARD_TOWER_COST;
-						newTower = new StandardTower(targetX, targetY, map->getPixelPerCell(), STANDARD_TOWER_COST);
-					}
-					towerBuySelect = -1;
-					break;
+					case 0: // Buy standard tower
+						if (playerGold >= StandardTower::TOWER_COST)
+						{
+							playerGold -= StandardTower::TOWER_COST;
+							newTower = new StandardTower(targetX, targetY, map->getPixelPerCell(), StandardTower::TOWER_COST);
+						}
+						towerBuySelect = -1;
+						break;
 
-				case 1: // Buy rapid fire tower
-					if (playerGold >= RAPID_FIRE_TOWER_COST)
-					{
-						playerGold -= RAPID_FIRE_TOWER_COST;
-						newTower = new RapidFireTower(targetX, targetY, map->getPixelPerCell(), RAPID_FIRE_TOWER_COST);
-					}
-					towerBuySelect = -1;
-					break;
+					case 1: // Buy rapid fire tower
+						if (playerGold >= RapidFireTower::TOWER_COST)
+						{
+							playerGold -= RapidFireTower::TOWER_COST;
+							newTower = new RapidFireTower(targetX, targetY, map->getPixelPerCell(), RapidFireTower::TOWER_COST);
+						}
+						towerBuySelect = -1;
+						break;
 
-				case 2: // Buy cannon tower
-					if (playerGold >= CANNON_TOWER_COST)
-					{
-						playerGold -= CANNON_TOWER_COST;
-						newTower = new CannonTower(targetX, targetY, map->getPixelPerCell(), CANNON_TOWER_COST);
-					}
-					towerBuySelect = -1;
-					break;
+					case 2: // Buy cannon tower
+						if (playerGold >= CannonTower::TOWER_COST)
+						{
+							playerGold -= CannonTower::TOWER_COST;
+							newTower = new CannonTower(targetX, targetY, map->getPixelPerCell(), CannonTower::TOWER_COST);
+						}
+						towerBuySelect = -1;
+						break;
 				}
 
 				// If a new tower was successfully created, place it in the towers list
