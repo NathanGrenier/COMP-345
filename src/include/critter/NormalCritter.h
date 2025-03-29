@@ -1,6 +1,7 @@
 #pragma once
 
 #include <critter/Critter.h>
+#include <ui/Texture.h>
 
 class NormalCritter : public Critter {
 public:
@@ -17,18 +18,25 @@ public:
 	void setupAnimationFrames() override;
 
 	// Static texture members
-	static inline SDL_Texture* loadedTextureWalkUp = nullptr;
-	static inline SDL_Texture* loadedTextureWalkDown = nullptr;
-	static inline SDL_Texture* loadedTextureWalkSide = nullptr;
-	static inline SDL_Texture* loadedTextureDeathUp = nullptr;
-	static inline SDL_Texture* loadedTextureDeathDown = nullptr;
-	static inline SDL_Texture* loadedTextureDeathSide = nullptr;
-
-	static void loadTextures();
-
+	static inline Texture loadedTextureWalkUp;
+	static inline Texture loadedTextureWalkDown;
+	static inline Texture loadedTextureWalkSide;
+	static inline Texture loadedTextureDeathUp;
+	static inline Texture loadedTextureDeathDown;
+	static inline Texture loadedTextureDeathSide;
 private:
-	float speed = 50.0f;
-	float maxHitPoints = 20.0f;
-	int reward = 10;
+	void loadTextures();
+
+	static constexpr float INITIAL_SPEED = 50.0f;
+	static constexpr float INITIAL_HITPOINTS = 10.0f;
+	static constexpr int INITIAL_REWARD = 5;
+	float speed = INITIAL_SPEED;
+	float maxHitPoints = INITIAL_HITPOINTS;
+	int reward = INITIAL_REWARD;
+
+	static constexpr float SPEED_SCALE_AMOUNT = INITIAL_SPEED * Critter::SPEED_SCALE_FACTOR;
+	static constexpr float HITPOINT_SCALE_AMOUNT = INITIAL_HITPOINTS * Critter::HITPOINT_SCALE_FACTOR;
+	static constexpr float REWARD_SCALE_AMOUNT = INITIAL_REWARD * Critter::REWARD_SCALE_FACTOR;
+
 	static inline const std::string baseTexturePath = "critters/slime";
 };

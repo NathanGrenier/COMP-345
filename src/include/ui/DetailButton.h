@@ -14,7 +14,8 @@
 #include <string>
 #include <ui/LButton.h>
 
-class DetailButton : public DetailDisplayComponent, public LButton {
+class DetailButton : public DetailDisplayComponent
+{
 public:
 	// constructors
 	DetailButton();
@@ -23,6 +24,15 @@ public:
 	void setComponentPosition(float x, float y);
 	void setComponentImagePath(std::string path);
 
-	void render();
-};
+	bool isClicked();
+	void handleEvent(SDL_Event *e);
 
+	void render();
+	void update();
+
+	float getXPos() const { return xPosition; };
+	float getYPos() const { return yPosition; };
+
+private:
+	LButton buttonTexture;
+};

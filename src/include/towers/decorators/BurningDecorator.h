@@ -23,6 +23,20 @@
   * gradually over a specified duration and also animates the effect with a fire texture.
   */
 class BurningDecorator : public TowerDecorator {
+private:
+	Tower* wrappedTower; /**< The tower that this decorator enhances */
+	Texture burningTexture; /**< The texture for the burn effect animation (fire effect) */
+	Texture indicatorTexture; /**< The texture for the fire indicator above the tower */
+	SDL_FRect spriteClips[4]; /**< The frames for the burn effect animation */
+	int currentFrame; /**< The current frame in the burn animation */
+	float frameTime; /**< Time accumulator for animation frame updates */
+	float frameWidth, frameHeight; /**< Dimensions of each animation frame */
+
+	std::unordered_map<Critter*, float> burnTimers; /**< A map of critters with active burn timers */
+
+	const float BURN_DURATION = 0.5f; /**< The duration the burn effect lasts for each critter */
+	const float BURN_DAMAGE_PERCENTAGE = 0.003f; /**< The percentage of max hit points to reduce per second */
+
 public:
 	/**
 	 * @brief Constructs a BurningDecorator that adds a burn effect to the tower.
@@ -35,9 +49,8 @@ public:
 	 * @param indicatorPath The file path for the fire indicator texture.
 	 */
 	BurningDecorator(Tower* tower, SDL_FRect towerPosition, std::string indicatorPath)
-		: TowerDecorator(tower, towerPosition, indicatorPath), wrappedTower(tower), currentFrame(0), frameTime(0),
-		burnDuration(1.0f) {  // Initialize burn timer and burn duration
-		burningTexture.loadFromFile("assets/tower/fire-4f.png");
+		: TowerDecorator(tower, towerPosition, indicatorPath), wrappedTower(tower), currentFrame(0), frameTime(0) {  // Initialize burn timer
+		burningTexture.loadFromFile("tower/fire-4f.png");
 		indicatorTexture.loadFromFile(indicatorPath);  // Load indicator texture
 
 		// Calculate individual frame dimensions for the fire sprite sheet
@@ -48,15 +61,6 @@ public:
 		for (int i = 0; i < 4; ++i) {
 			spriteClips[i] = { i * frameWidth, 0.f, frameWidth, frameHeight };
 		}
-	}
-
-	/**
-	 * @brief Destructor for BurningDecorator.
-	 *
-	 * Cleans up any resources, including the indicator texture.
-	 */
-	~BurningDecorator() {
-		indicatorTexture.destroy();
 	}
 
 	/**
@@ -81,10 +85,8 @@ public:
 		if (critter->isDamaged() && critter->isAlive()) {
 			// Apply burn effect only if the critter is not already burning
 			if (burnTimers.find(critter) == burnTimers.end()) {
-				// Reduce the critter's hit points gradually
-
 				// Initialize the burn timer
-				burnTimers[critter] = burnDuration;  // Set the burn duration
+				burnTimers[critter] = BURN_DURATION;  // Set the burn duration
 			}
 		} else {
 			// If the critter is not alive or not damaged, reset its burn effect
@@ -144,8 +146,7 @@ public:
 
 			// Only render the burning effect if the burn timer is active
 			if (burnTimers.find(critter) != burnTimers.end()) {
-				critter->takeDamage(0.5f);  // Reduce the critter's hit points over time
-
+				critter->takeDamage(critter->getMaxHitPoints() * BURN_DAMAGE_PERCENTAGE);
 				burningTexture.render(burnRect.x, burnRect.y, &spriteClips[currentFrame], burnRect.w, burnRect.h, 0.0f, EFFECT_RENDER_SIZE_MULTIPLIER);
 			}
 		}
@@ -204,17 +205,4 @@ public:
 		// Render the indicator texture
 		indicatorTexture.render(indicatorDestRect.x, indicatorDestRect.y, &srcRect, indicatorDestRect.w, indicatorDestRect.h);
 	}
-
-private:
-	Tower* wrappedTower; /**< The tower that this decorator enhances */
-	LTexture burningTexture; /**< The texture for the burn effect animation (fire effect) */
-	LTexture indicatorTexture; /**< The texture for the fire indicator above the tower */
-	SDL_FRect spriteClips[4]; /**< The frames for the burn effect animation */
-	int currentFrame; /**< The current frame in the burn animation */
-	float frameTime; /**< Time accumulator for animation frame updates */
-	float frameWidth, frameHeight; /**< Dimensions of each animation frame */
-
-	std::unordered_map<Critter*, float> burnTimers; /**< A map of critters with active burn timers */
-
-	const float burnDuration; /**< The duration the burn effect lasts for each critter */
 };

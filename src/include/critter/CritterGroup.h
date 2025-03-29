@@ -30,7 +30,7 @@ struct WaveConfig {
 class CritterGroup {
 public:
 	// Constructor with parameters
-	CritterGroup(int& waveLevel, int& playerGold, SDL_FRect startPosition, SDL_FRect endPosition, Map* map, DetailAttributeDisplay& detailDisplay, bool endlessMode);
+	CritterGroup(int& waveLevel, int& playerGold, SDL_FRect startPosition, SDL_FRect endPosition, Map* map, DetailAttributeDisplay* detailDisplay, bool endlessMode);
 	~CritterGroup();
 
 	void generateCritters(float deltaTime);
@@ -39,6 +39,11 @@ public:
 	void handleEvent(SDL_Event& e);
 	std::vector<Critter*> getCritters() { return critters; }
 	bool isGameWon() const;
+	bool isGameLost() const;
+	bool isGameFinished() const;
+	int getTotalCrittersKilled() const;
+	std::string getKillerCritterType() const;
+
 private:
 	int& waveLevel;
 	int& playerGold;
@@ -48,10 +53,13 @@ private:
 	SDL_FRect endPosition;
 	bool endlessMode;
 	bool gameWon = false;
+	bool gameLost = false;
+	std::string killerCritterType;
 
-	DetailAttributeDisplay& detailDisplay;
+	DetailAttributeDisplay* detailDisplay;
 	int crittersSpawned = 0;
 	int aliveCritters = 0;
+	int totalCrittersKilled = 0;
 	bool waveInProgress = true;
 	float waveCountdown = 3.0f;
 

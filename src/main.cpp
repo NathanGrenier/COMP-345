@@ -2,15 +2,18 @@
 #include <SDL3/SDL_main.h>
 #include <SDL3_image/SDL_image.h>
 #include <SDL3_ttf/SDL_ttf.h>
+#include <SDL3_mixer/SDL_mixer.h>
 #include <string>
 #include <sstream>
 
 #include "States/TitleState.cpp"
 #include "States/IntroState.cpp"
 #include "States/ExitState.cpp"
-#include "ui/LTexture.cpp"
 #include <LTimer.h>
 #include <iostream>
+#include <util/TextureManager.h>
+#include <util/AudioManager.h>
+#include <algorithm>
 
 /** @file main.cpp
  *  @brief Entry point for the Tower Defense game.
@@ -34,7 +37,7 @@ SDL_Renderer* gRenderer = nullptr;
 TTF_Font* gFont = nullptr;
 
 /** @brief Texture for rendering FPS information. */
-LTexture gFpsTexture;
+Texture gFpsTexture;
 
 /** @brief The current game state. */
 GameState* gCurrentState{ nullptr };
@@ -43,6 +46,12 @@ GameState* gCurrentState{ nullptr };
 GameState* gNextState{ nullptr };
 Map* Global::currentMap;
 
+//Playback audio device
+SDL_AudioDeviceID gAudioDeviceId{ 0 };
+
+//The music that will be played
+Mix_Music* gMusic{ nullptr };
+
 float Global::viewerWidth = kScreenWidth * 0.3f;
 float Global::headerHeight = kScreenHeight * 0.15f;
 
@@ -50,8 +59,15 @@ SDL_FRect Global::mapViewRect = {
 	Global::kScreenWidth * 0.02f,
 	Global::headerHeight + Global::kScreenHeight * 0.02f,
 	static_cast<float>(Global::kScreenWidth - Global::viewerWidth) - 2 * Global::kScreenWidth * 0.02f,
-	static_cast<float>(Global::kScreenHeight - Global::headerHeight) - 2 * Global::kScreenHeight * 0.02f
-};
+	static_cast<float>(Global::kScreenHeight - Global::headerHeight) - 2 * Global::kScreenHeight * 0.02f };
+
+bool isFading = false;	// Controls when fading occurs
+float fadeAlpha = 0.0f; // Alpha value (0 = fully visible, 255 = fully black)
+bool fadeIn = false; // Determines fade direction
+LTimer fadeTimer; // Timer for tracking fade duration
+constexpr Uint64 FADE_DURATION = 350'000'000;
+
+std::ofstream outFile;
 
 /**
  * @brief Sets the next game state.
@@ -61,7 +77,8 @@ SDL_FRect Global::mapViewRect = {
  * @param newState The new state to transition to.
  */
 void setNextState(GameState* newState) {
-	if (gNextState != ExitState::get()) {
+	if (gNextState != ExitState::get())
+	{
 		gNextState = newState;
 	}
 }
@@ -72,11 +89,13 @@ void setNextState(GameState* newState) {
  * Exits the current state, enters the new state, and updates the game state pointer.
  */
 void changeState() {
-	if (gNextState != nullptr) {
-		gCurrentState->exit();
-		gNextState->enter();
-		gCurrentState = gNextState;
-		gNextState = nullptr;
+	if (gNextState != nullptr)
+	{
+		// Start fading
+		isFading = true;
+		fadeIn = false; // Start with fade-out effect
+		fadeAlpha = 0.0f;
+		fadeTimer.start();
 	}
 }
 
@@ -86,32 +105,88 @@ void changeState() {
  * @return True if initialization was successful, false otherwise.
  */
 bool init() {
+	// Get current time and format it as HH:MM:SS
+	std::time_t currentTime = std::time(nullptr);  // Get the current time
+	std::tm* timeInfo = std::localtime(&currentTime);  // Convert to local time
+
+	char timestamp[20];  // Buffer to store formatted time (YYYYMMDD_HHMMSS format)
+	std::strftime(timestamp, sizeof(timestamp), "%Y%m%d_%H%M%S", timeInfo);  // Format time
+
+	// Construct the filename with the timestamp
+	std::stringstream filenameStream;
+	filenameStream << "LOG_" << timestamp << ".txt";  // Example: LOG_20250328_123045.txt
+	std::string filename = filenameStream.str();  // Convert the stream to a string
+
+	// Create and open the text file for writing (Append mode)
+	outFile.open(filename, std::ios::app);
+
+	if (!outFile) {  // Check if the file is opened successfully
+		std::cerr << "Error: Could not create the file!" << std::endl;
+	} else {
+		outFile << "Log started at: " << timestamp << std::endl;  // Write log start time
+	}
+
 	bool success{ true };
-	if (!SDL_Init(SDL_INIT_VIDEO)) {
+	if (!SDL_Init(SDL_INIT_VIDEO | SDL_INIT_AUDIO))
+	{
 		SDL_Log("SDL could not initialize! SDL error: %s\n", SDL_GetError());
 		success = false;
-	} else {
+	} else
+	{
 		// Create window and renderer
-		if (!SDL_CreateWindowAndRenderer("Tower Defense - NullTerminators", static_cast<int>(Global::kScreenWidth), static_cast<int>(Global::kScreenHeight), 0, &gWindow, &gRenderer)) {
+		if (!SDL_CreateWindowAndRenderer("Tower Defense - NullTerminators", static_cast<int>(Global::kScreenWidth), static_cast<int>(Global::kScreenHeight), 0, &gWindow, &gRenderer))
+		{
 			SDL_Log("Window could not be created! SDL error: %s\n", SDL_GetError());
 			success = false;
-		} else {
+		} else
+		{
 			// Enable VSync
-			if (!SDL_SetRenderVSync(gRenderer, 1)) {
+			if (!SDL_SetRenderVSync(gRenderer, 1))
+			{
 				SDL_Log("Could not enable VSync! SDL error: %s\n", SDL_GetError());
 				success = false;
 			}
 
 			// Set blending mode
-			if (!SDL_SetRenderDrawBlendMode(gRenderer, SDL_BLENDMODE_BLEND)) {
+			if (!SDL_SetRenderDrawBlendMode(gRenderer, SDL_BLENDMODE_BLEND))
+			{
 				SDL_Log("Could not set blend mode! SDL error: %s\n", SDL_GetError());
 				success = false;
 			}
 
 			// Initialize SDL_ttf
-			if (!TTF_Init()) {
+			if (!TTF_Init())
+			{
 				SDL_Log("SDL_ttf could not initialize! SDL_ttf error: %s\n", SDL_GetError());
 				success = false;
+			}
+
+			if (!SDL_SetWindowIcon(gWindow, IMG_Load("assets/icon.png"))) {
+				SDL_Log("Window Icon could not be set: %s\n", SDL_GetError());
+				success = false;
+			}
+
+			//Set audio spec
+			SDL_AudioSpec audioSpec;
+			SDL_zero(audioSpec);
+			audioSpec.format = SDL_AUDIO_F32;
+			audioSpec.channels = 2;
+			audioSpec.freq = 44100;
+
+			//Open audio device
+			gAudioDeviceId = SDL_OpenAudioDevice(SDL_AUDIO_DEVICE_DEFAULT_PLAYBACK, &audioSpec);
+			if (gAudioDeviceId == 0)
+			{
+				SDL_Log("Unable to open audio! SDL error: %s\n", SDL_GetError());
+				success = false;
+			} else
+			{
+				//Initialize SDL_mixer
+				if (!Mix_OpenAudio(gAudioDeviceId, nullptr))
+				{
+					printf("SDL_mixer could not initialize! SDL_mixer error: %s\n", SDL_GetError());
+					success = false;
+				}
 			}
 		}
 	}
@@ -128,17 +203,12 @@ bool loadMedia() {
 	bool success{ true };
 
 	// Load font
-	std::string fontPath = "./assets/fonts/lazy2.ttf";
-	if (gFont = TTF_OpenFont(fontPath.c_str(), 28); gFont == nullptr) {
-		SDL_Log("Could not load %s! SDL_ttf Error: %s\n", fontPath.c_str(), SDL_GetError());
+	std::string fontPath = "assets/fonts/lazy2.ttf";
+	gFont = TTF_OpenFont(fontPath.c_str(), 28);
+	if (gFont == nullptr)
+	{
+		SDL_Log("Failed to load font %s: %s", fontPath.c_str(), SDL_GetError());
 		success = false;
-	} else {
-		// Load text
-		SDL_Color textColor = { 0x00, 0x00, 0x00, 0xFF };
-		if (!gFpsTexture.loadFromRenderedText("Enter to start/stop or space to pause/unpause", textColor)) {
-			SDL_Log("Could not load text texture %s! SDL_ttf Error: %s\n", fontPath.c_str(), SDL_GetError());
-			success = false;
-		}
 	}
 
 	return success;
@@ -148,7 +218,12 @@ bool loadMedia() {
  * @brief Cleans up SDL resources and quits SDL subsystems.
  */
 void close() {
-	gFpsTexture.destroy();
+	//Free music
+	Mix_CloseAudio();
+	SDL_CloseAudioDevice(gAudioDeviceId);
+	gAudioDeviceId = 0;
+
+	TextureManager::getInstance().deallocateAllTextures();
 
 	// Free font
 	TTF_CloseFont(gFont);
@@ -161,6 +236,7 @@ void close() {
 	gWindow = nullptr;
 
 	// Quit SDL subsystems
+	Mix_Quit();
 	TTF_Quit();
 	SDL_Quit();
 }
@@ -179,15 +255,19 @@ int main(int argc, char* args[]) {
 	int exitCode{ 0 };
 
 	// Initialize SDL
-	if (!init()) {
+	if (!init())
+	{
 		SDL_Log("Unable to initialize program!\n");
 		exitCode = 1;
-	} else {
+	} else
+	{
 		// Load media
-		if (!loadMedia()) {
+		if (!loadMedia())
+		{
 			SDL_Log("Unable to load media!\n");
 			exitCode = 2;
-		} else {
+		} else
+		{
 			// Quit flag
 			bool quit{ false };
 
@@ -207,62 +287,106 @@ int main(int argc, char* args[]) {
 			// Flag for resetting FPS calculation
 			bool resetFps = true;
 
+			// Create TextureManager Singleton Instance
+			TextureManager::getInstance().init(gRenderer, gFont);
+			gFpsTexture.loadFromRenderedText("Enter to start/stop or space to pause/unpause", { 0x00, 0x00, 0x00, 0xFF });
+
+			AudioManager::getInstance().init(AudioManager::MAX_VOLUME / 4);
+			gMusic = AudioManager::getInstance().loadMusic("music.wav");
+
 			// Start game state machine
 			gCurrentState = IntroState::get();
 			gCurrentState->enter();
 			SDL_SetRenderVSync(gRenderer, 1);
 
-			// Main game loop
-			while (!quit) {
-				// Reset FPS calculations if needed
-				if (resetFps) {
-					fpsTimer.start();
-					renderedFrames = 0;
-					renderingNS = 0;
-					resetFps = false;
-				}
+			Mix_PlayMusic(gMusic, -1);
 
+			// Main game loop
+			while (!quit)
+			{
 				// Start frame timer
 				capTimer.start();
 
 				// Process events
-				while (SDL_PollEvent(&e)) {
-					// Handle events in the current state
+				while (SDL_PollEvent(&e))
+				{
 					gCurrentState->handleEvent(e);
 
-					// Handle quit event
-					if (e.type == SDL_EVENT_QUIT) {
+					if (e.type == SDL_EVENT_QUIT)
+					{
 						setNextState(ExitState::get());
 						quit = true;
-					} else if (e.type == SDL_EVENT_KEY_DOWN && e.key.key == SDLK_ESCAPE) {
+					} else if (e.type == SDL_EVENT_KEY_DOWN && e.key.key == SDLK_ESCAPE)
+					{
 						setNextState(TitleState::get());
 					}
 				}
 
-				// Update the current state
-				gCurrentState->update();
+				// Handle fading transition
+				if (isFading)
+				{
+					// Correct fadeProgress calculation (scaled from 0 to 1)
+					Uint64 elapsedTime = fadeTimer.getTicksNS();
+					float fadeProgress = static_cast<float>(elapsedTime) / static_cast<float>(FADE_DURATION);
+					fadeAlpha = std::clamp(fadeIn ? (1.0f - fadeProgress) * 255.0f : fadeProgress * 255.0f, 0.0f, 255.0f);
 
-				// Change state if needed
-				changeState();
+					// If fade-out is complete, switch game states
+					if (fadeAlpha >= 255 && !fadeIn)
+					{
+						gCurrentState->exit();
+						gNextState->enter();
+						gCurrentState = gNextState;
+						gCurrentState->update();
+						gNextState = nullptr;
+						fadeIn = true;
+						fadeTimer.start();
+					}
+
+					// If fade-in is complete, stop fading
+					if (fadeAlpha <= 0 && fadeIn)
+					{
+						isFading = false;
+						gCurrentState->update();
+					}
+				}
+
+				// Update the current state if not transitioning
+				if (!isFading)
+				{
+					gCurrentState->update();
+					changeState();
+				}
 
 				// Clear the screen
-				SDL_SetRenderDrawColor(gRenderer, 0xFF, 0xFF, 0xFF, 0xFF);
+				SDL_SetRenderDrawColor(gRenderer, 0, 0, 0, 0);
 				SDL_RenderClear(gRenderer);
 
 				// Render the current state
 				gCurrentState->render();
 
+				// Apply fade effect if needed
+				if (isFading)
+				{
+					SDL_SetRenderDrawColor(gRenderer, 0, 0, 0, static_cast<Uint8>(fadeAlpha));
+					SDL_RenderFillRect(gRenderer, nullptr);
+				}
+
 				// Present the updated frame
 				SDL_RenderPresent(gRenderer);
 
-				// Cap frame rate to maintain 60 FPS
+				// Cap frame rate
 				constexpr Uint64 nsPerFrame = 1000000000 / kScreenFps;
 				Uint64 frameNs = capTimer.getTicksNS();
-				if (frameNs < nsPerFrame) {
+				if (frameNs < nsPerFrame)
+				{
 					SDL_DelayNS(nsPerFrame - frameNs);
 				}
 			}
 		}
+	}
+
+	if (outFile.is_open()) {
+		outFile.close();
 	}
 
 	// Cleanup and exit

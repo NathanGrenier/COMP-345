@@ -42,12 +42,7 @@ Critter::Critter(int level, SDL_FRect start, Map* map)
 }
 
 Critter::~Critter() {
-	textureWalkUp.destroy();
-	textureWalkDown.destroy();
-	textureWalkSide.destroy();
-	textureDeathUp.destroy();
-	textureDeathDown.destroy();
-	textureDeathSide.destroy();
+	map = nullptr;
 }
 
 /**
@@ -91,8 +86,11 @@ void Critter::move(float deltaTime, const std::vector<Critter*> critters) {
 
 	if (distanceToTarget > 0) {
 		direction = direction.normalize();
-		float deltaX = direction.x * getSpeed() * deltaTime;
-		float deltaY = direction.y * getSpeed() * deltaTime;
+
+		float scaledSpeed = getSpeed() / Critter::SPEED_PER_CELL * deltaTime * Global::currentMap->getPixelPerCell();
+
+		float deltaX = direction.x * scaledSpeed;
+		float deltaY = direction.y * scaledSpeed;
 
 		float addedDistance = static_cast<float>(sqrt(pow(deltaX, 2) + pow(deltaY, 2)));
 		distanceTravelled += addedDistance;
@@ -259,9 +257,11 @@ void Critter::update(float deltaTime) {
 	textureWalkUp.setColor((Uint8)redTintAlpha, (Uint8)greenTintAlpha, (Uint8)blueTintAlpha);
 	textureWalkDown.setColor((Uint8)redTintAlpha, (Uint8)greenTintAlpha, (Uint8)blueTintAlpha);
 	textureWalkSide.setColor((Uint8)redTintAlpha, (Uint8)greenTintAlpha, (Uint8)blueTintAlpha);
-	textureDeathUp.setColor((Uint8)redTintAlpha, (Uint8)greenTintAlpha, (Uint8)blueTintAlpha);
-	textureDeathDown.setColor((Uint8)redTintAlpha, (Uint8)greenTintAlpha, (Uint8)blueTintAlpha);
-	textureDeathSide.setColor((Uint8)redTintAlpha, (Uint8)greenTintAlpha, (Uint8)blueTintAlpha);
+
+	// TODO: check if we need to set the texture's color for death animations
+	//textureDeathUp.setColor((Uint8)redTintAlpha, (Uint8)greenTintAlpha, (Uint8)blueTintAlpha);
+	//textureDeathDown.setColor((Uint8)redTintAlpha, (Uint8)greenTintAlpha, (Uint8)blueTintAlpha);
+	//textureDeathSide.setColor((Uint8)redTintAlpha, (Uint8)greenTintAlpha, (Uint8)blueTintAlpha);
 }
 
 bool Critter::isAlive() const {
@@ -323,7 +323,7 @@ void Critter::render() {
 	float currentCellSize = Global::currentMap->getPixelPerCell();
 	currentRenderRect = { position.x, position.y, currentCellSize * CRITTER_WIDTH_SCALE, currentCellSize * CRITTER_HEIGHT_SCALE };
 
-	LTexture* currentTexture = nullptr;
+	Texture* currentTexture = nullptr;
 	std::vector<SDL_FRect>* currentFrames = nullptr;
 	SDL_FlipMode flip = SDL_FLIP_NONE;
 

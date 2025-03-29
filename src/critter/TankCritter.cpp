@@ -1,37 +1,31 @@
 #include <critter/TankCritter.h>
 #include <Global.h>
-#include <util/TextureLoader.h>
 
 TankCritter::TankCritter(int level, SDL_FRect start, Map* map)
 	: Critter(level, start, map) {
-	maxHitPoints += level * 5.0f;
+	speed += level * SPEED_SCALE_AMOUNT;
+	maxHitPoints += level * HITPOINT_SCALE_AMOUNT;
 	hitPoints = maxHitPoints;
-	reward += level * 10;
+	reward += level * REWARD_SCALE_AMOUNT;
 
 	setupAnimationFrames();
-	frameTime = (1.0f / animationFramesWalkSide.size()) * 1.1;
+	frameTime = (1.0f / animationFramesWalkSide.size()) * (1.1 * (1 + Critter::SPEED_SCALE_FACTOR));
 	//std::cout << std::fixed << "Tank Critter Frame Time: " << frameTime << std::endl;
 
 }
 
 void TankCritter::loadTextures() {
-	loadedTextureWalkUp = TextureLoader::loadTexture(gRenderer, TankCritter::baseTexturePath + "/U_Walk.png");
-	loadedTextureWalkDown = TextureLoader::loadTexture(gRenderer, TankCritter::baseTexturePath + "/D_Walk.png");
-	loadedTextureWalkSide = TextureLoader::loadTexture(gRenderer, TankCritter::baseTexturePath + "/S_Walk.png");
+	textureWalkUp.loadFromFile(baseTexturePath + "/U_Walk.png");
+	textureWalkDown.loadFromFile(baseTexturePath + "/D_Walk.png");
+	textureWalkSide.loadFromFile(baseTexturePath + "/S_Walk.png");
 
-	loadedTextureDeathUp = TextureLoader::loadTexture(gRenderer, TankCritter::baseTexturePath + "/U_Death.png");
-	loadedTextureDeathDown = TextureLoader::loadTexture(gRenderer, TankCritter::baseTexturePath + "/D_Death.png");
-	loadedTextureDeathSide = TextureLoader::loadTexture(gRenderer, TankCritter::baseTexturePath + "/S_Death.png");
+	textureDeathUp.loadFromFile(baseTexturePath + "/U_Death.png");
+	textureDeathDown.loadFromFile(baseTexturePath + "/D_Death.png");
+	textureDeathSide.loadFromFile(baseTexturePath + "/S_Death.png");
 }
 
 void TankCritter::setupAnimationFrames() {
-	textureWalkUp = LTexture(TankCritter::loadedTextureWalkUp, false);
-	textureWalkDown = LTexture(TankCritter::loadedTextureWalkDown, false);
-	textureWalkSide = LTexture(TankCritter::loadedTextureWalkSide, false);
-
-	textureDeathUp = LTexture(TankCritter::loadedTextureDeathUp, false);
-	textureDeathDown = LTexture(TankCritter::loadedTextureDeathDown, false);
-	textureDeathSide = LTexture(TankCritter::loadedTextureDeathSide, false);
+	loadTextures();
 
 	const int animFrames = 6;
 

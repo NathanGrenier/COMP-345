@@ -8,7 +8,7 @@
 
 #include "GameState.h"
 #include <ui/LButton.h>
-#include <ui/LTexture.h>
+#include <ui/Texture.h>
 #include <map/Map.h>
 #include <string>
 #include <critter/CritterGroup.h>
@@ -20,6 +20,8 @@
 
 class MainGameState : public GameState {
 public:
+	static const int STARTING_GOLD_AMT = 200;
+
 	//Static accessor
 	static MainGameState* get();
 
@@ -32,7 +34,8 @@ public:
 	void update() override;
 	void render() override;
 
-	int playerGold = 1000;
+	int STARTING_PLAYER_GOLD = 100;
+	int playerGold;
 	int waveLevel = 0;
 
 	// Helper functions
@@ -43,17 +46,16 @@ private:
 	static MainGameState sMainGameState;
 
 	//Intro background
-	LTexture mBackgroundTexture;
-
-	//Intro message
-	LTexture mMessageTexture;
+	ParallaxBackground* bg;
+	Texture mMessageTexture;
 
 	LButton pauseButton;
 	LButton exitButton;
+	LButton* currentButton;
 	LButton playButton;
 
 	bool isPaused = false;
-	bool endlessMode;
+	bool endlessMode = false;
 
 	/** @brief Pointer to the map being edited
 	 *  @details nullptr if no map is currently loaded
@@ -63,6 +65,6 @@ private:
 	CritterGroup* critterGroup = nullptr;
 	TowerGroup* towerGroup = nullptr;
 
-	DetailAttributeDisplay detailDisplay; /** @brief ui display for details */
+	DetailAttributeDisplay* detailDisplay; /** @brief ui display for details */
 	int towerBuySelect = 0; /** @brief selected Tower as index */
 };

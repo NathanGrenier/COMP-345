@@ -4,7 +4,6 @@
  */
 
 #include <map/Map.h>
-#include <util/TextureLoader.h>
 #include <queue>
 #include <SDL3/SDL_log.h>
 #include <iostream>
@@ -40,7 +39,7 @@ Map::Map() {
 	setTarget(centerX, centerY);
 
 	calculateFlowField();
-	calculatePixelsPerCell();
+	loadCellTextures();
 }
 
 /**
@@ -72,7 +71,7 @@ Map::Map(int setCellCountX, int setCellCountY, std::string name) :
 	setTarget(centerX, centerY);
 
 	calculateFlowField();
-	calculatePixelsPerCell();
+	loadCellTextures();
 }
 
 /**
@@ -85,55 +84,55 @@ Map::Map(int setCellCountX, int setCellCountY, std::string name) :
  */
 void Map::drawCell(const Cell& cell, const SDL_FRect& rect) {
 	// Default texture is the empty cell.
-	SDL_Texture* textureSelected = textureCellEmpty;
+	Texture* textureSelected = &textureCellEmpty;
 
 	// Choose texture based on the cell’s properties.
 	if (cell.isSpawner) {
 		// Spawner cell
-		textureSelected = textureCellSpawner;
+		textureSelected = &textureCellSpawner;
 	} else if (cell.isTarget) {
 		// Target cell
-		textureSelected = textureCellTarget;
+		textureSelected = &textureCellTarget;
 	} else if (cell.isWall) {
 		// Wall cell
-		textureSelected = textureCellWall;
+		textureSelected = &textureCellWall;
 	} else if (cell.flowDirectionX != 0 || cell.flowDirectionY != 0) {
 		if (isFlowFieldVisible) {
 			// Cell with a flow direction (arrow)
 			if (cell.flowDirectionX == 0 && cell.flowDirectionY == -1) {
 				// Up
-				textureSelected = textureCellArrowUp;
+				textureSelected = &textureCellArrowUp;
 			} else if (cell.flowDirectionX == 1 && cell.flowDirectionY == 0) {
 				// Right
-				textureSelected = textureCellArrowRight;
+				textureSelected = &textureCellArrowRight;
 			} else if (cell.flowDirectionX == 0 && cell.flowDirectionY == 1) {
 				// Down
-				textureSelected = textureCellArrowDown;
+				textureSelected = &textureCellArrowDown;
 			} else if (cell.flowDirectionX == -1 && cell.flowDirectionY == 0) {
 				// Left
-				textureSelected = textureCellArrowLeft;
+				textureSelected = &textureCellArrowLeft;
 			}
 		} else if (cell.isOnPath) {
 			// Cell with a flow direction (arrow)
 			if (cell.flowDirectionX == 0 && cell.flowDirectionY == -1) {
 				// Up
-				textureSelected = textureCellArrowUp;
+				textureSelected = &textureCellArrowUp;
 			} else if (cell.flowDirectionX == 1 && cell.flowDirectionY == 0) {
 				// Right
-				textureSelected = textureCellArrowRight;
+				textureSelected = &textureCellArrowRight;
 			} else if (cell.flowDirectionX == 0 && cell.flowDirectionY == 1) {
 				// Down
-				textureSelected = textureCellArrowDown;
+				textureSelected = &textureCellArrowDown;
 			} else if (cell.flowDirectionX == -1 && cell.flowDirectionY == 0) {
 				// Left
-				textureSelected = textureCellArrowLeft;
+				textureSelected = &textureCellArrowLeft;
 			}
 		}
 	}
 
 	// Draw the selected texture within the specified rectangle
 	if (textureSelected != nullptr) {
-		SDL_RenderTexture(gRenderer, textureSelected, nullptr, &rect);
+		textureSelected->render(rect.x, rect.y, nullptr, rect.w, rect.h);
 	}
 }
 
@@ -677,22 +676,19 @@ void Map::setCurrentRenderRect(SDL_FRect newTargetRect) {
 }
 
 /**
- * @brief Calculates the number of pixels per cell and loads cell textures.
+ * @brief Loads the cell textures
  *
- * @details This function calculates the number of pixels each cell occupies
- *          based on the screen width and the number of cells along the X-axis.
- *          It also loads the textures for different cell types.
  */
-void Map::calculatePixelsPerCell() {
-	textureCellWall = TextureLoader::loadTexture(gRenderer, "map/cell-wall.bmp");
-	textureCellTarget = TextureLoader::loadTexture(gRenderer, "map/cell-target.bmp");
-	textureCellSpawner = TextureLoader::loadTexture(gRenderer, "map/cell-spawner.bmp");
+void Map::loadCellTextures() {
+	textureCellWall.loadFromFile("map/cell-wall.bmp");
+	textureCellTarget.loadFromFile("map/cell-target.bmp");
+	textureCellSpawner.loadFromFile("map/cell-spawner.bmp");
 
-	textureCellEmpty = TextureLoader::loadTexture(gRenderer, "map/cell-empty.bmp");
-	textureCellArrowUp = TextureLoader::loadTexture(gRenderer, "map/cell-arrow-up.bmp");
-	textureCellArrowDown = TextureLoader::loadTexture(gRenderer, "map/cell-arrow-down.bmp");
-	textureCellArrowLeft = TextureLoader::loadTexture(gRenderer, "map/cell-arrow-left.bmp");
-	textureCellArrowRight = TextureLoader::loadTexture(gRenderer, "map/cell-arrow-right.bmp");
+	textureCellEmpty.loadFromFile("map/cell-empty.bmp");
+	textureCellArrowUp.loadFromFile("map/cell-arrow-up.bmp");
+	textureCellArrowDown.loadFromFile("map/cell-arrow-down.bmp");
+	textureCellArrowLeft.loadFromFile("map/cell-arrow-left.bmp");
+	textureCellArrowRight.loadFromFile("map/cell-arrow-right.bmp");
 }
 
 /**
@@ -730,8 +726,8 @@ void Map::drawOnTargetRect(const SDL_FRect& targetRect) {
 		SDL_FRect cellRect = {
 			offsetX + cell.x * getPixelPerCell() * scale,
 			offsetY + cell.y * getPixelPerCell() * scale,
-			getPixelPerCell()* scale,
-			getPixelPerCell()* scale
+			getPixelPerCell() * scale,
+			getPixelPerCell() * scale
 		};
 
 		// Draw the cell using the existing drawCell method

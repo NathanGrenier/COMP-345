@@ -8,7 +8,7 @@
 #include <states/MapEditorState.h>
 #include <states/MainGameState.h>
 #include <ui/LButton.h>
-#include <ui/LTexture.h>
+#include <ui/Texture.h>
 #include <map/Map.h>
 #include <states/TitleState.h>
 
@@ -34,15 +34,24 @@ MapSelectState* MapSelectState::get() {
 bool MapSelectState::enter() {
 	loadAvailableMaps();
 
-	mTitle.loadFromFile("assets/ui/MapSelectionMessage.png");
+	bg = new ParallaxBackground();
+	std::srand(std::time(0));
+
+	for (int i = 0; i < Global::numberOfProps; ++i)
+	{
+		float randomSpeed = 5.0f + std::rand() % 11;
+		bg->addLayer(randomSpeed, Global::kScreenHeight);
+	}
+
+	mTitle.loadFromFile("ui/MapSelectionMessage.png");
 
 	// Load button textures
-	backButton.loadFromFile("assets/ui/LeftArrow.png");
-	createButton.loadFromFile("assets/ui/CreateMap.png");
-	editButton.loadFromFile("assets/ui/EditMap.png");
-	selectButton.loadFromFile("assets/ui/SelectMap.png");
-	leftArrow.loadFromFile("assets/ui/LeftArrow.png");
-	rightArrow.loadFromFile("assets/ui/RightArrow.png");
+	backButton.loadFromFile("ui/LeftArrow.png");
+	createButton.loadFromFile("ui/CreateMap.png");
+	editButton.loadFromFile("ui/EditMap.png");
+	selectButton.loadFromFile("ui/SelectMap.png");
+	leftArrow.loadFromFile("ui/LeftArrow.png");
+	rightArrow.loadFromFile("ui/RightArrow.png");
 
 	// Set sizes dynamically based on screen width
 	constexpr int buttonCount = 3;
@@ -85,10 +94,11 @@ bool MapSelectState::enter() {
 	float centerX = (Global::kScreenWidth - totalArrowsWidth) / 2;
 
 	// Set the positions for the arrows
-	leftArrow.setPosition(centerX, ((Global::kScreenHeight) - mHoveredMapName.getHeight()) / 2 - 75);
-	rightArrow.setPosition(centerX + leftArrow.kButtonWidth + distanceBetweenArrows, ((Global::kScreenHeight) - mHoveredMapName.getHeight()) / 2 - 75);
+	leftArrow.setPosition(centerX, ((Global::kScreenHeight)-mHoveredMapName.getHeight()) / 2 - 75);
+	rightArrow.setPosition(centerX + leftArrow.kButtonWidth + distanceBetweenArrows, ((Global::kScreenHeight)-mHoveredMapName.getHeight()) / 2 - 75);
 
-	for (auto& [mapName, map] : availableMaps) {
+	for (auto& [mapName, map] : availableMaps)
+	{
 		map.setCurrentRenderRect(targetRect);
 	}
 
@@ -96,19 +106,13 @@ bool MapSelectState::enter() {
 }
 
 bool MapSelectState::exit() {
-	backButton.destroy();
-	createButton.destroy();
-	editButton.destroy();
-	selectButton.destroy();
-	mTitle.destroy();
-	mHoveredMapName.destroy();
-
+	delete bg;
+	bg = nullptr;
 
 	return true;
 }
 
-
-void MapSelectState::handleEvent(SDL_Event& e) { 
+void MapSelectState::handleEvent(SDL_Event& e) {
 	backButton.handleEvent(&e);
 	createButton.handleEvent(&e);
 	editButton.handleEvent(&e);
@@ -117,71 +121,90 @@ void MapSelectState::handleEvent(SDL_Event& e) {
 	leftArrow.handleEvent(&e);
 	rightArrow.handleEvent(&e);
 
-	if (e.type == SDL_EVENT_MOUSE_BUTTON_DOWN && e.button.button == SDL_BUTTON_LEFT) {
-		if (leftArrow.isClicked()) {
-			if (selectedIndex > 0) {
+	if (e.type == SDL_EVENT_MOUSE_BUTTON_DOWN && e.button.button == SDL_BUTTON_LEFT)
+	{
+		if (leftArrow.isClicked())
+		{
+			if (selectedIndex > 0)
+			{
 				selectedIndex--;
-			}
-			else {
+			} else
+			{
 				selectedIndex = static_cast<int>(availableMaps.size()) - 1;
 			}
-		}
-		else if (rightArrow.isClicked()) {
+		} else if (rightArrow.isClicked())
+		{
 			selectedIndex = (selectedIndex + 1) % static_cast<int>(availableMaps.size());
-		}
-
-	}
-
-	if (e.type == SDL_EVENT_KEY_DOWN) {
-		switch (e.key.key) {
-		case SDLK_LEFT:
-			if (selectedIndex > 0) {
-				selectedIndex--;
-			}
-			else {
-				selectedIndex = static_cast<int>(availableMaps.size()) - 1;
-			}
-			break;
-		case SDLK_RIGHT:
-			selectedIndex = (selectedIndex + 1) % static_cast<int>(availableMaps.size());
-			break;
 		}
 	}
 
-	if (e.type == SDL_EVENT_MOUSE_BUTTON_DOWN && e.button.button == SDL_BUTTON_LEFT) {
+	if (e.type == SDL_EVENT_KEY_DOWN)
+	{
+		switch (e.key.key)
+		{
+			case SDLK_LEFT:
+				if (selectedIndex > 0)
+				{
+					selectedIndex--;
+				} else
+				{
+					selectedIndex = static_cast<int>(availableMaps.size()) - 1;
+				}
+				break;
+			case SDLK_RIGHT:
+				selectedIndex = (selectedIndex + 1) % static_cast<int>(availableMaps.size());
+				break;
+		}
+	}
+
+	if (e.type == SDL_EVENT_MOUSE_BUTTON_DOWN && e.button.button == SDL_BUTTON_LEFT)
+	{
 		std::string selectedMapPath = "assets/mapPresets/" + selectedMapFilePath;
 
-		if (createButton.isClicked()) {
-			Global::currentMap = nullptr;  // Assign a new empty map (default constructor)
+		if (createButton.isClicked())
+		{
+			Global::currentMap = nullptr; // Assign a new empty map (default constructor)
 			setNextState(MapEditorState::get());
-		}
-		else if (editButton.isClicked()) {
+		} else if (editButton.isClicked())
+		{
 			Global::currentMap = &availableMaps[selectedMapFilePath];
 			setNextState(MapEditorState::get());
-		}
-		else if (selectButton.isClicked()) {
+		} else if (selectButton.isClicked())
+		{
 			Global::currentMap = &availableMaps[selectedMapFilePath];
 			setNextState(MainGameState::get());
-		}
-		else if (backButton.isClicked()) {
+		} else if (backButton.isClicked())
+		{
 			setNextState(TitleState::get());
 		}
 	}
 }
 
-
 void MapSelectState::update() {
-	if (!availableMaps.empty()) {
+	backButton.update();
+	createButton.update();
+	editButton.update();
+	selectButton.update();
+	leftArrow.update();
+	rightArrow.update();
+
+	bg->update(0.016f);
+
+	if (!availableMaps.empty())
+	{
 		auto it = std::next(availableMaps.begin(), selectedIndex);
 		selectedMapFilePath = it->first;
 	}
 
-	if (!selectedMapFilePath.empty() && availableMaps.find(selectedMapFilePath) != availableMaps.end()) {
-		mHoveredMapName.loadFromRenderedText(availableMaps[selectedMapFilePath].name, { 0, 0, 0, 255 });
+	if (!selectedMapFilePath.empty() && availableMaps.find(selectedMapFilePath) != availableMaps.end())
+	{
+		mHoveredMapName.loadFromRenderedText(availableMaps[selectedMapFilePath].name, { 255, 255, 255, 255 });
 	}
 }
 
 void MapSelectState::render() {
+	bg->render();
+
 	float kScreenWidth = Global::kScreenWidth;
 	float kScreenHeight = Global::kScreenHeight;
 
@@ -191,29 +214,29 @@ void MapSelectState::render() {
 		10.0f,
 		nullptr,
 		kScreenWidth * 0.5f,
-		-1
-	);
+		-1);
 
 	// Render selected map
-	if (!selectedMapFilePath.empty()) {
+	if (!selectedMapFilePath.empty())
+	{
 		auto mapIter = availableMaps.find(selectedMapFilePath);
-		if (mapIter != availableMaps.end()) {
+		if (mapIter != availableMaps.end())
+		{
 			mapIter->second.setCurrentRenderRect(targetRect);
 			mapIter->second.drawOnTargetRect(targetRect);
-		}
-		else {
+		} else
+		{
 			std::cerr << "Error: Map '" << selectedMapFilePath << "' not found in available maps." << std::endl;
 		}
-	}
-	else {
+	} else
+	{
 		std::cerr << "Error: selectedMapName is empty." << std::endl;
 	}
 
 	// Render hovered map name
 	mHoveredMapName.render(
 		(kScreenWidth - mHoveredMapName.getWidth()) / 2,
-		targetRect.y + targetRect.h + 30
-	);
+		targetRect.y + targetRect.h + 30);
 
 	// Button rendering
 	backButton.render();
@@ -241,25 +264,30 @@ void MapSelectState::render() {
  * @note The first map found is set as the selected map.
  */
 void MapSelectState::loadAvailableMaps() {
-	availableMaps.clear();  // Clear existing list
+	availableMaps.clear(); // Clear existing list
 
-	std::string mapsDirectory = "assets/mapPresets";  // Folder containing map files
+	std::string mapsDirectory = "assets/mapPresets"; // Folder containing map files
 
-	try {
-		if (!fs::exists(mapsDirectory) || !fs::is_directory(mapsDirectory)) {
+	try
+	{
+		if (!fs::exists(mapsDirectory) || !fs::is_directory(mapsDirectory))
+		{
 			std::cerr << "Error: Directory " << mapsDirectory << " does not exist or is not a directory." << std::endl;
 			return;
 		}
 
-		for (const auto& entry : fs::directory_iterator(mapsDirectory)) {
-			if (entry.is_regular_file() && entry.path().extension() == ".json") {
+		for (const auto& entry : fs::directory_iterator(mapsDirectory))
+		{
+			if (entry.is_regular_file() && entry.path().extension() == ".json")
+			{
 				std::string mapFileName = entry.path().filename().string();
 
 				// Load the map from the JSON file
 				Map map;
-				if (!map.loadFromJson(entry.path().string())) {
+				if (!map.loadFromJson(entry.path().string()))
+				{
 					std::cerr << "Error: Failed to load map: " << mapFileName << std::endl;
-					continue;  // Skip if loading fails
+					continue; // Skip if loading fails
 				}
 
 				// Store the loaded Map object in the dictionary
@@ -267,13 +295,16 @@ void MapSelectState::loadAvailableMaps() {
 				availableMaps[mapFileName].setFlowFieldVisibility(false);
 			}
 		}
-	} catch (const fs::filesystem_error& e) {
+	} catch (const fs::filesystem_error& e)
+	{
 		std::cerr << "Filesystem error: " << e.what() << std::endl;
-	} catch (const std::exception& e) {
+	} catch (const std::exception& e)
+	{
 		std::cerr << "Error loading maps: " << e.what() << std::endl;
 	}
 
-	if (!availableMaps.empty()) {
+	if (!availableMaps.empty())
+	{
 		selectedMapFilePath = availableMaps.begin()->first;
 	}
 }
@@ -293,10 +324,13 @@ std::string MapSelectState::formatMapName(const std::string& fileName) {
 	// Remove extension and convert to sentence case
 	formattedName = formattedName.substr(0, formattedName.find_last_of('.'));
 	formattedName[0] = toupper(formattedName[0]);
-	for (size_t i = 1; i < formattedName.size(); ++i) {
-		if (formattedName[i - 1] == '_') {
+	for (size_t i = 1; i < formattedName.size(); ++i)
+	{
+		if (formattedName[i - 1] == '_')
+		{
 			formattedName[i] = toupper(formattedName[i]);
-		} else {
+		} else
+		{
 			formattedName[i] = tolower(formattedName[i]);
 		}
 	}

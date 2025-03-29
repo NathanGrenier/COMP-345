@@ -9,6 +9,7 @@
 #include <towers/Projectile.h>
 #include <iostream>
 #include <critter/Critter.h>
+#include <SDL3_mixer/SDL_mixer.h>
 
 /**
  * @brief Constructor with position, damage, and if projectile damages an area
@@ -26,10 +27,10 @@
  * @param texturePath The file path to the texture for the projectile.
  */
 Projectile::Projectile(float x, float y, int damage, bool isArea, float rotationAngle, float xSpeed, float ySpeed, std::string texturePath)
-    : x(x), y(y), damage(damage), isArea(isArea), projectileSize(3), rotationAngle(rotationAngle), xSpeed(xSpeed), ySpeed(ySpeed), targettedCritter(nullptr)
+	: x(x), y(y), damage(damage), isArea(isArea), projectileSize(3), rotationAngle(rotationAngle), xSpeed(xSpeed), ySpeed(ySpeed), targettedCritter(nullptr), active(true)
 {
-    currentRenderRect = {};
-    projectileTexture.loadFromFile(texturePath);
+	currentRenderRect = {};
+	projectileTexture.loadFromFile(texturePath);
 }
 
 /**
@@ -46,10 +47,10 @@ Projectile::Projectile(float x, float y, int damage, bool isArea, float rotation
  * @param texturePath The file path to the texture for the projectile.
  */
 Projectile::Projectile(float x, float y, int damage, bool isArea, int projectileSize, float rotationAngle, float xSpeed, float ySpeed, std::string texturePath)
-    : x(x), y(y), damage(damage), isArea(isArea), projectileSize(projectileSize), rotationAngle(rotationAngle), xSpeed(xSpeed), ySpeed(ySpeed), targettedCritter(nullptr)
+	: x(x), y(y), damage(damage), isArea(isArea), projectileSize(projectileSize), rotationAngle(rotationAngle), xSpeed(xSpeed), ySpeed(ySpeed), targettedCritter(nullptr), active(true)
 {
-    currentRenderRect = {};
-    projectileTexture.loadFromFile(texturePath);
+	currentRenderRect = {};
+	projectileTexture.loadFromFile(texturePath);
 }
 
 /**
@@ -67,9 +68,9 @@ Projectile::Projectile(float x, float y, int damage, bool isArea, int projectile
  * @param texturePath The file path to the texture for the projectile.
  */
 Projectile::Projectile(float x, float y, int damage, bool isArea, int projectileSize, float rotationAngle, float speed, Critter *targettedCritter, std::string texturePath)
-    : x(x), y(y), damage(damage), isArea(isArea), speed(speed), projectileSize(3), rotationAngle(rotationAngle), targettedCritter(targettedCritter)
+	: x(x), y(y), damage(damage), isArea(isArea), speed(speed), projectileSize(3), rotationAngle(rotationAngle), targettedCritter(targettedCritter), active(true)
 {
-    projectileTexture.loadFromFile(texturePath);
+	projectileTexture.loadFromFile(texturePath);
 }
 
 /**
@@ -88,9 +89,9 @@ Projectile::Projectile(float x, float y, int damage, bool isArea, int projectile
  * @param texturePath The file path to the texture for the projectile.
  */
 Projectile::Projectile(float x, float y, int damage, bool isArea, float rotationAngle, float speed, Critter *targettedCritter, std::string texturePath)
-    : x(x), y(y), damage(damage), isArea(isArea), speed(speed), projectileSize(projectileSize), rotationAngle(rotationAngle), targettedCritter(targettedCritter)
+	: x(x), y(y), damage(damage), isArea(isArea), speed(speed), projectileSize(projectileSize), rotationAngle(rotationAngle), targettedCritter(targettedCritter), active(true)
 {
-    projectileTexture.loadFromFile(texturePath);
+	projectileTexture.loadFromFile(texturePath);
 }
 
 /**
@@ -100,8 +101,18 @@ Projectile::Projectile(float x, float y, int damage, bool isArea, float rotation
  */
 int Projectile::getDamage() const
 {
-    return damage;
+	return damage;
 }
+
+bool Projectile::isActive()
+{
+	return active;
+};
+
+void Projectile::setIsActive(bool expr)
+{
+	active = expr;
+};
 
 /**
  * @brief Moves the projectile based on its speed.
@@ -113,17 +124,13 @@ int Projectile::getDamage() const
  */
 void Projectile::move(float multiplier)
 {
-    if (targettedCritter == nullptr)
-    {
-        if (isOutside())
-        {
-            destroy();
-        }
-        x += xSpeed * multiplier;
-        y += ySpeed * multiplier;
-    }
+	if (targettedCritter == nullptr)
+	{
+		x += xSpeed * multiplier;
+		y += ySpeed * multiplier;
+	}
 
-    // need to add code for homing projectiles, will be done for homing Tower
+	// need to add code for homing projectiles, will be done for homing Tower
 }
 
 /**
@@ -131,31 +138,31 @@ void Projectile::move(float multiplier)
  */
 void Projectile::generateProjectile()
 {
-    // Define the sprite clips for each frame (horizontal sprite sheet)
-    float frameWidth = projectileTexture.getWidth() / static_cast<float>(4);
-    float frameHeight = projectileTexture.getHeight();
+	// Define the sprite clips for each frame (horizontal sprite sheet)
+	float frameWidth = projectileTexture.getWidth() / static_cast<float>(4);
+	float frameHeight = projectileTexture.getHeight();
 
-    SDL_FRect spriteClips[] = {
-        {0.f * frameWidth, 0.f, frameWidth, frameHeight},
-        {1.f * frameWidth, 0.f, frameWidth, frameHeight},
-        {2.f * frameWidth, 0.f, frameWidth, frameHeight},
-        {3.f * frameWidth, 0.f, frameWidth, frameHeight}};
+	SDL_FRect spriteClips[] = {
+		{0.f * frameWidth, 0.f, frameWidth, frameHeight},
+		{1.f * frameWidth, 0.f, frameWidth, frameHeight},
+		{2.f * frameWidth, 0.f, frameWidth, frameHeight},
+		{3.f * frameWidth, 0.f, frameWidth, frameHeight}};
 
-    float targetHeight = Global::currentMap->getPixelPerCell() * 0.8f;
+	float targetHeight = Global::currentMap->getPixelPerCell() * 0.8f;
 
-    // Maintain aspect ratio for width
-    float aspectRatio = frameWidth / frameHeight;
-    float targetWidth = targetHeight * aspectRatio;
+	// Maintain aspect ratio for width
+	float aspectRatio = frameWidth / frameHeight;
+	float targetWidth = targetHeight * aspectRatio;
 
-    // Offset x and y so that projectile is centered at its position
-    float renderX = x - targetWidth / 2.0f;
-    float renderY = y - targetHeight / 2.0f;
+	// Offset x and y so that projectile is centered at its position
+	float renderX = x - targetWidth / 2.0f;
+	float renderY = y - targetHeight / 2.0f;
 
-    // Save the rect for collision detection
-    currentRenderRect = {renderX, renderY, targetWidth, targetHeight};
+	// Save the rect for collision detection
+	currentRenderRect = {renderX, renderY, targetWidth, targetHeight};
 
-    // Render the projectile using the saved rect
-    projectileTexture.render(currentRenderRect.x, currentRenderRect.y, &spriteClips[currentFrame], currentRenderRect.w, currentRenderRect.h, rotationAngle - 90);
+	// Render the projectile using the saved rect
+	projectileTexture.render(currentRenderRect.x, currentRenderRect.y, &spriteClips[currentFrame], currentRenderRect.w, currentRenderRect.h, rotationAngle - 90);
 }
 
 /**
@@ -168,22 +175,12 @@ void Projectile::generateProjectile()
  */
 void Projectile::updateAnimation(float deltaTime)
 {
-    frameTimer += deltaTime;
-    if (frameTimer >= frameDuration)
-    {
-        frameTimer = 0.0f;
-        currentFrame = (currentFrame + 1) % frameCount;
-    }
-}
-
-/**
- * @brief Destroys the projectile, cleaning up resources.
- *
- * This method releases any resources held by the projectile, including textures.
- */
-void Projectile::destroy()
-{
-    projectileTexture.destroy();
+	frameTimer += deltaTime;
+	if (frameTimer >= frameDuration)
+	{
+		frameTimer = 0.0f;
+		currentFrame = (currentFrame + 1) % frameCount;
+	}
 }
 
 /**
@@ -198,8 +195,8 @@ void Projectile::destroy()
  */
 bool Projectile::isOutside() const
 {
-    int buffer = 20;
-    return ((x < 0 || x > Global::mapViewRect.w + buffer) || (y < Global::headerHeight || y > Global::kScreenHeight + buffer));
+	int buffer = 20;
+	return ((x < 0 || x > Global::mapViewRect.w + buffer) || (y < Global::headerHeight || y > Global::kScreenHeight + buffer));
 }
 
 /**
@@ -213,38 +210,37 @@ bool Projectile::isOutside() const
  */
 bool Projectile::checkCollision(Critter *critter) const
 {
-    // Midpoint collision tolerance (you can adjust this if you want a small margin of error)
-    float tolerance = 0.0f;
+	// Midpoint collision tolerance (you can adjust this if you want a small margin of error)
+	float tolerance = 0.0f;
 
-    // Get critter's position and size
-    float critterX = critter->getPosition().x;
-    float critterY = critter->getPosition().y;
-    float critterSize = critter->getPosition().w; // Assuming square critter, w == h
+	// Get critter's position and size
+	float critterX = critter->getPosition().x;
+	float critterY = critter->getPosition().y;
+	float critterSize = critter->getPosition().w; // Assuming square critter, w == h
 
-    // Calculate critter's midpoint
-    float critterMidX = critterX + critterSize / 2.0f;
-    float critterMidY = critterY + critterSize / 2.0f;
+	// Calculate critter's midpoint
+	float critterMidX = critterX + critterSize / 2.0f;
+	float critterMidY = critterY + critterSize / 2.0f;
 
-    // Projectile's bounding box
-    float projectileLeft = currentRenderRect.x;
-    float projectileTop = currentRenderRect.y;
-    float projectileRight = currentRenderRect.x + currentRenderRect.w;
-    float projectileBottom = currentRenderRect.y + currentRenderRect.h;
+	// Projectile's bounding box
+	float projectileLeft = currentRenderRect.x;
+	float projectileTop = currentRenderRect.y;
+	float projectileRight = currentRenderRect.x + currentRenderRect.w;
+	float projectileBottom = currentRenderRect.y + currentRenderRect.h;
 
-    // Check if critter's midpoint is inside projectile's bounding box (with optional tolerance)
-    if (critter->isAlive() && critterMidX >= projectileLeft - tolerance &&
-        critterMidX <= projectileRight + tolerance &&
-        critterMidY >= projectileTop - tolerance &&
-        critterMidY <= projectileBottom + tolerance)
-    {
+	// Check if critter's midpoint is inside projectile's bounding box (with optional tolerance)
+	if (critter->isAlive() && critterMidX >= projectileLeft - tolerance &&
+		critterMidX <= projectileRight + tolerance &&
+		critterMidY >= projectileTop - tolerance &&
+		critterMidY <= projectileBottom + tolerance)
+	{
+		return true; // Collision detected
+	}
 
-        return true; // Collision detected
-    }
-
-    return false;
+	return false;
 }
 
 Critter *Projectile::getTargettedCritter()
 {
-    return const_cast<Critter *>(targettedCritter);
+	return const_cast<Critter *>(targettedCritter);
 }

@@ -19,6 +19,9 @@ Steps:
 | Denmar Ermitano | 40286029   | d_ermita@live.concordia.ca |
 | Nirav Patel     | 40248940   | pa_nir@live.concordia.ca   |
 
+## Attributions
+Any and all attributions to third-party assets, resources, or contributions used in the project can be found on the [Attributions Wiki](https://github.com/NathanGrenier/COMP-345/wiki/Credits-&-Attributions).
+
 ## Analysis and Design
 
 A document outlining the project's analysis and design considerations can be found at: [`deliverables/Analysis_and_Design.md`](deliverables/Analysis_and_Design.md).
@@ -27,16 +30,16 @@ A document outlining the project's analysis and design considerations can be fou
 
 All assignment documentation can be found in the [`deliverables/`](deliverables/) directory. There will be a markdown file for each assignment.
 
-## Project Documentation
+## Source Code Documentation
 
-The project's documentation can be found online here: https://comp345.ngrenier.com/
+The project's source code documentation can be found online here: https://comp345.ngrenier.com/
 
 # Getting Started
 
 The repo can be cloned at https://github.com/NathanGrenier/COMP-345.
 
 > [!NOTE]
-> The project was tested an ran on VisualStudio v17.3.6+
+> The project was tested on VisualStudio v17.3.6+
 
 > [!TIP]
 >  If you are running the project via a `.zip` file, skip to step 2.
@@ -47,7 +50,7 @@ The repo can be cloned at https://github.com/NathanGrenier/COMP-345.
 <div align="center">
 	<img src="static/select_startup.png" alt="Select Startup" width="500">
 </div>
-3. Compile and run the project by click the green arrow.
+1. Compile and run the project by click the green arrow.
 <div align="center">
 	<img src="static/run_project.png" alt="Select Startup" width="800">
 </div>

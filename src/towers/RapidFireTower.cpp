@@ -9,13 +9,18 @@
 #include <towers/RapidFireTower.h>
 #include <towers/Projectile.h>
 
- /**
-  * @brief Default Constructor
-  */
+ // Initial Cost: 75
+ // Max Cost: 375
+const int RapidFireTower::upgradeCosts[] = { 100, 200 };
+
+/**
+ * @brief Default Constructor
+ */
 RapidFireTower::RapidFireTower() : Tower(), fireBreak(0), fireBreakRate(0), burstSize(0), burstCount(0) {
-	getTowerTexture().loadFromFile("assets/tower/RapidFireTower.png");
+	getTowerTexture().loadFromFile("tower/RapidFireTower.png");
 	upgradeValues.rangeIncrease = RapidFireTower::rangeIncreasePerLevel;
 	upgradeValues.rateOfFireIncrease = RapidFireTower::rateOfFireIncreasePerLevel;
+	upgradeValues.upgradeCosts = std::vector<int>(upgradeCosts, upgradeCosts + MAX_LEVEL - 1);
 }
 
 /**
@@ -31,30 +36,11 @@ RapidFireTower::RapidFireTower() : Tower(), fireBreak(0), fireBreakRate(0), burs
  * Sets the burstSize to 50 for the interval for shooting, and the burstCount to 0
  */
 RapidFireTower::RapidFireTower(float x, float y, float width, int buyingCost)
-	: fireBreak(0), fireBreakRate(5), burstSize(50), burstCount(0), Tower(x, y, width, buyingCost, RAPID_RANGE, RAPID_POWER, RAPID_RATE_OF_FIRE) {
-	getTowerTexture().loadFromFile("assets/tower/RapidFireTower.png");
+	: fireBreak(0), fireBreakRate(5), burstSize(50), burstCount(0), Tower(x, y, width, buyingCost, RANGE, POWER, RATE_OF_FIRE) {
+	getTowerTexture().loadFromFile("tower/RapidFireTower.png");
 	upgradeValues.rangeIncrease = RapidFireTower::rangeIncreasePerLevel;
 	upgradeValues.rateOfFireIncrease = RapidFireTower::rateOfFireIncreasePerLevel;
-}
-
-/**
- * @brief Constructor with position buying cost, and refund value
- *
- * @param x Horizontal position using pixels
- * @param y Vertical position using pixels
- * @param buyingCost Cost of buying RapidFireTower
- * @param refundValue Amount of coins refunded when selling a RapidFireTower
- * @details Constructor for RapidFireTower with x, y position, buying cost, and refund value
- * Uses default range, power, and rate of fire for RapidFireTower
- * Uses default refund value ratio in Tower class
- * Sets the fireBreak to 0 to start shooting immediately and fireBreakRate to 5
- * Sets the burstSize to 50 for the interval for shooting, and the burstCount to 0
- */
-RapidFireTower::RapidFireTower(float x, float y, float width, int buyingCost, int refundValue)
-	: fireBreak(0), fireBreakRate(5), burstSize(50), burstCount(0), Tower(x, y, width, buyingCost, refundValue, RAPID_RANGE, RAPID_POWER, RAPID_RATE_OF_FIRE) {
-	getTowerTexture().loadFromFile("assets/tower/RapidFireTower.png");
-	upgradeValues.rangeIncrease = RapidFireTower::rangeIncreasePerLevel;
-	upgradeValues.rateOfFireIncrease = RapidFireTower::rateOfFireIncreasePerLevel;
+	upgradeValues.upgradeCosts = std::vector<int>(upgradeCosts, upgradeCosts + MAX_LEVEL - 1);
 }
 
 /**
@@ -85,7 +71,7 @@ bool RapidFireTower::upgrade() {
  * @return The maximum level for RapidFireTower upgrades
  */
 int RapidFireTower::getMaxLevel() {
-	return RAPID_MAX_LEVEL;
+	return MAX_LEVEL;
 }
 
 /**
@@ -127,7 +113,7 @@ void RapidFireTower::shootProjectile(Critter* targettedCritter) {
 		while (deltaAngle < -180.0f) deltaAngle += 360.0f;
 
 		// Calculate max rotation step this frame
-		float maxRotationStep = 180.0f * 0.016f;
+		float maxRotationStep = DEFAULT_TURN_SPEED * TURN_SPEED_FACTOR;
 
 		// Clamp rotation delta to avoid sudden jumps
 		if (deltaAngle > maxRotationStep) deltaAngle = maxRotationStep;
@@ -169,7 +155,7 @@ void RapidFireTower::shootProjectile(Critter* targettedCritter) {
 				float speedY = (critterPosY - posY) / distance;
 
 				// fires a projectile, resets shooting timer
-				projectiles.push_back(new Projectile(posX, posY, getPower(), false, 6, getRotation(), speedX, speedY, "assets/tower/RapidFireProjectile.png"));
+				projectiles.push_back(new Projectile(posX, posY, getPower(), false, 6, getRotation(), speedX, speedY, "tower/RapidFireProjectile.png"));
 				setShootingTimer(MAX_SHOOTING_TIMER);
 			}
 		} else
@@ -180,7 +166,7 @@ void RapidFireTower::shootProjectile(Critter* targettedCritter) {
 		// if maximum interval time is reached
 		if (burstCount == burstSize)
 		{
-			fireBreak = MAX_RAPID_FIRE_BREAK;
+			fireBreak = MAX_BREAK;
 		}
 
 		if (targettedCritter != nullptr)

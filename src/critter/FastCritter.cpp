@@ -1,37 +1,31 @@
 #include <critter/FastCritter.h>
 #include <Global.h>
-#include <util/TextureLoader.h>
 
 FastCritter::FastCritter(int level, SDL_FRect start, Map* map)
 	: Critter(level, start, map) {
-	maxHitPoints += level * 1.0f;
+	speed += level * SPEED_SCALE_AMOUNT;
+	maxHitPoints += level * HITPOINT_SCALE_AMOUNT;
 	hitPoints = maxHitPoints;
-	reward += level * 10;
+	reward += level * REWARD_SCALE_AMOUNT;
 
 	setupAnimationFrames();
-	frameTime = (1.0f / animationFramesWalkSide.size()) * 0.5;
+	frameTime = (1.0f / animationFramesWalkSide.size()) * (0.5 * (1 + Critter::SPEED_SCALE_FACTOR));
 	//std::cout << std::fixed << "Fast Critter Frame Time: " << frameTime << std::endl;
 
 }
 
 void FastCritter::loadTextures() {
-	loadedTextureWalkUp = TextureLoader::loadTexture(gRenderer, FastCritter::baseTexturePath + "/U_Walk.png");
-	loadedTextureWalkDown = TextureLoader::loadTexture(gRenderer, FastCritter::baseTexturePath + "/D_Walk.png");
-	loadedTextureWalkSide = TextureLoader::loadTexture(gRenderer, FastCritter::baseTexturePath + "/S_Walk.png");
+	textureWalkUp.loadFromFile(baseTexturePath + "/U_Walk.png");
+	textureWalkDown.loadFromFile(baseTexturePath + "/D_Walk.png");
+	textureWalkSide.loadFromFile(baseTexturePath + "/S_Walk.png");
 
-	loadedTextureDeathUp = TextureLoader::loadTexture(gRenderer, FastCritter::baseTexturePath + "/U_Death.png");
-	loadedTextureDeathDown = TextureLoader::loadTexture(gRenderer, FastCritter::baseTexturePath + "/D_Death.png");
-	loadedTextureDeathSide = TextureLoader::loadTexture(gRenderer, FastCritter::baseTexturePath + "/S_Death.png");
+	textureDeathUp.loadFromFile(baseTexturePath + "/U_Death.png");
+	textureDeathDown.loadFromFile(baseTexturePath + "/D_Death.png");
+	textureDeathSide.loadFromFile(baseTexturePath + "/S_Death.png");
 }
 
 void FastCritter::setupAnimationFrames() {
-	textureWalkUp = LTexture(FastCritter::loadedTextureWalkUp, false);
-	textureWalkDown = LTexture(FastCritter::loadedTextureWalkDown, false);
-	textureWalkSide = LTexture(FastCritter::loadedTextureWalkSide, false);
-
-	textureDeathUp = LTexture(FastCritter::loadedTextureDeathUp, false);
-	textureDeathDown = LTexture(FastCritter::loadedTextureDeathDown, false);
-	textureDeathSide = LTexture(FastCritter::loadedTextureDeathSide, false);
+	loadTextures();
 
 	const int animFrames = 6;
 
