@@ -12,8 +12,10 @@
 #include <towers/TargetNearTower.h>
 #include <towers/TargetStrongest.h>
 #include <towers/TargetWeakest.h>
+#include <map/Map.h>
 #include <iostream>
 #include <string>
+#include <states/MainGameState.h>
 
  /**
   * @brief Default Constructor, setting all values to 0
@@ -21,6 +23,8 @@
 Tower::Tower()
 	: upgradeCost(0), buyingCost(0), range(0), power(0), rateOfFire(0), level(0), shootingTimer(0), upgradeValues{ 0, 0, 0 }, critterTargettingStrategy(new TargetNearExit()) {
 	currentRenderRect = { 0, 0, 0, 0 };
+	renderRange = false;
+	rangeTexture.loadFromFile("tower/range.png");
 }
 
 /**
@@ -39,6 +43,8 @@ Tower::Tower()
 Tower::Tower(float x, float y, float width, int buyingCost, int range, int power, int rateOfFire)
 	: upgradeCost(0), buyingCost(buyingCost), range(range), power(power), rateOfFire(rateOfFire), level(1), shootingTimer(0), upgradeValues{ 0, 0, 0 }, critterTargettingStrategy(new TargetNearExit()) {
 	currentRenderRect = { x, y, width, width };
+	renderRange = false;
+	rangeTexture.loadFromFile("tower/range.png");
 }
 
 /**
@@ -291,6 +297,11 @@ TowerStrategy* Tower::getCritterTargettingStrategy() {
 	return critterTargettingStrategy;
 }
 
+void Tower::setRenderRange(bool newRenderRange)
+{
+	renderRange = newRenderRange;
+}
+
 /**
  * @brief Moves projectiles fired by a tower forward.
  * @param multiplier multiplier for moving the projectile slower/faster.
@@ -318,6 +329,75 @@ void Tower::render() {
 		projectiles[i]->generateProjectile();
 	}
 
+	// render the tower range under the tower
+	if (getRenderRange())
+	{
+		renderTowerRange();
+	}
+
 	// Render the tower texture
 	towerTexture.render(currentRenderRect.x, currentRenderRect.y, nullptr, currentRenderRect.w, currentRenderRect.h, rotationAngle);
+}
+
+/**
+ * @brief Renders the range of the tower as a semi-transparent circle
+ */
+void Tower::renderTowerRange()
+{
+	// calculate range in pixels
+	float rangeInCells = static_cast<float>(getRange()) / Tower::STAT_CELL_RATIO;
+	float rangeInPixels = rangeInCells * Global::currentMap->getPixelPerCell();
+	float rangeDiameter = 2 * rangeInPixels;
+
+	// position and size of range
+	float renderedWidth = rangeDiameter;
+	float renderedHeight = rangeDiameter;
+	float rangeXPosition = currentRenderRect.x + currentRenderRect.w / 2.0f - rangeInPixels;
+	float rangeYPosition = currentRenderRect.y + currentRenderRect.h / 2.0f - rangeInPixels;
+	SDL_FRect rangeClip = { 0, 0, rangeTexture.getWidth(), rangeTexture.getHeight() };
+
+	// map position and size
+	float mapWidth = Global::currentMap->cellCountX * Global::currentMap->getPixelPerCell();
+	float mapHeight = Global::currentMap->cellCountY * Global::currentMap->getPixelPerCell();
+	float mapXPosition = Global::mapViewRect.x + (Global::mapViewRect.w - mapWidth) / 2.0f;
+	float mapYPosition = Global::mapViewRect.y + (Global::mapViewRect.h - mapHeight) / 2.0f;
+
+	// checks if range is out of map on right
+	if (rangeXPosition + rangeDiameter > mapXPosition + mapWidth)
+	{
+		renderedWidth = mapXPosition + mapWidth - rangeXPosition;
+		rangeClip.w = renderedWidth / rangeDiameter * rangeTexture.getWidth();
+	}
+
+	// checks if range is out of map on left
+	if (rangeXPosition < mapXPosition)
+	{
+		float removedPixels = mapXPosition - rangeXPosition;
+		renderedWidth -= removedPixels;
+
+		rangeXPosition = mapXPosition;
+		rangeClip.x = removedPixels / rangeDiameter * rangeClip.w;
+		rangeClip.w = renderedWidth / rangeDiameter * rangeTexture.getWidth();
+	}
+
+	// checks if range is out of map on bottom
+	if (rangeYPosition + rangeDiameter > mapYPosition + mapHeight)
+	{
+		renderedHeight = mapYPosition + mapHeight - rangeYPosition;
+		rangeClip.h = renderedHeight / rangeDiameter * rangeTexture.getHeight();
+	}
+
+	// checks if range is out of map on top
+	if (rangeYPosition < mapYPosition)
+	{
+		float removedPixels = mapYPosition - rangeYPosition;
+		renderedHeight -= removedPixels;
+
+		rangeYPosition = mapYPosition;
+		rangeClip.y = removedPixels / rangeDiameter * rangeClip.h;
+		rangeClip.h = renderedHeight / rangeDiameter * rangeTexture.getHeight();
+	}
+
+	rangeTexture.setAlpha(Tower::RANGE_TRANSPARENCY);
+	rangeTexture.render(rangeXPosition, rangeYPosition, &rangeClip, renderedWidth, renderedHeight);
 }
