@@ -229,6 +229,25 @@ public:
 		return wrappedTower->getCritterTargettingStrategy();
 	}
 
+	/**
+	 * @brief Retrieves the whether the range is rendered or not.
+	 * @return true if the range of the tower is being rendered
+	 * @return false if the range of the tower is not being rendered
+	 */
+	bool getRenderRange() override  
+	{ 
+		return wrappedTower->getRenderRange();
+	}
+
+	/**
+	 * @brief Sets whether the tower should render its range or not
+	 * @param newRenderRange whether the tower should render its range
+	 */
+	void setRenderRange(bool newRenderRange) override
+	{
+		wrappedTower->setRenderRange(newRenderRange);
+	}
+
 protected:
 	Tower* wrappedTower; ///< The wrapped Tower object.
 	SDL_FRect towerPosition; ///< The position of the tower in the game world.

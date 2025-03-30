@@ -235,13 +235,13 @@ public:
 	 * @return true if the range of the tower is being rendered
 	 * @return false if the range of the tower is not being rendered
 	 */
-	bool getRenderRange() { return renderRange; };
+	virtual bool getRenderRange() { return renderRange; };
 
 	/**
 	 * @brief Sets whether the tower should render its range or not
 	 * @param newRenderRange whether the tower should render its range
 	 */
-	void setRenderRange(bool newRenderRange);
+	virtual void setRenderRange(bool newRenderRange);
 
 	/**
 	 * @brief Accessor for Tower Strategy
