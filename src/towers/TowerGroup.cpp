@@ -18,6 +18,9 @@
 #include <towers/powerups/FirePowerup.h>
 #include <towers/powerups/IcePowerup.h>
 
+Powerup* TowerGroup::draggedPowerup = nullptr;
+bool TowerGroup::dragging = false;
+
 /**
  * @brief Constructs a TowerGroup object.
  *
@@ -142,6 +145,8 @@ void TowerGroup::update(float deltaTime, std::vector<Critter *> critters)
 
 		if (powerup->markForDespawn)
 		{
+			draggedPowerup = nullptr;
+			dragging = false;
 			delete powerup;				   // Free memory
 			it = activePowerups.erase(it); // Remove from list and move iterator
 		}
@@ -247,9 +252,6 @@ void TowerGroup::handleEvent(SDL_Event &e)
 	bool buttonClick = false;
 	bool correctCell = false;
 
-	static Powerup *draggedPowerup = nullptr;
-	static bool dragging = false;
-
 	float mouseX, mouseY;
 	SDL_GetMouseState(&mouseX, &mouseY);
 
@@ -342,7 +344,7 @@ void TowerGroup::handleEvent(SDL_Event &e)
 						detailDisplay->selectTower(dummyCannonTower);
 						dummyCannonTower->notify();
 						return;
-					}
+					}	
 				}
 			}
 		}
@@ -474,6 +476,7 @@ void TowerGroup::handleEvent(SDL_Event &e)
 					++totalTowersPlaced;
 
 					map->wallCellDict[targetCell] = true;
+
 
 					Global::logMessage("Purchased new tower. ");
 				}
