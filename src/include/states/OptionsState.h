@@ -39,4 +39,8 @@ private:
     VolumeSlider* volumeSliderMusic;
     Texture volumeMessageMusic;
     Texture volumeNumberMusic;
+
+    Texture animationMessage;
+    LButton checkMark;
+    LButton disabledMark;
 };

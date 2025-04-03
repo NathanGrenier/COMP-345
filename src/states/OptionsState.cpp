@@ -4,7 +4,7 @@
 #include <Global.h>
 #include <states/TitleState.h>
 
-int desiredHeight = 80;
+float desiredHeight = 80;
 
 static int prevVolumeMusic = -1;
 static int prevVolumeUI = -1;
@@ -30,6 +30,10 @@ bool OptionsState::enter() {
 
     backButton.loadFromFile("ui/LeftArrow.png");
     optionsMenuMessage.loadFromFile("ui/OptionsMenu.png");
+	checkMark.loadFromFile("ui/CheckMark.png");
+	disabledMark.loadFromFile("ui/DisabledMark.png");
+
+    animationMessage.loadFromRenderedText("Background Animation", {255, 255, 255, 255});
 
     volumeMessageMusic.loadFromFile("ui/VolumeMusic.png");
     volumeMessageUI.loadFromFile("ui/VolumeUI.png");
@@ -80,6 +84,8 @@ bool OptionsState::exit() {
 
 void OptionsState::handleEvent(SDL_Event& e) {
     backButton.handleEvent(&e);
+    checkMark.handleEvent(&e);
+	disabledMark.handleEvent(&e);
     volumeSliderMusic->handleEvent(e);
     volumeSliderUI->handleEvent(e);
     volumeSliderGame->handleEvent(e);
@@ -89,6 +95,14 @@ void OptionsState::handleEvent(SDL_Event& e) {
         if (backButton.isClicked())
         {
             setNextState(TitleState::get());
+        }
+        if (checkMark.isClicked() && ParallaxBackground::isMoving == true)
+        {
+            ParallaxBackground::isMoving = false;
+        }
+        else if (disabledMark.isClicked() && ParallaxBackground::isMoving == false)
+        {
+            ParallaxBackground::isMoving = true;
         }
     }
 }
@@ -127,6 +141,12 @@ void OptionsState::update() {
         static_cast<int>(AudioManager::getInstance().getChannelVolumeLevel(AudioManager::eEffectChannelTowerShot) * 100.0f / 128.0f)),
         { 255, 255, 255, 255 });
 
+    if (ParallaxBackground::isMoving) {
+        checkMark.update();
+    }
+    else {
+        disabledMark.update();
+    }
 
     backButton.update();
     bg->update(0.016f);
@@ -149,7 +169,7 @@ void OptionsState::render() {
 
     float volumeMessageX = kScreenWidth * 0.25f; // Align messages to the left
     float volumeSliderX = kScreenWidth * 0.55f; // Sliders positioned slightly right
-    float volumeNumberX = volumeSliderX + 120.0f; // Position numbers to the right of sliders
+    float volumeNumberX = volumeSliderX + 120.0f;
 
     float firstVolumeY = kScreenHeight * 0.2f;
     constexpr int spacing = 20;
@@ -170,5 +190,24 @@ void OptionsState::render() {
     volumeNumberMusic.render(volumeNumberX, firstVolumeY, nullptr, -1, desiredHeight / 3);
     volumeNumberUI.render(volumeNumberX, firstVolumeY + spacing + desiredHeight, nullptr, -1, desiredHeight / 3);
     volumeNumberGame.render(volumeNumberX, firstVolumeY + 2 * (spacing + desiredHeight), nullptr, -1, desiredHeight / 3);
+
+	// Render check marks or disabled marks
+    animationMessage.render(volumeMessageX, firstVolumeY + 3 * (spacing + desiredHeight), nullptr, -1, desiredHeight / 3);
+
+    // Set position and size for checkMark and disabledMark
+    checkMark.setPosition(volumeNumberX + 10, firstVolumeY + 3 * (spacing + desiredHeight));
+    disabledMark.setPosition(volumeNumberX + 10, firstVolumeY + 3 * (spacing + desiredHeight));
+
+    checkMark.setSizeWithAspectRatio(0, desiredHeight / 3);
+    disabledMark.setSizeWithAspectRatio(0, desiredHeight / 3);
+
+    if (ParallaxBackground::isMoving) {
+        checkMark.render();
+        checkMark.update();
+    }
+    else {
+        disabledMark.render();
+        disabledMark.update();
+    }
 }
 
