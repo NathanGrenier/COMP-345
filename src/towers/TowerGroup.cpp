@@ -363,6 +363,7 @@ void TowerGroup::handleEvent(SDL_Event &e)
 				{
 					detailDisplay->getTowerObserver()->getCurrentTower()->notify();
 					playerGold -= upgradeCost;
+					detailDisplay->getTowerObserver()->getCurrentTower()->loadTextureForLevel();
 					Global::logMessage("Tower upgraded. ");
 				}
 
@@ -466,7 +467,7 @@ void TowerGroup::handleEvent(SDL_Event &e)
 					towers.push_back(newTower);
 					detailDisplay->selectTower(newTower);
 
-					float scaleFactor = 1.5f;
+					float scaleFactor = 2.0f;
 					float newSize = map->getPixelPerCell() * scaleFactor;
 					newTower->setCurrentRenderRect(targetX, targetY, newSize, newSize);
 
@@ -476,7 +477,6 @@ void TowerGroup::handleEvent(SDL_Event &e)
 					++totalTowersPlaced;
 
 					map->wallCellDict[targetCell] = true;
-
 
 					Global::logMessage("Purchased new tower. ");
 				}

@@ -34,7 +34,7 @@ public:
 	void update() override;
 	void render() override;
 
-	int STARTING_PLAYER_GOLD = 100;
+	int STARTING_PLAYER_GOLD = 9999;
 	int playerGold;
 	int waveLevel = 0;
 

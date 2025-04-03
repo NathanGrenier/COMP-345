@@ -36,4 +36,5 @@ public:
 
 	int getMaxLevel();
 	void shootProjectile(Critter* targettedCritter) override;
+	void loadTextureForLevel() override;
 };
