@@ -147,8 +147,8 @@ void TowerGroup::update(float deltaTime, std::vector<Critter *> critters)
 		{
 			draggedPowerup = nullptr;
 			dragging = false;
-			delete powerup;				   // Free memory
-			it = activePowerups.erase(it); // Remove from list and move iterator
+			delete powerup;
+			it = activePowerups.erase(it);
 		}
 		else
 		{

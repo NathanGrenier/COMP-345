@@ -21,7 +21,6 @@
 class MapSelectState : public GameState {
 public:
 	MapSelectState();
-	~MapSelectState() override;
 
 	//Static accessor
 	static MapSelectState* get();
