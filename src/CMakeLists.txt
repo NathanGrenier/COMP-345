@@ -1,9 +1,15 @@
-add_executable(${PROJECT_NAME})
+if (${CMAKE_SYSTEM_NAME} MATCHES "Windows")
+    enable_language("RC")
+    set (WIN32_RESOURCES icon.rc)
+endif()
+
+add_executable(${PROJECT_NAME} WIN32 ${WIN32_RESOURCES})
+
 set_target_properties(COMP-345 PROPERTIES
     WIN32_EXECUTABLE $<IF:$<CONFIG:Release>,TRUE,FALSE>
 )
 
-target_sources(${PROJECT_NAME} PRIVATE main.cpp LTimer.cpp "include/states/OptionsState.h" "include/ui/VolumeSlider.h")
+target_sources(${PROJECT_NAME} PRIVATE main.cpp)
 target_link_libraries(${PROJECT_NAME} PRIVATE vendor states ui map util towers)
 
 target_include_directories(${PROJECT_NAME} PUBLIC ${CMAKE_CURRENT_SOURCE_DIR}/include)

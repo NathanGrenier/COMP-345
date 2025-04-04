@@ -21,7 +21,6 @@ const int RapidFireTower::upgradeCosts[] = { 100, 200 };
  */
 RapidFireTower::RapidFireTower() : Tower(), fireBreak(0), fireBreakRate(0), burstSize(0), burstCount(0) {
 	loadTextureForLevel();
-	getTowerTexture().loadFromFile("tower/RapidFireTower/RapidFireTower1.png");
 	upgradeValues.rangeIncrease = RapidFireTower::rangeIncreasePerLevel;
 	upgradeValues.rateOfFireIncrease = RapidFireTower::rateOfFireIncreasePerLevel;
 	upgradeValues.upgradeCosts = std::vector<int>(upgradeCosts, upgradeCosts + MAX_LEVEL - 1);

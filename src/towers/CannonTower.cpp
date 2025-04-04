@@ -21,7 +21,6 @@ const int CannonTower::upgradeCosts[] = { 200, 300 };
  */
 CannonTower::CannonTower() : Tower() {
 	loadTextureForLevel();
-	getTowerTexture().loadFromFile("tower/CannonTower/CannonTower1.png");
 	upgradeValues.rangeIncrease = CannonTower::rangeIncreasePerLevel;
 	upgradeValues.powerIncrease = CannonTower::powerIncreasePerLevel;
 	upgradeValues.rateOfFireIncrease = CannonTower::rateOfFireIncreasePerLevel;

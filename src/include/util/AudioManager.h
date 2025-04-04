@@ -27,6 +27,11 @@ public:
 	int getMusicVolumeLevel(Mix_Music* music) const;
 	void setMusicVolumeLevel(int volume);
 
+	int getMusicLevelMapped(Mix_Music* music);
+	int getChannelVolumeMapped(int channel);
+
+	void setGameVolume(int mappedVolumeGame);
+
 	int volumeLevel;
 	int musicVolumeLevel;
 
