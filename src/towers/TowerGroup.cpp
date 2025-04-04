@@ -43,13 +43,13 @@ TowerGroup::TowerGroup(int &playerGold, Map *map, DetailAttributeDisplay *detail
 	dummyRapidFireTower = new RapidFireTower(0, 0, 0, RapidFireTower::TOWER_COST);
 	dummyCannonTower = new CannonTower(0, 0, 0, CannonTower::TOWER_COST);
 
-	CannonTower::towerShot = AudioManager::getInstance().loadAudio("tower\\CannonTower\\towerShot.wav");
-	RapidFireTower::towerShot = AudioManager::getInstance().loadAudio("tower\\RapidFireTower\\towerShot.wav");
-	StandardTower::towerShot = AudioManager::getInstance().loadAudio("tower\\StandardTower\\towerShot.wav");
+	CannonTower::towerShot = AudioManager::getInstance().loadAudio("tower/CannonTower/towerShot.wav");
+	RapidFireTower::towerShot = AudioManager::getInstance().loadAudio("tower/RapidFireTower/towerShot.wav");
+	StandardTower::towerShot = AudioManager::getInstance().loadAudio("tower/StandardTower/towerShot.wav");
 
-	towerPurchase = AudioManager::getInstance().loadAudio("tower\\TowerBuy.wav");
-	towerUpgrade = AudioManager::getInstance().loadAudio("tower\\TowerUpgrade.wav");
-	towerSell = AudioManager::getInstance().loadAudio("tower\\TowerSell.wav");
+	towerPurchase = AudioManager::getInstance().loadAudio("tower/TowerBuy.wav");
+	towerUpgrade = AudioManager::getInstance().loadAudio("tower/TowerUpgrade.wav");
+	towerSell = AudioManager::getInstance().loadAudio("tower/TowerSell.wav");
 
 	TowerObserver *towerObserver = detailDisplay->getTowerObserver();
 

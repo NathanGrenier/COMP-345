@@ -111,3 +111,18 @@ void AudioManager::setMusicVolumeLevel(int volume) {
 	musicVolumeLevel = volume;
 	Mix_VolumeMusic(volume);
 }
+
+int AudioManager::getMusicLevelMapped(Mix_Music* music) {
+	return (AudioManager::getMusicVolumeLevel(music) * 100) / 128;
+}
+
+// Method to map channel volume level to the range 0-100
+int AudioManager::getChannelVolumeMapped(int channel) {
+	return (AudioManager::getChannelVolumeLevel(channel) * 100) / 128;
+}
+
+void AudioManager::setGameVolume(int mappedVolumeGame) {
+	AudioManager::getInstance().setChannelVolumeLevel(AudioManager::eEffectChannelTowerShot, mappedVolumeGame);
+	AudioManager::getInstance().setChannelVolumeLevel(AudioManager::eEffectChannelEnemyDeath, mappedVolumeGame);
+	AudioManager::getInstance().setChannelVolumeLevel(AudioManager::eEffectChannelTowerPurchase, mappedVolumeGame);
+}

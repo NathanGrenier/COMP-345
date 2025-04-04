@@ -40,9 +40,9 @@ bool OptionsState::enter() {
     volumeMessageUI.loadFromFile("ui/VolumeUI.png");
     volumeMessageGame.loadFromFile("ui/VolumeGame.png");
 
-    volumeNumberMusic.loadFromRenderedText(std::to_string(AudioManager::getInstance().getMusicVolumeLevel(Global::gMusic) * 100 / 128), { 255, 255, 255, 255 });
-    volumeNumberUI.loadFromRenderedText(std::to_string(AudioManager::getInstance().getChannelVolumeLevel(AudioManager::eEffectChannelUI) * 100 / 128), { 255, 255, 255, 255 });
-    volumeNumberGame.loadFromRenderedText(std::to_string(AudioManager::getInstance().getChannelVolumeLevel(AudioManager::eEffectChannelTowerShot) * 100 / 128), { 255, 255, 255, 255 });
+    volumeNumberMusic.loadFromRenderedText(std::to_string(AudioManager::getInstance().getMusicLevelMapped(Global::gMusic)), { 255, 255, 255, 255 });
+    volumeNumberUI.loadFromRenderedText(std::to_string(AudioManager::getInstance().getChannelVolumeMapped(AudioManager::eEffectChannelUI)), { 255, 255, 255, 255 });
+    volumeNumberGame.loadFromRenderedText(std::to_string(AudioManager::getInstance().getChannelVolumeMapped(AudioManager::eEffectChannelTowerShot)), { 255, 255, 255, 255 });
 
     constexpr int spacing = 20;
     float screenWidth = Global::kScreenWidth;
@@ -61,9 +61,9 @@ bool OptionsState::enter() {
     float volumeSliderX = screenWidth * 0.55f;
     float firstVolumeY = screenHeight * 0.28f;
 
-    volumeSliderMusic = new VolumeSlider("ui/VolumeBar.png", "ui/VolumeKnob.png", volumeMessageX, firstVolumeY, 0, 128, AudioManager::getInstance().getMusicVolumeLevel(Global::gMusic));
-    volumeSliderUI = new VolumeSlider("ui/VolumeBar.png", "ui/VolumeKnob.png", volumeMessageX, firstVolumeY + spacing + desiredHeight, 0, 128, AudioManager::getInstance().getChannelVolumeLevel(AudioManager::eEffectChannelUI));
-    volumeSliderGame = new VolumeSlider("ui/VolumeBar.png", "ui/VolumeKnob.png", volumeMessageX, firstVolumeY + 2 * (spacing + desiredHeight), 0, 128, AudioManager::getInstance().getChannelVolumeLevel(AudioManager::eEffectChannelTowerShot));
+    volumeSliderMusic = new VolumeSlider("ui/VolumeBar.png", "ui/VolumeKnob.png", volumeMessageX, firstVolumeY, 0, AudioManager::MAX_VOLUME, AudioManager::getInstance().getMusicVolumeLevel(Global::gMusic));
+    volumeSliderUI = new VolumeSlider("ui/VolumeBar.png", "ui/VolumeKnob.png", volumeMessageX, firstVolumeY + spacing + desiredHeight, 0, AudioManager::MAX_VOLUME, AudioManager::getInstance().getChannelVolumeLevel(AudioManager::eEffectChannelUI));
+    volumeSliderGame = new VolumeSlider("ui/VolumeBar.png", "ui/VolumeKnob.png", volumeMessageX, firstVolumeY + 2 * (spacing + desiredHeight), 0, AudioManager::MAX_VOLUME, AudioManager::getInstance().getChannelVolumeLevel(AudioManager::eEffectChannelTowerShot));
 
     return true;
 }
@@ -132,23 +132,21 @@ void OptionsState::update() {
     }
 
     if (mappedVolumeGame != prevVolumeGame) {
-        AudioManager::getInstance().setChannelVolumeLevel(AudioManager::eEffectChannelTowerShot, mappedVolumeGame);
-        AudioManager::getInstance().setChannelVolumeLevel(AudioManager::eEffectChannelEnemyDeath, mappedVolumeGame);
-        AudioManager::getInstance().setChannelVolumeLevel(AudioManager::eEffectChannelTowerPurchase, mappedVolumeGame);
+        AudioManager::getInstance().setGameVolume(mappedVolumeGame);
         prevVolumeGame = mappedVolumeGame;
     }
 
     // Always update the volume display numbers
     volumeNumberMusic.loadFromRenderedText(std::to_string(
-        static_cast<int>(AudioManager::getInstance().getMusicVolumeLevel(Global::gMusic) * 100.0f / 128.0f)),
+        static_cast<int>(AudioManager::getInstance().getMusicLevelMapped(Global::gMusic))),
         { 255, 255, 255, 255 });
 
     volumeNumberUI.loadFromRenderedText(std::to_string(
-        static_cast<int>(AudioManager::getInstance().getChannelVolumeLevel(AudioManager::eEffectChannelUI) * 100.0f / 128.0f)),
+        static_cast<int>(AudioManager::getInstance().getChannelVolumeMapped(AudioManager::eEffectChannelUI))),
         { 255, 255, 255, 255 });
 
     volumeNumberGame.loadFromRenderedText(std::to_string(
-        static_cast<int>(AudioManager::getInstance().getChannelVolumeLevel(AudioManager::eEffectChannelTowerShot) * 100.0f / 128.0f)),
+        static_cast<int>(AudioManager::getInstance().getChannelVolumeMapped(AudioManager::eEffectChannelTowerShot))),
         { 255, 255, 255, 255 });
 
     if (ParallaxBackground::isMoving) {

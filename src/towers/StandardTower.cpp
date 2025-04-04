@@ -21,7 +21,6 @@ const int StandardTower::upgradeCosts[] = { 50, 75, 100, 125 };
  */
 StandardTower::StandardTower() : Tower() {
 	loadTextureForLevel();
-	getTowerTexture().loadFromFile("tower/StandardTower/StandardTower1.png");
 	upgradeValues.rangeIncrease = StandardTower::rangeIncreasePerLevel;
 	upgradeValues.powerIncrease = StandardTower::powerIncreasePerLevel;
 	upgradeValues.rateOfFireIncrease = StandardTower::rateOfFireIncreasePerLevel;
