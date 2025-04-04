@@ -16,6 +16,7 @@ public:
     const static std::string TANK_CRITTER_TYPE;
     const static std::string NORMAL_CRITTER_TYPE;
     const static int CRITTER_ANIMATION_WIDTH = 320;  /** @brief width of critter animation on endscreen. */
+    const static int CRITTER_ANIMATION_X_POSITION = 0;  /** @brief x position of critter animation on endscreen. */
 
     //Transitions
     bool enter() override;

@@ -329,6 +329,17 @@ void Tower::render() {
 		projectiles[i]->generateProjectile();
 	}
 
+	float frameWidth = towerTexture.getWidth() / static_cast<float>(frameCount);
+	float frameHeight = towerTexture.getHeight();
+
+	SDL_FRect* spriteClips = new SDL_FRect[frameCount]; // Dynamically allocate an array based on frameCount
+	for (int i = 0; i < frameCount; ++i) {
+		spriteClips[i].x = i * frameWidth;  // Set the x-coordinate based on the current frame
+		spriteClips[i].y = 0.f;             // Set the y-coordinate (assuming all frames are on the same row)
+		spriteClips[i].w = frameWidth;      // Set the width of the frame
+		spriteClips[i].h = frameHeight;     // Set the height of the frame
+	}
+
 	// render the tower range under the tower
 	if (getRenderRange())
 	{
@@ -336,6 +347,27 @@ void Tower::render() {
 	}
 
 	// Render the tower texture
+	towerTexture.render(currentRenderRect.x, currentRenderRect.y, &spriteClips[currentFrame], currentRenderRect.w, currentRenderRect.h, rotationAngle);
+}
+
+/**
+ * @brief Updates the animation frame for the tower.
+ * @param deltaTime The time difference between frames, used to update animation.
+ * @details Updates the current frame of the tower's animation based on the elapsed time.
+ */
+void Tower::updateAnimation(float deltaTime) {
+	frameTimer += deltaTime;
+	if (frameTimer >= frameDuration)
+	{
+		frameTimer = 0.0f;
+		currentFrame = (currentFrame + 1) % frameCount;
+	}
+}
+
+/**
+ * @brief Loads the texture based on the Tower's level.
+ */
+void Tower::loadTextureForLevel() {
 	towerTexture.render(currentRenderRect.x, currentRenderRect.y, nullptr, currentRenderRect.w, currentRenderRect.h, rotationAngle);
 }
 

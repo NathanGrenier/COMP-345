@@ -3,6 +3,11 @@
 #include <critter/CritterGroup.h>
 #include <util/Vector2D.h>
 #include <Global.h>
+#include <util/AudioManager.h>
+
+Mix_Chunk* Critter::critterHit;
+Mix_Chunk* Critter::critterSpawn;
+Mix_Chunk* Critter::critterDeath;
 
 Critter::Critter(int level, SDL_FRect start, Map* map)
 	: level(level), position(start), isAtExit(false), map(map),
@@ -12,6 +17,7 @@ Critter::Critter(int level, SDL_FRect start, Map* map)
 	if (map != nullptr)
 	{
 		map->subscribe(this);
+		Mix_PlayChannel(AudioManager::eEffectChannelEnemyDeath, critterSpawn, 0);
 		SDL_FRect renderRect = map->getCurrentRenderRect();
 		float centerX = position.x + position.w / 2.0f;
 		float centerY = position.y + position.h / 2.0f;
@@ -163,9 +169,13 @@ void Critter::takeDamage(float damage) {
 	damageTimer = SDL_GetTicks();
 	if (getHitPoints() <= 0 && currentState == State::ALIVE)
 	{
+		Mix_PlayChannel(AudioManager::eEffectChannelEnemyDeath, critterDeath, 0);
 		currentState = State::DYING;
 		currentFrame = 0; // Reset frame for death animation
 		animationTimer = 0.0f;
+	}
+	else {
+		Mix_PlayChannel(AudioManager::eEffectChannelEnemyDeath, critterHit, 0);
 	}
 }
 

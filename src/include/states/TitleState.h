@@ -8,6 +8,7 @@
 
 #include "GameState.h"
 #include <ui/Texture.h>
+#include <ui/LButton.h>
 
 class TitleState : public GameState {
 public:
@@ -29,4 +30,8 @@ private:
 
 	ParallaxBackground* bg;
 	Texture mMessageTexture;
+
+	static constexpr int kButtonCount = 3;
+
+	LButton buttons[kButtonCount];
 };

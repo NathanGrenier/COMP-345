@@ -18,8 +18,8 @@ public:
     static const int STAT_COUNT = 4; /** @brief Number of statistics in the main menu. */
 
     static constexpr float END_SCREEN_BUTTON_HEIGHT = 40.0f; /** @brief height of a button. */
-    static constexpr float END_SCREEN_STATS_HEIGHT = 10.0f; /** @brief height of stats. */
-    static constexpr float END_SCREEN_STATS_WIDTH = 60.0f; /** @brief width of stats. */
+    static constexpr float END_SCREEN_STATS_HEIGHT = 13.0f; /** @brief height of stats. */
+    static constexpr float END_SCREEN_STATS_SPACING = 7.0f; /** @brief spacing of stats. */
     static constexpr float END_SCREEN_UI_SPACING = 20.0f; /** @brief spacing for UI elements. */
     static constexpr float END_SCREEN_TITLE_WIDTH = 350.0f; /** @brief width of title on endscreen. */
     const static std::string DEFAULT_KILLER_CRITTER_STR; /** @brief default critter type for when you win the game. */

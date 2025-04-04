@@ -252,9 +252,12 @@ void TowerObserver::handleButtonEvents(SDL_Event& e) {
 	(dynamic_cast<DetailButton*>(towerComponents[7]))->handleEvent(&e);
 	(dynamic_cast<DetailButton*>(towerComponents[8]))->handleEvent(&e);
 
-	(dynamic_cast<DetailButton*>(towerComponents[7]))->update();
-	(dynamic_cast<DetailButton*>(towerComponents[8]))->update();
-	(dynamic_cast<DetailButton*>(towerComponents[10]))->update();
+	if (currentTower != nullptr) {
+		(dynamic_cast<DetailButton*>(towerComponents[7]))->update();
+		(dynamic_cast<DetailButton*>(towerComponents[8]))->update();
+		(dynamic_cast<DetailButton*>(towerComponents[10]))->update();
+	}
+
 	if (towerStrategyIndex >= 0)
 	{
 		(dynamic_cast<DetailButton*>(towerComponents[10]))->handleEvent(&e);

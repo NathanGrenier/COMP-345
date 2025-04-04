@@ -8,6 +8,9 @@
 #include <Global.h>
 #include <towers/RapidFireTower.h>
 #include <towers/Projectile.h>
+#include <util/AudioManager.h>
+
+Mix_Chunk* RapidFireTower::towerShot = nullptr;
 
  // Initial Cost: 75
  // Max Cost: 375
@@ -17,7 +20,7 @@ const int RapidFireTower::upgradeCosts[] = { 100, 200 };
  * @brief Default Constructor
  */
 RapidFireTower::RapidFireTower() : Tower(), fireBreak(0), fireBreakRate(0), burstSize(0), burstCount(0) {
-	getTowerTexture().loadFromFile("tower/RapidFireTower.png");
+	loadTextureForLevel();
 	upgradeValues.rangeIncrease = RapidFireTower::rangeIncreasePerLevel;
 	upgradeValues.rateOfFireIncrease = RapidFireTower::rateOfFireIncreasePerLevel;
 	upgradeValues.upgradeCosts = std::vector<int>(upgradeCosts, upgradeCosts + MAX_LEVEL - 1);
@@ -37,7 +40,8 @@ RapidFireTower::RapidFireTower() : Tower(), fireBreak(0), fireBreakRate(0), burs
  */
 RapidFireTower::RapidFireTower(float x, float y, float width, int buyingCost)
 	: fireBreak(0), fireBreakRate(5), burstSize(50), burstCount(0), Tower(x, y, width, buyingCost, RANGE, POWER, RATE_OF_FIRE) {
-	getTowerTexture().loadFromFile("tower/RapidFireTower.png");
+	loadTextureForLevel();
+	getTowerTexture().loadFromFile("tower/RapidFireTower/RapidFireTower1.png");
 	upgradeValues.rangeIncrease = RapidFireTower::rangeIncreasePerLevel;
 	upgradeValues.rateOfFireIncrease = RapidFireTower::rateOfFireIncreasePerLevel;
 	upgradeValues.upgradeCosts = std::vector<int>(upgradeCosts, upgradeCosts + MAX_LEVEL - 1);
@@ -86,99 +90,121 @@ int RapidFireTower::getMaxLevel() {
  * Gets rid of Projectiles when needed, either if out of bounds, Critter is already dead, or when collision is made with Critter
  */
 void RapidFireTower::shootProjectile(Critter* targettedCritter) {
-	// Ensure we're using the center of the tower
 	float towerCenterX = getCurrentRenderRect().x + getCurrentRenderRect().w / 2.0f;
 	float towerCenterY = getCurrentRenderRect().y + getCurrentRenderRect().h / 2.0f;
 	float deltaAngle = 0;
 
-	// Check if there's a valid critter to target
-	if (targettedCritter != nullptr)
-	{
-		// Target the center of the critter
+	if (targettedCritter != nullptr) {
 		Vector2D dirToTarget;
 		dirToTarget.x = (targettedCritter->getPosition().x + targettedCritter->getPosition().w / 2.0f) - towerCenterX;
 		dirToTarget.y = (targettedCritter->getPosition().y + targettedCritter->getPosition().h / 2.0f) - towerCenterY;
 
-		// Calculate the raw angle
 		float angleRad = atan2(dirToTarget.y, dirToTarget.x);
 		float angleDeg = angleRad * (180.0f / PI_CONSTANT);
-
-		// Adjust for sprite orientation (assuming "top" is default forward)
 		angleDeg += 90.0f;
 
 		deltaAngle = angleDeg - getRotation();
 
-		// Normalize delta to [-180, 180] for shortest path
 		while (deltaAngle > 180.0f) deltaAngle -= 360.0f;
 		while (deltaAngle < -180.0f) deltaAngle += 360.0f;
 
-		// Calculate max rotation step this frame
 		float maxRotationStep = DEFAULT_TURN_SPEED * TURN_SPEED_FACTOR;
 
-		// Clamp rotation delta to avoid sudden jumps
 		if (deltaAngle > maxRotationStep) deltaAngle = maxRotationStep;
 		if (deltaAngle < -maxRotationStep) deltaAngle = -maxRotationStep;
 
-		// Apply smooth rotation
 		setRotation(getRotation() + deltaAngle);
 	}
 
 	std::vector<Projectile*>& projectiles = getProjectiles();
 	int shootingTimer = getShootingTimer();
 
-	// checks if it is a shooting interval
-	if (fireBreak <= 0 && fabs(deltaAngle) < 2.0f)
-	{
-		// checks if it is time to shoot within the interval
-		if (shootingTimer <= 0)
-		{
-			if (targettedCritter != nullptr)
-			{
-				// tower position with offset
-				float posX = getCurrentRenderRect().x + getCurrentRenderRect().w / 2;
-				float posY = getCurrentRenderRect().y + getCurrentRenderRect().w / 2;
-
-				float currentCellSize = Global::currentMap->getPixelPerCell();
-
-				// critter position with offset
-				float critterPosX = targettedCritter->getPosition().x + Critter::CRITTER_WIDTH_SCALE * currentCellSize / 2;
-				float critterPosY = targettedCritter->getPosition().y + Critter::CRITTER_HEIGHT_SCALE * currentCellSize / 2;
-
-				// differences in position from tower to cannon
-				float differenceX = posX - critterPosX;
-				float differenceY = posY - critterPosY;
-
-				float distance = static_cast<float>(sqrt(pow(differenceX, 2) + pow(differenceY, 2)));
-
-				// distance for projectile as a unit vector
-				float speedX = (critterPosX - posX) / distance;
-				float speedY = (critterPosY - posY) / distance;
-
-				// fires a projectile, resets shooting timer
-				projectiles.push_back(new Projectile(posX, posY, getPower(), false, 6, getRotation(), speedX, speedY, "tower/RapidFireProjectile.png"));
-				setShootingTimer(MAX_SHOOTING_TIMER);
-			}
-		} else
-		{
+	// Start animation when conditions are met
+	if (!isAnimating && fireBreak <= 0 && fabs(deltaAngle) < 2.0f) {
+		if (shootingTimer <= 0 && targettedCritter != nullptr) {
+			isAnimating = true;  // Animation starts
+		}
+		else {
 			setShootingTimer(shootingTimer - getRateOfFire());
 		}
-
-		// if maximum interval time is reached
-		if (burstCount == burstSize)
-		{
-			fireBreak = MAX_BREAK;
-		}
-
-		if (targettedCritter != nullptr)
-		{
-			burstCount++;
-		}
-	} else // break from firing interval, no Projectiles to be fired
-	{
+	}
+	else {
 		burstCount = 0;
 		fireBreak -= fireBreakRate;
 	}
 
-	// moves projectile at a moderate speed
+	// Animation should continue uninterrupted once started
+	if (isAnimating) {
+		updateAnimation(0.16f);
+
+		// Calculate dynamic trigger frame
+		int triggerFrame = getFrameCount() / 2 - (getFrameCount() > 8 ? 3 : 2);
+
+		// Fire projectile when reaching the trigger frame
+		if (getCurrentFrame() == triggerFrame && targettedCritter != nullptr) {
+			float posX = getCurrentRenderRect().x + getCurrentRenderRect().w / 2;
+			float posY = getCurrentRenderRect().y + getCurrentRenderRect().h / 2;
+
+			float currentCellSize = Global::currentMap->getPixelPerCell();
+			float critterPosX = targettedCritter->getPosition().x + Critter::CRITTER_WIDTH_SCALE * currentCellSize / 2;
+			float critterPosY = targettedCritter->getPosition().y + Critter::CRITTER_HEIGHT_SCALE * currentCellSize / 2;
+
+			float differenceX = posX - critterPosX;
+			float differenceY = posY - critterPosY;
+			float distance = static_cast<float>(sqrt(pow(differenceX, 2) + pow(differenceY, 2)));
+
+			float speedX = (critterPosX - posX) / distance;
+			float speedY = (critterPosY - posY) / distance;
+
+			projectiles.push_back(new Projectile(posX, posY, getPower(), false, 6, getRotation(), speedX, speedY, "tower/RapidFireTower/RapidFireProjectile.png"));
+			Mix_PlayChannel(AudioManager::eEffectChannelTowerShot, towerShot, 0);
+			setShootingTimer(MAX_SHOOTING_TIMER);
+		}
+
+		// Animation resets at last frame
+		if (getCurrentFrame() == getFrameCount() - 1) {
+			isAnimating = false;
+		}
+
+		if (burstCount == burstSize) {
+			fireBreak = MAX_BREAK;
+		}
+
+		if (targettedCritter != nullptr) {
+			burstCount++;
+		}
+	}
+
 	moveProjectiles(10, targettedCritter);
+}
+
+
+/**
+ * @brief Loads the texture based on the RapidFireTower's level.
+ */
+void RapidFireTower::loadTextureForLevel() {
+	std::string textureFileName;
+
+	// Change texture based on the tower's level
+	switch (getLevel()) {
+	case 1:
+		textureFileName = "tower/RapidFireTower/RapidFireTower1.png";
+		setFrameCount(8);
+		break;
+	case 2:
+		textureFileName = "tower/RapidFireTower/RapidFireTower2.png";
+		setFrameCount(8);
+		break;
+	case 3:
+		textureFileName = "tower/RapidFireTower/RapidFireTower3.png";
+		setFrameCount(8);
+		break;
+	default:
+		textureFileName = "tower/RapidFireTower/RapidFireTower1.png";
+		setFrameCount(8);
+		break;
+	}
+
+	// Load the appropriate texture for this level
+	getTowerTexture().loadFromFile(textureFileName, true);
 }

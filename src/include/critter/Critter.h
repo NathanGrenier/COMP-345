@@ -17,6 +17,7 @@
 #include <map/Map.h>
 #include <util/Observable.h>
 #include <ui/Texture.h>
+#include <SDL3_mixer/SDL_mixer.h>
 
 enum class Direction {
 	UP,
@@ -82,6 +83,10 @@ public:
 	static constexpr float CRITTER_HEALTHBAR_PADDING = CRITTER_HEIGHT_SCALE * 0.15f; /**< Padding for the health bar */
 
 	static constexpr float CRITTER_SPRITE_MODIFIER = 2.0f;
+
+	static Mix_Chunk* critterHit;
+	static Mix_Chunk* critterSpawn;
+	static Mix_Chunk* critterDeath;
 
 protected:
 	int level;

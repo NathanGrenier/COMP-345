@@ -15,6 +15,7 @@
 #include <map/Map.h>
 #include <string>
 #include <fstream>
+#include <SDL3_mixer/SDL_mixer.h>
 
  // External SDL variables
 extern SDL_Renderer* gRenderer; ///< Global pointer to the SDL renderer.
@@ -53,6 +54,7 @@ public:
 		outFile << "[" << timestamp << "] " << message << std::endl;
 	};
 
+	static Mix_Music* gMusic;
 };
 
 /**

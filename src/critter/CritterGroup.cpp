@@ -10,6 +10,7 @@
 #include <critter/TankCritter.h>
 #include <critter/CritterFactory.h>
 #include <states/EndScreenState.h>
+#include <util/AudioManager.h>
 
 /**
  * @class CritterGroup
@@ -19,6 +20,8 @@
  *
  * @author Nirav Patel
  */
+
+Mix_Chunk* CritterGroup::baseHit = nullptr;
 
  /**
   * @brief Constructs a new CritterGroup object.
@@ -32,6 +35,11 @@
   */
 CritterGroup::CritterGroup(int& waveLevel, int& playerGold, SDL_FRect startPosition, SDL_FRect endPosition, Map* map, DetailAttributeDisplay* detailDisplay, bool endlessMode)
 	: waveLevel(waveLevel), playerGold(playerGold), startPosition(startPosition), endPosition(endPosition), map(map), detailDisplay(detailDisplay), endlessMode(endlessMode), currentSpawnDelay(0.0f), currentSpacing(0.0f) {
+
+	Critter::critterDeath = AudioManager::getInstance().loadAudio("critters/CritterDeath.wav");
+	Critter::critterSpawn = AudioManager::getInstance().loadAudio("critters/CritterSpawn.wav");
+	Critter::critterHit = AudioManager::getInstance().loadAudio("critters/CritterHit.wav");
+	baseHit = AudioManager::getInstance().loadAudio("sfx/BaseHit.wav");
 
 	float INITIAL_SPAWN_DELAY = 0.1f;
 	float INITIAL_SPACING = 50.0f;
@@ -208,6 +216,7 @@ void CritterGroup::update(float deltaTime) {
 			}
 			else
 			{
+				Mix_PlayChannel(AudioManager::eEffectChannelEnemyDeath, baseHit, 0);
 				critter->stealGold(playerGold);
 			}
 
