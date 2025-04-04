@@ -20,7 +20,7 @@
 
 class MainGameState : public GameState {
 public:
-	static const int STARTING_GOLD_AMT = 200;
+	static const int STARTING_GOLD_AMT = 100;
 
 	//Static accessor
 	static MainGameState* get();
@@ -41,6 +41,7 @@ public:
 	// Helper functions
 	void renderText(const std::string& text, float x, float y);
 
+	static bool optionsMenu;
 private:
 	//Static instance
 	static MainGameState sMainGameState;
@@ -50,13 +51,13 @@ private:
 	Texture mMessageTexture;
 
 	LButton pauseButton;
+	LButton optionsButton;
 	LButton exitButton;
 	LButton* currentButton;
 	LButton playButton;
 
-	bool isPaused = false;
 	bool endlessMode = false;
-
+	bool isPaused;
 	/** @brief Pointer to the map being edited
 	 *  @details nullptr if no map is currently loaded
 	 */

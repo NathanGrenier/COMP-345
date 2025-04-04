@@ -61,6 +61,9 @@ public:
 	 */
 	virtual Critter* findCritter(std::vector<Critter*> critters);
 
+
+	virtual void loadTextureForLevel();
+
 	/**
 	 * @brief Struct that contains the upgrade values for the tower.
 	 * It defines the increase in range, power, and rate of fire upon upgrading.
@@ -242,6 +245,18 @@ public:
 	 */
 	float calcDistance(Critter* critter) const;
 
+	/**
+	 * @brief Updates the animation frame for the tower.
+	 * @param deltaTime The time difference between frames, used to update animation.
+	 */
+	void updateAnimation(float deltaTime);
+
+	int getFrameCount() const { return frameCount; };
+	int getCurrentFrame() const { return currentFrame; };
+	void setFrameCount(int frames) { frameCount = frames; };
+	bool getIsAnimating() const { return isAnimating; };
+	void setIsAnimating(bool status) { isAnimating = status; };
+
 private:
 	SDL_FRect currentRenderRect; /**< @brief The current render rectangle for the tower */
 	int buyingCost; /**< @brief The cost to purchase the tower */
@@ -252,6 +267,12 @@ private:
 	int rateOfFire; /**< @brief The rate of fire of the tower */
 	int level; /**< @brief The level of the tower */
 	int shootingTimer; /**< @brief The shooting timer of the tower */
+
+	float frameTimer = 0.0f; /**< Timer to track the time elapsed between frames for animation. */
+	float frameDuration = 0.1f; /**< Duration of each frame in the animation (10 fps). */
+	int currentFrame = 0; /**< @brief The current frame of the tower's animation */
+	int frameCount;
+	bool isAnimating; /**< @brief Indicates if the tower is animating */
 
 	std::vector<Projectile*> projectiles; /**< @brief A vector of all projectiles fired by the tower */
 	Texture towerTexture; /**< @brief The texture of the tower */

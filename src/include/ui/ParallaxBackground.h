@@ -29,6 +29,8 @@ public:
 	static std::vector<std::string> starImages;
 	static std::vector<std::string> propImages;
 	static std::unordered_set<int> propXPositions;
+
+	static bool isMoving;
 private:
 	std::vector<ParallaxLayer*> layers;  // Vector to store all the layers
 	std::string basePath = "assets/";

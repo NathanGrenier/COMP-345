@@ -8,6 +8,9 @@
 #include <Global.h>
 #include <towers/CannonTower.h>
 #include <towers/Projectile.h>
+#include <util/AudioManager.h>
+
+Mix_Chunk* CannonTower::towerShot = nullptr;
 
  // Initial Cost: 100
  // Max Cost: 600
@@ -17,7 +20,8 @@ const int CannonTower::upgradeCosts[] = { 200, 300 };
  * @brief Default Constructor
  */
 CannonTower::CannonTower() : Tower() {
-	getTowerTexture().loadFromFile("tower/CannonTower.png");
+	loadTextureForLevel();
+	getTowerTexture().loadFromFile("tower/CannonTower/CannonTower1.png");
 	upgradeValues.rangeIncrease = CannonTower::rangeIncreasePerLevel;
 	upgradeValues.powerIncrease = CannonTower::powerIncreasePerLevel;
 	upgradeValues.rateOfFireIncrease = CannonTower::rateOfFireIncreasePerLevel;
@@ -36,7 +40,8 @@ CannonTower::CannonTower() : Tower() {
  */
 CannonTower::CannonTower(float x, float y, float width, int buyingCost)
 	: Tower(x, y, width, buyingCost, RANGE, POWER, RATE_OF_FIRE) {
-	getTowerTexture().loadFromFile("tower/CannonTower.png");
+	loadTextureForLevel();
+	getTowerTexture().loadFromFile("tower/CannonTower/CannonTower1.png");
 	upgradeValues.rangeIncrease = CannonTower::rangeIncreasePerLevel;
 	upgradeValues.powerIncrease = CannonTower::powerIncreasePerLevel;
 	upgradeValues.rateOfFireIncrease = CannonTower::rateOfFireIncreasePerLevel;
@@ -63,77 +68,113 @@ int CannonTower::getMaxLevel() {
  * Gets rid of Projectiles when needed, either if out of bounds, Critter is already dead, or when collision is made with Critter
  */
 void CannonTower::shootProjectile(Critter* targettedCritter) {
-	// Ensure we're using the center of the tower
+	// Center of the tower
 	float towerCenterX = getCurrentRenderRect().x + getCurrentRenderRect().w / 2.0f;
 	float towerCenterY = getCurrentRenderRect().y + getCurrentRenderRect().h / 2.0f;
 	float deltaAngle = 0;
 
-	// Target the center of the critter
+	// Track target direction
 	if (targettedCritter != nullptr) {
 		Vector2D dirToTarget;
 		dirToTarget.x = (targettedCritter->getPosition().x + targettedCritter->getPosition().w / 2.0f) - towerCenterX;
 		dirToTarget.y = (targettedCritter->getPosition().y + targettedCritter->getPosition().h / 2.0f) - towerCenterY;
 
-		// Calculate the raw angle
+		// Calculate angle toward critter
 		float angleRad = atan2(dirToTarget.y, dirToTarget.x);
 		float angleDeg = angleRad * (180.0f / PI_CONSTANT);
-
-		// Adjust for sprite orientation (assuming "top" is default forward)
-		angleDeg += 90.0f;
+		angleDeg += 90.0f; // adjust for sprite orientation
 
 		deltaAngle = angleDeg - getRotation();
 
-		// Normalize delta to [-180, 180] for shortest path
 		while (deltaAngle > 180.0f) deltaAngle -= 360.0f;
 		while (deltaAngle < -180.0f) deltaAngle += 360.0f;
 
-		// Calculate max rotation step this frame
 		float maxRotationStep = DEFAULT_TURN_SPEED * TURN_SPEED_FACTOR;
+		deltaAngle = (deltaAngle > maxRotationStep) ? maxRotationStep :
+			(deltaAngle < -maxRotationStep) ? -maxRotationStep : deltaAngle;
 
-		// Clamp rotation delta to avoid sudden jumps
-		if (deltaAngle > maxRotationStep) deltaAngle = maxRotationStep;
-		if (deltaAngle < -maxRotationStep) deltaAngle = -maxRotationStep;
-
-		// Apply smooth rotation
 		setRotation(getRotation() + deltaAngle);
 	}
 
 	std::vector<Projectile*>& projectiles = getProjectiles();
+	int shootingTimer = getShootingTimer();
 
-	// checks if it is time to shoot
-	if (getShootingTimer() <= 0 && fabs(deltaAngle) < 2.0f)
-	{
-		if (targettedCritter != nullptr)
-		{
-			// tower position with offset
+	// Start animation if ready to fire
+	if (!getIsAnimating() && shootingTimer <= 0 && fabs(deltaAngle) < 2.0f) {
+		if (targettedCritter != nullptr) {
+			setIsAnimating(true);
+		}
+	}
+	else if (shootingTimer > 0) {
+		setShootingTimer(shootingTimer - getRateOfFire());
+	}
+
+	// Handle shooting animation and projectile logic
+	if (getIsAnimating()) {
+		updateAnimation(0.08f);
+
+		int triggerFrame = getFrameCount() / 2 - (getFrameCount() > 8 ? 3 : 2);
+
+		if (getCurrentFrame() == triggerFrame && targettedCritter != nullptr) {
 			float posX = getCurrentRenderRect().x + getCurrentRenderRect().w / 2;
-			float posY = getCurrentRenderRect().y + getCurrentRenderRect().w / 2;
+			float posY = getCurrentRenderRect().y + getCurrentRenderRect().h / 2;
 
 			float currentCellSize = Global::currentMap->getPixelPerCell();
-
-			// critter position with offset
 			float critterPosX = targettedCritter->getPosition().x + Critter::CRITTER_WIDTH_SCALE * currentCellSize / 2;
 			float critterPosY = targettedCritter->getPosition().y + Critter::CRITTER_HEIGHT_SCALE * currentCellSize / 2;
 
-			// differences in position from tower to cannon
-			float differenceX = posX - critterPosX;
-			float differenceY = posY - critterPosY;
+			float diffX = critterPosX - posX;
+			float diffY = critterPosY - posY;
+			float distance = static_cast<float>(sqrt(diffX * diffX + diffY * diffY));
 
-			float distance = (float)sqrt(pow(differenceX, 2) + pow(differenceY, 2));
+			float speedX = diffX / distance;
+			float speedY = diffY / distance;
 
-			// distance for projectile as a unit vector
-			float speedX = (critterPosX - posX) / distance;
-			float speedY = (critterPosY - posY) / distance;
+			projectiles.push_back(new Projectile(
+				posX, posY, getPower(), false, 10, getRotation(),
+				speedX, speedY, "tower/CannonTower/CannonProjectile.png"
+			));
 
-			// fires a big sized projectile, resets shooting timer
-			projectiles.push_back(new Projectile(posX, posY, getPower(), false, 10, getRotation(), speedX, speedY, "tower/CannonProjectile.png"));
+			Mix_PlayChannel(AudioManager::eEffectChannelTowerShot, towerShot, 0);
+
 			setShootingTimer(MAX_SHOOTING_TIMER);
 		}
-	} else // decreases shooting timer
-	{
-		setShootingTimer(getShootingTimer() - getRateOfFire());
+
+		if (getCurrentFrame() == getFrameCount() - 1) {
+			setIsAnimating(false);
+		}
 	}
 
-	// moves projectile at a slow speed
 	moveProjectiles(5, targettedCritter);
+}
+
+
+/**
+ * @brief Loads the texture based on the CannonTower's level.
+ */
+void CannonTower::loadTextureForLevel() {
+	std::string textureFileName;
+
+	// Change texture based on the tower's level
+	switch (getLevel()) {
+	case 1:
+		textureFileName = "tower/CannonTower/CannonTower1.png";
+		setFrameCount(11);
+		break;
+	case 2:
+		textureFileName = "tower/CannonTower/CannonTower2.png";
+		setFrameCount(11);
+		break;
+	case 3:
+		textureFileName = "tower/CannonTower/CannonTower3.png";
+		setFrameCount(11);
+		break;
+	default:
+		textureFileName = "tower/CannonTower/CannonTower1.png";
+		setFrameCount(11);
+		break;
+	}
+
+	// Load the appropriate texture for this level
+	getTowerTexture().loadFromFile(textureFileName, true);
 }

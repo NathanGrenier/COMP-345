@@ -1,6 +1,8 @@
 #include <states/TitleState.h>
 #include <states/MainGameState.h>
 #include <states/MapSelectState.h>
+#include <states/ExitState.h>
+#include <states/OptionsState.h>
 #include <Global.h>
 #include <ui/LButton.h>
 
@@ -15,12 +17,6 @@
 
 /// Static instance of the TitleState
 TitleState TitleState::sTitleState;
-
-/// @brief Number of buttons in the main menu.
-constexpr int kButtonCount = 1;
-
-/// @brief Array of main menu buttons.
-LButton buttons[kButtonCount];
 
 /**
  * @brief Gets the singleton instance of TitleState.
@@ -64,21 +60,12 @@ bool TitleState::enter()
 
 	// Initialize buttons
 	buttons[0].loadFromFile("ui/Start.png");
-
-	for (int i = 1; i < kButtonCount; ++i)
-	{
-		if (!buttons[i].loadFromFile("ui/LoadPart" + std::to_string(i) + ".png"))
-		{
-			printf("Failed to set button text: %s\n", buttonLabels[i]);
-			success = false;
-		}
-		else
-		{
-			buttons[i].setSizeWithAspectRatio(400, 0);
-		}
-	}
+	buttons[1].loadFromFile("ui/Options.png");
+	buttons[2].loadFromFile("ui/QuitButton.png");
 
 	buttons[0].setSizeWithAspectRatio(400, 0);
+	buttons[1].setSizeWithAspectRatio(400, 0);
+	buttons[2].setSizeWithAspectRatio(400, 0);
 
 	// Define vertical spacing for buttons
 	constexpr int buttonSpacing = 20;
@@ -138,6 +125,12 @@ void TitleState::handleEvent(SDL_Event &e)
 				{
 				case 0:
 					setNextState(MapSelectState::get());
+					break;
+				case 1:
+					setNextState(OptionsState::get());
+					break;
+				case 2:
+					setNextState(ExitState::get());
 					break;
 				}
 			}

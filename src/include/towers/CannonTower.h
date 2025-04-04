@@ -39,4 +39,7 @@ public:
 
 	int getMaxLevel();
 	void shootProjectile(Critter* targettedCritter);
+	void loadTextureForLevel() override;
+	std::string towerShotFileName = "tower/CannonTower/towerShot.wav";
+	static Mix_Chunk* towerShot;
 };

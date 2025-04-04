@@ -18,7 +18,6 @@ std::string selectedMapFilePath;
 
 MapSelectState::MapSelectState() : selectedIndex(0) {}
 
-MapSelectState::~MapSelectState() {}
 
 /** @brief Singleton instance of the MapSelectState */
 MapSelectState MapSelectState::sMapSelectState;
