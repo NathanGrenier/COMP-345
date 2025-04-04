@@ -8,6 +8,9 @@
 #include <Global.h>
 #include <towers/StandardTower.h>
 #include <towers/Projectile.h>
+#include <util/AudioManager.h>
+
+Mix_Chunk* StandardTower::towerShot = nullptr;
 
  // Initial Cost: 50
  // Max Cost: 400
@@ -129,6 +132,7 @@ void StandardTower::shootProjectile(Critter* targettedCritter) {
 			float speedY = (critterPosY - posY) / distance;
 
 			projectiles.push_back(new Projectile(posX, posY, getPower(), false, 6, getRotation(), speedX, speedY, "tower/StandardTower/StandardProjectile.png"));
+			Mix_PlayChannel(AudioManager::eEffectChannelTowerShot, towerShot, 0);
 			projectileShot = true;
 
 			setShootingTimer(MAX_SHOOTING_TIMER);

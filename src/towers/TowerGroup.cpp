@@ -17,9 +17,13 @@
 #include <towers/powerups/Powerup.h>
 #include <towers/powerups/FirePowerup.h>
 #include <towers/powerups/IcePowerup.h>
+#include <util/AudioManager.h>
 
 Powerup* TowerGroup::draggedPowerup = nullptr;
 bool TowerGroup::dragging = false;
+Mix_Chunk* TowerGroup::towerPurchase = nullptr;
+Mix_Chunk* TowerGroup::towerUpgrade = nullptr;
+Mix_Chunk* TowerGroup::towerSell = nullptr;
 
 /**
  * @brief Constructs a TowerGroup object.
@@ -38,6 +42,14 @@ TowerGroup::TowerGroup(int &playerGold, Map *map, DetailAttributeDisplay *detail
 	dummyStandardTower = new StandardTower(0, 0, 0, StandardTower::TOWER_COST);
 	dummyRapidFireTower = new RapidFireTower(0, 0, 0, RapidFireTower::TOWER_COST);
 	dummyCannonTower = new CannonTower(0, 0, 0, CannonTower::TOWER_COST);
+
+	CannonTower::towerShot = AudioManager::getInstance().loadAudio("tower\\CannonTower\\towerShot.wav");
+	RapidFireTower::towerShot = AudioManager::getInstance().loadAudio("tower\\RapidFireTower\\towerShot.wav");
+	StandardTower::towerShot = AudioManager::getInstance().loadAudio("tower\\StandardTower\\towerShot.wav");
+
+	towerPurchase = AudioManager::getInstance().loadAudio("tower\\TowerBuy.wav");
+	towerUpgrade = AudioManager::getInstance().loadAudio("tower\\TowerUpgrade.wav");
+	towerSell = AudioManager::getInstance().loadAudio("tower\\TowerSell.wav");
 
 	TowerObserver *towerObserver = detailDisplay->getTowerObserver();
 
@@ -363,6 +375,7 @@ void TowerGroup::handleEvent(SDL_Event &e)
 				{
 					detailDisplay->getTowerObserver()->getCurrentTower()->notify();
 					playerGold -= upgradeCost;
+					Mix_PlayChannel(AudioManager::eEffectChannelTowerPurchase, towerUpgrade, 0);
 					detailDisplay->getTowerObserver()->getCurrentTower()->loadTextureForLevel();
 					Global::logMessage("Tower upgraded. ");
 				}
@@ -395,6 +408,8 @@ void TowerGroup::handleEvent(SDL_Event &e)
 				if (towers[i] == detailDisplay->getTowerObserver()->getCurrentTower())
 				{
 					towers.erase(towers.begin() + i);
+
+					Mix_PlayChannel(AudioManager::eEffectChannelTowerPurchase, towerSell, 0);
 
 					map->wallCellDict[targetCell] = false;
 
@@ -473,6 +488,7 @@ void TowerGroup::handleEvent(SDL_Event &e)
 
 					newTower->attach(detailDisplay->getTowerObserver());
 					newTower->notify();
+					Mix_PlayChannel(AudioManager::eEffectChannelTowerPurchase, towerPurchase, 0);
 
 					++totalTowersPlaced;
 

@@ -40,7 +40,10 @@ public:
 	int getMaxLevel();
 	void shootProjectile(Critter* targettedCritter) override;
 	void loadTextureForLevel() override;
+
+	static Mix_Chunk* towerShot; /**< @brief sound effect for shooting projectiles */
 private:
+	std::string towerShotFileName = "tower/RapidFireTower/towerShot.wav";
 	int fireBreak; /**< @brief decremented for no shooting interval */
 	int fireBreakRate; /**< @brief amount to decrement fireBreak by */
 	int burstSize; /**< @brief time for projectiles to be fired in an interval */

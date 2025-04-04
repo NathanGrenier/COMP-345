@@ -33,6 +33,9 @@ public:
 	void handleEvent(SDL_Event& e);
 
 	static int getStrategyIndex(Tower* tower); /** @brief index for the strategy of a Tower */
+	static Mix_Chunk* towerPurchase;
+	static Mix_Chunk* towerUpgrade;
+	static Mix_Chunk* towerSell;
 private:
 	int& playerGold;                               // Reference to player's gold for buying/upgrading towers
 	Map* map;                                      // Pointer to the map for tower placement validation
@@ -51,9 +54,6 @@ private:
 
 	/** @brief targetted cell when clicking */
 	Cell targetCell;
-
-	Mix_Chunk* gTowerPurchase{ nullptr };
-	Mix_Chunk* gTowerSell{ nullptr };
 
 	static Powerup* draggedPowerup;
 	static bool dragging;

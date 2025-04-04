@@ -37,4 +37,5 @@ public:
 	int getMaxLevel();
 	void shootProjectile(Critter* targettedCritter) override;
 	void loadTextureForLevel() override;
+	static Mix_Chunk* towerShot; /**< @brief sound effect for shooting projectiles */
 };

@@ -8,6 +8,9 @@
 #include <Global.h>
 #include <towers/RapidFireTower.h>
 #include <towers/Projectile.h>
+#include <util/AudioManager.h>
+
+Mix_Chunk* RapidFireTower::towerShot = nullptr;
 
  // Initial Cost: 75
  // Max Cost: 375
@@ -155,7 +158,7 @@ void RapidFireTower::shootProjectile(Critter* targettedCritter) {
 			float speedY = (critterPosY - posY) / distance;
 
 			projectiles.push_back(new Projectile(posX, posY, getPower(), false, 6, getRotation(), speedX, speedY, "tower/RapidFireTower/RapidFireProjectile.png"));
-
+			Mix_PlayChannel(AudioManager::eEffectChannelTowerShot, towerShot, 0);
 			setShootingTimer(MAX_SHOOTING_TIMER);
 		}
 

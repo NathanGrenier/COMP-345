@@ -3,6 +3,7 @@
 #include <SDL3/SDL_init.h>
 #include <Global.h>
 #include <states/TitleState.h>
+#include <states/MainGameState.h>
 
 float desiredHeight = 80;
 
@@ -92,9 +93,16 @@ void OptionsState::handleEvent(SDL_Event& e) {
 
     if (e.type == SDL_EVENT_MOUSE_BUTTON_DOWN && e.button.button == SDL_BUTTON_LEFT)
     {
-        if (backButton.isClicked())
-        {
-            setNextState(TitleState::get());
+		if (backButton.isClicked())
+		{
+			if (MainGameState::optionsMenu)
+			{
+				setNextState(MainGameState::get());
+			}
+            else
+            {
+                setNextState(TitleState::get());
+            }
         }
         if (checkMark.isClicked() && ParallaxBackground::isMoving == true)
         {
@@ -125,6 +133,8 @@ void OptionsState::update() {
 
     if (mappedVolumeGame != prevVolumeGame) {
         AudioManager::getInstance().setChannelVolumeLevel(AudioManager::eEffectChannelTowerShot, mappedVolumeGame);
+        AudioManager::getInstance().setChannelVolumeLevel(AudioManager::eEffectChannelEnemyDeath, mappedVolumeGame);
+        AudioManager::getInstance().setChannelVolumeLevel(AudioManager::eEffectChannelTowerPurchase, mappedVolumeGame);
         prevVolumeGame = mappedVolumeGame;
     }
 

@@ -8,6 +8,9 @@
 #include <Global.h>
 #include <towers/CannonTower.h>
 #include <towers/Projectile.h>
+#include <util/AudioManager.h>
+
+Mix_Chunk* CannonTower::towerShot = nullptr;
 
  // Initial Cost: 100
  // Max Cost: 600
@@ -131,6 +134,8 @@ void CannonTower::shootProjectile(Critter* targettedCritter) {
 				posX, posY, getPower(), false, 10, getRotation(),
 				speedX, speedY, "tower/CannonTower/CannonProjectile.png"
 			));
+
+			Mix_PlayChannel(AudioManager::eEffectChannelTowerShot, towerShot, 0);
 
 			setShootingTimer(MAX_SHOOTING_TIMER);
 		}

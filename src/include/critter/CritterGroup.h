@@ -9,6 +9,7 @@
 #include <vector>
 #include "Critter.h"
 #include <ui/DetailAttributeDisplay.h>
+#include <SDL3_mixer/SDL_mixer.h>
 
 enum class CritterType {
 	NORMAL,
@@ -43,7 +44,7 @@ public:
 	bool isGameFinished() const;
 	int getTotalCrittersKilled() const;
 	std::string getKillerCritterType() const;
-
+	static Mix_Chunk* baseHit;
 private:
 	int& waveLevel;
 	int& playerGold;
