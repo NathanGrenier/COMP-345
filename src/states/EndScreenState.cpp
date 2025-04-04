@@ -193,9 +193,8 @@ void EndScreenState::render() {
 		buttons[i].render();
 	}
 
-
-	float statsHeight = (1.0f / 2.0f) * Global::kScreenHeight;
-
+	float statsHeight = (4.0f / 9.0f) * Global::kScreenHeight;
+	float buttonWidth = EndScreenState::END_SCREEN_BUTTON_HEIGHT * buttons[0].kButtonWidth / buttons[0].kButtonHeight;
 
 	for (int i = 0; i < STAT_COUNT; ++i) {
 		if (i == 0 && !killedBy.compare(EndScreenState::DEFAULT_KILLER_CRITTER_STR))
@@ -203,14 +202,19 @@ void EndScreenState::render() {
 			continue;
 		}
 
+		//float labelWidth = EndScreenState::END_SCREEN_STATS_HEIGHT * statLabels[i].getWidth() / statLabels[i].getHeight();
+		float labelWidth = EndScreenState::END_SCREEN_STATS_HEIGHT * stats[i].getWidth() / stats[i].getHeight();
+
 		statLabels[i].render(
-			Global::kScreenWidth / 2.0f - EndScreenState::END_SCREEN_STATS_WIDTH, 
-			statsHeight, 
-			nullptr, 
+			//(Global::kScreenWidth) / 2.0f - labelWidth,
+			(Global::kScreenWidth - buttonWidth) / 2.0f,
+			statsHeight,
+			nullptr,
 			0, EndScreenState::END_SCREEN_STATS_HEIGHT);
-		
+
 		stats[i].render(
-			Global::kScreenWidth / 2.0f + EndScreenState::END_SCREEN_STATS_WIDTH,
+			//Global::kScreenWidth / 2.0f + EndScreenState::END_SCREEN_STATS_SPACING,
+			(Global::kScreenWidth + buttonWidth) / 2.0f - labelWidth,
 			statsHeight,
 			nullptr,
 			0, EndScreenState::END_SCREEN_STATS_HEIGHT);
