@@ -3,7 +3,8 @@ add_library(util STATIC
     Observable.cpp
     Observer.cpp
     TextureManager.cpp 
-    AudioManger.cpp)
+    AudioManger.cpp
+    LTimer.cpp)
 
 target_include_directories(util PUBLIC ${CMAKE_SOURCE_DIR}/src/include)
 

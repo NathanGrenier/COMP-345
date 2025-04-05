@@ -50,7 +50,7 @@ Map* Global::currentMap;
 SDL_AudioDeviceID gAudioDeviceId{ 0 };
 
 //The music that will be played
-Mix_Music* gMusic{ nullptr };
+Mix_Music* Global::gMusic{ nullptr };
 
 float Global::viewerWidth = kScreenWidth * 0.3f;
 float Global::headerHeight = kScreenHeight * 0.15f;
@@ -292,14 +292,14 @@ int main(int argc, char* args[]) {
 			gFpsTexture.loadFromRenderedText("Enter to start/stop or space to pause/unpause", { 0x00, 0x00, 0x00, 0xFF });
 
 			AudioManager::getInstance().init(AudioManager::MAX_VOLUME / 4);
-			gMusic = AudioManager::getInstance().loadMusic("music.wav");
+			Global::gMusic = AudioManager::getInstance().loadMusic("music.wav");
 
 			// Start game state machine
 			gCurrentState = IntroState::get();
 			gCurrentState->enter();
 			SDL_SetRenderVSync(gRenderer, 1);
 
-			Mix_PlayMusic(gMusic, -1);
+			Mix_PlayMusic(Global::gMusic, -1);
 
 			// Main game loop
 			while (!quit)

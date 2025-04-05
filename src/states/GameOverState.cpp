@@ -84,7 +84,7 @@ void GameOverState::render() {
 	
 	float critterAnimationHeight = (1.0f / 15.0f) * Global::kScreenHeight;
 	
-	textureWalkDown.render((Global::kScreenWidth - CRITTER_ANIMATION_WIDTH) / 2.0f, critterAnimationHeight, clip, CRITTER_ANIMATION_WIDTH, CRITTER_ANIMATION_WIDTH);
+	textureWalkDown.render((Global::kScreenWidth - CRITTER_ANIMATION_WIDTH) / 2.0f, CRITTER_ANIMATION_X_POSITION, clip, CRITTER_ANIMATION_WIDTH, CRITTER_ANIMATION_WIDTH);
 }
 
 /**

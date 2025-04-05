@@ -10,6 +10,7 @@
 #include <states/EndScreenState.h>
 #include <states/WinGameState.h>
 #include <states/GameOverState.h>
+#include <states/OptionsState.h>
 
 /** @class MainGameState
  *  @brief Implementation of the main game state.
@@ -18,6 +19,8 @@
  *  It follows a singleton pattern to ensure only one instance exists.
  *
  */
+
+bool MainGameState::optionsMenu = false;
 
 /// Static instance of MainGameState
 MainGameState MainGameState::sMainGameState;
@@ -41,6 +44,11 @@ MainGameState *MainGameState::get()
  */
 bool MainGameState::enter()
 {
+	if (optionsMenu) {
+		optionsMenu = false;
+		return true;
+	}
+
 	float buttonHeight = 40.0f;
 
 	if (Global::currentMap == nullptr)
@@ -49,13 +57,19 @@ bool MainGameState::enter()
 		return false;
 	}
 
+	int spacing = 13;
+
 	pauseButton.loadFromFile("ui/PauseButton.png", "sfx/PauseButtonPress.wav");
 	pauseButton.setSizeWithAspectRatio(0, buttonHeight);
-	pauseButton.setPosition(Global::kScreenWidth - Global::viewerWidth + 30, Global::kScreenHeight - buttonHeight - 20);
+	pauseButton.setPosition(Global::kScreenWidth - Global::viewerWidth + spacing, Global::kScreenHeight - buttonHeight - 20);
 
 	playButton.loadFromFile("ui/PlayButton.png", "sfx/PauseButtonPress.wav");
 	playButton.setSizeWithAspectRatio(0, buttonHeight);
-	playButton.setPosition(Global::kScreenWidth - Global::viewerWidth + 30, Global::kScreenHeight - buttonHeight - 20);
+	playButton.setPosition(Global::kScreenWidth - Global::viewerWidth + spacing, Global::kScreenHeight - buttonHeight - 20);
+
+	optionsButton.loadFromFile("ui/OptionsIcon.png");
+	optionsButton.setSizeWithAspectRatio(0, buttonHeight);
+	optionsButton.setPosition(Global::kScreenWidth - Global::viewerWidth + 2 * spacing + pauseButton.kButtonWidth, Global::kScreenHeight - buttonHeight - 20);
 
 	currentButton = &pauseButton;
 
@@ -70,9 +84,9 @@ bool MainGameState::enter()
 
 	exitButton.loadFromFile("ui/ExitButton.png");
 	exitButton.setSizeWithAspectRatio(0, buttonHeight);
-	exitButton.setPosition(Global::kScreenWidth - Global::viewerWidth + 30 + pauseButton.kButtonWidth + 30, Global::kScreenHeight - buttonHeight - 20);
+	exitButton.setPosition(Global::kScreenWidth - Global::viewerWidth + 3 * spacing + pauseButton.kButtonWidth + optionsButton.kButtonWidth, Global::kScreenHeight - buttonHeight - 20);
 
-	map = new Map(*Global::currentMap);
+	map = Global::currentMap;
 	map->setFlowFieldVisibility(false);
 
 	for (auto &cell : map->cells)
@@ -115,6 +129,7 @@ void MainGameState::handleEvent(SDL_Event &e)
 
 	currentButton->handleEvent(&e);
 	exitButton.handleEvent(&e);
+	optionsButton.handleEvent(&e);
 
 	if (e.type == SDL_EVENT_MOUSE_BUTTON_DOWN && e.button.button == SDL_BUTTON_LEFT)
 	{
@@ -138,6 +153,11 @@ void MainGameState::handleEvent(SDL_Event &e)
 		{
 			setNextState(TitleState::get());
 		}
+		if (optionsButton.isClicked())
+		{
+			setNextState(OptionsState::get());
+			optionsMenu = true;
+		}
 	}
 }
 
@@ -149,6 +169,7 @@ void MainGameState::handleEvent(SDL_Event &e)
 void MainGameState::update()
 {
 	currentButton->update();
+	optionsButton.update();
 	exitButton.update();
 	detailDisplay->update();
 
@@ -211,6 +232,7 @@ void MainGameState::render()
 	towerGroup->render();
 
 	currentButton->render();
+	optionsButton.render();
 	exitButton.render();
 
 	// Render player gold
@@ -231,6 +253,8 @@ void MainGameState::render()
  */
 bool MainGameState::exit()
 {
+	if (optionsMenu) return true;
+
 	isPaused = false;
 
 	currentButton = &pauseButton;
@@ -240,9 +264,6 @@ bool MainGameState::exit()
 
 	delete towerGroup;
 	towerGroup = nullptr;
-
-	delete map;
-	map = nullptr;
 
 	delete bg;
 	bg = nullptr;

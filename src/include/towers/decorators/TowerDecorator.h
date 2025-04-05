@@ -228,6 +228,39 @@ public:
 
 		return wrappedTower->getCritterTargettingStrategy();
 	}
+	
+	void updateAnimation(float deltaTime) { wrappedTower->updateAnimation(deltaTime); };
+
+	int getFrameCount() const { return wrappedTower->getFrameCount(); };
+
+	int getCurrentFrame() const { return  wrappedTower->getCurrentFrame(); };
+
+	void setFrameCount(int frames) { wrappedTower->setFrameCount(frames); };
+
+	bool getIsAnimating() const { return wrappedTower->getIsAnimating(); };
+
+	void setIsAnimating(bool status) { wrappedTower->setIsAnimating(status); };
+
+	void loadTextureForLevel() { wrappedTower->loadTextureForLevel(); };
+
+	/**
+	 * @brief Retrieves the whether the range is rendered or not.
+	 * @return true if the range of the tower is being rendered
+	 * @return false if the range of the tower is not being rendered
+	 */
+	bool getRenderRange() override  
+	{ 
+		return wrappedTower->getRenderRange();
+	}
+
+	/**
+	 * @brief Sets whether the tower should render its range or not
+	 * @param newRenderRange whether the tower should render its range
+	 */
+	void setRenderRange(bool newRenderRange) override
+	{
+		wrappedTower->setRenderRange(newRenderRange);
+	}
 
 protected:
 	Tower* wrappedTower; ///< The wrapped Tower object.

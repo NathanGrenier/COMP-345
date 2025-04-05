@@ -8,7 +8,8 @@ add_library(ui STATIC
     DetailButton.cpp
     DetailAttribute.cpp
     ParallaxBackground.cpp 
-    ParallaxLayer.cpp)
+    ParallaxLayer.cpp
+    VolumeSlider.cpp)
 
 target_include_directories(ui PUBLIC ${CMAKE_SOURCE_DIR}/src/include)
 

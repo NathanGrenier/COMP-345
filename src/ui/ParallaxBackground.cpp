@@ -12,6 +12,8 @@ std::vector<std::string> ParallaxBackground::starImages;
 std::vector<std::string> ParallaxBackground::propImages;
 std::unordered_set<int> ParallaxBackground::propXPositions;
 
+bool ParallaxBackground::isMoving = true;
+
 ParallaxBackground::ParallaxBackground() {
 	// Seed the random number generator
 	std::srand(std::time(0));
@@ -61,6 +63,8 @@ void ParallaxBackground::addLayer(float speed, int height) {
 }
 
 void ParallaxBackground::update(float deltaTime) {
+	if (!isMoving) return;
+
 	for (auto layer : layers) {
 		layer->update(deltaTime);
 	}
