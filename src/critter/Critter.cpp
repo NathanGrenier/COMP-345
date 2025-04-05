@@ -164,7 +164,6 @@ void Critter::move(float deltaTime, const std::vector<Critter*> critters) {
  */
 void Critter::takeDamage(float damage) {
 	setHitPoints(getHitPoints() - damage);
-	isHurt = true;
 	notify();
 	damageTimer = SDL_GetTicks();
 	if (getHitPoints() <= 0 && currentState == State::ALIVE)
@@ -174,9 +173,10 @@ void Critter::takeDamage(float damage) {
 		currentFrame = 0; // Reset frame for death animation
 		animationTimer = 0.0f;
 	}
-	else {
+	else if (!isHurt) {
 		Mix_PlayChannel(AudioManager::eEffectChannelEnemyDeath, critterHit, 0);
 	}
+	isHurt = true;
 }
 
 void Critter::update(float deltaTime) {

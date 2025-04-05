@@ -24,6 +24,7 @@
 class Tower : public Observable {
 public:
 	static const int MAX_SHOOTING_TIMER = 100; /**< @brief Shooting timer to be decremented */
+	static const int RANGE_TRANSPARENCY = 45; /**< @brief Alpha value for range transparency */
 	static const int STAT_CELL_RATIO = 30; /**< @brief Ratio of Tower stat unit (range) per map cell */
 	static constexpr float PI_CONSTANT = 3.14159265358979323846f; /**< @brief The constant PI for tower calculations */
 	const double REFUND_RATIO = 0.7; /**< @brief Ratio between original tower cost and refund value */
@@ -233,6 +234,19 @@ public:
 	virtual void setCritterTargettingStrategy(TowerStrategy* newStrategy);
 
 	/**
+	 * @brief Retrieves the whether the range is rendered or not.
+	 * @return true if the range of the tower is being rendered
+	 * @return false if the range of the tower is not being rendered
+	 */
+	virtual bool getRenderRange() { return renderRange; };
+
+	/**
+	 * @brief Sets whether the tower should render its range or not
+	 * @param newRenderRange whether the tower should render its range
+	 */
+	virtual void setRenderRange(bool newRenderRange);
+
+	/**
 	 * @brief Accessor for Tower Strategy
 	 * @returns the TargettingStrategy object that determines the Tower's targetting pattern
 	 */
@@ -252,9 +266,13 @@ public:
 	void updateAnimation(float deltaTime);
 
 	int getFrameCount() const { return frameCount; };
+
 	int getCurrentFrame() const { return currentFrame; };
+
 	void setFrameCount(int frames) { frameCount = frames; };
+
 	bool getIsAnimating() const { return isAnimating; };
+
 	void setIsAnimating(bool status) { isAnimating = status; };
 
 private:
@@ -267,6 +285,7 @@ private:
 	int rateOfFire; /**< @brief The rate of fire of the tower */
 	int level; /**< @brief The level of the tower */
 	int shootingTimer; /**< @brief The shooting timer of the tower */
+	bool renderRange; /**< @brief Whether the tower should render its range or not */
 
 	float frameTimer = 0.0f; /**< Timer to track the time elapsed between frames for animation. */
 	float frameDuration = 0.1f; /**< Duration of each frame in the animation (10 fps). */
@@ -276,6 +295,9 @@ private:
 
 	std::vector<Projectile*> projectiles; /**< @brief A vector of all projectiles fired by the tower */
 	Texture towerTexture; /**< @brief The texture of the tower */
+	Texture rangeTexture; /**< @brief The texture of the tower range */
 
 	TowerStrategy* critterTargettingStrategy; /**< @brief The TowerStrategy object for the tower to use */
+
+	void renderTowerRange();
 };

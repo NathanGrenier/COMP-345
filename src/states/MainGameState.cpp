@@ -86,7 +86,7 @@ bool MainGameState::enter()
 	exitButton.setSizeWithAspectRatio(0, buttonHeight);
 	exitButton.setPosition(Global::kScreenWidth - Global::viewerWidth + 3 * spacing + pauseButton.kButtonWidth + optionsButton.kButtonWidth, Global::kScreenHeight - buttonHeight - 20);
 
-	map = new Map(*Global::currentMap);
+	map = Global::currentMap;
 	map->setFlowFieldVisibility(false);
 
 	for (auto &cell : map->cells)
@@ -264,9 +264,6 @@ bool MainGameState::exit()
 
 	delete towerGroup;
 	towerGroup = nullptr;
-
-	delete map;
-	map = nullptr;
 
 	delete bg;
 	bg = nullptr;

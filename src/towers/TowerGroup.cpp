@@ -105,6 +105,17 @@ void TowerGroup::update(float deltaTime, std::vector<Critter *> critters)
 {
 	for (int i = 0; i < towers.size(); i++)
 	{
+		
+		if (towers[i] == detailDisplay->getTowerObserver()->getCurrentTower())
+		{
+			towers[i]->setRenderRange(true);
+		}
+		else
+		{
+			towers[i]->setRenderRange(false);
+		}
+		
+		
 		towers[i]->generateAllProjectiles();
 
 		// Find the target critter for the current tower

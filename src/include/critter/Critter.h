@@ -75,8 +75,8 @@ public:
 	float getDistanceTravelled() const { return distanceTravelled; };
 
 	// Constants
-	static constexpr float CRITTER_WIDTH_SCALE = 1.0f;  /**< Width scale for the critter */
-	static constexpr float CRITTER_HEIGHT_SCALE = 1.0f; /**< Height scale for the critter */
+	static constexpr float CRITTER_WIDTH_SCALE = 0.70f;  /**< Width scale for the critter */
+	static constexpr float CRITTER_HEIGHT_SCALE = 0.70f; /**< Height scale for the critter */
 	static constexpr float SPEED_PER_CELL = 30.0f; /**< Amount of speed for the critter to take a cell (as a ratio)*/
 
 	static constexpr float CRITTER_HEALTHBAR_HEIGHT = CRITTER_HEIGHT_SCALE * 0.15f;  /**< Height of the health bar */
