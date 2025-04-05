@@ -266,9 +266,13 @@ public:
 	void updateAnimation(float deltaTime);
 
 	int getFrameCount() const { return frameCount; };
+
 	int getCurrentFrame() const { return currentFrame; };
+
 	void setFrameCount(int frames) { frameCount = frames; };
+
 	bool getIsAnimating() const { return isAnimating; };
+
 	void setIsAnimating(bool status) { isAnimating = status; };
 
 private:
