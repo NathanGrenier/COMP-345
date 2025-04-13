@@ -40,14 +40,6 @@ bool EndScreenState::enter() {
 	statLabels = new Texture[STAT_COUNT];
 	stats = new Texture[STAT_COUNT];
 
-	bg = new ParallaxBackground();
-	std::srand(std::time(0));
-
-	for (int i = 0; i < Global::numberOfProps; ++i) {
-		float randomSpeed = 5.0f + std::rand() % 11;
-		bg->addLayer(randomSpeed, Global::kScreenHeight);
-	}
-
 	bool success = true;
 	SDL_Color textColor{ 0xFF, 0xFF, 0xFF, 0xFF };
 	
@@ -123,9 +115,6 @@ bool EndScreenState::exit()
 		stats[i].destroy();
 	}*/
 
-	delete bg;
-	bg = nullptr;
-
 	delete[] stats;
 	stats = nullptr;
 
@@ -171,7 +160,6 @@ void EndScreenState::handleEvent(SDL_Event& e) {
  *
  */
 void EndScreenState::update() {
-	bg->update(0.016f);
 }
 
 /**
@@ -180,8 +168,6 @@ void EndScreenState::update() {
  * Clears the screen, renders the background, title text, and menu buttons.
  */
 void EndScreenState::render() {
-	bg->render();
-
 	// Render title text centered at the top
 	messageTexture.render(
 			(Global::kScreenWidth - EndScreenState::END_SCREEN_TITLE_WIDTH) / 2.f, 
@@ -220,7 +206,7 @@ void EndScreenState::render() {
 			0, EndScreenState::END_SCREEN_STATS_HEIGHT);
 
 
-		statsHeight += statLabels[i].getHeight() * 0.9;
+		statsHeight += statLabels[i].getHeight() * 0.9f;
 	}
 }
 

@@ -61,7 +61,11 @@ void Texture::ensureUniqueTexture() {
 		// Create a copy of the base texture
 		float width, height;
 		SDL_GetTextureSize(mBaseTexture, &width, &height);
-		mModifiedTexture = SDL_CreateTexture(TextureManager::getInstance().getRenderer(), SDL_PIXELFORMAT_RGBA32, SDL_TEXTUREACCESS_TARGET, width, height);
+		mModifiedTexture = SDL_CreateTexture(TextureManager::getInstance().getRenderer(),
+			SDL_PIXELFORMAT_RGBA32,
+			SDL_TEXTUREACCESS_TARGET,
+			static_cast<int>(width),
+			static_cast<int>(height));
 		SDL_SetTextureBlendMode(mModifiedTexture, SDL_BLENDMODE_BLEND);
 
 		// Copy the base texture into the modified texture

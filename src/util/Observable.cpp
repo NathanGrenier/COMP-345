@@ -17,6 +17,12 @@ Observable::Observable()
 	observers = new std::vector<Observer*>();
 }
 
+Observable::~Observable()
+{
+	// delete the observers vector
+	delete observers;
+}
+
 /**
  * @brief Attaches an Observer object to the Observable
  * @param observer the Observer to attach to the Observable

@@ -43,12 +43,13 @@ public:
 
 	static void logMessage(std::string message) {
 		// Get current time for the log entry
-		std::time_t currentTime = std::time(nullptr);  // Get the current time
-		std::tm* timeInfo = std::localtime(&currentTime);  // Convert to local time
+		std::time_t currentTime = std::time(nullptr);
+		std::tm timeInfo;
+		localtime_s(&timeInfo, &currentTime); // Safe version
 
 		// Create a timestamp string in HH:MM:SS format
 		char timestamp[9];  // Buffer to store formatted time
-		std::strftime(timestamp, sizeof(timestamp), "%H:%M:%S", timeInfo);  // Format time
+		std::strftime(timestamp, sizeof(timestamp), "%H:%M:%S", &timeInfo);  // Format time
 
 		// Log the purchase with timestamp
 		outFile << "[" << timestamp << "] " << message << std::endl;

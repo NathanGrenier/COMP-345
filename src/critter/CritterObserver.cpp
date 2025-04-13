@@ -179,6 +179,11 @@ void CritterObserver::handleButtonEvents(SDL_Event* e) {
 CritterObserver::~CritterObserver() {
 	currentCritter = nullptr;
 
+	for (int i = 0; i < critterComponents.size(); i++)
+	{
+		delete critterComponents[i];
+	}
+
 	critterComponents.clear();
 }
 

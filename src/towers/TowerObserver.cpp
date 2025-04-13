@@ -212,6 +212,12 @@ TowerObserver::~TowerObserver() {
 		delete towerComponents[i];
 	}
 
+	delete currentTower;
+	currentTower = nullptr;
+
+	delete[] towerStrategyPaths;
+	towerStrategyPaths = nullptr;
+
 	towerComponents.clear();
 }
 

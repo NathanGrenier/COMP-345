@@ -49,6 +49,8 @@ public:
 	 */
 	Tower(float x, float y, float width, int buyingCost, int range, int power, int rateOfFire);
 
+	~Tower();
+
 	/**
 	 * @brief Retrieves the projectiles fired by the tower.
 	 * @return A reference to the vector of projectiles.
@@ -94,7 +96,7 @@ public:
 	 * @brief Retrieves the buying cost of the tower.
 	 * @return The cost of the tower in gold.
 	 */
-	int getBuyingCost();
+	int getBuyingCost() const;
 
 	/**
 	 * @brief Retrieves the power of the tower.

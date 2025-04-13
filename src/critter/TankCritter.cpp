@@ -6,10 +6,10 @@ TankCritter::TankCritter(int level, SDL_FRect start, Map* map)
 	speed += level * SPEED_SCALE_AMOUNT;
 	maxHitPoints += level * HITPOINT_SCALE_AMOUNT;
 	hitPoints = maxHitPoints;
-	reward += level * REWARD_SCALE_AMOUNT;
+	reward += static_cast<int>(level * REWARD_SCALE_AMOUNT);
 
 	setupAnimationFrames();
-	frameTime = (1.0f / animationFramesWalkSide.size()) * (1.1 * (1 + Critter::SPEED_SCALE_FACTOR));
+	frameTime = (1.0f / animationFramesWalkSide.size()) * (1.1f * (1 + Critter::SPEED_SCALE_FACTOR));
 	//std::cout << std::fixed << "Tank Critter Frame Time: " << frameTime << std::endl;
 
 }

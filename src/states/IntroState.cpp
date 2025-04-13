@@ -50,15 +50,6 @@ bool IntroState::enter() {
 		success = false;
 	}
 
-	bg = new ParallaxBackground();
-
-	std::srand(std::time(0));
-
-	for (int i = 0; i < Global::numberOfProps; ++i) {
-		float randomSpeed = 5.0f + std::rand() % 11;
-		bg->addLayer(randomSpeed, Global::kScreenHeight);
-	}
-
 	return success;
 }
 
@@ -70,7 +61,6 @@ bool IntroState::enter() {
  * @return Always returns true.
  */
 bool IntroState::exit() {
-	delete bg;
 	return true;
 }
 
@@ -100,7 +90,6 @@ void IntroState::update() {
 	// Calculate the vertical oscillation offset (range of -5 to 5 pixels)
 	oscillationOffset = std::sin(mOscillationTime) * 5.0f;
 
-	bg->update(0.016f);
 }
 
 /**
@@ -109,8 +98,6 @@ void IntroState::update() {
  * The message text moves up and down slightly using a sine wave oscillation effect.
  */
 void IntroState::render() {
-	bg->render();
-
 	// Render message text with oscillation effect
 	mMessageTexture.render(
 		(Global::kScreenWidth - Global::kScreenWidth * 0.9) / 2.f,

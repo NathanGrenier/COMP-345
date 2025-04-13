@@ -52,12 +52,11 @@ private:
 
     Texture messageTexture; /**< @brief title for end screen */
 
-    ParallaxBackground* bg;
     int wave = -1; /**< @brief wave game ended on */
     int towersBought = -1; /**< @brief numbers of towers bought. */
     int crittersKilled = -1; /**< @brief number of critters killed. */
 
-    LButton* buttons; /**< @brief Array of main menu buttons. */
-    Texture* statLabels; /**< @brief Array of statistic labels. */
-    Texture* stats; /**< @brief Array of statistics */
+    LButton* buttons = nullptr; /**< @brief Array of main menu buttons. */
+    Texture* statLabels = nullptr; /**< @brief Array of statistic labels. */
+    Texture* stats = nullptr; /**< @brief Array of statistics */
 };

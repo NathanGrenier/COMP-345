@@ -19,14 +19,6 @@ MapEditorState* MapEditorState::get() {
 }
 
 bool MapEditorState::enter() {
-	bg = new ParallaxBackground();
-	std::srand(std::time(0));
-
-	for (int i = 0; i < Global::numberOfProps; ++i) {
-		float randomSpeed = 5.0f + std::rand() % 11;
-		bg->addLayer(randomSpeed, Global::kScreenHeight);
-	}
-
 	if (Global::currentMap == nullptr) {
 		map = new Map(15, 15, "Default");
 		mMessageTexture.loadFromFile("ui/MapCreation.png");
@@ -124,7 +116,6 @@ bool MapEditorState::enter() {
 
 bool MapEditorState::exit() {
 	map = nullptr;
-	delete bg;
 
 	return true;
 }
@@ -286,8 +277,6 @@ void MapEditorState::handleEvent(SDL_Event& e) {
 
 
 void MapEditorState::update() {
-	bg->update(0.016f);
-
 	// Set color to black and fill the map view
 	SDL_SetRenderDrawColor(gRenderer, 0, 0, 0, 255);  // Black (R=0, G=0, B=0, A=255)
 	SDL_RenderFillRect(gRenderer, &mapView);
@@ -297,8 +286,6 @@ void MapEditorState::update() {
 }
 
 void MapEditorState::render() {
-	bg->render();
-
 	float buttonWidth = Global::viewerWidth * 0.8f;
 	float buttonSpacing = 30.0f;
 	float buttonHeight = 25.0f;

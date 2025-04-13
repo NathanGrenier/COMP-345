@@ -45,6 +45,20 @@ DetailAttributeDisplay::DetailAttributeDisplay()
 	critterObserver = new CritterObserver(mPosition.x + DetailDisplayComponent::DETAIL_COMPONENT_PADDING, currentY + DetailDisplayComponent::CRITTER_COMPONENT_SPACING);
 }
 
+DetailAttributeDisplay::~DetailAttributeDisplay() {
+	// Clean up components
+	for (auto component : components)
+	{
+		delete component;
+	}
+	components.clear();
+	// Clean up observers
+	delete towerObserver;
+	towerObserver = nullptr;
+	delete critterObserver;
+	critterObserver = nullptr;
+}
+
 /**
  * @brief Accessor for components
  * @return the array of DetailDisplayComponent object pointers

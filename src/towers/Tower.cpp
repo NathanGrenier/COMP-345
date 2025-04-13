@@ -21,7 +21,7 @@
   * @brief Default Constructor, setting all values to 0
   */
 Tower::Tower()
-	: upgradeCost(0), buyingCost(0), range(0), power(0), rateOfFire(0), level(0), shootingTimer(0), upgradeValues{ 0, 0, 0 }, critterTargettingStrategy(new TargetNearExit()) {
+	: upgradeCost(0), buyingCost(0), isAnimating(false), frameCount(0), range(0), power(0), rateOfFire(0), level(0), shootingTimer(0), upgradeValues{ 0, 0, 0 }, critterTargettingStrategy(new TargetNearExit()) {
 	currentRenderRect = { 0, 0, 0, 0 };
 	renderRange = false;
 	rangeTexture.loadFromFile("tower/range.png");
@@ -41,10 +41,14 @@ Tower::Tower()
  * Uses default refund value ratio in Tower class
  */
 Tower::Tower(float x, float y, float width, int buyingCost, int range, int power, int rateOfFire)
-	: upgradeCost(0), buyingCost(buyingCost), range(range), power(power), rateOfFire(rateOfFire), level(1), shootingTimer(0), upgradeValues{ 0, 0, 0 }, critterTargettingStrategy(new TargetNearExit()) {
+	: upgradeCost(0), isAnimating(false), frameCount(0), buyingCost(buyingCost), range(range), power(power), rateOfFire(rateOfFire), level(1), shootingTimer(0), upgradeValues{ 0, 0, 0 }, critterTargettingStrategy(new TargetNearExit()) {
 	currentRenderRect = { x, y, width, width };
 	renderRange = false;
 	rangeTexture.loadFromFile("tower/range.png");
+}
+
+Tower::~Tower() {
+	delete critterTargettingStrategy;
 }
 
 /**
@@ -126,20 +130,20 @@ int Tower::getRefundValue() {
 	{
 		upgradeCost += upgradeValues.upgradeCosts[i];
 	}
-	return (buyingCost + upgradeCost) * REFUND_RATIO;
+	return static_cast<int>((buyingCost + upgradeCost) * REFUND_RATIO);
 }
 
 /**
  * @brief Accessor for buying cost
  * @return the cost for buying a Tower
  */
-int Tower::getBuyingCost() {
+int Tower::getBuyingCost() const {
 	return buyingCost;
 }
 
 int Tower::getUpgradeCost() {
 	if (level < getMaxLevel()) {
-		return upgradeValues.upgradeCosts[level - 1];
+		return upgradeValues.upgradeCosts[static_cast<size_t>(level) - 1];
 	}
 	return 0; // No cost if at max level
 }
@@ -332,12 +336,12 @@ void Tower::render() {
 	float frameWidth = towerTexture.getWidth() / static_cast<float>(frameCount);
 	float frameHeight = towerTexture.getHeight();
 
-	SDL_FRect* spriteClips = new SDL_FRect[frameCount]; // Dynamically allocate an array based on frameCount
+	std::vector<SDL_FRect> spriteClips(frameCount);
 	for (int i = 0; i < frameCount; ++i) {
-		spriteClips[i].x = i * frameWidth;  // Set the x-coordinate based on the current frame
-		spriteClips[i].y = 0.f;             // Set the y-coordinate (assuming all frames are on the same row)
-		spriteClips[i].w = frameWidth;      // Set the width of the frame
-		spriteClips[i].h = frameHeight;     // Set the height of the frame
+		spriteClips[i].x = i * frameWidth;
+		spriteClips[i].y = 0.f;
+		spriteClips[i].w = frameWidth;
+		spriteClips[i].h = frameHeight;
 	}
 
 	// render the tower range under the tower

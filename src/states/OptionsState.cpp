@@ -18,15 +18,6 @@ OptionsState* OptionsState::get() {
 }
 
 bool OptionsState::enter() {
-    bg = new ParallaxBackground();
-    std::srand(std::time(0));
-
-    for (int i = 0; i < Global::numberOfProps; ++i)
-    {
-        float randomSpeed = 5.0f + std::rand() % 11;
-        bg->addLayer(randomSpeed, Global::kScreenHeight);
-    }
-
     AudioManager::getInstance();
 
     backButton.loadFromFile("ui/LeftArrow.png");
@@ -50,7 +41,7 @@ bool OptionsState::enter() {
 
     float titleWidth = screenWidth * 0.5f;
     float titleHeight = (static_cast<float>(optionsMenuMessage.getHeight()) / optionsMenuMessage.getWidth()) * titleWidth;
-    float backButtonSize = titleHeight * 1.1;
+    float backButtonSize = titleHeight * 1.1f;
     float renderedWidth = Global::kScreenWidth * 0.5f;
     float backButtonY = titleDistanceFromTop;
 
@@ -69,9 +60,6 @@ bool OptionsState::enter() {
 }
 
 bool OptionsState::exit() {
-    delete bg;
-    bg = nullptr;
-
     delete volumeSliderMusic;
     delete volumeSliderUI;
     delete volumeSliderGame;
@@ -157,13 +145,10 @@ void OptionsState::update() {
     }
 
     backButton.update();
-    bg->update(0.016f);
 }
 
 
 void OptionsState::render() {
-    bg->render();
-
     float kScreenWidth = Global::kScreenWidth;
     float kScreenHeight = Global::kScreenHeight;
 

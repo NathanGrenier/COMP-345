@@ -25,18 +25,17 @@ private:
     static OptionsState sOptionsState;
 
     LButton backButton;
-    ParallaxBackground* bg;
     Texture optionsMenuMessage;
 
-    VolumeSlider* volumeSliderUI;
+    VolumeSlider* volumeSliderUI = nullptr;
     Texture volumeMessageUI;
     Texture volumeNumberUI;
 
-    VolumeSlider* volumeSliderGame;
+    VolumeSlider* volumeSliderGame = nullptr;
     Texture volumeMessageGame;
     Texture volumeNumberGame;
 
-    VolumeSlider* volumeSliderMusic;
+    VolumeSlider* volumeSliderMusic = nullptr;
     Texture volumeMessageMusic;
     Texture volumeNumberMusic;
 

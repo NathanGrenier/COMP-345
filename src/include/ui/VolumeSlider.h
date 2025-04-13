@@ -5,7 +5,7 @@
 
 class VolumeSlider {
 public:
-    VolumeSlider(const std::string& barPath, const std::string& knobPath, int x, int y, int minVol = 0, int maxVol = 100, int initialVol = 50);
+    VolumeSlider(const std::string& barPath, const std::string& knobPath, float x, float y, int minVol = 0, int maxVol = 100, int initialVol = 50);
 
     void handleEvent(SDL_Event& e);
     void render();
@@ -16,8 +16,7 @@ private:
     Texture mBarTexture;
     Texture mKnobTexture;
 
-    int mX, mY;     // Bar position
-    int mKnobX;      // Knob's X position
+    float mX, mY;     // Bar position
     bool mDragging;
 
     int mMinVolume;

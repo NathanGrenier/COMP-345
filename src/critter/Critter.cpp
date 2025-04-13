@@ -12,7 +12,7 @@ Mix_Chunk* Critter::critterDeath;
 Critter::Critter(int level, SDL_FRect start, Map* map)
 	: level(level), position(start), isAtExit(false), map(map),
 	currentFrame(0), animationTimer(0.0f), frameTime(0.1f), distanceTravelled(0.0f),
-	isHurt(false), damageTimer(0), redTintAlpha(255), greenTintAlpha(255), blueTintAlpha(255), currentState(State::ALIVE) {
+	isHurt(false), damageTimer(0), currentDirection(Direction::UP), hitPoints(100), redTintAlpha(255), greenTintAlpha(255), blueTintAlpha(255), currentState(State::ALIVE) {
 	currentRenderRect = {};
 	if (map != nullptr)
 	{
@@ -226,7 +226,7 @@ void Critter::update(float deltaTime) {
 			}
 			if (currentFrames && !currentFrames->empty())
 			{
-				currentFrame = (currentFrame + 1) % currentFrames->size();
+				currentFrame = (static_cast<size_t>(currentFrame) + 1) % currentFrames->size();
 			}
 			animationTimer = 0.0f;
 		}
@@ -256,7 +256,7 @@ void Critter::update(float deltaTime) {
 				if (currentFrame >= static_cast<int>(currentFrames->size()))
 				{
 					currentState = State::DEAD;				  // Transition to DEAD after animation completes
-					currentFrame = currentFrames->size() - 1; // Hold on last frame
+					currentFrame = static_cast<int>(currentFrames->size()) - 1;
 				}
 			}
 			animationTimer = 0.0f;
@@ -422,5 +422,5 @@ void Critter::render() {
  * @param playerGold The player's current gold amount, which will be reduced by the critter's strength.
  */
 void Critter::stealGold(int& playerGold) const {
-	playerGold -= getHitPoints();
+	playerGold -= static_cast<int>(getHitPoints());
 }

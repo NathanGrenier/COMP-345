@@ -654,25 +654,7 @@ SDL_FRect Map::getCurrentRenderRect() const {
  * @param newTargetRect The new rendering rectangle to set.
  */
 void Map::setCurrentRenderRect(SDL_FRect newTargetRect) {
-	// Calculate the scaling factor to fit the map within the target rectangle
-	float mapWidth = cellCountX * getPixelPerCell();
-	float mapHeight = cellCountY * getPixelPerCell();
-
-	float scaleX = newTargetRect.w / mapWidth;
-	float scaleY = newTargetRect.h / mapHeight;
-	float scale = std::min(scaleX, scaleY); // Maintain aspect ratio
-
-	// Calculate the offset to center the map within the target rectangle
-	float offsetX = newTargetRect.x + (newTargetRect.w - mapWidth * scale) / 2.0f;
-	float offsetY = newTargetRect.y + (newTargetRect.h - mapHeight * scale) / 2.0f;
-
-	// Update the currentRenderRect to track where the map is being drawn
-	currentRenderRect = {
-		offsetX,
-		offsetY,
-		mapWidth * scale,
-		mapHeight * scale
-	};
+	currentRenderRect = newTargetRect;
 }
 
 /**
@@ -713,14 +695,6 @@ void Map::drawOnTargetRect(const SDL_FRect& targetRect) {
 	float offsetX = targetRect.x + (targetRect.w - mapWidth * scale) / 2.0f;
 	float offsetY = targetRect.y + (targetRect.h - mapHeight * scale) / 2.0f;
 
-	// Update the currentRenderRect to track where the map is being drawn
-	currentRenderRect = {
-		offsetX,
-		offsetY,
-		mapWidth * scale,
-		mapHeight * scale
-	};
-
 	// Draw each cell, scaled to fit the target rectangle
 	for (const auto& cell : cells) {
 		SDL_FRect cellRect = {
@@ -733,6 +707,14 @@ void Map::drawOnTargetRect(const SDL_FRect& targetRect) {
 		// Draw the cell using the existing drawCell method
 		drawCell(cell, cellRect);
 	}
+
+	// Update the currentRenderRect to track where the map is being drawn
+	currentRenderRect = {
+		offsetX,
+		offsetY,
+		mapWidth * scale,
+		mapHeight * scale
+	};
 }
 
 float Map::getPixelPerCell() const {

@@ -17,8 +17,8 @@ ParallaxLayer::ParallaxLayer(float speed, float y, const std::string& filepath)
 
 	// Calculate random scale factor for size variation
 	float scaleFactor = 1.0f + (std::rand() % 51) / 100.0f;
-	width = static_cast<int>(width * scaleFactor);
-	height = static_cast<int>(height * scaleFactor);
+	width = width * scaleFactor;
+	height = height * scaleFactor;
 	rotationAngle = 0;
 
 	// Ensure prop doesn't overlap existing props by finding a suitable x1 position
@@ -27,11 +27,11 @@ ParallaxLayer::ParallaxLayer(float speed, float y, const std::string& filepath)
 		bool overlapDetected = true;
 		int maxAttempts = 100; // Maximum number of attempts before giving up
 		while (overlapDetected && maxAttempts > 0) {
-			x1 = std::rand() % static_cast<int>(Global::kScreenWidth);
+			x1 = static_cast<float>(std::rand() % static_cast<int>(Global::kScreenWidth));
 			overlapDetected = false;
 
 			// Check if this x1 position overlaps with any previously spawned props
-			for (int existingX : ParallaxBackground::propXPositions) {
+			for (float existingX : ParallaxBackground::propXPositions) {
 				if (std::abs(existingX - x1) < width) {  // Ensure no overlap (distance >= width)
 					overlapDetected = true;
 					break;
@@ -43,13 +43,13 @@ ParallaxLayer::ParallaxLayer(float speed, float y, const std::string& filepath)
 
 		// If after maxAttempts no valid position was found, spawn at a random position anyway
 		if (maxAttempts == 0) {
-			x1 = std::rand() % static_cast<int>(Global::kScreenWidth);  // Fallback to random position
+			x1 = static_cast<float>(std::rand() % static_cast<int>(Global::kScreenWidth));
 		}
 
 		// Add the new x1 position to the set of tracked positions
 		ParallaxBackground::propXPositions.insert(x1);
 
-		rotationAngle = std::rand() % 360; // Random rotation for props
+		rotationAngle = static_cast<float>(std::rand() % 360);
 	}
 
 	x2 = x1 + width;
@@ -76,9 +76,9 @@ void ParallaxLayer::update(float deltaTime) {
 			width = texture.getWidth();
 			height = texture.getHeight();
 			float scaleFactor = 1.0f + (std::rand() % 51) / 100.0f;  // Random value between 1 and 1.5
-			width = static_cast<int>(width * scaleFactor);
-			height = static_cast<int>(height * scaleFactor);
-			rotationAngle = std::rand() % 360;
+			width = width * scaleFactor;
+			height = height * scaleFactor;
+			rotationAngle = static_cast<float>(std::rand() % 360);
 
 			// Ensure the new prop doesn't overlap with any other props
 			bool overlapDetected = true;
@@ -88,7 +88,7 @@ void ParallaxLayer::update(float deltaTime) {
 				overlapDetected = false;
 
 				// Check if this x1 position overlaps with any previously spawned props
-				for (int existingX : ParallaxBackground::propXPositions) {
+				for (float existingX : ParallaxBackground::propXPositions) {
 					if (std::abs(existingX - x1) < width) {
 						overlapDetected = true;
 						break;
@@ -102,7 +102,7 @@ void ParallaxLayer::update(float deltaTime) {
 			ParallaxBackground::propXPositions.insert(x1);
 
 			// Set new y position when prop is out of bounds
-			y = std::rand() % static_cast<int>(Global::kScreenHeight);
+			y = static_cast<float>(std::rand() % static_cast<int>(Global::kScreenHeight));
 		}
 	} else {
 		// Move both textures for background

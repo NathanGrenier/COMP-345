@@ -30,7 +30,5 @@ private:
 	Texture mMessageTexture;
 	Texture mCursorPromptTexture;
 
-	ParallaxBackground* bg;
-
 	float oscillationOffset = 0.0f;
 };

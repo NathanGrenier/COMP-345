@@ -1,21 +1,13 @@
 #include <ui/VolumeSlider.h>
 #include <iostream>
 
-VolumeSlider::VolumeSlider(const std::string& barPath, const std::string& knobPath, int x, int y, int minVol, int maxVol, int initialVol)
-    : mX(x), mY(y), mMinVolume(minVol), mMaxVolume(maxVol), mDragging(false) {
+VolumeSlider::VolumeSlider(const std::string& barPath, const std::string& knobPath, float x, float y, int minVol, int maxVol, int initialVol)
+    : mX(x), mY(y), mMinVolume(minVol), mMaxVolume(maxVol), mDragging(false), mCurrentBarRect({}), mCurrentKnobRect({}) {
     mBarTexture.loadFromFile(barPath);
     mKnobTexture.loadFromFile(knobPath);
 
     // Clamp the initial volume to be within bounds
     mVolume = std::max(mMinVolume, std::min(initialVol, mMaxVolume));
-
-    // Compute dimensions
-    int barWidth = mBarTexture.getWidth();
-    int knobWidth = mKnobTexture.getWidth();
-
-    // Set the knob position based on the initial volume
-    float percent = float(mVolume - mMinVolume) / (mMaxVolume - mMinVolume);
-    mKnobX = x + percent * (barWidth - knobWidth);
 }
 
 void VolumeSlider::handleEvent(SDL_Event& e) {
