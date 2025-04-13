@@ -24,7 +24,7 @@ protected:
 	float speed;      // Speed of scrolling
 	float x1, x2;     // X positions for the two textures (for scrolling)
 	float y;
-	int width, height;  // Dimensions of the texture
+	float width, height;  // Dimensions of the texture
 	bool isProp;
 	float rotationAngle;
 };

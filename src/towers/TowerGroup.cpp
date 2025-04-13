@@ -78,6 +78,21 @@ TowerGroup::TowerGroup(int &playerGold, Map *map, DetailAttributeDisplay *detail
  */
 TowerGroup::~TowerGroup()
 {
+	delete dummyStandardTower;
+	delete dummyRapidFireTower;
+	delete dummyCannonTower;
+
+	dummyCannonTower = nullptr;
+	dummyRapidFireTower = nullptr;
+	dummyStandardTower = nullptr;
+
+	for (int i = 0; i < TowerObserver::STRATEGY_COUNT; ++i) {
+		delete strategies[i];  // delete each object
+	}
+	delete[] strategies;        // delete the array of pointers
+	strategies = nullptr;
+
+
 	// Clean up dynamically allocated towers
 	for (Tower *tower : towers)
 	{
@@ -209,7 +224,7 @@ std::vector<Tower *> &TowerGroup::getTowers()
  * @brief Accessor for total number of towers placed.
  * @return The total number of towers placed.
  */
-int TowerGroup::getTotalTowersPlaced()
+int TowerGroup::getTotalTowersPlaced() const
 {
 	return totalTowersPlaced;
 }

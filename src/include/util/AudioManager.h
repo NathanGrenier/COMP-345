@@ -36,7 +36,7 @@ public:
 	int musicVolumeLevel;
 
 	//Channel constants. Starts at 0
-	static enum eEffectChannel
+	enum eEffectChannel
 	{
 		eEffectChannelTowerShot,
 		eEffectChannelEnemyDeath,

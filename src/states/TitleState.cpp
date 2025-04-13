@@ -37,15 +37,6 @@ TitleState *TitleState::get()
  */
 bool TitleState::enter()
 {
-	bg = new ParallaxBackground();
-	std::srand(std::time(0));
-
-	for (int i = 0; i < Global::numberOfProps; ++i)
-	{
-		float randomSpeed = 5.0f + std::rand() % 11;
-		bg->addLayer(randomSpeed, Global::kScreenHeight);
-	}
-
 	bool success = true;
 	SDL_Color textColor{0x00, 0x00, 0x00, 0xFF};
 
@@ -97,8 +88,6 @@ bool TitleState::enter()
  */
 bool TitleState::exit()
 {
-	delete bg;
-	bg = nullptr;
 	return true;
 }
 
@@ -146,8 +135,6 @@ void TitleState::update() {
 	for (int i = 0; i < kButtonCount; ++i) {
 		buttons[i].update();
 	}
-
-	bg->update(0.016f);
 }
 
 /**
@@ -157,8 +144,6 @@ void TitleState::update() {
  */
 void TitleState::render()
 {
-	bg->render();
-
 	// Render title text centered at the top
 	mMessageTexture.render((Global::kScreenWidth - Global::kScreenWidth * 0.9) / 2.f, 40, nullptr, Global::kScreenWidth * 0.9, -1);
 

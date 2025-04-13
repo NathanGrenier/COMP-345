@@ -27,6 +27,7 @@ public:
 
 	// constructor
 	DetailAttributeDisplay();
+	~DetailAttributeDisplay();
 	void addToBuyTowers(Tower* tower);
 
 	// methods for towerObserver

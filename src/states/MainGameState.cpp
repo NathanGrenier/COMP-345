@@ -73,15 +73,6 @@ bool MainGameState::enter()
 
 	currentButton = &pauseButton;
 
-	bg = new ParallaxBackground();
-	std::srand(std::time(0));
-
-	for (int i = 0; i < Global::numberOfProps; ++i)
-	{
-		float randomSpeed = 5.0f + std::rand() % 11;
-		bg->addLayer(randomSpeed, Global::kScreenHeight);
-	}
-
 	exitButton.loadFromFile("ui/ExitButton.png");
 	exitButton.setSizeWithAspectRatio(0, buttonHeight);
 	exitButton.setPosition(Global::kScreenWidth - Global::viewerWidth + 3 * spacing + pauseButton.kButtonWidth + optionsButton.kButtonWidth, Global::kScreenHeight - buttonHeight - 20);
@@ -176,8 +167,6 @@ void MainGameState::update()
 	if (isPaused)
 		return;
 
-	bg->update(0.016f);
-
 	critterGroup->update(0.016f);
 
 	towerGroup->update(0.016f, critterGroup->getCritters());
@@ -210,20 +199,6 @@ void MainGameState::update()
  */
 void MainGameState::render()
 {
-	SDL_FRect backRect = {0, 0, Global::kScreenWidth - Global::viewerWidth, Global::headerHeight};
-
-	// Set the renderer color for the outline
-	SDL_SetRenderDrawColor(gRenderer, 168, 168, 168, 255); // Gray color for outline
-	SDL_RenderFillRect(gRenderer, &backRect);			   // Draw box outline
-
-	SDL_FRect foreRect = {4, 4, Global::kScreenWidth - Global::viewerWidth - 5, Global::headerHeight - 8};
-
-	// Set the renderer color for the gray box
-	SDL_SetRenderDrawColor(gRenderer, 202, 202, 202, 255); // Gray color for box
-	SDL_RenderFillRect(gRenderer, &foreRect);			   // Draw filled box
-
-	bg->render();
-
 	map->drawOnTargetRect(Global::mapViewRect);
 
 	detailDisplay->render();
@@ -265,8 +240,8 @@ bool MainGameState::exit()
 	delete towerGroup;
 	towerGroup = nullptr;
 
-	delete bg;
-	bg = nullptr;
+	delete detailDisplay;
+	detailDisplay = nullptr;
 
 	waveLevel = 0;
 

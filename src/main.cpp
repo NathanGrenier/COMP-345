@@ -45,6 +45,7 @@ GameState* gCurrentState{ nullptr };
 /** @brief The next game state to transition to. */
 GameState* gNextState{ nullptr };
 Map* Global::currentMap;
+ParallaxBackground* bg;
 
 //Playback audio device
 SDL_AudioDeviceID gAudioDeviceId{ 0 };
@@ -107,10 +108,12 @@ void changeState() {
 bool init() {
 	// Get current time and format it as HH:MM:SS
 	std::time_t currentTime = std::time(nullptr);  // Get the current time
-	std::tm* timeInfo = std::localtime(&currentTime);  // Convert to local time
+	std::tm timeInfo;
+	localtime_s(&timeInfo, &currentTime);  // Convert to local time using localtime_s
+
 
 	char timestamp[20];  // Buffer to store formatted time (YYYYMMDD_HHMMSS format)
-	std::strftime(timestamp, sizeof(timestamp), "%Y%m%d_%H%M%S", timeInfo);  // Format time
+	std::strftime(timestamp, sizeof(timestamp), "%Y%m%d_%H%M%S", &timeInfo);  // Format time
 
 	// Construct the filename with the timestamp
 	std::stringstream filenameStream;
@@ -234,6 +237,9 @@ void close() {
 	gRenderer = nullptr;
 	SDL_DestroyWindow(gWindow);
 	gWindow = nullptr;
+	
+	delete bg;
+	bg = nullptr;
 
 	// Quit SDL subsystems
 	Mix_Quit();
@@ -290,6 +296,15 @@ int main(int argc, char* args[]) {
 			// Create TextureManager Singleton Instance
 			TextureManager::getInstance().init(gRenderer, gFont);
 			gFpsTexture.loadFromRenderedText("Enter to start/stop or space to pause/unpause", { 0x00, 0x00, 0x00, 0xFF });
+
+			bg = new ParallaxBackground();
+			std::srand(static_cast<unsigned int>(std::time(0)));
+
+			for (int i = 0; i < Global::numberOfProps; ++i)
+			{
+				float randomSpeed = 5.0f + std::rand() % 11;
+				bg->addLayer(randomSpeed, Global::kScreenHeight);
+			}
 
 			AudioManager::getInstance().init(AudioManager::MAX_VOLUME / 4);
 			Global::gMusic = AudioManager::getInstance().loadMusic("music.wav");
@@ -353,6 +368,7 @@ int main(int argc, char* args[]) {
 				// Update the current state if not transitioning
 				if (!isFading)
 				{
+					bg->update(0.016f);
 					gCurrentState->update();
 					changeState();
 				}
@@ -362,6 +378,7 @@ int main(int argc, char* args[]) {
 				SDL_RenderClear(gRenderer);
 
 				// Render the current state
+				bg->render();
 				gCurrentState->render();
 
 				// Apply fade effect if needed

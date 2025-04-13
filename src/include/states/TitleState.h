@@ -28,7 +28,6 @@ private:
 	//Static instance
 	static TitleState sTitleState;
 
-	ParallaxBackground* bg;
 	Texture mMessageTexture;
 
 	static constexpr int kButtonCount = 3;

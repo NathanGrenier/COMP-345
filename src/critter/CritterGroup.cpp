@@ -87,7 +87,7 @@ CritterGroup::~CritterGroup() {
 	critters.clear();
 }
 
-std::string critterTypeToString(CritterType type) {
+static std::string critterTypeToString(CritterType type) {
 	switch (type) {
 		case CritterType::NORMAL: return "Normal";
 		case CritterType::FAST: return "Fast";
@@ -183,7 +183,7 @@ void CritterGroup::update(float deltaTime) {
 			if (endlessMode || nextWave <= static_cast<int>(waveConfigs.size())) {
 				waveInProgress = true;
 				waveLevel = nextWave;
-				int configIndex = endlessMode ? (waveLevel - 1) % waveConfigs.size() : (waveLevel - 1);
+				int configIndex = endlessMode ? (static_cast<size_t>(waveLevel) - 1) % waveConfigs.size() : (static_cast<size_t>(waveLevel) - 1);
 				const WaveConfig& config = waveConfigs[configIndex];
 
 				currentWaveCrittersToSpawn.clear();
@@ -208,33 +208,35 @@ void CritterGroup::update(float deltaTime) {
 		Critter* critter = *it;
 		critter->update(deltaTime);
 		if (critter->atExit()) {
-			if (critter->getHitPoints() > playerGold)
-			{
+			if (critter->getHitPoints() > playerGold) {
 				playerGold = 0;
 				killerCritterType = critter->getType();
 				gameLost = true;
 			}
-			else
-			{
+			else {
 				Mix_PlayChannel(AudioManager::eEffectChannelEnemyDeath, baseHit, 0);
 				critter->stealGold(playerGold);
 			}
 
 			critter->detach(detailDisplay->getCritterObserver());
 			it = critters.erase(it);
-			Global::logMessage("Critter reached exit. Decreasing gold. ");
+			delete critter;
+			Global::logMessage("Critter reached exit. Decreasing gold.");
 			--aliveCritters;
 
-		} else if (!critter->isAlive() && !critter->isDying()) {
+		}
+		else if (!critter->isAlive() && !critter->isDying()) {
 			playerGold += critter->getReward();
 			critter->detach(detailDisplay->getCritterObserver());
 			it = critters.erase(it);
-			Global::logMessage("A critter was killed. ");
+			delete critter;
+			Global::logMessage("A critter was killed.");
 			--aliveCritters;
 
 			++totalCrittersKilled;
 
-		} else {
+		}
+		else {
 			critter->move(deltaTime, critters);
 			++it;
 		}

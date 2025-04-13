@@ -47,13 +47,12 @@ private:
 	static MainGameState sMainGameState;
 
 	//Intro background
-	ParallaxBackground* bg;
 	Texture mMessageTexture;
 
 	LButton pauseButton;
 	LButton optionsButton;
 	LButton exitButton;
-	LButton* currentButton;
+	LButton* currentButton = nullptr;
 	LButton playButton;
 
 	bool endlessMode = false;

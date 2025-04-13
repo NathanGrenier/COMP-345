@@ -15,7 +15,7 @@ public:
 	~ParallaxBackground();
 
 	// Add a layer to the background
-	void addLayer(float speed, int height);
+	void addLayer(float speed, float height);
 
 	// Update all layers
 	void update(float deltaTime);
@@ -28,7 +28,7 @@ public:
 	static std::vector<std::string> backgroundImages;
 	static std::vector<std::string> starImages;
 	static std::vector<std::string> propImages;
-	static std::unordered_set<int> propXPositions;
+	static std::unordered_set<float> propXPositions;
 
 	static bool isMoving;
 private:

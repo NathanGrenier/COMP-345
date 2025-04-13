@@ -24,6 +24,7 @@ public:
 protected:
     // constructor
     Observable();
+    ~Observable();
 
 private:
     // vector of observers

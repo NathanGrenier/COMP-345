@@ -10,14 +10,13 @@ namespace fs = std::filesystem;
 std::vector<std::string> ParallaxBackground::backgroundImages;
 std::vector<std::string> ParallaxBackground::starImages;
 std::vector<std::string> ParallaxBackground::propImages;
-std::unordered_set<int> ParallaxBackground::propXPositions;
+std::unordered_set<float> ParallaxBackground::propXPositions;
 
 bool ParallaxBackground::isMoving = true;
 
 ParallaxBackground::ParallaxBackground() {
 	// Seed the random number generator
-	std::srand(std::time(0));
-
+	std::srand(static_cast<unsigned int>(std::time(0)));
 
 	// Get the list of star images from assets/backgrounds/stars
 	populateAssetPaths("assets/backgrounds/stars", starImages);
@@ -54,10 +53,10 @@ ParallaxBackground::~ParallaxBackground() {
 	}
 }
 
-void ParallaxBackground::addLayer(float speed, int height) {
+void ParallaxBackground::addLayer(float speed, float height) {
 	int randomIndex = std::rand() % propImages.size();
 	std::string randomProp = propImages[randomIndex];
-	int randomY = std::rand() % height;
+	float randomY = static_cast<float>(std::rand()) / RAND_MAX * height;
 	ParallaxLayer* newLayer = new ParallaxLayer(speed, randomY, randomProp);
 	layers.push_back(newLayer);
 }

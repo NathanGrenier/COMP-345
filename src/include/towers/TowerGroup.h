@@ -26,7 +26,7 @@ public:
 	void render();												   // Render all towers
 
 	std::vector<Tower*>& getTowers();               // Access all towers (modifiable)
-	int getTotalTowersPlaced();                     // Access number of towers
+	int getTotalTowersPlaced() const;                     // Access number of towers
 	Tower* getTowerAtPosition(float x, float y, float scaleFactor); // Get a tower at a specific position (for selecting/upgrading)
 
 	void upgradeTower(Tower* tower); // Upgrade a selected tower, if possible
@@ -50,7 +50,7 @@ private:
 	Tower* dummyCannonTower;	/**< @brief dummy CannonTower for details before buying Tower */
 	TowerStrategy** strategies; /**< @brief Tower Strategies for targetting Critters */
 
-	const float POWERUP_SPAWN_CHANCE = 0.01;
+	const float POWERUP_SPAWN_CHANCE = 0.01f;
 
 	/** @brief targetted cell when clicking */
 	Cell targetCell;

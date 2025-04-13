@@ -33,15 +33,6 @@ MapSelectState* MapSelectState::get() {
 bool MapSelectState::enter() {
 	loadAvailableMaps();
 
-	bg = new ParallaxBackground();
-	std::srand(std::time(0));
-
-	for (int i = 0; i < Global::numberOfProps; ++i)
-	{
-		float randomSpeed = 5.0f + std::rand() % 11;
-		bg->addLayer(randomSpeed, Global::kScreenHeight);
-	}
-
 	mTitle.loadFromFile("ui/MapSelectionMessage.png");
 
 	// Load button textures
@@ -105,9 +96,6 @@ bool MapSelectState::enter() {
 }
 
 bool MapSelectState::exit() {
-	delete bg;
-	bg = nullptr;
-
 	return true;
 }
 
@@ -187,8 +175,6 @@ void MapSelectState::update() {
 	leftArrow.update();
 	rightArrow.update();
 
-	bg->update(0.016f);
-
 	if (!availableMaps.empty())
 	{
 		auto it = std::next(availableMaps.begin(), selectedIndex);
@@ -202,8 +188,6 @@ void MapSelectState::update() {
 }
 
 void MapSelectState::render() {
-	bg->render();
-
 	float kScreenWidth = Global::kScreenWidth;
 	float kScreenHeight = Global::kScreenHeight;
 
@@ -221,7 +205,6 @@ void MapSelectState::render() {
 		auto mapIter = availableMaps.find(selectedMapFilePath);
 		if (mapIter != availableMaps.end())
 		{
-			mapIter->second.setCurrentRenderRect(targetRect);
 			mapIter->second.drawOnTargetRect(targetRect);
 		} else
 		{
@@ -291,6 +274,7 @@ void MapSelectState::loadAvailableMaps() {
 
 				// Store the loaded Map object in the dictionary
 				availableMaps[mapFileName] = std::move(map);
+				availableMaps[mapFileName].setCurrentRenderRect(targetRect);
 				availableMaps[mapFileName].setFlowFieldVisibility(false);
 			}
 		}

@@ -44,7 +44,6 @@ private:
 
 	//State title message
 	Texture mTitle;
-	ParallaxBackground* bg;
 	Texture mHoveredMapName;
 
 	LButton backButton;
